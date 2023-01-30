@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @unique @default(uuid())
+  name        String
+  username    String   @unique
+  email       String   @unique
+  role        Role     @default(BASIC)
+  isAdmin     Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdPost Post[]   @relation("creatorUser")
+  likedPost   Post[]   @relation("likedUser")
+
+  likedReply Reply[] @relation("ReplylikedUser")
+  Post       Post?   @relation(fields: [postId], references: [id])
+  postId     String?
+  Reply      Reply?  @relation(fields: [replyId], references: [id])
+  replyId    String?
+
+  @@index([email])
+}
+
+enum Role {
+  BASIC
+  SCHOLAR
+}
+
+model Post {
+  id             String   @id
+  type           String
+  avatar         String
+  topic_id       Int
+  post_id        Int
+  creatorUser    User     @relation("creatorUser", fields: [creatorUser_id], references: [id], onDelete: Cascade)
+  likedBy        User[]   @relation("likedUser")
+  content        String
+  start          Int
+  end            Int
+  text           Text     @relation(fields: [text_id], references: [id], onDelete: Cascade)
+  created_at     DateTime @default(now())
+  creatorUser_id String
+  Reply          Reply[]
+  User           User[]
+  text_id        Int
+}
+
+model Reply {
+  id         String   @id @unique @default(uuid())
+  parentPost Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  likedBy    User[]   @relation("ReplylikedUser")
+  isAproved  Boolean?
+  post_id    String
+  User       User[]
+}
+
+model Text {
+  id      Int    @id @unique @default(autoincrement())
+  name    String
+  content String @db.Text()
+  Post    Post[]
+}
