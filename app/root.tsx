@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import { json, LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -6,15 +6,23 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import tailwindStyle from "./styles/tailwind.css";
 import globalStyle from "./styles/globalStyle.css";
+import { db } from "./db.server";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
   viewport: "width=device-width,initial-scale=1",
+  description: "annotation of text and discussion on budhist text",
 });
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const title = "lopenling";
+  const user = db.user.findMany();
+  return json({ user, title });
+};
 
 export function links() {
   return [
@@ -24,6 +32,7 @@ export function links() {
 }
 
 export default function App() {
+  const loaderData = useLoaderData();
   return (
     <html lang="en">
       <head>
