@@ -11,6 +11,7 @@ import {
 import tailwindStyle from "./styles/tailwind.css";
 import globalStyle from "./styles/globalStyle.css";
 import { db } from "./db.server";
+import Header from "./component/Header";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -39,7 +40,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body style={{ width: "100vw" }}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
