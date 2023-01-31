@@ -37,7 +37,7 @@ enum Role {
 }
 
 model Post {
-  id             String   @id
+  id             String   @id @default(uuid())
   type           String
   avatar         String
   topic_id       Int
