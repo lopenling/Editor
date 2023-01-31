@@ -7,12 +7,7 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
-export const handle = {
-  // In the handle export, we could add a i18n key with namespaces our route
-  // will need to load. This key can be a single string or an array of strings.
-  i18n: ["common"],
-};
-
+import lopenlingLogo from "~/file/logo.png";
 function generateInitials(name) {
   const nameArray = name.split(" ");
   let initials = "";
@@ -33,10 +28,7 @@ export default function Header({ user }: any) {
     >
       <Link to="/" className="flex items-center  ">
         <div className="flex h-8 w-1/5 items-center justify-center">
-          <img
-            className="mr-3 h-full flex-1 rounded-lg"
-            src="https://parkhang.lopenling.org/static/bundles/375e0e9056137a8eb3c9bbcb876efbdc.png"
-          />
+          <img className="mr-3 h-full flex-1 rounded-lg" src={lopenlingLogo} />
         </div>
         <p className="text-2xl font-extrabold leading-9 text-green-400">
           Lopenling
@@ -46,7 +38,7 @@ export default function Header({ user }: any) {
       {user ? (
         <div className="flex md:order-2">
           <Dropdown
-            arrowIcon={false}
+            className="z-10"
             inline={true}
             label={
               user.avatarUrl ? (

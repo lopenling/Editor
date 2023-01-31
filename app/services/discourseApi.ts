@@ -1,17 +1,16 @@
-import { db } from "~/utility/db.server";
+import { db } from "~/db.server";
 import { v4 as uuidv4 } from "uuid";
-import FormData from "form-data";
 
 class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
   username: string;
   constructor(username: string = "") {
-    if (!process.env.DISCOURSE_API_KEY || !process.env.DISCOURSE_SITE)
+    if (!DISCOURSE_API_KEY || !DISCOURSE_SITE)
       throw new Error("asign api and url  in env");
 
-    this.DiscourseUrl = process.env.DISCOURSE_SITE;
-    this.apiKey = process.env.DISCOURSE_API_KEY;
+    this.DiscourseUrl = DISCOURSE_SITE;
+    this.apiKey = DISCOURSE_API_KEY;
     this.username = username;
   }
 
@@ -86,17 +85,14 @@ class DiscourseApi {
   ) {
     let auth_headers = this.authHeader();
     let questionId = uuidv4();
-    let url =
-      process.env.ORIGIN_LOCATION +
-      `/texts/${textId}?start=${start}&end=${end}`;
+    let url = ORIGIN_LOCATION + `/texts/${textId}?start=${start}&end=${end}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `<div>
     <blockquote>${topic_name}</blockquote>
     <div>
 <p>${bodyContentWithLink}</p>
 <br/>
-<iframe width="40" height="40" src="${process.env.ORIGIN_LOCATION}/embed/${questionId}"
-></iframe><div>`;
+<div>`;
     let new_Topic_data = {
       title: topic_name as string,
       category: category_id,
@@ -108,19 +104,15 @@ class DiscourseApi {
         username,
       },
     });
-    let data;
     try {
       const response = await fetch(
         `${this.DiscourseUrl}/posts.json?` + params,
         {
           method: "POST",
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin",
           headers: auth_headers,
         }
       );
-      data = await response.json();
+      let data = await response.json();
       if (data["topic_id"] > 0 && user) {
         const createQuestion = await db.post.create({
           data: {
@@ -137,11 +129,11 @@ class DiscourseApi {
           },
         });
       }
+      console.log(data);
+      return data;
     } catch (e) {
-      console.log(e);
+      return e;
     }
-
-    return data;
   }
 
   async createPost(TopicId: number, postString: string) {
@@ -224,9 +216,7 @@ export async function createThread(
   textId: number,
   type: string
 ) {
-  if (!start || !end) {
-    throw new Error("start and end values not available");
-  }
+  if (!start || !end) throw new Error("start and end values not available");
   if (!postTitle || !blockquoteArea || !postContent)
     throw new Error("failed to access Topic Id");
   const apiObj: DiscourseApi = new DiscourseApi(userName);
@@ -238,7 +228,7 @@ export async function createThread(
       id: res.category?.id,
     };
   }
-  return apiObj.addTopic(
+  let createTopic = await apiObj.addTopic(
     userName,
     checkIfCategoryPresent.id,
     parseInt(start as string),
@@ -248,6 +238,8 @@ export async function createThread(
     textId,
     type
   );
+
+  return createTopic;
 }
 
 function addLinktoQuestion(question: string, url: string) {

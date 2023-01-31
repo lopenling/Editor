@@ -6,8 +6,5 @@ addEventListener(
   createEventHandler({
     build,
     mode: process.env.NODE_ENV,
-    getLoadContext({ env }) {
-      return env;
-    },
   })
 );

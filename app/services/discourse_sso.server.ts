@@ -29,9 +29,8 @@ export let redirectDiscourse = async function () {
   let payloadBase64 = btoa(payload);
   var encoder = new TextEncoder();
   var encodedText = encoder.encode(payloadBase64);
+  var decodedText = new TextDecoder().decode(encodedText);
 
-  var decoder = new TextDecoder("UTF-8");
-  var decodedText = decoder.decode(encodedText);
   var hmac = CryptoJS.HmacSHA256(decodedText, DISCOURSE_API_KEY);
   var hexDigest = CryptoJS.enc.Hex.stringify(hmac);
   var signature = hexDigest;
