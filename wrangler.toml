@@ -1,4 +1,4 @@
-name = "v_01"
+name = "lopenling"
 
 workers_dev = true
 main = "./build/index.js"
@@ -7,7 +7,7 @@ account_id="542d340d71d90c60471c8a30e3f7c65e"
 compatibility_date = "2022-04-05"
 
 kv_namespaces = [
-  { binding = "SESSIONS", preview_id = "5c32d1a6f27b4f5abb705dff4276d9e8",id = "8ab5fe4256d84a1c99a9753bf512a723" }
+  { binding = "SESSIONS", preview_id = "32ed6268dab1406ebad067d982980857",id = "32ed6268dab1406ebad067d982980857" }
 ]
 [site]
   bucket = "./public"
@@ -15,28 +15,11 @@ kv_namespaces = [
 
 
 [vars]
-   MIGRATION_DATABASE_URL = "postgresql://postgres:DrYL7fp9NdHYZGvU@db.nphyujhlnjxdqmmcyvpv.supabase.co:5432/postgres"
-   DATABASE_URL = "prisma://aws-eu-central-1.prisma-data.com/?api_key=Rg8EMJwPVzAeEUIzU1mhdeLIVInggCz9WoXmpQRKjeTTOAWsNYjzW6aDDTpvwdC0"
-  
-   DISCOURSE_SSO_LOGIN_URL='https://lopenling.org/session/sso_provider'
-   DISCOURSE_SSO_REDIRECT='http://localhost:8787/sso/login'
-   DISCOURSE_SSO_SIGNUP_URL='https://lopenling.org/signup'
-   DISCOURSE_SITE='https://lopenling.org'
-   DISCOURSE_API_KEY="69692ed5e365396b9ae17acd63334b444cf07ab1b8c0f43a9e67764fb7a31b02"
-   DISCOURSE_QA_CATEGORY_ID=65
-   ORIGIN_LOCATION="http://localhost:8787"
-   
+ DISCOURSE_API_KEY="69692ed5e365396b9ae17acd63334b444cf07ab1b8c0f43a9e67764fb7a31b02"
 
-[env.production]
-kv_namespaces = [
-{ binding = "SESSIONS", id = "8ab5fe4256d84a1c99a9753bf512a723" }]
-[env.production.vars]
-   DATABASE_URL = "prisma://aws-eu-central-1.prisma-data.com/?api_key=Rg8EMJwPVzAeEUIzU1mhdeLIVInggCz9WoXmpQRKjeTTOAWsNYjzW6aDDTpvwdC0"
-   DISCOURSE_SSO_REDIRECT='https://v_01-production.openpecha.workers.dev/sso/login'
+   DISCOURSE_SSO_REDIRECT='https://lopenling.openpecha.workers.dev/sso/login'
    DISCOURSE_SSO_LOGIN_URL='https://lopenling.org/session/sso_provider'
    DISCOURSE_SSO_SIGNUP_URL='https://lopenling.org/signup'
-   ORIGIN_LOCATION="https://v_01-production.openpecha.workers.dev"
+   ORIGIN_LOCATION="https://lopenling.openpecha.workers.dev"
    DISCOURSE_SITE='https://lopenling.org'
-   DISCOURSE_API_KEY="69692ed5e365396b9ae17acd63334b444cf07ab1b8c0f43a9e67764fb7a31b02"
    DISCOURSE_QA_CATEGORY_ID=65
-   

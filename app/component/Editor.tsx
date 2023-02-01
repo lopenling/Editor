@@ -111,7 +111,6 @@ function Editor() {
         <h1 className="mb-4 flex items-center justify-center text-lg font-bold text-gray-900">
           {data?.text?.name}
         </h1>
-
         <div className=" max-h-80 overflow-y-scroll md:max-h-full">
           {editor ? (
             <EditorContent
@@ -151,6 +150,7 @@ function Editor() {
             </Button.Group>
           </BubbleMenu>
         )}
+
         <div
           className="absolute bottom-2 right-3 z-40 md:hidden"
           onClick={() => setShowEditorSettings((prev) => !prev)}
@@ -226,13 +226,15 @@ function Editor() {
         </div>
         <Post postInfo={postInfo} ref={null} />
 
-        <div>
-          <PostList
-            editor={editor}
-            setOpenFilter={setOpenFilter}
-            openFilter={openFilter}
-          />
-        </div>
+        {data.posts.length > 0 && (
+          <div>
+            <PostList
+              editor={editor}
+              setOpenFilter={setOpenFilter}
+              openFilter={openFilter}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

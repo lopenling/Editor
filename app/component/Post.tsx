@@ -1,9 +1,7 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Editor } from "@tiptap/react";
 import { Avatar, Button } from "flowbite-react";
 import React, { useEffect } from "react";
 type QuestionFormProps = {
-  editor: Editor | null;
   postInfo: null | {
     type: string;
     start: number;

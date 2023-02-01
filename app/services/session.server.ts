@@ -13,6 +13,7 @@ const sessionCookie = createCookie("__session", {
   secrets: ["r3m1xr0ck5"],
   sameSite: true,
 });
+
 const { getSession, commitSession, destroySession } =
   createCloudflareKVSessionStorage({
     // The KV Namespace where you want to store sessions

@@ -10,7 +10,7 @@ import {
   getUserSession,
   login,
 } from "~/services/session.server";
-import { db } from "~/db.server";
+import { createUserInDB, findUserByUsername } from "~/model/user";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -35,18 +35,11 @@ export let loader: LoaderFunction = async ({ request }) => {
         throw new Error("discourse SSO returned error URL");
       }
       session.set("user", { email, admin, name, username, avatarUrl });
-      let findUserInDatabase = await db.user.findUnique({
-        where: { username },
-      });
-      if (!findUserInDatabase) {
-        const newUser = await db.user.create({
-          data: {
-            username: username,
-            name: name,
-            email: email,
-            isAdmin: admin === "true" ? true : false,
-          },
-        });
+      let isUserInDatabase = await findUserByUsername(username);
+      if (!isUserInDatabase) {
+        let isAdmin = admin === "true" ? true : false;
+        const newUser = await createUserInDB(username, name, email, isAdmin);
+        console.log(newUser);
       }
     } catch (e) {
       session.flash("error", {

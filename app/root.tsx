@@ -18,16 +18,16 @@ import FooterContainer from "./component/Footer";
 import React from "react";
 import { Progress } from "flowbite-react";
 import ErrorPage from "./component/ErrorPage";
-import { db } from "./db.server";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
   description: "annotation of text and discussion on budhist text",
 });
 export const loader: LoaderFunction = async ({ request }) => {
-  let user = await getUserSession(request);
-  let text = await db.text.findMany();
-  return { user, text };
+  // let user = (await getUserSession(request)) || null;
+  let user = "";
+  console.log(DATABASE_URL);
+  return { user };
 };
 
 export function links() {
@@ -42,7 +42,7 @@ export function links() {
   ];
 }
 
-function Document({ children, title }: any) {
+function Document({ children, title }: { children: any; title: string }) {
   const transition = useTransition();
   const loaderData = useLoaderData();
   let location = useLocation();
@@ -50,13 +50,12 @@ function Document({ children, title }: any) {
     transition.state === "loading" &&
     transition.location.pathname.includes("/texts") &&
     !transition.location.state;
-
   return (
     <html lang="en">
       <head>
         <Meta />
         <Links />
-        <title>Lopenling</title>
+        <title>{title}</title>
       </head>
 
       <body style={{ width: "100vw" }}>

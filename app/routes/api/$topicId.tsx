@@ -2,27 +2,18 @@ import { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "react-router";
 import { getposts } from "~/services/discourseApi";
 import { getUserSession } from "~/services/session.server";
-import { db } from "~/db.server";
+import { findPostByTopicId } from "~/model/post";
+import { findReplyByPostId } from "~/model/reply";
 
 export const loader: LoaderFunction = async ({ params, request }) => {
   const user = await getUserSession(request);
-  const topicId = params.topicId;
-  const post = await db.post.findFirst({
-    where: {
-      topic_id: parseInt(topicId),
-    },
-  });
+  const topicId = parseInt(params.topicId);
+  const post = await findPostByTopicId(topicId);
   let posts: [] = [];
   let replyList: [] = [];
   const data = getposts(topicId, user?.username);
-  const replyListPromise = db.reply.findMany({
-    where: {
-      post_id: post.id,
-    },
-    include: {
-      likedBy: true,
-    },
-  });
+  const replyListPromise = findReplyByPostId(post.id);
+
   let result = await Promise.all([data, replyListPromise]);
   posts = result[0].post_stream?.posts;
   replyList = result[1];

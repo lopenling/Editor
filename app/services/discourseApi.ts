@@ -1,5 +1,6 @@
-import { db } from "~/db.server";
 import { v4 as uuidv4 } from "uuid";
+import { createPostOnDB } from "~/model/post";
+import { findUserByUsername } from "~/model/user";
 
 class DiscourseApi {
   DiscourseUrl: string;
@@ -99,11 +100,7 @@ class DiscourseApi {
       raw: post_text,
     };
     let params = new URLSearchParams(new_Topic_data).toString();
-    let user = await db.user.findUnique({
-      where: {
-        username,
-      },
-    });
+    let user = await findUserByUsername(username);
     try {
       const response = await fetch(
         `${this.DiscourseUrl}/posts.json?` + params,
@@ -114,22 +111,20 @@ class DiscourseApi {
       );
       let data = await response.json();
       if (data["topic_id"] > 0 && user) {
-        const createQuestion = await db.post.create({
-          data: {
-            id: questionId,
-            type: type,
-            avatar: data["avatar_template"],
-            topic_id: data["topic_id"],
-            post_id: data.id,
-            start,
-            end,
-            text_id: textId,
-            content: bodyContent,
-            creatorUser_id: user.id,
-          },
-        });
+        const createQuestion = await createPostOnDB(
+          questionId,
+          type,
+          data["avatar_template"],
+          data["topic_id"],
+          data["id"],
+          start,
+          end,
+          textId,
+          bodyContent,
+          user.id
+        );
+        return createQuestion;
       }
-      console.log(data);
       return data;
     } catch (e) {
       return e;

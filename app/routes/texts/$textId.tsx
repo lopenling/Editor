@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { getUserSession } from "~/services/session.server";
 import {
   ActionFunction,
@@ -7,39 +7,27 @@ import {
   redirect,
 } from "@remix-run/server-runtime";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import { db } from "~/db.server";
-import { useLoaderData } from "@remix-run/react";
-const Editor = React.lazy(() => import("~/component/Editor"));
+import { Await, useLoaderData } from "@remix-run/react";
+import { findUserByUsername } from "~/model/user";
+import { findPostByTextId } from "~/model/post";
+import { findTextByTextId } from "~/model/text";
+import Editor from "~/component/Editor";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUserSession(request);
-  const textId = params.textId;
+  const textId = parseInt(params.textId);
   if (!textId) throw new Error("not valid textId");
   let userInfo = null;
   if (user?.email) {
     try {
-      let findUserInDatabase = await db.user.findUnique({
-        where: { email: user.email },
-      });
+      let findUserInDatabase = await findUserByUsername(user.username);
       userInfo = { ...findUserInDatabase, ...user };
     } catch (e) {
       console.log(e);
     }
   }
 
-  const posts = await db.post.findMany({
-    include: {
-      creatorUser: true,
-      likedBy: true,
-    },
-    where: {
-      text_id: parseInt(textId),
-    },
-  });
-  const text = await db.text.findUnique({
-    where: {
-      id: parseInt(textId),
-    },
-  });
+  const posts = await findPostByTextId(textId);
+  const text = await findTextByTextId(textId, true);
   const data = {
     user: userInfo,
     text,
@@ -59,14 +47,11 @@ export const meta: MetaFunction = ({ data }) => {
 export default function () {
   const data = useLoaderData();
   if (!data.text) return <div>no Text Available </div>;
-
   return (
     <>
       <main className="container m-auto">
         <section>
-          <React.Suspense fallback={<div>Loading...</div>}>
-            <Editor />
-          </React.Suspense>
+          <Editor />
         </section>
       </main>
     </>

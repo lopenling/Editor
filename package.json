@@ -4,7 +4,7 @@
   "scripts": {
     "build": "npm run build:css && remix build",
     "build:css": "npm run generate:css -- --minify ",
-    "deploy": "wrangler publish --env production",
+    "deploy": "wrangler publish ",
     "dev": "remix build && run-p \"dev:*\" ",
     "dev:remix": "remix watch",
     "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --watch ",
@@ -35,10 +35,11 @@
     "react-dom": "^18.2.0",
     "react-responsive-modal": "^6.4.1",
     "react-viewport-list": "^6.3.0",
+    "remix-utils": "^6.0.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.18.0",
+    "@cloudflare/workers-types": "^3.19.0",
     "@remix-run/dev": "^1.11.1",
     "@remix-run/eslint-config": "^1.11.1",
     "@types/react": "^18.0.25",

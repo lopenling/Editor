@@ -1,9 +1,9 @@
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
+
 export default function Index() {
   const searchedText = useFetcher();
   const list = searchedText.data;
-
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
   return (
     <>

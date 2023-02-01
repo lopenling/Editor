@@ -4,7 +4,6 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/server-runtime";
-import { db } from "~/db.server";
 import {
   createThread,
   deletePost,

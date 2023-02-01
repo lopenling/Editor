@@ -12,15 +12,9 @@ import {
 } from "@remix-run/react";
 import { useRef } from "react";
 import { getUserSession } from "~/services/session.server";
-import { db } from "~/utility/db.server";
-
+import { createText, deleteText, findAllText } from "~/model/text";
 export const loader: LoaderFunction = async ({ request }) => {
-  const textList = await db.text.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-  });
+  const textList = await findAllText();
   const user = await getUserSession(request);
   if (!user || user?.admin !== "true") return redirect("/");
   return { textList, user };
@@ -29,32 +23,16 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const textName = formData.get("text-name") as string;
   const textContent = formData.get("text-content") as string;
+  let res = null;
   if (request.method === "DELETE") {
     const textId = formData.get("textId") as string;
-    try {
-      let res = await db.text.delete({
-        where: {
-          id: parseInt(textId),
-        },
-      });
-    } catch (e) {
-      return e;
-    }
+    res = await deleteText(textId);
   }
-
-  if (!textName || !textContent) return null;
-  try {
-    let res = await db.text.create({
-      data: {
-        name: textName,
-        content: textContent,
-      },
-    });
-    return res;
-  } catch (e) {
-    console.log(e);
-    return e;
+  if (request.method === "POST") {
+    if (!textName || !textContent) return null;
+    res = await createText(textName, textContent);
   }
+  return res;
 };
 
 export default function UploadText() {
@@ -64,7 +42,6 @@ export default function UploadText() {
   if (transition.state !== "idle") {
     formRef.current.reset();
   }
-
   return (
     <div className="mx-10 my-4">
       <Form method="post" ref={formRef}>

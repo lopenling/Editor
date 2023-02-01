@@ -1,11 +1,10 @@
-import { Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import React from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import Reply from "./Reply";
 import { Avatar, Modal } from "flowbite-react";
-const FilterPost = React.lazy(() => import("./FilterPost"));
+import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
 
 import { ViewportList } from "react-viewport-list";
@@ -20,7 +19,6 @@ export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
 function PostList(props: QuestionProps) {
-  const [parent, enableAnimations] = useAutoAnimate(/* optional config */);
   const data = useLoaderData();
   const [filter, setFilter] = React.useState(null);
   const [selectedPost, setSelectedPost] = React.useState(null);
@@ -59,12 +57,13 @@ function PostList(props: QuestionProps) {
 
   return (
     <div>
-      <Modal show={props.openFilter} onClose={onClose} size="md">
-        <Modal.Header>Filter</Modal.Header>
-        <React.Suspense fallback={<div>loading</div>}>
+      {props.openFilter && (
+        <Modal show={true} onClose={onClose} size="md">
+          <Modal.Header>Filter</Modal.Header>
           <FilterPost setFilter={setFilter} close={onClose} />
-        </React.Suspense>
-      </Modal>
+        </Modal>
+      )}
+
       <div
         className="scroll-container flex flex-col "
         ref={ref}
