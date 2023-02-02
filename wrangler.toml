@@ -1,25 +1,12 @@
-name = "lopenling"
+name = "Lopenling-App"
 
 workers_dev = true
 main = "./build/index.js"
 account_id="542d340d71d90c60471c8a30e3f7c65e"
-# https://developers.cloudflare.com/workers/platform/compatibility-dates
-compatibility_date = "2022-04-05"
 
 kv_namespaces = [
   { binding="SESSIONS", preview_id="cafd863b818c4062a021975a54a3a695", id="ac731a42acec4a3a84a81e86119a0c7d" }
 ]
+
 [site]
   bucket = "./public"
-
-
-
-[vars]
- DISCOURSE_API_KEY="69692ed5e365396b9ae17acd63334b444cf07ab1b8c0f43a9e67764fb7a31b02"
-
-   DISCOURSE_SSO_REDIRECT='https://lopenling.openpecha.workers.dev/sso/login'
-   DISCOURSE_SSO_LOGIN_URL='https://lopenling.org/session/sso_provider'
-   DISCOURSE_SSO_SIGNUP_URL='https://lopenling.org/signup'
-   ORIGIN_LOCATION="https://lopenling.openpecha.workers.dev"
-   DISCOURSE_SITE='https://lopenling.org'
-   DISCOURSE_QA_CATEGORY_ID=65
