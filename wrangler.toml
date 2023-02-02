@@ -7,7 +7,7 @@ account_id="542d340d71d90c60471c8a30e3f7c65e"
 compatibility_date = "2022-04-05"
 
 kv_namespaces = [
-  { binding = "SESSIONS", preview_id = "32ed6268dab1406ebad067d982980857",id = "32ed6268dab1406ebad067d982980857" }
+  { binding="SESSIONS", preview_id="cafd863b818c4062a021975a54a3a695", id="ac731a42acec4a3a84a81e86119a0c7d" }
 ]
 [site]
   bucket = "./public"
