@@ -27,8 +27,8 @@ jobs:
       - name: Create Environment Vars
         shell: python
         run: |
-          import environ
-          env_vars_blob = environ.get("PROD_ENV_VARS")
+          import os
+          env_vars_blob = os.environ.get("PROD_ENV_VARS")
           print(env_vars_blob)
         env:
           PROD_ENV_VARS: ${{ secrets.PROD_ENV_VARS }}
