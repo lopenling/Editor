@@ -25,9 +25,10 @@ function Reply(
   }
   React.useEffect(() => {
     postListFetcher.submit({}, { method: "get", action: `/api/${topicId}` });
-  }, [postFetcher.submission]);
-  if (postListFetcher.data)
+  }, [postFetcher.submission, loaderData.posts]);
+  if (postListFetcher.data) {
     ref.current.innerText = postListFetcher.data?.posts?.length - 1;
+  }
   const handleDelete = (id, TopicId) => {
     postFetcher.submit(
       {

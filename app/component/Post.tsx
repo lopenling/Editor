@@ -13,11 +13,11 @@ type QuestionFormProps = {
 const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
   const data = useLoaderData();
   const createPost = useFetcher();
-  const inputRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
   const [body, setBody] = React.useState("");
   useEffect(() => {
     setOpen(!!postInfo);
+    console.log(postInfo);
   }, [postInfo]);
   function handleSubmit(e) {
     e.preventDefault();
@@ -45,7 +45,6 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
   }
   if (!open) return null;
   if (!postInfo) return null;
-  if (createPost.type === "done") setOpen(false);
   if (createPost.submission && createPost.submission.formData.get("body")) {
     return (
       <TemporaryPost
@@ -57,8 +56,8 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
   return (
     <section style={{ position: "sticky" }}>
       <div className="inline-flex items-start justify-start">
-        <p className="text-base font-medium leading-tight text-gray-900 mb-3">
-          New {postInfo.type}
+        <p className="text-base font-medium leading-tight text-gray-900 mb-3 capitalize">
+          {postInfo.type === "question" ? "ask question" : "new comment"}
         </p>
       </div>
       <createPost.Form
@@ -84,7 +83,7 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
           <Button
             onClick={() => setOpen(false)}
             color=""
-            className="bg-white text-black"
+            className="bg-gray-200 text-black"
           >
             cancel
           </Button>
