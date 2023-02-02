@@ -11,7 +11,8 @@
     "dev:css": "npm run generate:css -- --watch",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "generate-client": "prisma generate --data-proxy"
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.6",
