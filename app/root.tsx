@@ -1,4 +1,4 @@
-import { json, LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -8,24 +8,23 @@ import {
   ScrollRestoration,
   useLoaderData,
   useLocation,
-  useTransition,
+  useTransition
 } from "@remix-run/react";
-import tailwindStyle from "./styles/tailwind.css";
-import globalStyle from "./styles/globalStyle.css";
+import { Progress } from "flowbite-react";
+import React from "react";
+import ErrorPage from "./component/ErrorPage";
+import FooterContainer from "./component/Footer";
 import Header from "./component/Header";
 import { getUserSession } from "./services/session.server";
-import FooterContainer from "./component/Footer";
-import React from "react";
-import { Progress } from "flowbite-react";
-import ErrorPage from "./component/ErrorPage";
+import globalStyle from "./styles/globalStyle.css";
+import tailwindStyle from "./styles/tailwind.css";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
   description: "annotation of text and discussion on budhist text",
 });
 export const loader: LoaderFunction = async ({ request }) => {
-  // let user = (await getUserSession(request)) || null;
-  let user = "";
+  let user = (await getUserSession(request)) || null;
   console.log(DATABASE_URL);
   return { user };
 };
