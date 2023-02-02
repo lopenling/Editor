@@ -1,5 +1,5 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Avatar, Button } from "flowbite-react";
+import { Avatar, Button, Textarea } from "flowbite-react";
 import React, { useEffect } from "react";
 type QuestionFormProps = {
   postInfo: null | {
@@ -56,11 +56,8 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
   }
   return (
     <section style={{ position: "sticky" }}>
-      <div
-        className="inline-flex items-start justify-start"
-        style={{ width: 388, height: 20 }}
-      >
-        <p className="text-base font-medium leading-tight text-gray-900">
+      <div className="inline-flex items-start justify-start">
+        <p className="text-base font-medium leading-tight text-gray-900 mb-3">
           New {postInfo.type}
         </p>
       </div>
@@ -69,25 +66,20 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
         className="flex flex-col gap-3"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col items-start justify-start rounded-lg border border-gray-300 bg-gray-50 px-5 py-3">
-          <div className="h-full w-full flex-1">
-            <div className="h-full flex-1 text-sm leading-tight text-gray-500">
-              {data.user ? (
-                <>
-                  <textarea
-                    autoFocus
-                    name="body"
-                    ref={inputRef}
-                    onChange={(e) => setBody(e.target.value)}
-                    className="h-12 w-full bg-gray-50 outline-0 "
-                  ></textarea>
-                </>
-              ) : (
-                <div style={{ color: "red" }}>You must login first</div>
-              )}
-            </div>
-          </div>
-        </div>
+        {data.user ? (
+          <>
+            <Textarea
+              placeholder="what are your thoughts?"
+              autoFocus
+              name="body"
+              onChange={(e) => setBody(e.target.value)}
+              style={{ height: 108 }}
+              className=" w-full bg-gray-50 focus:border-0 focus:outline-0"
+            ></Textarea>
+          </>
+        ) : (
+          <div style={{ color: "red" }}>You must login first</div>
+        )}
         <div className="flex justify-end gap-4">
           <Button
             onClick={() => setOpen(false)}
@@ -105,6 +97,7 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
           </Button>
         </div>
       </createPost.Form>
+      <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
     </section>
   );
 };

@@ -34,13 +34,13 @@ export let loader: LoaderFunction = async ({ request }) => {
       if (!email || !name || !username) {
         throw new Error("discourse SSO returned error URL");
       }
-      session.set("user", { email, admin, name, username, avatarUrl });
       let isUserInDatabase = await findUserByUsername(username);
       if (!isUserInDatabase) {
         let isAdmin = admin === "true" ? true : false;
         const newUser = await createUserInDB(username, name, email, isAdmin);
         console.log(newUser);
       }
+      session.set("user", { email, admin, name, username, avatarUrl });
     } catch (e) {
       session.flash("error", {
         error: e,

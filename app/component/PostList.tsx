@@ -183,7 +183,8 @@ function EachPost({
           </p>
           <div className="flex w-full flex-1 items-center justify-between pb-3">
             <div className="flex h-full w-64 items-center justify-start space-x-4">
-              <div
+              <button
+                disabled={likeFetcher.state !== "idle" || !data.user}
                 className="flex cursor-pointer items-center justify-start space-x-1.5"
                 onClick={handleLikeClick}
               >
@@ -200,17 +201,14 @@ function EachPost({
                   />
                 </svg>
 
-                <button
-                  disabled={likeFetcher.state !== "idle"}
-                  className="  text-sm font-medium leading-tight text-gray-500"
-                >
+                <div className="  text-sm font-medium leading-tight text-gray-500">
                   {likeFetcher.submission
                     ? likedByMe
                       ? likedBy.length - 1
                       : likedBy.length + 1
                     : likedBy.length}
-                </button>
-              </div>
+                </div>
+              </button>
               <div className="flex items-center justify-start space-x-1.5">
                 <svg
                   width="16"

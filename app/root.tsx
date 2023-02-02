@@ -1,5 +1,11 @@
-import { json, LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
+  defer,
+  json,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/cloudflare";
+import {
+  Await,
   Links,
   LiveReload,
   Meta,
@@ -15,7 +21,7 @@ import globalStyle from "./styles/globalStyle.css";
 import Header from "./component/Header";
 import { getUserSession } from "./services/session.server";
 import FooterContainer from "./component/Footer";
-import React from "react";
+import React, { Suspense } from "react";
 import { Progress } from "flowbite-react";
 import ErrorPage from "./component/ErrorPage";
 export const meta: MetaFunction = () => ({
@@ -24,9 +30,7 @@ export const meta: MetaFunction = () => ({
   description: "annotation of text and discussion on budhist text",
 });
 export const loader: LoaderFunction = async ({ request }) => {
-  // let user = (await getUserSession(request)) || null;
-  let user = "";
-  console.log(DATABASE_URL);
+  let user = await getUserSession(request);
   return { user };
 };
 
@@ -50,6 +54,10 @@ function Document({ children, title }: { children: any; title: string }) {
     transition.state === "loading" &&
     transition.location.pathname.includes("/texts") &&
     !transition.location.state;
+  const header = React.useMemo(
+    () => <Header user={loaderData.user} />,
+    [loaderData.user]
+  );
   return (
     <html lang="en">
       <head>
@@ -59,7 +67,7 @@ function Document({ children, title }: { children: any; title: string }) {
       </head>
 
       <body style={{ width: "100vw" }}>
-        <Header user={loaderData.user} />
+        {header}
         {routeChanged ? <Loading /> : children}
         {location.pathname === "/" && <FooterContainer />}
         <ScrollRestoration />

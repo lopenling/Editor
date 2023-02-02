@@ -14,6 +14,7 @@ import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/Editor";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUserSession(request);
+
   const textId = parseInt(params.textId);
   if (!textId) throw new Error("not valid textId");
   let userInfo = null;
