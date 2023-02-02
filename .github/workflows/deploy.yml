@@ -25,8 +25,13 @@ jobs:
 #         uses: bahmutov/npm-install@v1
         
       - name: Create Environment Vars
+        shell: python
         run: |
-          python --version
+          import environ
+          env_vars_blob = environ.get("PROD_ENV_VARS")
+          print(env_vars_blob)
+        env:
+          PROD_ENV_VARS: ${{ secrets.PROD_ENV_VARS }}
 
 #       - name: Publish
 #         run: |
