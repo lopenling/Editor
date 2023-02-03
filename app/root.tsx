@@ -1,4 +1,7 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import type {
+  LoaderFunction,
+  MetaFunction
+} from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -24,8 +27,7 @@ export const meta: MetaFunction = () => ({
   description: "annotation of text and discussion on budhist text",
 });
 export const loader: LoaderFunction = async ({ request }) => {
-  let user = (await getUserSession(request)) || null;
-  console.log(DATABASE_URL);
+  let user = await getUserSession(request);
   return { user };
 };
 
@@ -49,6 +51,10 @@ function Document({ children, title }: { children: any; title: string }) {
     transition.state === "loading" &&
     transition.location.pathname.includes("/texts") &&
     !transition.location.state;
+  const header = React.useMemo(
+    () => <Header user={loaderData.user} />,
+    [loaderData.user]
+  );
   return (
     <html lang="en">
       <head>
@@ -58,7 +64,7 @@ function Document({ children, title }: { children: any; title: string }) {
       </head>
 
       <body style={{ width: "100vw" }}>
-        <Header user={loaderData.user} />
+        {header}
         {routeChanged ? <Loading /> : children}
         {location.pathname === "/" && <FooterContainer />}
         <ScrollRestoration />

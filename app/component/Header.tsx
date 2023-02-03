@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
-import lopenlingLogo from "~/file/logo.png";
+import LopenlingLogo from "~/file/logo.svg";
 function generateInitials(name) {
   const nameArray = name.split(" ");
   let initials = "";
@@ -27,12 +27,7 @@ export default function Header({ user }: any) {
       className="justify-between px-3"
     >
       <Link to="/" className="flex items-center  ">
-        <div className="flex h-8 w-1/5 items-center justify-center">
-          <img className="mr-3 h-full flex-1 rounded-lg" src={lopenlingLogo} />
-        </div>
-        <p className="text-2xl font-extrabold leading-9 text-green-400">
-          Lopenling
-        </p>
+        <img src={LopenlingLogo} alt="logo" />
       </Link>
 
       {user ? (

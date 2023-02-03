@@ -108,7 +108,10 @@ function Editor() {
           showEditorSettings={showEditorSettings}
         />
 
-        <h1 className="mb-4 flex items-center justify-center text-lg font-bold text-gray-900">
+        <h1
+          style={{ fontSize: 24 }}
+          className="mb-4 flex items-center justify-center  text-lg font-bold text-gray-900"
+        >
           {data?.text?.name}
         </h1>
         <div className=" max-h-80 overflow-y-scroll md:max-h-full">

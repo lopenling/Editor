@@ -3,10 +3,10 @@ import { Editor } from "@tiptap/react";
 import React from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import Reply from "./Reply";
-import { Avatar, Modal } from "flowbite-react";
+import { Avatar, Modal, Spinner } from "flowbite-react";
 import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
-
+import { useDetectClickOutside } from "react-detect-click-outside";
 import { ViewportList } from "react-viewport-list";
 
 type QuestionProps = {
@@ -51,7 +51,12 @@ function PostList(props: QuestionProps) {
       .run();
     setSelectedPost(id);
   }
-  const ref = React.useRef<HTMLDivElement | null>(null);
+  const clickOutside = React.useCallback(() => {
+    setSelectedPost(null);
+  }, []);
+  const ref = useDetectClickOutside({
+    onTriggered: clickOutside,
+  });
 
   const onClose = () => props.setOpenFilter((prev) => !prev);
 
@@ -132,8 +137,6 @@ function EachPost({
   selectedPost,
   type,
 }: EachPostType) {
-  const rowRef = React.useRef();
-
   const [openReply, setOpenReply] = React.useState(false);
   const [showReplies, setShowReplies] = React.useState(false);
   const reply_count_ref = React.useRef(null);
@@ -157,11 +160,11 @@ function EachPost({
   return (
     <>
       <div
-        ref={rowRef}
         style={{
           backgroundColor: selectedPost === id ? "#FDFDEA" : "transparent",
         }}
         className="md:px-3"
+        onClick={handleSelection}
       >
         <div className="mt-3 inline-flex w-full items-start justify-start">
           <div className="flex items-center justify-start space-x-3">
@@ -175,15 +178,13 @@ function EachPost({
           </p>
         </div>
         <div className="flex flex-col items-start justify-start space-y-4">
-          <p
-            className="text-base leading-normal text-gray-500"
-            onClick={handleSelection}
-          >
+          <p className="text-base leading-normal text-gray-500">
             {postContent}
           </p>
           <div className="flex w-full flex-1 items-center justify-between pb-3">
             <div className="flex h-full w-64 items-center justify-start space-x-4">
-              <div
+              <button
+                disabled={likeFetcher.state !== "idle" || !data.user}
                 className="flex cursor-pointer items-center justify-start space-x-1.5"
                 onClick={handleLikeClick}
               >
@@ -200,17 +201,14 @@ function EachPost({
                   />
                 </svg>
 
-                <button
-                  disabled={likeFetcher.state !== "idle"}
-                  className="  text-sm font-medium leading-tight text-gray-500"
-                >
+                <div className="  text-sm font-medium leading-tight text-gray-500">
                   {likeFetcher.submission
                     ? likedByMe
                       ? likedBy.length - 1
                       : likedBy.length + 1
                     : likedBy.length}
-                </button>
-              </div>
+                </div>
+              </button>
               <div className="flex items-center justify-start space-x-1.5">
                 <svg
                   width="16"
@@ -230,7 +228,10 @@ function EachPost({
                   onClick={() => setShowReplies((prev) => !prev)}
                   className="text-sm font-medium leading-tight text-gray-500"
                 >
-                  <span ref={reply_count_ref}>0</span> replies
+                  <span ref={reply_count_ref} className="mr-1">
+                    <Spinner />
+                  </span>
+                  replies
                 </button>
               </div>
             </div>

@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    name: Deploying on Cloudflare Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v2
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
+        
+      - name: Setup Environment Vars
+        run: ./scripts/set_env_vars.py
+        env:
+          PROD_ENV_VARS: ${{ secrets.PROD_ENV_VARS }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Publish
+        run: |
+          npm run build
+          npm run deploy
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
