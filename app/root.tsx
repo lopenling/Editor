@@ -128,7 +128,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 function App() {
   return (
     <>
-      <Document title={"Lopenling Application"}>
+      <Document title={"Lopenling App"}>
         <Outlet />
       </Document>
     </>
