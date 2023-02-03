@@ -35,6 +35,7 @@ jobs:
 
       - name: Publish
         run: |
+          npx prisma generate --data-proxy
           npm run build
           npm run deploy
         env:
