@@ -27,7 +27,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         
       - name: Setup Environment Vars
-        run: ./scripts/set_env_vars.py
+        run: python3 ./scripts/set_env_vars.py
         env:
           PROD_ENV_VARS: ${{ secrets.PROD_ENV_VARS }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -35,6 +35,7 @@ jobs:
 
       - name: Publish
         run: |
+          npx prisma generate --data-proxy
           npm run build
           npm run deploy
         env:
