@@ -1,7 +1,4 @@
-import type {
-  LoaderFunction,
-  MetaFunction
-} from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -11,7 +8,7 @@ import {
   ScrollRestoration,
   useLoaderData,
   useLocation,
-  useTransition
+  useTransition,
 } from "@remix-run/react";
 import { Progress } from "flowbite-react";
 import React from "react";
@@ -88,7 +85,7 @@ function Loading() {
       if (progress >= 100) {
         clearInterval(interval);
       } else if (progress >= 70) {
-        step = 0.1;
+        step = 0.2;
       }
       setPercent(progress);
     }, 100);
