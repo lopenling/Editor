@@ -2,14 +2,13 @@ name = "lopenling-app"
 
 workers_dev = true
 main = "./build/index.js"
-account_id = "542d340d71d90c60471c8a30e3f7c65e"
+account_id ="542d340d71d90c60471c8a30e3f7c65e"
 compatibility_date = "2022-04-05"
-compatibility_flags = ["streams_enable_constructors"]
 
 [site]
 bucket = "./public"
 
 [[kv_namespaces]]
 binding = "SESSIONS"
-id = "ac731a42acec4a3a84a81e86119a0c7d"
-preview_id = "cafd863b818c4062a021975a54a3a695"
+id = "b8a947c3f76646e59296f4569b720027"
+preview_id = "604c7bc6c9ce4391b069ff0e23ffce22"

@@ -27,6 +27,7 @@ function Reply(
     postListFetcher.submit({}, { method: "get", action: `/api/${topicId}` });
   }, [postFetcher.submission, loaderData.posts]);
   if (postListFetcher.data) {
+    console.log(postListFetcher.data);
     ref.current.innerText = postListFetcher.data?.posts?.length - 1;
   }
   const handleDelete = (id, TopicId) => {
@@ -193,7 +194,7 @@ function EachReply({
       ></p>
       <div className="flex justify-between">
         <button
-          disabled={!!replyLikeFetcher.submission || !data.user}
+          disabled={!!replyLikeFetcher.submission || !data?.user}
           onClick={handleLikeReply}
           className="flex cursor-pointer items-center"
         >

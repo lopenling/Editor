@@ -1,9 +1,12 @@
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
+import { useTranslation } from "react-i18next";
 
 export default function Index() {
   const searchedText = useFetcher();
   const list = searchedText.data;
+
+  const { t, ready, i18n } = useTranslation("common");
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
   return (
     <>
@@ -19,7 +22,7 @@ export default function Index() {
           <div className="relative flex w-full space-x-3">
             <TextInput
               name="textSearch"
-              placeholder="search text"
+              placeholder={t("searchPlaceholder")}
               id="large"
               type="search"
               required
@@ -30,7 +33,7 @@ export default function Index() {
               className="bg-green-400 text-white"
               color={"#1C64F2"}
             >
-              search
+              {t("search")}
             </Button>
           </div>
         </searchedText.Form>

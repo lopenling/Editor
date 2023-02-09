@@ -18,6 +18,8 @@ import Header from "./component/Header";
 import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
+import remixI18n from "./i18n.server";
+import { useTranslation } from "react-i18next";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
@@ -28,6 +30,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   return { user };
 };
 
+export const handle = {
+  // In the handle export, we could add a i18n key with namespaces our route
+  // will need to load. This key can be a single string or an array of strings.
+  i18n: ["common"],
+};
 export function links() {
   return [
     {
@@ -44,6 +51,7 @@ function Document({ children, title }: { children: any; title: string }) {
   const transition = useTransition();
   const loaderData = useLoaderData();
   let location = useLocation();
+  const { t, i18n } = useTranslation("common");
   let routeChanged =
     transition.state === "loading" &&
     transition.location.pathname.includes("/texts") &&
@@ -53,11 +61,11 @@ function Document({ children, title }: { children: any; title: string }) {
     [loaderData.user]
   );
   return (
-    <html lang="en">
+    <html lang={i18n.language}>
       <head>
         <Meta />
         <Links />
-        <title>{title}</title>
+        <title>{t("title")}</title>
       </head>
 
       <body style={{ width: "100vw" }}>
