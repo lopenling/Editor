@@ -25,6 +25,7 @@ function Reply(
   }
   React.useEffect(() => {
     postListFetcher.submit({}, { method: "get", action: `/api/${topicId}` });
+    console.log(postListFetcher.data);
   }, [postFetcher.submission, loaderData.posts]);
   if (postListFetcher.data) {
     ref.current.innerText = postListFetcher.data?.posts?.length - 1;
