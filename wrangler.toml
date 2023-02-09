@@ -11,5 +11,5 @@ bucket = "./public"
 
 [[kv_namespaces]]
 binding = "SESSIONS"
-id = "ac731a42acec4a3a84a81e86119a0c7d"
-preview_id = "cafd863b818c4062a021975a54a3a695"
+id = "75bd4d2a632c48ca8611a84394024d3d"
+preview_id = "964fdd4a3eb54a04bfc825390edf6d4b"
