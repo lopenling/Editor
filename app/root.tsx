@@ -85,7 +85,7 @@ function Loading() {
       if (progress >= 100) {
         clearInterval(interval);
       } else if (progress >= 70) {
-        step = 0.2;
+        step = 0.1;
       }
       setPercent(progress);
     }, 100);
