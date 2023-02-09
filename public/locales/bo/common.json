@@ -5,6 +5,7 @@
         "logout": "ཕྱིར་ཐོན།",
         "search": "འཚོལ།",
         "searchPlaceholder":"དཔེ་ཆ་འཚོལ།",
+        "filter":"ཚགས།",
         "authorFilter": "མཛད་པ་པོ།",
         "titles": "མཚན་བྱང་།",
         "loadMore": "Load More…",
@@ -34,7 +35,7 @@
      "greeting": "བཀྲ་ཤིས་བདེ་ལེགས།",
     "fontSize": "ཡིག་གཟུགས་ཆེ་ཆུངྲ།",
     "question": "དྲི་བ།",
-    "comment":"Comment",
+    "comment":"ཟུར་མཆན།",
     "uploadText":"uploadText"
 
 }

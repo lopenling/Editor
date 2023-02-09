@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 };
 
 function combineArrays(array1: [], array2: []) {
-  return array1.reduce((acc, val) => {
+  return array1?.reduce((acc, val) => {
     const matchingObject = array2.find((obj) => obj.id == val.id);
     if (matchingObject) {
       acc.push({ ...val, ...matchingObject });

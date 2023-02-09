@@ -5,6 +5,7 @@
         "logout": "logout",
         "search": "search",
         "searchPlaceholder":"search text",
+          "filter":"filter by",
         "authorFilter": "authorFilter",
         "titles": "titles",
         "loadMore": "Load More…",

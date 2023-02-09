@@ -17,11 +17,13 @@ import EditorSettings from "./EditorSettings";
 import applyAnnotation from "~/tiptap-extension/applyMarks";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { Button } from "flowbite-react";
+import { useTranslation } from "react-i18next";
 // import applyAnnotation from "~/extension/applyMarks";
 function Editor() {
   const data = useLoaderData();
   const [searchLocation, setSearchLocation] = React.useState([]);
   const [showEditorSettings, setShowEditorSettings] = React.useState(false);
+  const { t } = useTranslation("common");
   const [postInfo, setPostInfo] = React.useState<null | {
     type: string;
     start: number;
@@ -140,7 +142,7 @@ function Editor() {
                 className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500  border-gray-300 border-2"
                 onClick={() => handleBubbleClick("comment")}
               >
-                Comment
+                {t("comment")}
               </Button>
               <Button
                 size="sm"
@@ -148,7 +150,7 @@ function Editor() {
                 className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 border-gray-300 border-2"
                 onClick={() => handleBubbleClick("question")}
               >
-                Question
+                {t("question")}
               </Button>
             </Button.Group>
           </BubbleMenu>
@@ -195,7 +197,7 @@ function Editor() {
               />
             </svg>
             <span className="text-sm font-medium leading-tight text-gray-500">
-              filter by
+              {t("filter")}
             </span>
           </button>
         </div>
