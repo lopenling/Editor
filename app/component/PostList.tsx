@@ -225,12 +225,13 @@ function EachPost({
                 </svg>
 
                 <button
-                  onClick={() => setShowReplies((prev) => !prev)}
+                  onClick={() => {
+                    if (reply_count_ref.current?.innerText)
+                      setShowReplies((prev) => !prev);
+                  }}
                   className="text-sm font-medium leading-tight text-gray-500"
                 >
-                  <span ref={reply_count_ref} className="mr-1">
-                    <Spinner />
-                  </span>
+                  <span ref={reply_count_ref} className="mr-1"></span>
                   replies
                 </button>
               </div>
