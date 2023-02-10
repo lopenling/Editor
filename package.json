@@ -35,6 +35,7 @@
     "react-detect-click-outside": "^1.1.7",
     "react-dom": "^18.2.0",
     "react-responsive-modal": "^6.4.1",
+    "react-spinners": "^0.13.8",
     "react-viewport-list": "^6.3.0",
     "remix-utils": "^6.0.0",
     "uuid": "^9.0.0"

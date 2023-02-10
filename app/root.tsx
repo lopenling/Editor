@@ -10,7 +10,7 @@ import {
   useLocation,
   useTransition,
 } from "@remix-run/react";
-import { Progress } from "flowbite-react";
+import { Progress, Spinner } from "flowbite-react";
 import React from "react";
 import ErrorPage from "./component/ErrorPage";
 import Header from "./component/Header";
@@ -71,27 +71,11 @@ function Document({ children, title }: { children: any; title: string }) {
 }
 
 function Loading() {
-  const [percent, setPercent] = React.useState(0);
-  let step = 0.5;
-  let current_progress = 0;
-  React.useEffect(() => {
-    let interval = setInterval(function () {
-      current_progress += step;
-      let progress =
-        Math.round((Math.atan(current_progress) / (Math.PI / 2)) * 100 * 1000) /
-        1000;
-      if (progress >= 100) {
-        clearInterval(interval);
-      } else if (progress >= 70) {
-        step = 0.1;
-      }
-      setPercent(progress);
-    }, 100);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  return <Progress progress={percent} size="sm" color="dark" />;
+  return (
+    <div className="mt-10 flex justify-center items-center">
+      <Spinner size="xl" aria-label="Center-aligned spinner example" />
+    </div>
+  );
 }
 
 export function CatchBoundary() {

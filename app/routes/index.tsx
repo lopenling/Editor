@@ -24,7 +24,6 @@ export default function Index() {
   const transition = useTransition();
   const list = data;
   const isLoading = transition.state !== "idle" || transition.submission;
-  console.log(data);
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
   return (
     <>
