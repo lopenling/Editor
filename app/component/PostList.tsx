@@ -231,7 +231,7 @@ function EachPost({
                   <span ref={reply_count_ref} className="mr-1">
                     <Spinner />
                   </span>
-                  replies
+                  {showReplies ? "Hide reply" : "reply"}
                 </button>
               </div>
             </div>

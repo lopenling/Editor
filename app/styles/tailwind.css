@@ -2046,6 +2046,10 @@ input:checked + .toggle-bg {
   border-left-width: 1px;
 }
 
+.border-r-2 {
+  border-right-width: 2px;
+}
+
 .border-none {
   border-style: none;
 }
