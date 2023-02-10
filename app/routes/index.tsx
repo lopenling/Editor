@@ -1,29 +1,50 @@
-import { Link, useFetcher } from "@remix-run/react";
+import { Link, useFetcher, Form } from "@remix-run/react";
 import { Button, Card, Footer, Spinner, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Footer";
+import { LoaderFunction, redirect } from "@remix-run/server-runtime";
+import { json } from "@remix-run/cloudflare";
+import { searchTextWithName } from "~/model/text";
+import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
+import React from "react";
+export let loader: LoaderFunction = async ({ request }) => {
+  const searchText = new URL(request.url).searchParams.get("search");
+  console.log(searchText);
+  if (searchText === null) return null;
+  if (searchText === "") return json([]);
+  try {
+    let textList = await searchTextWithName(searchText);
+    return json(textList);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
 
 export default function Index() {
-  const searchedText = useFetcher();
-  const list = searchedText.data;
+  const data = useLoaderData();
+  const transition = useTransition();
+  const list = data;
+  const isLoading = transition.state !== "idle" || transition.submission;
+  console.log(data);
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
   return (
     <>
       <div className=" max-w-2xl mx-auto">
         <div
           className="inline-flex w-full items-center justify-center  px-3 md:px-1.5"
-          style={{ paddingBlock: !list ? "7rem" : 10 }}
+          style={{
+            paddingBlock: !list && !transition.submission ? "7rem" : 30,
+          }}
         >
-          <searchedText.Form
-            method="get"
-            action="/api/text-search"
-            className="w-full max-w-2xl"
-          >
-            <div className="relative flex w-full space-x-3">
+          <Form method="get" className="w-full max-w-2xl">
+            <div className="relative flex w-full space-x-3 ">
               <TextInput
-                name="textSearch"
+                name="search"
                 placeholder="search text"
-                id="large"
                 type="search"
+                style={{
+                  height: 50,
+                  color: "gray",
+                }}
                 required
                 className="flex-1"
                 icon={() => (
@@ -46,15 +67,16 @@ export default function Index() {
               />
               <Button
                 type="submit"
-                className="bg-green-400 text-white"
+                className="bg-green-400 text-white h-full"
                 color={"#1C64F2"}
+                size="lg"
               >
                 search
               </Button>
             </div>
-          </searchedText.Form>
+          </Form>
         </div>
-        {searchedText.submission && (
+        {isLoading && (
           <div className="inline-flex h-screen w-full flex-col items-center justify-start space-y-3.5">
             <Spinner />
           </div>
@@ -63,7 +85,16 @@ export default function Index() {
         {list && (
           <div className="inline-flex h-screen w-full flex-col items-center justify-start space-y-3.5 py-10">
             {list.length === 0 && (
-              <div style={{ color: "red" }}>No result found</div>
+              <div
+                className="text-gray-300 text-xl font-extrabold capitalize"
+                style={{
+                  fontSize: 20,
+                  fontFamily: "Inter",
+                  lineHeight: "150%",
+                }}
+              >
+                No result found
+              </div>
             )}
             {list?.map((list: { id: number; name: string }) => {
               return (
@@ -76,7 +107,7 @@ export default function Index() {
                     <h5 className="text-2xl tracking-tight text-gray-900 dark:text-white">
                       {list.name}
                     </h5>
-                    <p className="font-normal text-gray-700 dark:text-gray-400">
+                    <p className=" text-base font-normal text-gray-500 dark:text-gray-400">
                       Here are information about the text.
                     </p>
                   </Card>
@@ -86,7 +117,7 @@ export default function Index() {
           </div>
         )}
       </div>
-      {!list && (
+      {!list && !transition.submission && (
         <>
           <div className="inline-flex w-full items-center justify-center bg-gray-50 px-16">
             <div className="inline-flex flex-col items-center justify-center  bg-gray-50 py-24">
