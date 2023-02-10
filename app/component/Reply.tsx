@@ -1,5 +1,5 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Button, TextInput } from "flowbite-react";
+import { Button, Textarea, TextInput } from "flowbite-react";
 import React from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 
@@ -8,12 +8,21 @@ type ReplyProps = {
   topicId: number;
   showReplies: boolean;
   openReply: boolean;
+  closeReply: () => void;
   isCreator: boolean;
   type: "question" | "comment";
 };
 
 function Reply(
-  { postId, topicId, showReplies, openReply, isCreator, type }: ReplyProps,
+  {
+    postId,
+    topicId,
+    showReplies,
+    openReply,
+    closeReply,
+    isCreator,
+    type,
+  }: ReplyProps,
   ref
 ) {
   const postFetcher = useFetcher();
@@ -57,23 +66,43 @@ function Reply(
   return (
     <>
       {openReply && (
-        <postFetcher.Form
-          action="/api/postReply"
-          method="post"
-          className="flex max-w-full"
-        >
-          <input hidden defaultValue={topicId} name="topicId" />
-          <TextInput
-            type="text"
-            name="postString"
-            required={true}
-            className="flex-1"
-            ref={inputRef}
-          />
-          <Button color="" className="bg-green-400 text-white" type="submit">
-            post
-          </Button>
-        </postFetcher.Form>
+        <div className="flex justify-between mb-2">
+          <div style={{ borderLeft: "6px solid #e5e7eb", height: 180 }}></div>
+          <postFetcher.Form
+            action="/api/postReply"
+            method="post"
+            className="flex w-11/12 flex-col"
+          >
+            <input hidden defaultValue={topicId} name="topicId" />
+            <Textarea
+              name="postString"
+              required={true}
+              placeholder="Write your reply here ..."
+              className="flex-1"
+              style={{ maxHeight: 108 }}
+              autoFocus
+            />
+            <div className="flex justify-end gap-2 mt-2">
+              <Button
+                color=""
+                size="xs"
+                onClick={closeReply}
+                className="bg-gray-300 text-black"
+                type="reset"
+              >
+                cancel
+              </Button>
+              <Button
+                color=""
+                size="xs"
+                className="bg-green-400 text-white"
+                type="submit"
+              >
+                respond
+              </Button>
+            </div>
+          </postFetcher.Form>
+        </div>
       )}
 
       {showReplies &&

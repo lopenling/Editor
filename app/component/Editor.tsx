@@ -11,13 +11,10 @@ import React, { useEffect } from "react";
 import Post from "./Post";
 import PostList from "./PostList";
 import { FontSize } from "~/tiptap-extension/fontSize";
-// import SearchText from "./SearchText";
-// import { searchMarks } from "~/extension/searchMarks";
 import EditorSettings from "./EditorSettings";
 import applyAnnotation from "~/tiptap-extension/applyMarks";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { Button } from "flowbite-react";
-// import applyAnnotation from "~/extension/applyMarks";
 function Editor() {
   const data = useLoaderData();
   const [searchLocation, setSearchLocation] = React.useState([]);
@@ -110,7 +107,7 @@ function Editor() {
 
         <h1
           style={{ fontSize: 24 }}
-          className="mb-4 flex items-center justify-center  text-lg font-bold text-gray-900"
+          className=" my-4  flex items-center justify-center  text-lg  text-gray-900"
         >
           {data?.text?.name}
         </h1>

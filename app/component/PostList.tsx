@@ -263,6 +263,7 @@ function EachPost({
         topicId={topic_id}
         showReplies={showReplies}
         openReply={openReply}
+        closeReply={() => setOpenReply(false)}
         ref={reply_count_ref}
         isCreator={data?.user?.username === name}
         type={type}

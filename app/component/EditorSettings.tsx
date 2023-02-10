@@ -19,13 +19,18 @@ function EditorSetting({
       style={{ display: showEditorSettings ? "flex" : null }}
       className="hidden items-center gap-3 md:flex"
     >
-      <div className="flex-1" style={{ maxHeight: 29 }}>
+      <div className="flex-2" style={{ maxHeight: 37, width: 459 }}>
         <SearchString setSearchLocation={setSearchLocation} />
       </div>
-      <div className="inline-flex h-6 w-full flex-1 items-center justify-between rounded-full">
+      <div
+        style={{
+          maxWidth: 297,
+        }}
+        className="inline-flex flex-1 items-center justify-between rounded-full"
+      >
         <p className="text-sm leading-tight text-gray-500">A-</p>
-        <div className="flex h-2 w-full items-center justify-start ">
-          <div className=" flex h-2.5 flex-1 items-center justify-start space-x-16">
+        <div className="flex w-full items-center justify-start ">
+          <div className=" flex  flex-1 items-center justify-start ">
             <input
               type="range"
               className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-gray-700"
