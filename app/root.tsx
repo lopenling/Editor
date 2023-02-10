@@ -1,7 +1,4 @@
-import type {
-  LoaderFunction,
-  MetaFunction
-} from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -11,12 +8,11 @@ import {
   ScrollRestoration,
   useLoaderData,
   useLocation,
-  useTransition
+  useTransition,
 } from "@remix-run/react";
 import { Progress } from "flowbite-react";
 import React from "react";
 import ErrorPage from "./component/ErrorPage";
-import FooterContainer from "./component/Footer";
 import Header from "./component/Header";
 import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
@@ -66,7 +62,6 @@ function Document({ children, title }: { children: any; title: string }) {
       <body style={{ width: "100vw" }}>
         {header}
         {routeChanged ? <Loading /> : children}
-        {location.pathname === "/" && <FooterContainer />}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

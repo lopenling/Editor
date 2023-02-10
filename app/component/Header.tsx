@@ -23,8 +23,7 @@ export default function Header({ user }: any) {
     <Navbar
       rounded={true}
       fluid={false}
-      style={{ borderBottom: "1px solid #eee" }}
-      className="justify-between px-3"
+      style={{ borderBottom: "1px solid #eee", height: 72 }}
     >
       <Link to="/" className="flex items-center  ">
         <img src={LopenlingLogo} alt="logo" />
@@ -95,9 +94,9 @@ export default function Header({ user }: any) {
               type="submit"
               name="_action"
               value="login"
-              className="text-sm font-medium leading-tight text-gray-900"
+              className="text-sm font-medium leading-tight text-gray-900 capitalize"
             >
-              login{" "}
+              log in
             </button>
           </Form>
           <div className="flex items-center justify-center space-x-2 rounded-lg border border-green-400 px-5 py-2.5">

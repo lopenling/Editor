@@ -1188,6 +1188,11 @@ input:checked + .toggle-bg {
   margin-right: 1rem;
 }
 
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .mt-5 {
   margin-top: 1.25rem;
 }

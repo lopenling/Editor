@@ -24,6 +24,9 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
 }
+nav > div {
+  height: 100%;
+}
 ::selection {
   background: #fce96a;
   opacity: 0.3;
@@ -42,7 +45,10 @@ body {
 .search-term {
   font-weight: bold;
 }
-
+button,
+::placeholder {
+  text-transform: capitalize;
+}
 /* 
 .item {
   flex: 0 0 auto;
