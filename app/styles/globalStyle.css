@@ -7,12 +7,14 @@
 ::-webkit-scrollbar {
   width: 10px;
 }
-
+main {
+  height: calc(100vh - 72px);
+}
 /* Track */
 ::-webkit-scrollbar-track {
   width: 10px;
+  border: 1px solid #d9d9d9;
 }
-
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #d9d9d9;

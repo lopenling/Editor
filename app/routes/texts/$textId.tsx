@@ -51,9 +51,7 @@ export default function () {
   return (
     <>
       <main className="container m-auto">
-        <section>
-          <Editor />
-        </section>
+        <Editor />
       </main>
     </>
   );

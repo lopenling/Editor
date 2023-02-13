@@ -62,7 +62,7 @@ function PostList(props: QuestionProps) {
   const onClose = () => props.setOpenFilter((prev) => !prev);
 
   return (
-    <div>
+    <>
       {props.openFilter && (
         <Modal show={true} onClose={onClose} size="md">
           <Modal.Header>Filter</Modal.Header>
@@ -71,13 +71,13 @@ function PostList(props: QuestionProps) {
       )}
 
       <div
-        className="scroll-container flex flex-col "
+        className="scroll-container flex flex-col"
         ref={ref}
         style={{
           position: "relative",
           overflowY: "auto",
-          height: "70vh",
           overflowX: "hidden",
+          height: "80vh",
           paddingInline: 10,
         }}
       >
@@ -107,7 +107,7 @@ function PostList(props: QuestionProps) {
           )}
         </ViewportList>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -24,7 +24,7 @@ export default function Header({ user }: any) {
       rounded={true}
       fluid={false}
       style={{ borderBottom: "1px solid #eee", height: 72 }}
-      className="container md:px-16"
+      className=" md:px-16"
     >
       <Link to="/" className="flex items-center  ">
         <img src={LopenlingLogo} alt="logo" />
