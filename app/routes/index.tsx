@@ -23,7 +23,9 @@ export default function Index() {
   const data = useLoaderData();
   const transition = useTransition();
   const list = data;
-  const isLoading = transition.state !== "idle" || transition.submission;
+  const isLoading =
+    transition.state !== "idle" &&
+    transition.submission?.formData.get("search");
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
   return (
     <>
@@ -31,7 +33,7 @@ export default function Index() {
         <div
           className="inline-flex w-full items-center justify-center  px-3 md:px-1.5"
           style={{
-            paddingBlock: !list && !transition.submission ? "7rem" : 30,
+            paddingBlock: !isLoading && !list ? "7rem" : 30,
           }}
         >
           <Form method="get" className="w-full max-w-2xl">
@@ -116,7 +118,7 @@ export default function Index() {
           </div>
         )}
       </div>
-      {!list && !transition.submission && (
+      {!list && !isLoading && (
         <>
           <div className="inline-flex w-full items-center justify-center bg-gray-50 px-16">
             <div className="inline-flex flex-col items-center justify-center  bg-gray-50 py-24">

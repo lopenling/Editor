@@ -42,7 +42,6 @@ export function links() {
 function Document({ children, title }: { children: any; title: string }) {
   const transition = useTransition();
   const loaderData = useLoaderData();
-  let location = useLocation();
   let routeChanged =
     transition.state === "loading" &&
     transition.location.pathname.includes("/texts") &&

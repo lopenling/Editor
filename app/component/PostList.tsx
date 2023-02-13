@@ -34,12 +34,13 @@ function PostList(props: QuestionProps) {
       posts = posts.filter((l) => {
         return filter.user?.includes(l.creatorUser.username);
       });
-    if (filter.fromDate && filter.toDate)
+    if (filter.date?.startDate)
       posts = posts.filter((l) => {
         return (
           new Date(l.created_at).getTime() >
-            new Date(filter.fromDate).getTime() &&
-          new Date(l.created_at).getTime() < new Date(filter.toDate).getTime()
+            new Date(filter.date.startDate).getTime() &&
+          new Date(l.created_at).getTime() <
+            new Date(filter.date.endDate).getTime()
         );
       });
   }
@@ -229,7 +230,7 @@ function EachPost({
                   className="text-sm font-medium leading-tight text-gray-500"
                 >
                   <span ref={reply_count_ref} className="mr-1">
-                    <Spinner />
+                    0
                   </span>
                   {showReplies ? "Hide reply" : "reply"}
                 </button>

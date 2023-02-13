@@ -35,8 +35,7 @@ nav > div {
   height: 100%;
 }
 ::selection {
-  background: #fce96a;
-  opacity: 0.3;
+  background: rgba(252, 233, 106, 0.3);
 }
 .ProseMirror-focused {
   outline: none;

@@ -104,13 +104,12 @@ function getBoldOnHighlight(text: string, highlight: string) {
   const parts = text.split(new RegExp(`(${highlight})`, "gi"));
   let search = parts.map((part, index) => {
     let show =
-      part.toLowerCase() === highlight.toLowerCase()
-        ? `<span class='search-term'>${part}</span>`
-        : part;
+      part.toLowerCase() !== highlight.toLowerCase()
+        ? part
+        : `<search class='search-term'>${part}</search>`;
     return show;
   });
-
-  return `<search>${search.join("")}</search>`;
+  return search.join("");
 }
 
 export default applyAnnotation;

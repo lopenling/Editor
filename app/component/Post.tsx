@@ -8,9 +8,10 @@ type QuestionFormProps = {
     end: number;
     content: string;
   };
+  setPostInfo: (e: null | any) => void;
 };
 
-const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
+const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
   const data = useLoaderData();
   const createPost = useFetcher();
   const [open, setOpen] = React.useState(false);
@@ -42,9 +43,8 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
           action: "/api/post",
         }
       );
+    setPostInfo(null);
   }
-  if (!open) return null;
-  if (!postInfo) return null;
   if (createPost.submission && createPost.submission.formData.get("body")) {
     return (
       <TemporaryPost
@@ -53,6 +53,8 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
       />
     );
   }
+  if (!open) return null;
+  if (!postInfo) return null;
   return (
     <section style={{ position: "sticky" }}>
       <div className="inline-flex items-start justify-start">
@@ -79,17 +81,19 @@ const Posts = ({ postInfo }: QuestionFormProps, ref: any) => {
         ) : (
           <div style={{ color: "red" }}>You must login first</div>
         )}
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-2">
           <Button
             onClick={() => setOpen(false)}
             color=""
             className="bg-gray-200 text-black"
+            size="xs"
           >
             cancel
           </Button>
           <Button
             onClick={handleSubmit}
             color=""
+            size="xs"
             className="bg-green-400 text-white"
           >
             {createPost.state !== "idle" ? "posting" : "post"}
@@ -106,7 +110,7 @@ export default React.forwardRef(Posts);
 function TemporaryPost({ user, postContent }: any) {
   return (
     <>
-      <div className=" opacity-30 md:px-3">
+      <div className=" opacity-75 mx-1 md:px-3">
         <div className="mt-3 inline-flex w-full items-start justify-start">
           <div className="flex items-center justify-start space-x-3">
             <Avatar img={user.avatarUrl} rounded={true} size="xs" />

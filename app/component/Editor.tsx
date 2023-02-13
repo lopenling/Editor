@@ -97,7 +97,7 @@ function Editor() {
       });
   };
   return (
-    <div className="mt-5 flex w-full flex-col gap-5 md:flex-row">
+    <div className="mt-5 flex w-full flex-col gap-5 lg:flex-row  container lg:px-16">
       <div className="relative flex-1 px-5" style={{ maxHeight: "75vh" }}>
         <EditorSettings
           editor={editor}
@@ -111,7 +111,7 @@ function Editor() {
         >
           {data?.text?.name}
         </h1>
-        <div className=" max-h-80 overflow-y-scroll md:max-h-full">
+        <div className=" max-h-80 overflow-y-scroll lg:max-h-full">
           {editor ? (
             <EditorContent
               editor={editor}
@@ -171,11 +171,11 @@ function Editor() {
           </svg>
         </div>
       </div>
-      <div className=" relative sm:w-full md:w-1/3">
+      <div className=" relative sm:w-full lg:w-1/3">
         <div className="hidden w-full items-center justify-end md:inline-flex">
           <button
             onClick={() => setOpenFilter((prev) => !prev)}
-            className="flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2"
+            className="flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2 mb-4"
           >
             <svg
               width="16"
@@ -224,7 +224,7 @@ function Editor() {
             />
           </svg>
         </div>
-        <Post postInfo={postInfo} ref={null} />
+        <Post postInfo={postInfo} setPostInfo={setPostInfo} ref={null} />
 
         {data.posts.length > 0 && (
           <div>
