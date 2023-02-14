@@ -47,7 +47,7 @@ export default function FilterPost({ setFilter, filter, close }) {
   }
   function reset() {
     setFilterData({
-      type: null,
+      type: "all",
       date: { startDate: null, endDate: null },
       user: [],
     });
