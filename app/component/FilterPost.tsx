@@ -2,12 +2,9 @@ import { Avatar, Button } from "flowbite-react";
 import React, { useState } from "react";
 import { useFetcher } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
-export default function FilterPost({ setFilter, close }) {
-  const [filterData, setFilterData] = useState({
-    type: null,
-    date: { startDate: null, endDate: null },
-    user: [],
-  });
+export default function FilterPost({ setFilter, filter, close }) {
+  const [filterData, setFilterData] = useState(filter);
+  const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
   function handleTypeCheck(e) {
     let value = e.target.value;
@@ -51,9 +48,10 @@ export default function FilterPost({ setFilter, close }) {
   function reset() {
     setFilterData({
       type: null,
-      date: null,
+      date: { startDate: null, endDate: null },
       user: [],
     });
+    setUserInput("");
   }
   return (
     <>
@@ -67,7 +65,7 @@ export default function FilterPost({ setFilter, close }) {
             <div className="flex flex-col items-start justify-start space-y-0.5">
               <div className="flex py-2">
                 <input
-                  id="default-radio"
+                  id="all-radio"
                   type="radio"
                   onChange={handleTypeCheck}
                   value="all"
@@ -76,7 +74,7 @@ export default function FilterPost({ setFilter, close }) {
                   className="h-4 w-4 rounded  border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
                 <label
-                  htmlFor="default-checkbox"
+                  htmlFor="all-radio"
                   className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
                 >
                   All
@@ -84,7 +82,7 @@ export default function FilterPost({ setFilter, close }) {
               </div>
               <div className="flex py-2">
                 <input
-                  id="default-radio"
+                  id="comment-redio"
                   type="radio"
                   onChange={handleTypeCheck}
                   checked={filterData.type === "comment"}
@@ -93,7 +91,7 @@ export default function FilterPost({ setFilter, close }) {
                   className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
                 <label
-                  htmlFor="default-checkbox"
+                  htmlFor="comment-redio"
                   className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
                 >
                   Comments only
@@ -101,7 +99,7 @@ export default function FilterPost({ setFilter, close }) {
               </div>
               <div className="flex py-2">
                 <input
-                  id="default-radio"
+                  id="question-radio"
                   type="radio"
                   onChange={handleTypeCheck}
                   checked={filterData.type === "question"}
@@ -110,7 +108,7 @@ export default function FilterPost({ setFilter, close }) {
                   className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
                 <label
-                  htmlFor="default-checkbox"
+                  htmlFor="question-radio"
                   className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
                 >
                   Questions only
@@ -187,17 +185,19 @@ export default function FilterPost({ setFilter, close }) {
                     <input
                       type="text"
                       name="username"
-                      onChange={(e) =>
+                      value={userInput}
+                      onChange={(e) => {
+                        setUserInput(e.target.value);
                         searchUser.submit(
                           {
                             username: e.target.value,
                           },
                           { method: "get", action: "/api/search-user" }
-                        )
-                      }
+                        );
+                      }}
                       className="h-full flex-1 border-none border-transparent bg-transparent text-sm leading-none text-gray-900 outline-none focus:border-none focus:border-transparent focus:outline-none focus:ring-0"
                     />
-                    <button type="reset">
+                    <button type="button" onClick={() => setUserInput("")}>
                       <svg
                         width="18"
                         height="18"
@@ -215,16 +215,19 @@ export default function FilterPost({ setFilter, close }) {
                   </searchUser.Form>
                 </div>
               </div>
-              {searchUser.data?.length > 0 && (
+              {searchUser.data?.length > 0 && userInput !== "" && (
                 <div className="flex w-full flex-col items-center justify-start space-y-3 rounded-lg border border-gray-200 bg-white p-4 shadow">
                   {searchUser.data?.map((user) => {
+                    let avatarUrl = (
+                      "http://lopenling.org" + user?.avatar
+                    ).replace("{size}", "30");
                     return (
                       <div
                         className="w-full cursor-pointer"
                         key={user?.username}
                       >
                         <div className="inline-flex w-full items-center justify-start space-x-2 rounded-lg">
-                          <Avatar rounded={true} size="xs" />
+                          <Avatar rounded={true} img={avatarUrl} size="xs" />
                           <div
                             className="flex-1 text-sm leading-tight"
                             onClick={() => handleNameClick(user?.username)}

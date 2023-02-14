@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
         Obj.type
       );
     } catch (e) {
-      throw new Error(e.message);
+      return { error: { message: e.message } };
     }
     return { message: "success" };
   }

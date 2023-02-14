@@ -1,14 +1,46 @@
 import { Form, useFetcher, useLoaderData } from "@remix-run/react";
+import { Editor } from "@tiptap/react";
+import { Button } from "flowbite-react";
 import React from "react";
 export default function SearchString({
   setSearchLocation,
+  editor,
 }: {
   setSearchLocation: (list: any) => void;
+  editor: Editor;
 }) {
   const data = useLoaderData();
   const fullTextSearch = useFetcher();
-  const inputRef = React.useRef();
-  if (fullTextSearch.data) setSearchLocation(fullTextSearch.data);
+  const [index, setIndex] = React.useState(1);
+
+  const searchLocations = fullTextSearch.data;
+  function nextSearch() {
+    if (
+      index > -1 &&
+      searchLocations?.length &&
+      index < searchLocations?.length
+    ) {
+      setIndex((prev) => prev + 1);
+    }
+  }
+  function prevSearch() {
+    if (index > 1 && searchLocations?.length) {
+      setIndex((prev) => prev - 1);
+    }
+  }
+  React.useEffect(() => {
+    if (searchLocations?.length) {
+      let selectedSearch = searchLocations[index - 1];
+      editor
+        ?.chain()
+        .focus()
+        .setTextSelection(selectedSearch?.start)
+        .scrollIntoView()
+        .run();
+    }
+  }, [index]);
+
+  if (searchLocations) setSearchLocation(searchLocations);
   return (
     <div className="items-center flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border border-gray-300 bg-gray-50  ">
       {" "}
@@ -18,7 +50,6 @@ export default function SearchString({
         action="/api/full-text-search"
       >
         <input
-          ref={inputRef}
           name="searchString"
           type="text"
           placeholder="type here"
@@ -27,7 +58,20 @@ export default function SearchString({
         ></input>
         <input name="textId" readOnly value={data.text.id} hidden />
         <button type="submit" hidden></button>
-        <button type="reset">
+        <button
+          type="reset"
+          onClick={() => {
+            fullTextSearch.submit(
+              {
+                searchString: "",
+              },
+              {
+                method: "post",
+                action: "/api/full-text-search",
+              }
+            );
+          }}
+        >
           <svg
             width="11"
             height="12"
@@ -44,11 +88,56 @@ export default function SearchString({
           </svg>
         </button>
       </fullTextSearch.Form>
-      <p className="pr-3 text-sm leading-tight text-gray-500">
-        0/{fullTextSearch.data?.length ? fullTextSearch.data?.length : 0}
+      <p className=" text-sm leading-tight text-gray-500">
+        {searchLocations?.length ? index : 0}/
+        {searchLocations?.length ? searchLocations?.length : 0}
       </p>
+      <Button.Group>
+        <Button
+          style={{ borderLeft: "1px solid lightgray", borderRadius: "inherit" }}
+          color=""
+          className="w-8"
+          onClick={prevSearch}
+        >
+          <svg
+            width="15"
+            height="9"
+            viewBox="0 0 15 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.6665 7.50001L7.49984 1.66667L13.3332 7.50001"
+              stroke="#6B7280"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Button>
+        <Button
+          style={{ borderLeft: "1px solid lightgray" }}
+          color=""
+          className="w-8"
+          onClick={nextSearch}
+        >
+          <svg
+            width="15"
+            height="9"
+            viewBox="0 0 15 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.3332 1.5L7.49984 7.33333L1.6665 1.5"
+              stroke="#6B7280"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Button>
+      </Button.Group>
     </div>
   );
 }
-
-// <p >|</p>

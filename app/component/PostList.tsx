@@ -20,7 +20,11 @@ export function links() {
 }
 function PostList(props: QuestionProps) {
   const data = useLoaderData();
-  const [filter, setFilter] = React.useState(null);
+  const [filter, setFilter] = React.useState({
+    type: "all",
+    date: { startDate: null, endDate: null },
+    user: [],
+  });
   const [selectedPost, setSelectedPost] = React.useState(null);
   let posts = data.posts.sort(
     (a, b) => new Date(b.created_at) - new Date(a.created_at)
@@ -66,7 +70,7 @@ function PostList(props: QuestionProps) {
       {props.openFilter && (
         <Modal show={true} onClose={onClose} size="md">
           <Modal.Header>Filter</Modal.Header>
-          <FilterPost setFilter={setFilter} close={onClose} />
+          <FilterPost filter={filter} setFilter={setFilter} close={onClose} />
         </Modal>
       )}
 

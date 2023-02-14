@@ -53,6 +53,12 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
       />
     );
   }
+  if (createPost.data?.error)
+    return (
+      <div className="text-red-600">
+        Error: 'cannot create a post' <span onClick={handleSubmit}>retry</span>
+      </div>
+    );
   if (!open) return null;
   if (!postInfo) return null;
   return (

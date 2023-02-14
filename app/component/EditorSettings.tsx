@@ -28,7 +28,10 @@ function EditorSetting({
             style={{ maxWidth: 300, margin: "0 auto" }}
             className="flex items-center gap-2"
           >
-            <SearchString setSearchLocation={setSearchLocation} />
+            <SearchString
+              setSearchLocation={setSearchLocation}
+              editor={editor}
+            />
             <div onClick={() => setShowFindText(false)}>
               <img src={crossIcon} alt="cross"></img>
             </div>
@@ -65,15 +68,16 @@ function EditorSetting({
     );
 
   return (
-    <div className="hidden items-center gap-3 md:flex">
-      <div className="flex-2" style={{ maxHeight: 37, width: 459 }}>
-        <SearchString setSearchLocation={setSearchLocation} />
+    <div className="hidden items-center gap-4 md:flex md:justify-between">
+      <div style={{ maxHeight: 37, flex: 2.3 }}>
+        <SearchString setSearchLocation={setSearchLocation} editor={editor} />
       </div>
       <div
         style={{
           maxWidth: 297,
+          flex: 1,
         }}
-        className="inline-flex flex-1 items-center justify-between rounded-full"
+        className="inline-flex items-center justify-between rounded-full"
       >
         <p className="text-sm leading-tight text-gray-500">A-</p>
         <div className="flex w-full items-center justify-start ">

@@ -110,7 +110,7 @@ function Reply(
       )}
 
       {showReplies &&
-        postdata.map((reply: any, index: number) => {
+        postdata?.map((reply: any, index: number) => {
           return (
             <div className="flex" key={reply.id}>
               <EachReply

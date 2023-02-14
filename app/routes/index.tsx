@@ -6,9 +6,9 @@ import { json } from "@remix-run/cloudflare";
 import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
 import React from "react";
+
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
-  console.log(searchText);
   if (searchText === null) return null;
   if (searchText === "") return json([]);
   try {

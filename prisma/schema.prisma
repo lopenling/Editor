@@ -16,7 +16,6 @@ model User {
   username   String   @unique
   email      String   @unique
   role       Role     @default(BASIC)
-  isAdmin    Boolean
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   Post       Post[]   @relation("creatorPost")
