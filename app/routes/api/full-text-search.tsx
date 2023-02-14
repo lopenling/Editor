@@ -10,21 +10,27 @@ export let action: ActionFunction = async ({ request }) => {
   if (searchString === "") return json([]);
   let id = parseInt(textId);
   const text = await findTextByTextId(id, true);
-  const split = text.content?.split(" ").map((l, index) => {
-    if (index === text.content.split(" ").length - 1) return l;
-    return l + " ";
-  });
-  let start = 0;
-  const jsonList = split.map((l, index) => {
-    if (index !== 0) start = start + split[index - 1].length;
+
+  let location = findStringOccurrences(text?.content, searchString);
+
+  const jsonList = location.map((l, index) => {
     return {
-      start,
-      length: l.length,
-      text: l,
+      start: l,
+      length: searchString.length,
+      text: "",
+      index,
       searchString: searchString,
     };
   });
-  let results = jsonList.filter((l) => l.text.includes(searchString));
-
-  return json(results);
+  return json(jsonList);
 };
+
+function findStringOccurrences(text, searchString) {
+  const regex = new RegExp(searchString, "gi");
+  const matches = text.matchAll(regex);
+  const indices = [];
+  for (const match of matches) {
+    indices.push(match.index);
+  }
+  return indices;
+}

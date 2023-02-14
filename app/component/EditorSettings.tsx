@@ -1,6 +1,9 @@
 import { Editor } from "@tiptap/react";
 import crossIcon from "~/file/icon_cross.svg";
 import SearchString from "./SearchText";
+import React from "react";
+import { DEFAULT_FONT_SIZE } from "~/constants";
+
 function EditorSetting({
   editor,
   setSearchLocation,
@@ -16,10 +19,13 @@ function EditorSetting({
   setShowFindText: any;
   setShowFontSize: any;
 }) {
-  function handleFontSize(e) {
-    let value = e.target.value;
-    editor.chain().selectAll().setFontSize(value).run();
-  }
+  const [fontSize, setFontSize] = React.useState(DEFAULT_FONT_SIZE);
+  const deferedFont = React.useDeferredValue(fontSize);
+  React.useEffect(() => {
+    if (editor && deferedFont > 0)
+      editor.chain().selectAll().setFontSize(deferedFont).run();
+  }, [deferedFont]);
+
   if (showFindText || showFontSize)
     return (
       <>
@@ -52,8 +58,8 @@ function EditorSetting({
                     min={12}
                     step={1}
                     max={24}
-                    defaultValue={16}
-                    onChange={handleFontSize}
+                    value={fontSize}
+                    onChange={(e) => setFontSize(e.target.value)}
                   ></input>
                 </div>
               </div>
@@ -66,7 +72,6 @@ function EditorSetting({
         )}
       </>
     );
-
   return (
     <div className="hidden items-center gap-4 md:flex md:justify-between">
       <div style={{ maxHeight: 37, flex: 2.3 }}>
@@ -88,8 +93,8 @@ function EditorSetting({
               min={12}
               step={1}
               max={24}
-              defaultValue={16}
-              onChange={handleFontSize}
+              value={fontSize}
+              onChange={(e) => setFontSize(e.target.value)}
             ></input>
           </div>
         </div>

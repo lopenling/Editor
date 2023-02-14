@@ -16,6 +16,7 @@ import EditorSettings from "./EditorSettings";
 import applyAnnotation from "~/tiptap-extension/applyMarks";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { Button } from "flowbite-react";
+import { DEFAULT_FONT_SIZE } from "~/constants";
 function Editor() {
   const data = useLoaderData();
   const [searchLocation, setSearchLocation] = React.useState([]);
@@ -122,6 +123,7 @@ function Editor() {
               editor={editor}
               className="editor"
               style={{
+                fontSize: DEFAULT_FONT_SIZE,
                 transition: "all ease 0.3s",
               }}
             />

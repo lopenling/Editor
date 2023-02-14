@@ -50,9 +50,6 @@ nav > div {
 .search {
   background-color: rgb(232, 233, 136);
 }
-.search-term {
-  font-weight: bold;
-}
 button,
 ::placeholder {
   text-transform: capitalize;
