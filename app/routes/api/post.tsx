@@ -1,15 +1,9 @@
 import {
   ActionFunction,
-  json,
   LoaderFunction,
   redirect,
 } from "@remix-run/server-runtime";
-import {
-  createThread,
-  deletePost,
-  getpostreplies,
-  getposts,
-} from "~/services/discourseApi";
+import { createThread } from "~/services/discourseApi";
 import { getUserSession } from "~/services/session.server";
 
 export const loader: LoaderFunction = () => {

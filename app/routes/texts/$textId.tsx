@@ -7,7 +7,7 @@ import {
   redirect,
 } from "@remix-run/server-runtime";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import { Await, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { findUserByUsername } from "~/model/user";
 import { findPostByTextId } from "~/model/post";
 import { findTextByTextId } from "~/model/text";
