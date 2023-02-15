@@ -18,7 +18,7 @@ export let action: ActionFunction = async ({ request }) => {
       start: l,
       length: searchString.length,
       text: "",
-      index,
+      index: index + 1,
       searchString: searchString,
     };
   });

@@ -19,7 +19,6 @@ import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 function Editor() {
   const data = useLoaderData();
-  const [searchLocation, setSearchLocation] = React.useState([]);
   const [showEditorSettings, setShowEditorSettings] = React.useState(false);
   const [showFindText, setShowFindText] = React.useState(false);
   const [showFontSize, setShowFontSize] = React.useState(false);
@@ -53,8 +52,6 @@ function Editor() {
           caseSensitive: false,
           disableRegex: false,
         }),
-        // applyAnnotation([], [], []),
-
         // SelectTextOnRender,
       ],
       content: content,
@@ -87,7 +84,6 @@ function Editor() {
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
-        console.log(from, to);
         setPostInfo(null);
         setSelection({
           start: from,
@@ -96,7 +92,7 @@ function Editor() {
         });
       },
     },
-    [searchLocation]
+    []
   );
   const handleBubbleClick = (type: string) => {
     if (selection)
@@ -112,7 +108,6 @@ function Editor() {
       <div className="relative flex-1 px-5" style={{ maxHeight: "75vh" }}>
         <EditorSettings
           editor={editor}
-          setSearchLocation={setSearchLocation}
           showFindText={showFindText}
           showFontSize={showFontSize}
           setShowFindText={setShowFindText}

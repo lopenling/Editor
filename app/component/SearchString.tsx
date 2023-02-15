@@ -2,17 +2,11 @@ import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { Button } from "flowbite-react";
 import React from "react";
-export default function SearchString({
-  setSearchLocation,
-  editor,
-}: {
-  setSearchLocation: (list: any) => void;
-  editor: Editor;
-}) {
+export default function SearchString({ editor }: { editor: Editor }) {
   const data = useLoaderData();
   const fullTextSearch = useFetcher();
   const [index, setIndex] = React.useState(1);
-
+  const [selectedSearch, setSelectedSearch] = React.useState([]);
   const searchLocations = fullTextSearch.data;
   function nextSearch() {
     if (
@@ -29,20 +23,27 @@ export default function SearchString({
     }
   }
   React.useEffect(() => {
+    setIndex(1);
+  }, [searchLocations]);
+  React.useEffect(() => {
     if (searchLocations?.length) {
-      let selectedSearch = searchLocations[index - 1];
+      setSelectedSearch(searchLocations[index - 1]);
+    }
+  }, [index, searchLocations]);
+  React.useEffect(() => {
+    if (selectedSearch?.start)
       editor
         ?.chain()
         .focus()
         .setTextSelection(selectedSearch?.start)
         .scrollIntoView()
         .run();
-    }
-  }, [index]);
-
-  if (searchLocations) {
-    setSearchLocation(searchLocations);
-    editor.commands.setSearchTerm(searchLocations[0]?.searchString);
+  }, [selectedSearch]);
+  let temporary = fullTextSearch?.submission?.formData.get(
+    "searchString"
+  ) as string;
+  if (temporary && fullTextSearch.type === "actionReload") {
+    editor.commands.setSearchTerm(temporary);
   }
   return (
     <div className="items-center flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border border-gray-300 bg-gray-50  ">
@@ -92,7 +93,7 @@ export default function SearchString({
         </button>
       </fullTextSearch.Form>
       <p className=" text-sm leading-tight text-gray-500">
-        {searchLocations?.length ? index : 0}/
+        {selectedSearch?.index || 0}/
         {searchLocations?.length ? searchLocations?.length : 0}
       </p>
       <Button.Group>

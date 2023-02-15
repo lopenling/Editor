@@ -6,26 +6,17 @@ import { DEFAULT_FONT_SIZE } from "~/constants";
 
 function EditorSetting({
   editor,
-  setSearchLocation,
   showFindText,
   showFontSize,
   setShowFindText,
   setShowFontSize,
 }: {
   editor: Editor | null;
-  setSearchLocation: any;
   showFindText: boolean;
   showFontSize: boolean;
   setShowFindText: any;
   setShowFontSize: any;
 }) {
-  const [fontSize, setFontSize] = React.useState(DEFAULT_FONT_SIZE);
-  const deferedFont = React.useDeferredValue(fontSize);
-  React.useEffect(() => {
-    if (editor && deferedFont > 0)
-      editor.chain().selectAll().setFontSize(deferedFont).run();
-  }, [deferedFont]);
-
   if (showFindText || showFontSize)
     return (
       <>
@@ -34,10 +25,7 @@ function EditorSetting({
             style={{ maxWidth: 300, margin: "0 auto" }}
             className="flex items-center gap-2"
           >
-            <SearchString
-              setSearchLocation={setSearchLocation}
-              editor={editor}
-            />
+            <SearchString editor={editor} />
             <div onClick={() => setShowFindText(false)}>
               <img src={crossIcon} alt="cross"></img>
             </div>
@@ -58,8 +46,14 @@ function EditorSetting({
                     min={12}
                     step={1}
                     max={24}
-                    value={fontSize}
-                    onChange={(e) => setFontSize(e.target.value)}
+                    defaultValue={DEFAULT_FONT_SIZE}
+                    onChange={(e) =>
+                      editor
+                        .chain()
+                        .selectAll()
+                        .setFontSize(e.target.value)
+                        .run()
+                    }
                   ></input>
                 </div>
               </div>
@@ -75,7 +69,7 @@ function EditorSetting({
   return (
     <div className="hidden items-center gap-4 md:flex md:justify-between">
       <div style={{ maxHeight: 37, flex: 2.3 }}>
-        <SearchString setSearchLocation={setSearchLocation} editor={editor} />
+        <SearchString editor={editor} />
       </div>
       <div
         style={{
@@ -93,8 +87,10 @@ function EditorSetting({
               min={12}
               step={1}
               max={24}
-              value={fontSize}
-              onChange={(e) => setFontSize(e.target.value)}
+              defaultValue={DEFAULT_FONT_SIZE}
+              onChange={(e) =>
+                editor.chain().selectAll().setFontSize(e.target.value).run()
+              }
             ></input>
           </div>
         </div>
