@@ -113,7 +113,7 @@ function Editor() {
         />
         <h1
           style={{ fontSize: 24 }}
-          className=" my-4  flex items-center justify-center  text-lg  text-gray-900"
+          className=" my-4 text-center  flex items-center justify-center  text-lg  text-gray-900"
         >
           {data?.text?.name}
         </h1>
