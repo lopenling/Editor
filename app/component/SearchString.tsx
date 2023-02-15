@@ -74,6 +74,7 @@ export default function SearchString({ editor }: { editor: Editor }) {
                 action: "/api/full-text-search",
               }
             );
+            editor.commands.setSearchTerm(null);
           }}
         >
           <svg
