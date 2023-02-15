@@ -93,7 +93,7 @@ export default function SearchString({ editor }: { editor: Editor }) {
         </button>
       </fullTextSearch.Form>
       <p className=" text-sm leading-tight text-gray-500">
-        {selectedSearch?.index || 0}/
+        {searchLocations?.length ? selectedSearch?.index : 0}/
         {searchLocations?.length ? searchLocations?.length : 0}
       </p>
       <Button.Group>
