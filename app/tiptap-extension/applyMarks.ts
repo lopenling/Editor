@@ -28,19 +28,21 @@ export const applyAnnotationFunction = (
     }
   if (searchLocation) {
     searchKey = searchLocation.map((l) => l.start);
+    console.log(searchKey);
   }
 
   let skiplength: any = [];
   [...content].forEach((c, i: number) => {
     if (searchKey.includes(i)) {
       let s = searchLocation.find((p) => p.start === i);
-      let length = s?.length;
       let text = "";
+      let length = s?.searchString?.length;
       for (let j = i; j < i + length; j++) {
         text += content[j];
         skiplength.push(j);
       }
-      html += getBoldOnHighlight(text, s?.searchString);
+
+      html += getBoldOnHighlight(text);
     }
     if (allPageBreakerStart.includes(i) && i !== 0) {
       html += "</p><p>";
@@ -99,17 +101,10 @@ const applyAnnotation = (
     },
   });
 
-function getBoldOnHighlight(text: string, highlight: string) {
+function getBoldOnHighlight(highlight: string) {
   // Split text on highlight term, include term itself into parts, ignore case
-  const parts = text.split(new RegExp(`(${highlight})`, "gi"));
-  let search = parts.map((part, index) => {
-    let show =
-      part.toLowerCase() !== highlight.toLowerCase()
-        ? part
-        : `<search class='search-term'>${part}</search>`;
-    return show;
-  });
-  return search.join("");
+
+  return `<search class='search-term'>${highlight}</search>`;
 }
 
 export default applyAnnotation;

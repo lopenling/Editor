@@ -1,6 +1,6 @@
 import { Editor } from "@tiptap/react";
 import crossIcon from "~/file/icon_cross.svg";
-import SearchString from "./SearchText";
+import SearchString from "./SearchString";
 import React from "react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 

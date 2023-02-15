@@ -1,12 +1,12 @@
 import { Mark, mergeAttributes } from "@tiptap/core";
 
 export const searchMarks = Mark.create({
-  name: "search",
+  name: "span",
 
   addOptions() {
     return {
       HTMLAttributes: {
-        class: "search",
+        class: "",
       },
     };
   },
@@ -14,7 +14,7 @@ export const searchMarks = Mark.create({
   parseHTML() {
     return [
       {
-        tag: "search",
+        tag: "span",
       },
     ];
   },

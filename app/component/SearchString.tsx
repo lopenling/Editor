@@ -40,7 +40,10 @@ export default function SearchString({
     }
   }, [index]);
 
-  if (searchLocations) setSearchLocation(searchLocations);
+  if (searchLocations) {
+    setSearchLocation(searchLocations);
+    editor.commands.setSearchTerm(searchLocations[0]?.searchString);
+  }
   return (
     <div className="items-center flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border border-gray-300 bg-gray-50  ">
       {" "}

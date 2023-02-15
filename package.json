@@ -19,6 +19,7 @@
     "@remix-run/cloudflare": "^1.11.1",
     "@remix-run/cloudflare-workers": "^1.11.1",
     "@remix-run/react": "^1.11.1",
+    "@sereneinserenade/tiptap-extension-search-n-replace": "^2.0.0-beta.3",
     "@tiptap/extension-bold": "^2.0.0-beta.209",
     "@tiptap/extension-document": "^2.0.0-beta.209",
     "@tiptap/extension-highlight": "^2.0.0-beta.209",
@@ -31,6 +32,9 @@
     "crypto-js": "^4.1.1",
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",
+    "prosemirror-model": "^1.19.0",
+    "prosemirror-state": "^1.4.2",
+    "prosemirror-view": "^1.30.1",
     "react": "^18.2.0",
     "react-detect-click-outside": "^1.1.7",
     "react-dom": "^18.2.0",
@@ -39,6 +43,7 @@
     "react-tailwindcss-datepicker": "^1.4.2",
     "react-viewport-list": "^6.3.0",
     "remix-utils": "^6.0.0",
+    "tiptap-extensions": "^1.35.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

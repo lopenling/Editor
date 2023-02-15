@@ -1,6 +1,6 @@
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import Document from "@tiptap/extension-document";
-import Highlight from "@tiptap/extension-highlight";
+import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import TextStyle from "@tiptap/extension-text-style";
 import Paragraph from "@tiptap/extension-paragraph";
 import Bold from "@tiptap/extension-bold";
@@ -13,7 +13,7 @@ import Post from "./Post";
 import PostList from "./PostList";
 import { FontSize } from "~/tiptap-extension/fontSize";
 import EditorSettings from "./EditorSettings";
-import applyAnnotation from "~/tiptap-extension/applyMarks";
+// import applyAnnotation from "~/tiptap-extension/applyMarks";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
@@ -48,7 +48,13 @@ function Editor() {
         TextStyle,
         FontSize,
         searchMarks,
-        applyAnnotation([], [], searchLocation),
+        SearchAndReplace.configure({
+          searchResultClass: "search",
+          caseSensitive: false,
+          disableRegex: false,
+        }),
+        // applyAnnotation([], [], []),
+
         // SelectTextOnRender,
       ],
       content: content,
@@ -81,6 +87,7 @@ function Editor() {
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
+        console.log(from, to);
         setPostInfo(null);
         setSelection({
           start: from,
