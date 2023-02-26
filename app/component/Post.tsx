@@ -82,28 +82,28 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
               style={{ height: 108 }}
               className=" w-full bg-gray-50 focus:border-0 focus:outline-0"
             ></Textarea>
+            <div className="flex justify-end gap-2">
+              <Button
+                onClick={() => setOpen(false)}
+                color=""
+                className="bg-gray-200 text-black"
+                size="xs"
+              >
+                cancel
+              </Button>
+              <Button
+                onClick={handleSubmit}
+                color=""
+                size="xs"
+                className="bg-green-400 text-white"
+              >
+                {createPost.state !== "idle" ? "posting" : "post"}
+              </Button>
+            </div>
           </>
         ) : (
           <div style={{ color: "red" }}>You must login first</div>
         )}
-        <div className="flex justify-end gap-2">
-          <Button
-            onClick={() => setOpen(false)}
-            color=""
-            className="bg-gray-200 text-black"
-            size="xs"
-          >
-            cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            color=""
-            size="xs"
-            className="bg-green-400 text-white"
-          >
-            {createPost.state !== "idle" ? "posting" : "post"}
-          </Button>
-        </div>
       </createPost.Form>
       <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
     </section>
