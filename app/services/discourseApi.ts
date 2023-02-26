@@ -71,7 +71,7 @@ class DiscourseApi {
       let res = await response.json();
       return res;
     } catch (e) {
-      console.log(e.message);
+      console.log("error", e.message);
     }
   }
   async addTopic(
@@ -100,17 +100,16 @@ class DiscourseApi {
       raw: post_text,
     };
     let params = new URLSearchParams(new_Topic_data).toString();
-    let user = await findUserByUsername(username);
+    let userPromise = findUserByUsername(username);
+    const responsePromise = fetch(`${this.DiscourseUrl}/posts.json?` + params, {
+      method: "POST",
+      headers: auth_headers,
+    });
+    let [user, response] = await Promise.all([userPromise, responsePromise]);
+    let data = await response.json();
+    console.log(data);
     try {
-      const response = await fetch(
-        `${this.DiscourseUrl}/posts.json?` + params,
-        {
-          method: "POST",
-          headers: auth_headers,
-        }
-      );
-      let data = await response.json();
-      if (data["topic_id"] > 0 && user) {
+      if (data["topic_id"] && user) {
         const createQuestion = await createPostOnDB(
           questionId,
           type,
@@ -125,9 +124,8 @@ class DiscourseApi {
         );
         return createQuestion;
       }
-      return data;
     } catch (e) {
-      return e;
+      console.log(e);
     }
   }
 
@@ -216,9 +214,17 @@ export async function createThread(
     throw new Error("failed to access Topic Id");
   const apiObj: DiscourseApi = new DiscourseApi(userName);
   let response = await apiObj.fetchCategoryList(parent_category_id);
-  let checkIfCategoryPresent = response?.find((l: any) => l.name === postTitle);
+  let d = "";
+  if (postTitle.length > 30) {
+    d = postTitle.slice(0, 30) + `_${textId}_`;
+  } else {
+    d = postTitle;
+  }
+  let checkIfCategoryPresent = response?.find(
+    (l: any) => l.name === (d as string)
+  );
   if (!checkIfCategoryPresent) {
-    let res = await apiObj.addCategory(postTitle, parseInt(parent_category_id));
+    let res = await apiObj.addCategory(d, parseInt(parent_category_id));
     checkIfCategoryPresent = {
       id: res.category?.id,
     };
@@ -233,7 +239,6 @@ export async function createThread(
     textId,
     type
   );
-
   return createTopic;
 }
 

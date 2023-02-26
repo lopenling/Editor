@@ -6,7 +6,7 @@ import { json } from "@remix-run/cloudflare";
 import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
 import React from "react";
-
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
@@ -22,6 +22,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
   const data = useLoaderData();
   const transition = useTransition();
+  const [animationParent] = useAutoAnimate();
   const list = data;
   const isLoading =
     transition.state !== "idle" &&
@@ -84,7 +85,10 @@ export default function Index() {
         )}
 
         {list && (
-          <div className="inline-flex h-screen w-full flex-col items-center justify-start space-y-3.5 py-10">
+          <div
+            ref={animationParent}
+            className="inline-flex h-screen w-full flex-col items-center justify-start space-y-3.5 py-10"
+          >
             {list.length === 0 && (
               <div
                 className="text-gray-300 text-xl font-extrabold capitalize"

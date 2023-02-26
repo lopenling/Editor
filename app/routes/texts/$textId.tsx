@@ -27,8 +27,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     }
   }
 
-  const posts = await findPostByTextId(textId);
-  const text = await findTextByTextId(textId, true);
+  const [posts, text] = await Promise.all([
+    findPostByTextId(textId),
+    findTextByTextId(textId, true),
+  ]);
+
   const data = {
     user: userInfo,
     text,

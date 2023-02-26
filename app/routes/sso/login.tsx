@@ -38,7 +38,6 @@ export let loader: LoaderFunction = async ({ request }) => {
       if (!isUserInDatabase) {
         let isAdmin = admin === "true" ? true : false;
         const newUser = await createUserInDB(username, name, email, isAdmin);
-        console.log(newUser);
       }
       session.set("user", { email, admin, name, username, avatarUrl });
     } catch (e) {

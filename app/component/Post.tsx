@@ -18,7 +18,6 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
   const [body, setBody] = React.useState("");
   useEffect(() => {
     setOpen(!!postInfo);
-    console.log(postInfo);
   }, [postInfo]);
   function handleSubmit(e) {
     e.preventDefault();

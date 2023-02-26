@@ -24,6 +24,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (request.method === "POST") {
     try {
+      console.log("session user: ", user);
       await createThread(
         user.username,
         Obj.topic,
@@ -36,6 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
         Obj.type
       );
     } catch (e) {
+      console.log(e);
       return { error: { message: e.message } };
     }
     return { message: "success" };

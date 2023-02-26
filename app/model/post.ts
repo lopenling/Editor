@@ -59,6 +59,7 @@ export async function findPostByTextId(textId: number) {
         text_id: textId,
       },
     });
+
     return posts;
   } catch (e) {
     return "couldnot find the post with error" + e.message;

@@ -8,7 +8,7 @@ import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { ViewportList } from "react-viewport-list";
-
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 type QuestionProps = {
   editor: Editor | null;
   openFilter: boolean;
@@ -19,6 +19,7 @@ export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
 function PostList(props: QuestionProps) {
+  const [animationParent] = useAutoAnimate();
   const data = useLoaderData();
   const [filter, setFilter] = React.useState({
     type: "all",
@@ -65,6 +66,7 @@ function PostList(props: QuestionProps) {
 
   const onClose = () => props.setOpenFilter((prev) => !prev);
 
+  console.log(posts);
   return (
     <>
       {props.openFilter && (
@@ -76,7 +78,7 @@ function PostList(props: QuestionProps) {
 
       <div
         className="scroll-container flex flex-col"
-        ref={ref}
+        ref={animationParent}
         style={{
           position: "relative",
           overflowY: "auto",
@@ -85,7 +87,24 @@ function PostList(props: QuestionProps) {
           paddingInline: 10,
         }}
       >
-        <ViewportList
+        {posts?.map((post, index) => (
+          <div key={index} className={`item${index % 2 === 0 ? "" : " odd"}`}>
+            <EachPost
+              id={post.id}
+              name={post.creatorUser.username}
+              avatar={post.avatar}
+              time={timeAgo(post.created_at)!}
+              postContent={post.content}
+              likedBy={post.likedBy}
+              topic_id={post.topic_id}
+              handleSelection={() => handleSelectPost(post)}
+              selectedPost={selectedPost!}
+              type={post.type}
+            />
+            <div className="w-full bg-gray-200" />
+          </div>
+        ))}
+        {/* <ViewportList
           viewportRef={ref}
           overscan={1}
           itemMinSize={42}
@@ -109,7 +128,7 @@ function PostList(props: QuestionProps) {
               <div className="w-full bg-gray-200" />
             </div>
           )}
-        </ViewportList>
+        </ViewportList> */}
       </div>
     </>
   );

@@ -13,6 +13,7 @@ export async function getAllUser() {
 // find user in database
 
 export async function findUserByUsername(username: string) {
+  if (!username) return null;
   try {
     let user = await db.user.findUnique({
       where: {
