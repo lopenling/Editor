@@ -40,5 +40,6 @@ export let redirectDiscourse = async function () {
     sig: signature,
   }).toString();
   url = url + "?" + qs;
+  console.log(url);
   return url;
 };
