@@ -104,31 +104,6 @@ function PostList(props: QuestionProps) {
             <div className="w-full bg-gray-200" />
           </div>
         ))}
-        {/* <ViewportList
-          viewportRef={ref}
-          overscan={1}
-          itemMinSize={42}
-          margin={10}
-          items={posts}
-        >
-          {(post, index) => (
-            <div key={index} className={`item${index % 2 === 0 ? "" : " odd"}`}>
-              <EachPost
-                id={post.id}
-                name={post.creatorUser.username}
-                avatar={post.avatar}
-                time={timeAgo(post.created_at)!}
-                postContent={post.content}
-                likedBy={post.likedBy}
-                topic_id={post.topic_id}
-                handleSelection={() => handleSelectPost(post)}
-                selectedPost={selectedPost!}
-                type={post.type}
-              />
-              <div className="w-full bg-gray-200" />
-            </div>
-          )}
-        </ViewportList> */}
       </div>
     </>
   );
