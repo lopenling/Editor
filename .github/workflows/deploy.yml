@@ -25,7 +25,7 @@ jobs:
 
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
-        
+
       - name: Setup Environment Vars
         run: python3 ./scripts/set_env_vars.py
         env:
@@ -36,7 +36,6 @@ jobs:
       - name: Publish
         run: |
           npx prisma generate --data-proxy
-          npm run build
           npm run deploy
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
