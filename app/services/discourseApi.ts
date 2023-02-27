@@ -108,7 +108,7 @@ class DiscourseApi {
     let [user, response] = await Promise.all([userPromise, responsePromise]);
     let data = await response.json();
     if (data?.errors) {
-      throw new Error(data.errors);
+      throw new Error("Post cannot be created due to dublication!");
     }
     try {
       if (data["topic_id"] && user) {

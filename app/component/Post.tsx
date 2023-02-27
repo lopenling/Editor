@@ -16,6 +16,8 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
   const data = useLoaderData();
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
+  let isPosting =
+    createPost.submission && createPost.submission.formData.get("body") !== "";
   function handleSubmit(e) {
     e.preventDefault();
     let lengthOfSelection = postInfo.end - postInfo?.start;
@@ -41,7 +43,7 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
       );
     setPostInfo(null);
   }
-  if (createPost.submission && createPost.submission.formData.get("body")) {
+  if (isPosting) {
     return (
       <TemporaryPost
         postContent={createPost.submission.formData.get("body")}
@@ -51,9 +53,24 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
   }
   if (createPost.data?.error && !postInfo)
     return (
-      <Toast className="my-2">
+      <Toast className="my-2 max-w-full">
+        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+          <svg
+            className="h-8 w-8 text-red-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+        </div>
         <div className="ml-3 text-sm font-normal">
-          {createPost.data.error.message} , try again
+          {createPost.data.error.message}
         </div>
         <Toast.Toggle />
       </Toast>
@@ -96,7 +113,7 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
                 size="xs"
                 className="bg-green-400 text-white"
               >
-                {createPost.state !== "idle" ? "posting" : "post"}
+                post
               </Button>
             </div>
           </>
@@ -135,7 +152,7 @@ function TemporaryPost({ user, postContent }: any) {
           </p>
           <div className="flex w-full flex-1 items-center justify-between pb-3">
             <div className="flex h-full w-64 items-center justify-start space-x-4">
-              <div className="flex cursor-pointer items-center justify-start space-x-1.5">
+              <div className="flex items-center justify-start space-x-1.5">
                 <svg
                   width="14"
                   height="14"
