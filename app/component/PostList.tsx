@@ -66,7 +66,6 @@ function PostList(props: QuestionProps) {
 
   const onClose = () => props.setOpenFilter((prev) => !prev);
 
-  console.log(posts);
   return (
     <>
       {props.openFilter && (

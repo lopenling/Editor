@@ -36,7 +36,7 @@ body {
 nav > div {
   height: 100%;
 }
-::selection {
+.ProseMirror ::selection {
   background: rgba(252, 233, 106, 0.3);
 }
 .ProseMirror-focused {

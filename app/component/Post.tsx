@@ -1,6 +1,7 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Avatar, Button, Textarea } from "flowbite-react";
+import { Avatar, Button, Textarea, Toast } from "flowbite-react";
 import React, { useEffect } from "react";
+import Loading from "react-loading";
 type QuestionFormProps = {
   postInfo: null | {
     type: string;
@@ -14,11 +15,7 @@ type QuestionFormProps = {
 const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
   const data = useLoaderData();
   const createPost = useFetcher();
-  const [open, setOpen] = React.useState(false);
   const [body, setBody] = React.useState("");
-  useEffect(() => {
-    setOpen(!!postInfo);
-  }, [postInfo]);
   function handleSubmit(e) {
     e.preventDefault();
     let lengthOfSelection = postInfo.end - postInfo?.start;
@@ -52,14 +49,16 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
       />
     );
   }
-  if (createPost.data?.error)
+  if (createPost.data?.error && !postInfo)
     return (
-      <div className="text-red-600">
-        Error: 'cannot create a post' <span onClick={handleSubmit}>retry</span>
-      </div>
+      <Toast className="my-2">
+        <div className="ml-3 text-sm font-normal">
+          {createPost.data.error.message} , try again
+        </div>
+        <Toast.Toggle />
+      </Toast>
     );
-  if (!open) return null;
-  if (!postInfo) return null;
+  if (!postInfo?.type) return null;
   return (
     <section style={{ position: "sticky" }}>
       <div className="inline-flex items-start justify-start">
@@ -84,7 +83,7 @@ const Posts = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
             ></Textarea>
             <div className="flex justify-end gap-2">
               <Button
-                onClick={() => setOpen(false)}
+                onClick={() => setPostInfo(null)}
                 color=""
                 className="bg-gray-200 text-black"
                 size="xs"
@@ -115,7 +114,10 @@ export default React.forwardRef(Posts);
 function TemporaryPost({ user, postContent }: any) {
   return (
     <>
-      <div className=" opacity-75 mx-1 md:px-3">
+      <div className=" opacity-75 mx-1 md:px-3 relative ">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Loading color="#000" />
+        </div>
         <div className="mt-3 inline-flex w-full items-start justify-start">
           <div className="flex items-center justify-start space-x-3">
             <Avatar img={user.avatarUrl} rounded={true} size="xs" />

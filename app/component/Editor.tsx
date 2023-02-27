@@ -92,7 +92,7 @@ function Editor() {
     []
   );
   const handleBubbleClick = (type: string) => {
-    if (selection)
+    if (selection.start)
       setPostInfo({
         type: type,
         start: selection.start,

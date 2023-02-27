@@ -14,7 +14,6 @@ export const action: ActionFunction = async ({ request }) => {
     if (request.method === "POST") {
       const postString = formData.get("postString");
       let create = await createPost(topicId, postString, user.username);
-      console.log(create);
     }
   } catch (e) {
     return {

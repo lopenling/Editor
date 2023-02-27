@@ -107,7 +107,9 @@ class DiscourseApi {
     });
     let [user, response] = await Promise.all([userPromise, responsePromise]);
     let data = await response.json();
-    console.log(data);
+    if (data?.errors) {
+      throw new Error(data.errors);
+    }
     try {
       if (data["topic_id"] && user) {
         const createQuestion = await createPostOnDB(
