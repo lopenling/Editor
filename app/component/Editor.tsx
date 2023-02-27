@@ -56,18 +56,12 @@ function Editor() {
       ],
       content: content,
       editable: true,
-
       editorProps: {
         handleDOMEvents: {
-          keypress: (value, event) => {
-            event.preventDefault();
-          },
-          keyup: (value, event) => {
-            event.preventDefault();
-          },
           keydown: (value, event) => {
             if (![37, 38, 39, 40].includes(event.keyCode)) {
               event.preventDefault();
+              this.blur();
             }
           },
           textInput: (value, evt) => {
@@ -79,6 +73,9 @@ function Editor() {
           dragstart: (value, e) => {
             e.preventDefault();
           },
+        },
+        attributes: {
+          inputmode: "none",
         },
       },
       onSelectionUpdate: ({ editor }) => {
