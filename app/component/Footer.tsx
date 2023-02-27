@@ -1,5 +1,5 @@
 import { Footer } from "flowbite-react";
-import indrajalaLogo from "~/file/indrajalaLogo.png";
+import indrajalaLogo from "~/assets/indrajalaLogo.png";
 
 export default function FooterContainer() {
   return (

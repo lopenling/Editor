@@ -247,11 +247,11 @@ export async function createThread(
 function addLinktoQuestion(question: string, url: string) {
   return `<a href="${url}" target='_blank'>${question}</a>`;
 }
-export async function deleteQuestion(userName: string, topicId: number) {
-  const apiObj: DiscourseApi = new DiscourseApi(userName);
-  const res = apiObj.deleteTopic(topicId, userName);
-  return res;
-}
+// export async function deleteQuestion(userName: string, topicId: number) {
+//   const apiObj: DiscourseApi = new DiscourseApi(userName);
+//   const res = apiObj.deleteTopic(topicId, userName);
+//   return res;
+// }
 
 export async function getposts(topicId: number, username: string) {
   const apiObj: DiscourseApi = new DiscourseApi(username);

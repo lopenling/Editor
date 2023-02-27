@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
-import LopenlingLogo from "~/file/logo.svg";
+import LopenlingLogo from "~/assets/logo.svg";
 function generateInitials(name) {
   const nameArray = name.split(" ");
   let initials = "";

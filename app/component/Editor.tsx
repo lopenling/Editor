@@ -8,7 +8,7 @@ import Text from "@tiptap/extension-text";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import React, { useEffect } from "react";
 // import SelectTextOnRender from "~/extension/selectionOnFirstRender";
-import CopyIcon from "~/file/icon_copy.svg";
+import CopyIcon from "~/assets/icon_copy.svg";
 import Post from "./Post";
 import PostList from "./PostList";
 import { FontSize } from "~/tiptap-extension/fontSize";
