@@ -29,6 +29,7 @@ export async function getUserSession(request: Request) {
 }
 export async function destroyUserSession(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
+  session.set("user", null);
   return await destroySession(session);
 }
 
