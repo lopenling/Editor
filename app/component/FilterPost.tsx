@@ -44,7 +44,7 @@ export default function FilterPost({ setFilter, filter, close }) {
       };
     });
   }
-  function clickedApply() {
+  function apply() {
     setFilter(filterData);
     close();
   }
@@ -56,6 +56,7 @@ export default function FilterPost({ setFilter, filter, close }) {
     });
     setUserInput("");
   }
+  let isFetchingUser = searchUser.state === "loading";
   return (
     <>
       <div className="p-5">
@@ -218,36 +219,39 @@ export default function FilterPost({ setFilter, filter, close }) {
                   </searchUser.Form>
                 </div>
               </div>
-              {searchUser.data?.length > 0 && userInput !== "" && (
-                <div className="flex w-full flex-col items-center justify-start space-y-3 rounded-lg border border-gray-200 bg-white p-4 shadow">
-                  {searchUser.data?.map((user) => {
-                    let avatarUrl = (
-                      "http://lopenling.org" + user?.avatar
-                    ).replace("{size}", "30");
-                    return (
-                      <div
-                        className="w-full cursor-pointer"
-                        key={user?.username}
-                      >
-                        <div className="inline-flex w-full items-center justify-start space-x-2 rounded-lg">
-                          <Avatar rounded={true} img={avatarUrl} size="xs" />
-                          <div
-                            className="flex-1 text-sm leading-tight"
-                            onClick={() => handleNameClick(user?.username)}
-                          >
-                            {user?.username}
+              {isFetchingUser && "loading"}
+              {searchUser.data?.length > 0 &&
+                userInput !== "" &&
+                !isFetchingUser && (
+                  <div className="flex w-full flex-col items-center justify-start space-y-3 rounded-lg border border-gray-200 bg-white p-4 shadow">
+                    {searchUser.data?.map((user) => {
+                      let avatarUrl = (
+                        "http://lopenling.org" + user?.avatar
+                      ).replace("{size}", "30");
+                      return (
+                        <div
+                          className="w-full cursor-pointer"
+                          key={user?.username}
+                        >
+                          <div className="inline-flex w-full items-center justify-start space-x-2 rounded-lg">
+                            <Avatar rounded={true} img={avatarUrl} size="xs" />
+                            <div
+                              className="flex-1 text-sm leading-tight"
+                              onClick={() => handleNameClick(user?.username)}
+                            >
+                              {user?.username}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                      );
+                    })}
+                  </div>
+                )}
             </div>
           </div>
         </div>
         <div className="flex w-full items-start justify-start gap-3 mt-2">
-          <Button onClick={clickedApply}>Apply filters</Button>
+          <Button onClick={apply}>Apply filters</Button>
           <Button onClick={reset} color="light" type="reset">
             Reset
           </Button>

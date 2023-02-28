@@ -39,7 +39,6 @@ function Editor() {
     text: string;
   }>(null);
   const [openFilter, setOpenFilter] = React.useState<boolean>(false);
-  console.log(contentHtml);
   const editor = useEditor(
     {
       extensions: [
