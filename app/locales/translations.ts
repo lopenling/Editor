@@ -22,12 +22,16 @@ const translations = {
     bo_TI: " དྲི་བ།",
   },
   filter: {
-    en_US: "filter by",
+    en_US: "Filter",
     bo_TI: " ཚགས།",
   },
   fontSize: {
     en_US: "Font size",
     bo_TI: "ཡིག་གཟུགས་ཆེ་ཆུངྲ།",
+  },
+  reply: {
+    en_US: "reply",
+    bo_TI: "ལན།",
   },
 };
 export default translations;

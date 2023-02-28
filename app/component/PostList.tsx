@@ -9,6 +9,8 @@ import ModalStyle from "react-responsive-modal/styles.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { ViewportList } from "react-viewport-list";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useLittera } from "@assembless/react-littera";
+import translations from "~/locales/translations";
 type QuestionProps = {
   editor: Editor | null;
   openFilter: boolean;
@@ -65,12 +67,13 @@ function PostList(props: QuestionProps) {
   });
 
   const onClose = () => props.setOpenFilter((prev) => !prev);
+  const translation = useLittera(translations);
 
   return (
     <>
       {props.openFilter && (
         <Modal show={true} onClose={onClose} size="md">
-          <Modal.Header>Filter</Modal.Header>
+          <Modal.Header>{translation.filter}</Modal.Header>
           <FilterPost filter={filter} setFilter={setFilter} close={onClose} />
         </Modal>
       )}
@@ -140,6 +143,7 @@ function EachPost({
   const reply_count_ref = React.useRef(null);
   const likeFetcher = useFetcher();
   const data = useLoaderData();
+  const translation = useLittera(translations);
   const likedByMe = data.user
     ? likedBy.some((l) => l.username === data.user.username)
     : false;
@@ -229,7 +233,7 @@ function EachPost({
                   <span ref={reply_count_ref} className="mr-1">
                     0
                   </span>
-                  {showReplies ? "Hide reply" : "reply"}
+                  {showReplies ? "Hide reply" : translation.reply}
                 </button>
               </div>
             </div>
@@ -249,7 +253,7 @@ function EachPost({
                   onClick={() => setOpenReply((prev) => !prev)}
                   className="text-sm font-medium leading-tight text-gray-500"
                 >
-                  {openReply ? "Close" : "Reply"}
+                  {openReply ? "Close" : translation.reply}
                 </button>
               </div>
             )}
