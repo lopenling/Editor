@@ -34,7 +34,7 @@ function EditorSetting({
             <input
               type="range"
               className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-gray-700"
-              min={12}
+              min={14}
               step={1}
               max={24}
               value={fontSize}
