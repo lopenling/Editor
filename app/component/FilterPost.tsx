@@ -247,6 +247,11 @@ export default function FilterPost({ setFilter, filter, close }) {
                     })}
                   </div>
                 )}
+              {searchUser.data?.length === 0 &&
+                userInput !== "" &&
+                !isFetchingUser && (
+                  <span className="text-red-400">User not Found</span>
+                )}
             </div>
           </div>
         </div>
