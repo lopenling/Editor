@@ -128,11 +128,9 @@ function Translation() {
 
         break;
     }
-    // i18n.changeLanguage("bo");
   }
   return (
     <div className="mr-10 flex items-center justify-start space-x-0.5">
-      <div>{translated.language}</div>
       <select
         onChange={changeLanguage}
         className="text-sm font-medium leading-tight text-gray-900 border-0 outline-none focus:outline-none"
