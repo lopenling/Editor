@@ -17,6 +17,7 @@ import Header from "./component/Header";
 import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
+import { LitteraProvider } from "@assembless/react-littera";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
@@ -51,7 +52,7 @@ function Document({ children, title }: { children: any; title: string }) {
     [loaderData.user]
   );
   return (
-    <html lang="en">
+    <html>
       <head>
         <Meta />
         <Links />
@@ -59,11 +60,13 @@ function Document({ children, title }: { children: any; title: string }) {
       </head>
 
       <body style={{ width: "100vw" }}>
-        {header}
-        {routeChanged ? <Loading /> : children}
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <LitteraProvider locales={["en_US", "bo_TI"]}>
+          {header}
+          {routeChanged ? <Loading /> : children}
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </LitteraProvider>
       </body>
     </html>
   );

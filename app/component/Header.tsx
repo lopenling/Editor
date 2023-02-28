@@ -1,6 +1,8 @@
 import { Form, Link, useLocation } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar, Select } from "flowbite-react";
 import LopenlingLogo from "~/assets/logo.svg";
+import { useLittera, useLitteraMethods } from "@assembless/react-littera";
+import translations from "~/locales/translations";
 function generateInitials(name) {
   const nameArray = name.split(" ");
   let initials = "";
@@ -114,22 +116,23 @@ export default function Header({ user }: any) {
 }
 
 function Translation() {
-  // const { t, ready, i18n } = useTranslation("common");
-  // if (!ready) return <div>loading</div>;
-  // let locale = i18n.language;
+  const translated = useLittera(translations);
+  const methods = useLitteraMethods();
   function changeLanguage(e) {
     switch (e.target.value) {
       case "en":
-        console.log("en");
+        methods.setLocale("en_US");
         break;
       case "bo":
-        console.log("bo");
+        methods.setLocale("bo_TI");
+
         break;
     }
     // i18n.changeLanguage("bo");
   }
   return (
     <div className="mr-10 flex items-center justify-start space-x-0.5">
+      <div>{translated.language}</div>
       <select
         onChange={changeLanguage}
         className="text-sm font-medium leading-tight text-gray-900 border-0 outline-none focus:outline-none"

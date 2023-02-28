@@ -7,6 +7,8 @@ import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
 import React from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useLittera } from "@assembless/react-littera";
+import translations from "~/locales/translations";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
@@ -22,6 +24,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
   const data = useLoaderData();
   const transition = useTransition();
+  const translation = useLittera(translations);
   const [animationParent] = useAutoAnimate();
   const list = data;
   const isLoading =
@@ -42,7 +45,7 @@ export default function Index() {
             <div className="relative flex w-full space-x-3 ">
               <TextInput
                 name="search"
-                placeholder="search text"
+                placeholder={translation.searchPlaceholder}
                 type="search"
                 style={{
                   height: 50,
@@ -74,7 +77,7 @@ export default function Index() {
                 color={"#1C64F2"}
                 size="lg"
               >
-                search
+                {translation.search}
               </Button>
             </div>
           </Form>

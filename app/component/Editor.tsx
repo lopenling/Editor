@@ -18,6 +18,8 @@ import EditorSettings from "./EditorSettings";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
+import { useLittera } from "@assembless/react-littera";
+import translations from "~/locales/translations";
 function Editor() {
   const data = useLoaderData();
   let content = React.useMemo(() => {
@@ -68,7 +70,6 @@ function Editor() {
           keydown: (value, event) => {
             if (![37, 38, 39, 40].includes(event.keyCode)) {
               event.preventDefault();
-              this.blur();
             }
           },
           textInput: (value, evt) => {
@@ -107,6 +108,8 @@ function Editor() {
         content: selection.text,
       });
   };
+  const translation = useLittera(translations);
+
   return (
     <div className="mt-5 flex w-full flex-col gap-5 lg:flex-row  container lg:px-16">
       <div className="relative flex-1 px-5" style={{ maxHeight: "75vh" }}>
@@ -150,7 +153,7 @@ function Editor() {
                 className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500  border-gray-300 border-2"
                 onClick={() => handleBubbleClick("comment")}
               >
-                Comment
+                {translation.comment}
               </Button>
               <Button
                 size="sm"
@@ -158,7 +161,7 @@ function Editor() {
                 className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 border-gray-300 border-2"
                 onClick={() => handleBubbleClick("question")}
               >
-                Question
+                {translation.question}
               </Button>
             </Button.Group>
           </BubbleMenu>
@@ -185,14 +188,14 @@ function Editor() {
                     fill="#6B7280"
                   />
                 </svg>
-                find in text
+                {translation.search}
               </button>
               <button
                 className="bg-white text-gray-700 flex justify-between items-center gap-2 p-1"
                 onClick={() => setShowFontSize(true)}
               >
                 <img src={CopyIcon} alt="copy" height={16} width={16} />
-                font size
+                {translation.fontSize}
               </button>
             </div>
           )}
@@ -234,7 +237,7 @@ function Editor() {
               />
             </svg>
             <span className="text-sm font-medium leading-tight text-gray-500">
-              filter by
+              {translation.filter}
             </span>
           </button>
         </div>
