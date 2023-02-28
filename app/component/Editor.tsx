@@ -5,6 +5,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import Paragraph from "@tiptap/extension-paragraph";
 import Bold from "@tiptap/extension-bold";
 import Text from "@tiptap/extension-text";
+import HardBreak from "@tiptap/extension-hard-break";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import React, { useEffect } from "react";
 // import SelectTextOnRender from "~/extension/selectionOnFirstRender";
@@ -19,6 +20,10 @@ import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 function Editor() {
   const data = useLoaderData();
+  let content = React.useMemo(() => {
+    return data.text.content.replace(/\n/g, "<br>");
+  }, []);
+  const [contentHtml, setContentHtml] = React.useState(content);
   const [showEditorSettings, setShowEditorSettings] = React.useState(false);
   const [showFindText, setShowFindText] = React.useState(false);
   const [showFontSize, setShowFontSize] = React.useState(false);
@@ -34,9 +39,7 @@ function Editor() {
     text: string;
   }>(null);
   const [openFilter, setOpenFilter] = React.useState<boolean>(false);
-  let content = React.useMemo(() => {
-    return data.text.content;
-  }, []);
+  console.log(contentHtml);
   const editor = useEditor(
     {
       extensions: [
@@ -52,9 +55,14 @@ function Editor() {
           caseSensitive: false,
           disableRegex: false,
         }),
+        HardBreak.configure({
+          HTMLAttributes: {
+            class: "pageBreak",
+          },
+        }),
         // SelectTextOnRender,
       ],
-      content: content,
+      content: contentHtml,
       editable: true,
       editorProps: {
         handleDOMEvents: {

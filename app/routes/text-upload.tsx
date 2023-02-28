@@ -13,7 +13,7 @@ import {
 import { useRef } from "react";
 import { getUserSession } from "~/services/session.server";
 import { createText, deleteText, findAllText } from "~/model/text";
-
+import { useId } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -42,6 +42,7 @@ export default function UploadText() {
   const formRef = useRef();
   const loaderData = useLoaderData();
   const transition = useTransition();
+  const uploadId = useId();
   if (transition.state !== "idle") {
     formRef.current.reset();
   }
@@ -51,14 +52,14 @@ export default function UploadText() {
       <Form method="post" ref={formRef}>
         <div className="mb-6">
           <label
-            htmlFor="text-name"
+            htmlFor={uploadId + "textName"}
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
           >
             Text name
           </label>
           <input
             type="text"
-            id="text-name"
+            id={uploadId + "textName"}
             name="text-name"
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             placeholder="title"
@@ -67,13 +68,13 @@ export default function UploadText() {
         </div>
         <div className="mb-6">
           <label
-            htmlFor="text-content"
+            htmlFor={uploadId + "textContent"}
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
           >
             Text Content
           </label>
           <textarea
-            id="text-content"
+            id={uploadId + "textContent"}
             name="text-content"
             rows={4}
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"

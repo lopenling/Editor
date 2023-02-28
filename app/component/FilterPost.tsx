@@ -1,11 +1,14 @@
 import { Avatar, Button } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 import { useFetcher } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
+
 export default function FilterPost({ setFilter, filter, close }) {
   const [filterData, setFilterData] = useState(filter);
   const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
+  const typeId = useId();
+
   function handleTypeCheck(e) {
     let value = e.target.value;
     if (e.target.checked)
@@ -65,7 +68,7 @@ export default function FilterPost({ setFilter, filter, close }) {
             <div className="flex flex-col items-start justify-start space-y-0.5">
               <div className="flex py-2">
                 <input
-                  id="all-radio"
+                  id={typeId + "-all"}
                   type="radio"
                   onChange={handleTypeCheck}
                   value="all"
@@ -74,7 +77,7 @@ export default function FilterPost({ setFilter, filter, close }) {
                   className="h-4 w-4 rounded  border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
                 <label
-                  htmlFor="all-radio"
+                  htmlFor={typeId + "-all"}
                   className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
                 >
                   All
@@ -82,7 +85,7 @@ export default function FilterPost({ setFilter, filter, close }) {
               </div>
               <div className="flex py-2">
                 <input
-                  id="comment-redio"
+                  id={typeId + "-comment"}
                   type="radio"
                   onChange={handleTypeCheck}
                   checked={filterData.type === "comment"}
@@ -91,7 +94,7 @@ export default function FilterPost({ setFilter, filter, close }) {
                   className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
                 <label
-                  htmlFor="comment-redio"
+                  htmlFor={typeId + "-comment"}
                   className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
                 >
                   Comments only
@@ -99,7 +102,7 @@ export default function FilterPost({ setFilter, filter, close }) {
               </div>
               <div className="flex py-2">
                 <input
-                  id="question-radio"
+                  id={typeId + "-question"}
                   type="radio"
                   onChange={handleTypeCheck}
                   checked={filterData.type === "question"}
@@ -108,7 +111,7 @@ export default function FilterPost({ setFilter, filter, close }) {
                   className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
                 <label
-                  htmlFor="question-radio"
+                  htmlFor={typeId + "-question"}
                   className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
                 >
                   Questions only
