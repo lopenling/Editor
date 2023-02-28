@@ -17,9 +17,14 @@ function EditorSetting({
   setShowFindText: any;
   setShowFontSize: any;
 }) {
-  function changeFontSize(value) {
-    editor.chain().selectAll().setFontSize(value).run();
-  }
+  const changeFontSize = React.useCallback(
+    (value) => {
+      setFontSize(value);
+      editor.chain().selectAll().setFontSize(value).run();
+    },
+    [editor]
+  );
+  const [fontSize, setFontSize] = React.useState(DEFAULT_FONT_SIZE);
   const FontSizeComponent = () => (
     <>
       <div className="inline-flex flex-1 items-center justify-between rounded-full">
@@ -32,7 +37,7 @@ function EditorSetting({
               min={12}
               step={1}
               max={24}
-              defaultValue={DEFAULT_FONT_SIZE}
+              value={fontSize}
               onChange={(e) => changeFontSize(e.target.value)}
             ></input>
           </div>
