@@ -68,7 +68,10 @@ function Editor() {
       editorProps: {
         handleDOMEvents: {
           keydown: (value, event) => {
-            if (![37, 38, 39, 40].includes(event.keyCode)) {
+            let charCode = String.fromCharCode(event.which).toLowerCase();
+            let copyPressed =
+              (event.ctrlKey || event.metaKey) && charCode === "c";
+            if (![37, 38, 39, 40].includes(event.keyCode) && !copyPressed) {
               event.preventDefault();
             }
           },
