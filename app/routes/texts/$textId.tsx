@@ -7,7 +7,7 @@ import {
   redirect,
 } from "@remix-run/server-runtime";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useFetcher } from "@remix-run/react";
 import { findUserByUsername } from "~/model/user";
 import { findPostByTextId } from "~/model/post";
 import { findTextByTextId } from "~/model/text";
@@ -29,12 +29,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const [posts, text] = await Promise.all([
     findPostByTextId(textId),
-    findTextByTextId(textId, true),
+    findTextByTextId(textId, false),
   ]);
-
   const data = {
     user: userInfo,
-    text,
+    text: text,
     posts,
   };
   return json(data, { status: 200 });
@@ -47,14 +46,30 @@ export const meta: MetaFunction = ({ data }) => {
     title,
   };
 };
-
+export function links() {
+  return [
+    {
+      rel: "icon",
+      href: "https://lopenling-app.openpecha.workers.dev/favicon.png",
+      type: "image/png",
+    },
+  ];
+}
 export default function () {
   const data = useLoaderData();
-  if (!data.text) return <div>no Text Available </div>;
+  const textFetcher = useFetcher();
+  React.useEffect(() => {
+    if (textFetcher.type === "init")
+      textFetcher.load(`/api/text?textId=${data.text?.id}`);
+  }, []);
+  let content = React.useMemo(() => {
+    return textFetcher.data?.content.replace(/\n/g, "<br>");
+  }, [textFetcher.data]);
+
   return (
     <>
       <main className="container m-auto">
-        <Editor />
+        <Editor content={content} />
       </main>
     </>
   );

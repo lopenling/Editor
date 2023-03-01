@@ -11,20 +11,19 @@ type ReplyProps = {
   closeReply: () => void;
   isCreator: boolean;
   type: "question" | "comment";
+  setReplyCount: any;
 };
 
-function Reply(
-  {
-    postId,
-    topicId,
-    showReplies,
-    openReply,
-    closeReply,
-    isCreator,
-    type,
-  }: ReplyProps,
-  ref
-) {
+function Reply({
+  postId,
+  topicId,
+  showReplies,
+  openReply,
+  closeReply,
+  isCreator,
+  type,
+  setReplyCount,
+}: ReplyProps) {
   const postFetcher = useFetcher();
   const postListFetcher = useFetcher();
   const loaderData = useLoaderData();
@@ -40,7 +39,7 @@ function Reply(
     }
   }, [postFetcher.submission, loaderData.posts]);
   if (postListFetcher.data) {
-    ref.current.innerText = postListFetcher.data?.posts?.length - 1;
+    setReplyCount(postListFetcher.data?.posts?.length - 1);
   }
   const handleDelete = (id, TopicId) => {
     postFetcher.submit(

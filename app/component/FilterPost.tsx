@@ -1,14 +1,16 @@
+import { useLittera } from "@assembless/react-littera";
 import { Avatar, Button } from "flowbite-react";
 import React, { useState, useId } from "react";
 import { useFetcher } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
+import translations from "~/locales/translations";
 
 export default function FilterPost({ setFilter, filter, close }) {
   const [filterData, setFilterData] = useState(filter);
   const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
   const typeId = useId();
-
+  const translation = useLittera(translations);
   function handleTypeCheck(e) {
     let value = e.target.value;
     if (e.target.checked)

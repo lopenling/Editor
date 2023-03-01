@@ -1,4 +1,9 @@
-import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useTransition,
+  useFetcher,
+} from "@remix-run/react";
 import Document from "@tiptap/extension-document";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import TextStyle from "@tiptap/extension-text-style";
@@ -17,15 +22,12 @@ import EditorSettings from "./EditorSettings";
 // import applyAnnotation from "~/tiptap-extension/applyMarks";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { Button } from "flowbite-react";
-import { DEFAULT_FONT_SIZE } from "~/constants";
+import { DEFAULT_FONT_SIZE, MAX_WIDTH_PAGE } from "~/constants";
 import { useLittera } from "@assembless/react-littera";
 import translations from "~/locales/translations";
-function Editor() {
+import Loading from "react-loading";
+function Editor({ content }) {
   const data = useLoaderData();
-  let content = React.useMemo(() => {
-    return data.text.content.replace(/\n/g, "<br>");
-  }, []);
-  const [contentHtml, setContentHtml] = React.useState(content);
   const [showEditorSettings, setShowEditorSettings] = React.useState(false);
   const [showFindText, setShowFindText] = React.useState(false);
   const [showFontSize, setShowFontSize] = React.useState(false);
@@ -63,7 +65,7 @@ function Editor() {
         }),
         // SelectTextOnRender,
       ],
-      content: contentHtml,
+      content: content,
       editable: true,
       editorProps: {
         handleDOMEvents: {
@@ -100,7 +102,7 @@ function Editor() {
         });
       },
     },
-    []
+    [content]
   );
   const handleBubbleClick = (type: string) => {
     if (selection.start)
@@ -114,8 +116,11 @@ function Editor() {
   const translation = useLittera(translations);
 
   return (
-    <div className="mt-5 flex w-full flex-col gap-5 lg:flex-row  container lg:px-16">
-      <div className="relative flex-1 px-5" style={{ maxHeight: "75vh" }}>
+    <div
+      className="mt-5 mx-auto flex w-full flex-col gap-5 lg:flex-row  container "
+      style={{ maxWidth: MAX_WIDTH_PAGE }}
+    >
+      <div className="relative flex-1" style={{ maxHeight: "75vh" }}>
         <EditorSettings
           editor={editor}
           showFindText={showFindText}
@@ -124,23 +129,29 @@ function Editor() {
           setShowFontSize={setShowFontSize}
         />
         <h1
-          style={{ fontSize: 24 }}
+          style={{ fontSize: 28 }}
           className=" my-4 text-center  flex items-center justify-center  text-lg  text-gray-900"
         >
           {data?.text?.name}
         </h1>
-        <div className=" max-h-80 overflow-y-scroll lg:max-h-full">
-          {editor ? (
+        <div
+          className=" max-h-80 overflow-y-scroll lg:max-h-full "
+          id="editor-Container"
+        >
+          {!content || !editor ? (
+            <div className="flex justify-center">
+              <Loading color="#111" />
+            </div>
+          ) : (
             <EditorContent
               editor={editor}
               className="editor"
               style={{
                 fontSize: DEFAULT_FONT_SIZE,
                 transition: "all ease 0.3s",
+                boxShadow: "0 2px 4px -1px rgb(0 0 0 / 25%) ",
               }}
             />
-          ) : (
-            <div>loading</div>
           )}
         </div>
         {editor && (

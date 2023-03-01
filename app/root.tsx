@@ -18,6 +18,7 @@ import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
+import { MAX_WIDTH_PAGE } from "./constants";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
@@ -59,7 +60,7 @@ function Document({ children, title }: { children: any; title: string }) {
         <title>{title}</title>
       </head>
 
-      <body style={{ width: "100vw" }}>
+      <body>
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           {header}
           {routeChanged ? <Loading /> : children}

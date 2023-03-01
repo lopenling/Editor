@@ -18,11 +18,10 @@ export const action: ActionFunction = async ({ request }) => {
       await createReply(id, post_id, likedBy);
     } else {
       const alreadyLiked = await findReply(id, likedBy);
-      if (!alreadyLiked) {
-        await updateReply(id, likedBy, true);
-      } else {
-        await updateReply(id, likedBy, false);
-      }
+      const actionPromise = !alreadyLiked
+        ? updateReply(id, likedBy, true)
+        : updateReply(id, likedBy, false);
+      await actionPromise;
     }
   }
   if (_action === "likePost") {
@@ -30,11 +29,9 @@ export const action: ActionFunction = async ({ request }) => {
     let userId = Obj.userId as string;
     const likedUsers = await findPostByUserLiked(id, userId);
     try {
-      if (!likedUsers) {
-        await updatePostLike(id, userId, true);
-      } else {
-        await updatePostLike(id, userId, false);
-      }
+      !likedUsers
+        ? await updatePostLike(id, userId, true)
+        : await updatePostLike(id, userId, false);
     } catch (e) {
       console.log(e);
     }

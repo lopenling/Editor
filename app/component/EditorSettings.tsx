@@ -24,6 +24,9 @@ function EditorSetting({
     },
     [editor]
   );
+  const handleRangeHover = (event) => {
+    event.target.title = fontSize;
+  };
   const [fontSize, setFontSize] = React.useState(DEFAULT_FONT_SIZE);
   const FontSizeComponent = () => (
     <>
@@ -34,11 +37,12 @@ function EditorSetting({
             <input
               type="range"
               className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-gray-700"
-              min={14}
+              min={18}
               step={1}
-              max={24}
+              max={32}
               value={fontSize}
               onChange={(e) => changeFontSize(e.target.value)}
+              onMouseOver={handleRangeHover}
             ></input>
           </div>
         </div>
