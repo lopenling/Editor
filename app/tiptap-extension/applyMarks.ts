@@ -28,7 +28,6 @@ export const applyAnnotationFunction = (
     }
   if (searchLocation) {
     searchKey = searchLocation.map((l) => l.start);
-    console.log(searchKey);
   }
 
   let skiplength: any = [];
