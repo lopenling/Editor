@@ -29,15 +29,30 @@ export let loader: LoaderFunction = async ({ request }) => {
       let email = params.get("email");
       let admin = params.get("admin");
       let name = params.get("name");
-      let avatarUrl = params.get("avatar_url");
       let username = params.get("username");
+      let avatarUrl = params.get("avatar_url");
+      if (avatarUrl === null) {
+        let url = DISCOURSE_SITE + `/u/${username}.json`;
+        let result = await fetch(url);
+        let res = await result.json();
+        avatarUrl =
+          "http://lopenling.org" +
+          res?.user?.avatar_template.replace("{size}", "30");
+      }
+
       if (!email || !name || !username) {
         throw new Error("discourse SSO returned error URL");
       }
       let isUserInDatabase = await findUserByUsername(username);
-      if (!isUserInDatabase) {
+      if (isUserInDatabase === null) {
         let isAdmin = admin === "true" ? true : false;
-        const newUser = await createUserInDB(username, name, email, isAdmin);
+        const newUser = await createUserInDB(
+          username,
+          name,
+          email,
+          isAdmin,
+          avatarUrl
+        );
       }
       session.set("user", { email, admin, name, username, avatarUrl });
     } catch (e) {

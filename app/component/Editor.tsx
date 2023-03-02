@@ -23,9 +23,8 @@ import EditorSettings from "./EditorSettings";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE, MAX_WIDTH_PAGE } from "~/constants";
-import { useLittera } from "@assembless/react-littera";
-import translations from "~/locales/translations";
 import Loading from "react-loading";
+import { uselitteraTranlation } from "~/locales/translations";
 function Editor({ content }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = React.useState(false);
@@ -113,7 +112,7 @@ function Editor({ content }) {
         content: selection.text,
       });
   };
-  const translation = useLittera(translations);
+  const translation = uselitteraTranlation();
 
   return (
     <div

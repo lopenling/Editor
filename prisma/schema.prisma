@@ -21,6 +21,8 @@ model User {
   Post       Post[]   @relation("creatorPost")
   likedPost  Post[]   @relation("likedPost")
   likedReply Reply[]  @relation("ReplylikedUser")
+  isAdmin    Boolean
+  avatarUrl  String
 
   @@index([email, username])
 }

@@ -31,7 +31,7 @@ export async function createPostOnDB(
     });
     return createdPost;
   } catch (e) {
-    return "post could not be created ";
+    throw new Error("post couldnot be created " + e);
   }
 }
 

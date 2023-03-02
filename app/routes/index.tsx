@@ -1,30 +1,40 @@
-import { Link, useFetcher, Form } from "@remix-run/react";
-import { Button, Card, Footer, Spinner, TextInput } from "flowbite-react";
+import { Link, Form } from "@remix-run/react";
+import { Button, Card, Spinner, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Footer";
 import { LoaderFunction, redirect } from "@remix-run/server-runtime";
 import { json } from "@remix-run/cloudflare";
 import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
-import React from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useLittera } from "@assembless/react-littera";
-import translations from "~/locales/translations";
+import { uselitteraTranlation } from "~/locales/translations";
+
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
   if (searchText === "") return json([]);
   try {
     let textList = await searchTextWithName(searchText);
-    return json(textList);
+    return json(textList, {
+      headers: {
+        "cache-control":
+          "public, max-age=60, s-maxage=60480, stale-while-revalidate=315400000",
+      },
+    });
   } catch (e) {
     throw new Error(e.message);
   }
 };
 
+export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
+  return {
+    "Cache-Control": loaderHeaders.get("Cache-Control"),
+  };
+}
+
 export default function Index() {
   const data = useLoaderData();
   const transition = useTransition();
-  const translation = useLittera(translations);
+  const translation = uselitteraTranlation();
   const [animationParent] = useAutoAnimate();
   const list = data;
   const isLoading =

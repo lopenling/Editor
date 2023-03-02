@@ -7,10 +7,8 @@ import { Avatar, Modal, Spinner } from "flowbite-react";
 import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { ViewportList } from "react-viewport-list";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useLittera } from "@assembless/react-littera";
-import translations from "~/locales/translations";
+import { uselitteraTranlation } from "~/locales/translations";
 type QuestionProps = {
   editor: Editor | null;
   openFilter: boolean;
@@ -59,22 +57,22 @@ function PostList(props: QuestionProps) {
       .run();
     setSelectedPost(id);
   }
-  const clickOutside = React.useCallback(() => {
-    setSelectedPost(null);
-  }, []);
-  const ref = useDetectClickOutside({
-    onTriggered: clickOutside,
-  });
 
   const onClose = () => props.setOpenFilter((prev) => !prev);
-  const translation = useLittera(translations);
+  const ref = useDetectClickOutside({
+    onTriggered: onClose,
+  });
+
+  const translation = uselitteraTranlation();
 
   return (
     <>
       {props.openFilter && (
         <Modal show={true} onClose={onClose} size="md">
-          <Modal.Header>{translation.filter}</Modal.Header>
-          <FilterPost filter={filter} setFilter={setFilter} close={onClose} />
+          <div ref={ref}>
+            <Modal.Header>{translation.filter}</Modal.Header>
+            <FilterPost filter={filter} setFilter={setFilter} close={onClose} />
+          </div>
         </Modal>
       )}
 
@@ -119,7 +117,7 @@ type EachPostType = {
   avatar: string;
   time: string;
   postContent: string;
-  likedBy: number;
+  likedBy: any;
   topic_id: number;
   handleSelection: () => void;
   selectedPost: number;
@@ -143,7 +141,7 @@ function EachPost({
   const [replyCount, setReplyCount] = React.useState(0);
   const likeFetcher = useFetcher();
   const data = useLoaderData();
-  const translation = useLittera(translations);
+  const translation = uselitteraTranlation();
   const likedByMe = data.user
     ? likedBy.some((l) => l.username === data.user.username)
     : false;
@@ -157,16 +155,24 @@ function EachPost({
       { method: "post", action: "api/like" }
     );
   }
+  const [selected, setSelected] = React.useState(false);
   let avatar_img = ("http://lopenling.org" + avatar).replace("{size}", "30");
-
+  const postref = useDetectClickOutside({
+    onTriggered: () => setSelected(false),
+  });
   return (
     <>
       <div
         style={{
-          backgroundColor: selectedPost === id ? "#FDFDEA" : "transparent",
+          backgroundColor:
+            selectedPost === id && selected ? "#FDFDEA" : "transparent",
         }}
         className="md:px-3"
-        onClick={handleSelection}
+        ref={postref}
+        onClick={() => {
+          handleSelection();
+          setSelected(true);
+        }}
       >
         <div className="mt-3 inline-flex w-full items-start justify-start">
           <div className="flex items-center justify-start space-x-3">

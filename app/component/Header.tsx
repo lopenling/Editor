@@ -1,17 +1,8 @@
 import { Form, Link, useLocation } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar, Select } from "flowbite-react";
 import LopenlingLogo from "~/assets/logo.svg";
-import { useLittera, useLitteraMethods } from "@assembless/react-littera";
-import translations from "~/locales/translations";
+import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
-function generateInitials(name) {
-  const nameArray = name.split(" ");
-  let initials = "";
-  for (let i = 0; i < nameArray.length; i++) {
-    initials += nameArray[i][0];
-  }
-  return initials;
-}
 
 export default function Header({ user }: any) {
   const location = useLocation();
@@ -39,6 +30,7 @@ export default function Header({ user }: any) {
             style={{ maxHeight: 37, maxWidth: 324 }}
           />
         </Link>
+        <Navbar.Toggle />
         <div className="flex">
           <Translation />
           {user ? (
@@ -48,20 +40,12 @@ export default function Header({ user }: any) {
                 inline={true}
                 arrowIcon={null}
                 label={
-                  user.avatarUrl ? (
-                    <Avatar
-                      alt={user.name}
-                      img={user.avatarUrl}
-                      rounded={true}
-                      size="sm"
-                    />
-                  ) : (
-                    <div className="relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-100 dark:bg-gray-600">
-                      <span className="font-medium capitalize text-gray-600 dark:text-gray-300">
-                        {generateInitials(user.name)}
-                      </span>
-                    </div>
-                  )
+                  <Avatar
+                    alt={user.name}
+                    img={user.avatarUrl}
+                    rounded={true}
+                    size="sm"
+                  />
                 }
               >
                 <Dropdown.Header>
@@ -112,6 +96,7 @@ export default function Header({ user }: any) {
                   name="redirectTo"
                   defaultValue={location.pathname}
                 />
+
                 <button
                   type="submit"
                   name="_action"
@@ -138,7 +123,6 @@ export default function Header({ user }: any) {
 }
 
 function Translation() {
-  const translated = useLittera(translations);
   const methods = useLitteraMethods();
   function changeLanguage(e) {
     switch (e.target.value) {
@@ -157,7 +141,7 @@ function Translation() {
         onChange={changeLanguage}
         className="text-sm font-medium leading-tight text-gray-900 border-0 outline-none focus:outline-none"
       >
-        <option value="en">english</option>
+        <option value="en">English</option>
         <option value="bo">བོད་ཡིག་</option>
       </select>
     </div>

@@ -15,10 +15,10 @@ class DiscourseApi {
     this.username = username;
   }
 
-  authHeader() {
+  authHeader(admin = false) {
     let auth_headers = {
       "Api-Key": this.apiKey,
-      "Api-Username": this.username,
+      "Api-Username": admin ? "tenkus47" : this.username,
     };
     return auth_headers;
   }
@@ -51,7 +51,7 @@ class DiscourseApi {
     }
   }
   async addCategory(categoryName: string, parent_category_id: number) {
-    let auth_headers = this.authHeader();
+    let auth_headers = this.authHeader(true);
     var randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
     let newCategoryData = {
       name: categoryName,
@@ -69,6 +69,7 @@ class DiscourseApi {
         }
       );
       let res = await response.json();
+      console.log(res);
       return res;
     } catch (e) {
       console.log("error", e.message);
@@ -124,6 +125,7 @@ class DiscourseApi {
           bodyContent,
           user.id
         );
+
         return createQuestion;
       }
     } catch (e) {
@@ -216,17 +218,12 @@ export async function createThread(
     throw new Error("failed to access Topic Id");
   const apiObj: DiscourseApi = new DiscourseApi(userName);
   let response = await apiObj.fetchCategoryList(parent_category_id);
-  let d = "";
-  if (postTitle.length > 30) {
-    d = postTitle.slice(0, 30) + `_${textId}_`;
-  } else {
-    d = postTitle;
-  }
+
   let checkIfCategoryPresent = response?.find(
-    (l: any) => l.name === (d as string)
+    (l: any) => l.name === (postTitle as string)
   );
   if (!checkIfCategoryPresent) {
-    let res = await apiObj.addCategory(d, parseInt(parent_category_id));
+    let res = await apiObj.addCategory(postTitle, parseInt(parent_category_id));
     checkIfCategoryPresent = {
       id: res.category?.id,
     };

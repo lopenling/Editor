@@ -32,7 +32,8 @@ export async function createUserInDB(
   username: string,
   name: string,
   email: string,
-  isAdmin: boolean
+  isAdmin: boolean,
+  avatarUrl: string
 ) {
   try {
     const newUser = await db.user.create({
@@ -41,10 +42,11 @@ export async function createUserInDB(
         name,
         email,
         isAdmin,
+        avatarUrl,
       },
     });
     return newUser;
   } catch (e) {
-    throw new Error("error " + e.message);
+    return "user Cannot be created" + e;
   }
 }

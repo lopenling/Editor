@@ -18,7 +18,7 @@ import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
-import { MAX_WIDTH_PAGE } from "./constants";
+
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",

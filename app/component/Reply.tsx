@@ -33,11 +33,12 @@ function Reply({
   }
 
   React.useEffect(() => {
-    postListFetcher.submit({}, { method: "get", action: `/api/${topicId}` });
+    postListFetcher.load(`/api/${topicId}`);
     if (postFetcher.submission) {
       closeReply();
     }
-  }, [postFetcher.submission, loaderData.posts]);
+    return () => setReplyCount(0);
+  }, [postFetcher.submission, loaderData.posts, topicId]);
   if (postListFetcher.data) {
     setReplyCount(postListFetcher.data?.posts?.length - 1);
   }

@@ -1,37 +1,24 @@
 import { useLittera } from "@assembless/react-littera";
+import en from "~/assets/locale/en.json";
+import bo from "~/assets/locale/bo.json";
 
-const translations = {
-  language: {
-    en_US: "language",
-    bo_TI: "སྐད་ཡིག་",
-  },
-  search: {
-    en_US: "Search",
-    bo_TI: "འཚོལ།",
-  },
-  searchPlaceholder: {
-    en_US: "Search Text",
-    bo_TI: " པད་ཆ་འཚོལ།",
-  },
-  comment: {
-    en_US: "Comment",
-    bo_TI: " འགྲེལ་པ།",
-  },
-  question: {
-    en_US: "Question",
-    bo_TI: " དྲི་བ།",
-  },
-  filter: {
-    en_US: "Filter",
-    bo_TI: " ཚགས།",
-  },
-  fontSize: {
-    en_US: "Font size",
-    bo_TI: "ཡིག་གཟུགས་ཆེ་ཆུངྲ།",
-  },
-  reply: {
-    en_US: "reply",
-    bo_TI: "ལན།",
-  },
+type translationType = {
+  filter: string;
 };
+let translations: translationType = en;
+for (const key in en) {
+  translations = {
+    ...translations,
+    [key]: {
+      en_US: en[key],
+      bo_TI: bo.hasOwnProperty(key) ? bo[key] : en[key],
+    },
+  };
+}
+
+export function uselitteraTranlation() {
+  const translation = useLittera(translations);
+  return translation;
+}
+
 export default translations;
