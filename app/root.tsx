@@ -99,7 +99,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   console.log(error);
   return (
     <Document title={"error ooh"}>
-      <h1>App Error</h1>
+      <h1 className=" text-3xl text-red-600 font-sans">App Error</h1>
       <pre color="red">{error.message}</pre>
       <p>
         try to go to

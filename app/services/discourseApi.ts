@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { createPostOnDB } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
-import _ from "lodash";
 class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
@@ -225,8 +224,8 @@ export async function createThread(
     throw new Error("failed to access Topic Id");
   const apiObj: DiscourseApi = new DiscourseApi(userName);
   let response = await apiObj.fetchCategoryList(parent_category_id);
-  let checkIfCategoryPresent = response?.find((l: any) =>
-    _.isEqual(l.name, postTitle.replace(/^\s+|\s+$/gm, ""))
+  let checkIfCategoryPresent = response?.find(
+    (l: any) => l.name === postTitle.replace(/^\s+|\s+$/gm, "")
   );
   if (!checkIfCategoryPresent) {
     let res = await apiObj.addCategory(postTitle, parseInt(parent_category_id));
