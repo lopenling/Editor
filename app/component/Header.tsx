@@ -30,9 +30,10 @@ export default function Header({ user }: any) {
             style={{ maxHeight: 37, maxWidth: 324 }}
           />
         </Link>
-        <Navbar.Toggle />
         <div className="flex">
-          <Translation />
+          <div className="hidden md:block">
+            <Translation />
+          </div>
           {user ? (
             <div className="flex md:order-2">
               <Dropdown
@@ -82,6 +83,9 @@ export default function Header({ user }: any) {
                     <Link to="/text-upload">UploadText</Link>
                   )}
                 </Dropdown.Item>
+                <div className="block md:hidden">
+                  <Translation />
+                </div>
               </Dropdown>
             </div>
           ) : (

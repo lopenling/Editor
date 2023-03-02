@@ -8,7 +8,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   return json(text, {
     headers: {
       "cache-control":
-        "public, max-age=600, s-maxage=604800, stale-while-revalidate=31540000000",
+        "public, max-age=6000, s-maxage=604800, stale-while-revalidate=31540000000",
     },
   });
 };

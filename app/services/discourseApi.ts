@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { createPostOnDB } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
-
+import _ from "lodash";
 class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
@@ -51,7 +51,7 @@ class DiscourseApi {
     }
   }
   async addCategory(categoryName: string, parent_category_id: number) {
-    let auth_headers = this.authHeader(true);
+    let authHeaders = this.authHeader(true);
     var randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
     let newCategoryData = {
       name: categoryName,
@@ -59,20 +59,21 @@ class DiscourseApi {
       text_color: randomColor(),
       parent_category_id,
     };
-    let params = new URLSearchParams(newCategoryData).toString();
+    let queryParams = new URLSearchParams(newCategoryData).toString();
     try {
       const response = await fetch(
-        `${this.DiscourseUrl}/categories.json?` + params,
+        `${this.DiscourseUrl}/categories.json?` + queryParams,
         {
           method: "POST",
-          headers: auth_headers,
+          headers: authHeaders,
         }
       );
-      let res = await response.json();
-      console.log(res);
-      return res;
+      let category = await response.json();
+      console.log("Created category:", category);
+      return category;
     } catch (e) {
-      console.log("error", e.message);
+      console.error("Failed to create category:", e);
+      throw e;
     }
   }
   async addTopic(
@@ -87,7 +88,7 @@ class DiscourseApi {
   ) {
     let auth_headers = this.authHeader();
     let questionId = uuidv4();
-    let url = ORIGIN_LOCATION + `/texts/${textId}?start=${start}&end=${end}`;
+    let url = `${ORIGIN_LOCATION}/texts/${textId}?start=${start}&end=${end}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `<div>
     <blockquote>${topic_name}</blockquote>
@@ -100,16 +101,21 @@ class DiscourseApi {
       category: category_id,
       raw: post_text,
     };
-    let params = new URLSearchParams(new_Topic_data).toString();
+    let queryParams = new URLSearchParams(new_Topic_data).toString();
     let userPromise = findUserByUsername(username);
-    const responsePromise = fetch(`${this.DiscourseUrl}/posts.json?` + params, {
-      method: "POST",
-      headers: auth_headers,
-    });
+    const responsePromise = fetch(
+      `${this.DiscourseUrl}/posts.json?${queryParams}`,
+      {
+        method: "POST",
+        headers: auth_headers,
+      }
+    );
     let [user, response] = await Promise.all([userPromise, responsePromise]);
     let data = await response.json();
     if (data?.errors) {
-      throw new Error("Post cannot be created due to dublication!");
+      throw new Error(
+        "Post cannot be created due to dublication!" + data.errors
+      );
     }
     try {
       if (data["topic_id"] && user) {
@@ -128,8 +134,9 @@ class DiscourseApi {
 
         return createQuestion;
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error("Failed to create question:", error);
+      throw error;
     }
   }
 
@@ -218,9 +225,8 @@ export async function createThread(
     throw new Error("failed to access Topic Id");
   const apiObj: DiscourseApi = new DiscourseApi(userName);
   let response = await apiObj.fetchCategoryList(parent_category_id);
-
-  let checkIfCategoryPresent = response?.find(
-    (l: any) => l.name === (postTitle as string)
+  let checkIfCategoryPresent = response?.find((l: any) =>
+    _.isEqual(l.name, postTitle.replace(/^\s+|\s+$/gm, ""))
   );
   if (!checkIfCategoryPresent) {
     let res = await apiObj.addCategory(postTitle, parseInt(parent_category_id));
