@@ -1,5 +1,6 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -101,7 +102,8 @@ export function ErrorBoundary({ error }: { error: Error }) {
       <h1>App Error</h1>
       <pre color="red">{error.message}</pre>
       <p>
-        try to go to here <a href="/">click</a>
+        try to go to
+        <Link to={"/"}> home page</Link>
       </p>
     </Document>
   );
