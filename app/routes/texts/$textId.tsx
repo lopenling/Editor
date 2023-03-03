@@ -26,9 +26,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       console.log(e);
     }
   }
-
+  const domain = new URL(request.url).origin;
   const [posts, text] = await Promise.all([
-    findPostByTextId(textId),
+    findPostByTextId(textId, domain),
     findTextByTextId(textId, false),
   ]);
   const data = {

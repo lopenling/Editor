@@ -13,7 +13,11 @@ const MONTH_NAMES = [
   "December",
 ];
 
-function getFormattedDate(date, prefomattedDate = false, hideYear = false) {
+function getFormattedDate(
+  date,
+  prefomattedDate: boolean | string = false,
+  hideYear = false
+) {
   const day = date.getDate();
   const month = MONTH_NAMES[date.getMonth()];
   const year = date.getFullYear();
@@ -28,16 +32,16 @@ function getFormattedDate(date, prefomattedDate = false, hideYear = false) {
   if (prefomattedDate) {
     // Today at 10:20
     // Yesterday at 10:20
-    return `${prefomattedDate} at ${hours}:${minutes}`;
+    return `${prefomattedDate}`;
   }
 
   if (hideYear) {
     // 10. January at 10:20
-    return `${day}. ${month} at ${hours}:${minutes}`;
+    return `${day} ${month}`;
   }
 
   // 10. January 2017. at 10:20
-  return `${day}. ${month} ${year}. at ${hours}:${minutes}`;
+  return `${day} ${month} ${year}`;
 }
 
 // --- Main function
@@ -55,22 +59,22 @@ export function timeAgo(dateParam) {
   const isToday = today.toDateString() === date.toDateString();
   const isYesterday = yesterday.toDateString() === date.toDateString();
   const isThisYear = today.getFullYear() === date.getFullYear();
-
-  if (seconds < 5) {
-    return "now";
-  } else if (seconds < 60) {
-    return `${seconds} seconds ago`;
-  } else if (seconds < 90) {
-    return "about a minute ago";
-  } else if (minutes < 60) {
-    return `${minutes} minutes ago`;
-  } else if (isToday) {
-    return getFormattedDate(date, "Today"); // Today at 10:20
-  } else if (isYesterday) {
-    return getFormattedDate(date, "Yesterday"); // Yesterday at 10:20
-  } else if (isThisYear) {
-    return getFormattedDate(date, false, true); // 10. January at 10:20
+  switch (true) {
+    case seconds < 5:
+      return "now";
+    case seconds < 60:
+      return `${seconds} seconds ago`;
+    case seconds < 90:
+      return "about a minute ago";
+    case minutes < 60:
+      return `${minutes} minutes ago`;
+    case isToday:
+      return getFormattedDate(date, "Today"); // Today at 10:20
+    case isYesterday:
+      return getFormattedDate(date, "Yesterday"); // Yesterday at 10:20
+    case isThisYear:
+      return getFormattedDate(date, false, true); // 10. January at 10:20
+    default:
+      return getFormattedDate(date); // 10. January 2017. at 10:20
   }
-
-  return getFormattedDate(date); // 10. January 2017. at 10:20
 }

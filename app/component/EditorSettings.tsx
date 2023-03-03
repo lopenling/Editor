@@ -1,8 +1,16 @@
 import { Editor } from "@tiptap/react";
 import crossIcon from "~/assets/icon_cross.svg";
 import SearchString from "./SearchString";
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
+
+interface Props {
+  editor: Editor | null;
+  showFindText: boolean;
+  showFontSize: boolean;
+  setShowFindText: (value: boolean) => void;
+  setShowFontSize: (value: boolean) => void;
+}
 
 function EditorSetting({
   editor,
@@ -10,24 +18,22 @@ function EditorSetting({
   showFontSize,
   setShowFindText,
   setShowFontSize,
-}: {
-  editor: Editor | null;
-  showFindText: boolean;
-  showFontSize: boolean;
-  setShowFindText: any;
-  setShowFontSize: any;
-}) {
-  const changeFontSize = React.useCallback(
-    (value) => {
+}: Props) {
+  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
+
+  const changeFontSize = useCallback(
+    (value: number) => {
       setFontSize(value);
-      editor.chain().selectAll().setFontSize(value).run();
+      editor?.chain()?.selectAll()?.setFontSize(value)?.run();
     },
     [editor]
   );
-  const handleRangeHover = (event) => {
-    event.target.title = fontSize;
-  };
-  const [fontSize, setFontSize] = React.useState(DEFAULT_FONT_SIZE);
+  const handleRangeHover = useCallback(
+    (event) => {
+      event.target.title = fontSize;
+    },
+    [fontSize]
+  );
   const FontSizeComponent = () => (
     <>
       <div className="inline-flex flex-1 items-center justify-between rounded-full">
@@ -41,7 +47,7 @@ function EditorSetting({
               step={1}
               max={32}
               value={fontSize}
-              onChange={(e) => changeFontSize(e.target.value)}
+              onChange={(e) => changeFontSize(Number(e.target.value))}
               onMouseOver={handleRangeHover}
             ></input>
           </div>
@@ -50,48 +56,45 @@ function EditorSetting({
       </div>
     </>
   );
-  if (showFindText || showFontSize)
-    return (
-      <>
-        {showFindText && (
-          <div
-            style={{ maxWidth: 300, margin: "0 auto" }}
-            className="flex items-center gap-2"
-          >
-            <SearchString editor={editor} />
-            <div onClick={() => setShowFindText(false)}>
-              <img src={crossIcon} alt="cross"></img>
-            </div>
+
+  return (
+    <>
+      {showFindText && (
+        <div
+          style={{ maxWidth: 300, margin: "0 auto" }}
+          className="flex items-center gap-2"
+        >
+          <SearchString editor={editor} />
+          <div onClick={() => setShowFindText(false)}>
+            <img src={crossIcon} alt="cross"></img>
           </div>
-        )}
-        {showFontSize && (
+        </div>
+      )}
+      {showFontSize && (
+        <div
+          style={{ maxWidth: 300, margin: "0 auto" }}
+          className="flex items-center gap-2"
+        >
+          <FontSizeComponent />
+          <div onClick={() => setShowFontSize(false)}>
+            <img src={crossIcon} alt="cross"></img>
+          </div>
+        </div>
+      )}
+      {!showFindText && !showFontSize && (
+        <div className="hidden items-center gap-4 md:flex md:justify-between">
+          <div style={{ maxHeight: 37, flex: 2.3 }}>
+            <SearchString editor={editor} />
+          </div>
           <div
-            style={{ maxWidth: 300, margin: "0 auto" }}
-            className="flex items-center gap-2"
+            style={{ maxWidth: 297, flex: 1 }}
+            className="inline-flex items-center justify-between rounded-full"
           >
             <FontSizeComponent />
-            <div onClick={() => setShowFontSize(false)}>
-              <img src={crossIcon} alt="cross"></img>
-            </div>
           </div>
-        )}
-      </>
-    );
-  return (
-    <div className="hidden items-center gap-4 md:flex md:justify-between">
-      <div style={{ maxHeight: 37, flex: 2.3 }}>
-        <SearchString editor={editor} />
-      </div>
-      <div
-        style={{
-          maxWidth: 297,
-          flex: 1,
-        }}
-        className="inline-flex items-center justify-between rounded-full"
-      >
-        <FontSizeComponent />
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 export default EditorSetting;

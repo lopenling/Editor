@@ -1,135 +1,8 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Button, Textarea, TextInput } from "flowbite-react";
-import React from "react";
+import { useFetcher, useLoaderData } from "@remix-run/react/dist/components";
+import { Button } from "flowbite-react";
 import { timeAgo } from "~/utility/getFormatedDate";
 
-type ReplyProps = {
-  postId: number;
-  topicId: number;
-  showReplies: boolean;
-  openReply: boolean;
-  closeReply: () => void;
-  isCreator: boolean;
-  type: "question" | "comment";
-  setReplyCount: any;
-};
-
-function Reply({
-  postId,
-  topicId,
-  showReplies,
-  openReply,
-  closeReply,
-  isCreator,
-  type,
-  setReplyCount,
-}: ReplyProps) {
-  const postFetcher = useFetcher();
-  const postListFetcher = useFetcher();
-  const loaderData = useLoaderData();
-  const inputRef = React.useRef<HTMLInputElement>();
-  if (postFetcher.submission && openReply) {
-    if (inputRef.current) inputRef.current.value = "";
-  }
-
-  React.useEffect(() => {
-    postListFetcher.load(`/api/${topicId}`);
-    if (postFetcher.submission) {
-      closeReply();
-    }
-    return () => setReplyCount(0);
-  }, [postFetcher.submission, loaderData.posts, topicId]);
-  if (postListFetcher.data) {
-    setReplyCount(postListFetcher.data?.posts?.length - 1);
-  }
-  const handleDelete = (id, TopicId) => {
-    postFetcher.submit(
-      {
-        postId: id,
-        topicId: TopicId,
-      },
-      {
-        method: "delete",
-        action: "/api/postReply",
-      }
-    );
-  };
-  let postdata = React.useMemo(
-    () =>
-      postListFetcher.data?.posts
-        ?.slice(1)
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        .sort((a, b) => {
-          if (a.isAproved === b.isAproved) {
-            return 0;
-          }
-          return a.isAproved ? -1 : 1;
-        }),
-    [postListFetcher.data]
-  );
-  return (
-    <>
-      {openReply && (
-        <div className="flex justify-between mb-2">
-          <div style={{ borderLeft: "6px solid #e5e7eb", height: 180 }}></div>
-          <postFetcher.Form
-            action="/api/postReply"
-            method="post"
-            className="flex w-11/12 flex-col justify-center"
-          >
-            <input hidden defaultValue={topicId} name="topicId" />
-            <Textarea
-              name="postString"
-              required={true}
-              placeholder="Write your reply here ..."
-              className="flex-1"
-              style={{ maxHeight: 108 }}
-              autoFocus
-            />
-            <div className="flex justify-end gap-2 mt-2">
-              <Button
-                color=""
-                size="xs"
-                onClick={closeReply}
-                className="bg-gray-300 text-black"
-                type="reset"
-              >
-                cancel
-              </Button>
-              <Button
-                color=""
-                size="xs"
-                className="bg-green-400 text-white"
-                type="submit"
-              >
-                respond
-              </Button>
-            </div>
-          </postFetcher.Form>
-        </div>
-      )}
-
-      {showReplies &&
-        postdata?.map((reply: any, index: number) => {
-          return (
-            <div className="flex" key={reply.id}>
-              <EachReply
-                reply={reply}
-                isCreator={isCreator}
-                postId={postId}
-                replyList={postListFetcher.data?.replyList.find(
-                  (l) => l.id == reply.id
-                )}
-                type={type}
-              />
-            </div>
-          );
-        })}
-    </>
-  );
-}
-
-type EachReplyPropType = {
+type ReplyPropType = {
   reply: any;
   isCreator: boolean;
   postId: number;
@@ -137,13 +10,7 @@ type EachReplyPropType = {
   type: "question" | "comment";
 };
 
-function EachReply({
-  reply,
-  isCreator,
-  postId,
-  replyList,
-  type,
-}: EachReplyPropType) {
+function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
   const replyLikeFetcher = useFetcher();
   const approvedFetcher = useFetcher();
   const data = useLoaderData();
@@ -173,7 +40,7 @@ function EachReply({
     }
     return { __html: html };
   };
-  let avatar_img = ("http://lopenling.org" + reply.avatar_template).replace(
+  let avatar_img = ("http://lopenling.org" + reply?.avatar_template).replace(
     "{size}",
     "30"
   );
@@ -292,7 +159,7 @@ function EachReply({
   );
 }
 
-export function solvedLogo(color) {
+export function solvedLogo(color: string) {
   return (
     <svg
       width="14"
@@ -302,13 +169,12 @@ export function solvedLogo(color) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M4.0131 1.76399C4.5277 1.7229 5.01623 1.52049 5.4091 1.18559C5.85283 0.807658 6.41664 0.600098 6.9995 0.600098C7.58236 0.600098 8.14617 0.807658 8.5899 1.18559C8.98277 1.52049 9.47129 1.7229 9.9859 1.76399C10.567 1.81043 11.1126 2.06236 11.5249 2.4746C11.9371 2.88684 12.1891 3.43244 12.2355 4.01359C12.2763 4.52799 12.4787 5.01679 12.8139 5.40959C13.1918 5.85332 13.3994 6.41713 13.3994 6.99999C13.3994 7.58284 13.1918 8.14666 12.8139 8.59039C12.479 8.98326 12.2766 9.47178 12.2355 9.98639C12.1891 10.5675 11.9371 11.1131 11.5249 11.5254C11.1126 11.9376 10.567 12.1895 9.9859 12.236C9.47129 12.2771 8.98277 12.4795 8.5899 12.8144C8.14617 13.1923 7.58236 13.3999 6.9995 13.3999C6.41664 13.3999 5.85283 13.1923 5.4091 12.8144C5.01623 12.4795 4.5277 12.2771 4.0131 12.236C3.43195 12.1895 2.88635 11.9376 2.47411 11.5254C2.06187 11.1131 1.80994 10.5675 1.7635 9.98639C1.72241 9.47178 1.52 8.98326 1.1851 8.59039C0.80717 8.14666 0.599609 7.58284 0.599609 6.99999C0.599609 6.41713 0.80717 5.85332 1.1851 5.40959C1.52 5.01672 1.72241 4.52819 1.7635 4.01359C1.80994 3.43244 2.06187 2.88684 2.47411 2.4746C2.88635 2.06236 3.43195 1.81043 4.0131 1.76399ZM9.9651 5.96559C10.1108 5.8147 10.1915 5.61262 10.1896 5.40286C10.1878 5.19311 10.1037 4.99246 9.95535 4.84413C9.80703 4.6958 9.60638 4.61167 9.39662 4.60985C9.18686 4.60802 8.98478 4.68866 8.8339 4.83439L6.1995 7.46879L5.1651 6.43439C5.01422 6.28866 4.81213 6.20802 4.60238 6.20985C4.39262 6.21167 4.19197 6.2958 4.04364 6.44413C3.89532 6.59246 3.81118 6.79311 3.80936 7.00286C3.80753 7.21262 3.88817 7.4147 4.0339 7.56559L5.6339 9.16559C5.78392 9.31556 5.98737 9.39981 6.1995 9.39981C6.41163 9.39981 6.61508 9.31556 6.7651 9.16559L9.9651 5.96559Z"
         fill={color}
       />
     </svg>
   );
 }
-
-export default React.forwardRef(Reply);
+export default Reply;

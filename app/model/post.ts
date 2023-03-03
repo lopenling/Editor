@@ -48,7 +48,7 @@ export async function findPostByTopicId(TopicId: number) {
     return "couldnot find the post with error" + e.message;
   }
 }
-export async function findPostByTextId(textId: number) {
+export async function findPostByTextId(textId: number, domain = "") {
   try {
     let posts = await db.post.findMany({
       include: {
@@ -59,8 +59,15 @@ export async function findPostByTextId(textId: number) {
         text_id: textId,
       },
     });
-
-    return posts;
+    let postWithReply = await Promise.all(
+      posts.map(async (post) => {
+        let url = `${domain}/api/${post?.topic_id}`;
+        let replies = await (await fetch(url)).json();
+        replies.posts.shift();
+        return { ...post, replies: replies };
+      })
+    );
+    return postWithReply;
   } catch (e) {
     return "couldnot find the post with error" + e.message;
   }
@@ -91,7 +98,7 @@ export async function updatePostLike(
   payload: boolean
 ) {
   try {
-    await db.post.update({
+    let response = await db.post.update({
       data: {
         likedBy: payload
           ? {
@@ -108,7 +115,11 @@ export async function updatePostLike(
       where: {
         id: id,
       },
+      select: {
+        likedBy: true,
+      },
     });
+    return response;
   } catch (e) {
     throw new Error("update post like error: " + e.message);
   }

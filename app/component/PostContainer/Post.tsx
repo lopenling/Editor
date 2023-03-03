@@ -1,117 +1,11 @@
+import { useState, useEffect } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Editor } from "@tiptap/react";
-import React from "react";
-import { timeAgo } from "~/utility/getFormatedDate";
-import Reply from "./Reply";
-import { Avatar, Modal, Spinner } from "flowbite-react";
-import FilterPost from "./FilterPost";
-import ModalStyle from "react-responsive-modal/styles.css";
-import { useDetectClickOutside } from "react-detect-click-outside";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { uselitteraTranlation } from "~/locales/translations";
-type QuestionProps = {
-  editor: Editor | null;
-  openFilter: boolean;
-  setOpenFilter: any;
-};
+import { useDetectClickOutside } from "react-detect-click-outside";
+import { Avatar } from "flowbite-react";
+import Replies from "./Replies";
 
-export function links() {
-  return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
-}
-function PostList(props: QuestionProps) {
-  const [animationParent] = useAutoAnimate();
-  const data = useLoaderData();
-  const [filter, setFilter] = React.useState({
-    type: "all",
-    date: { startDate: null, endDate: null },
-    user: [],
-  });
-  const [selectedPost, setSelectedPost] = React.useState(null);
-  let posts = data.posts.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-  );
-  if (filter) {
-    if (filter.type && filter.type !== "all")
-      posts = posts.filter((l) => {
-        return l.type === filter.type;
-      });
-    if (filter.user?.length)
-      posts = posts.filter((l) => {
-        return filter.user?.includes(l.creatorUser.username);
-      });
-    if (filter.date?.startDate)
-      posts = posts.filter((l) => {
-        return (
-          new Date(l.created_at).getTime() >
-            new Date(filter.date.startDate).getTime() &&
-          new Date(l.created_at).getTime() <
-            new Date(filter.date.endDate).getTime()
-        );
-      });
-  }
-  function handleSelectPost({ start, end, id }) {
-    props.editor
-      ?.chain()
-      .focus()
-      .setTextSelection({ from: start, to: end })
-      .run();
-    setSelectedPost(id);
-  }
-
-  const onClose = () => props.setOpenFilter((prev) => !prev);
-  const ref = useDetectClickOutside({
-    onTriggered: onClose,
-  });
-
-  const translation = uselitteraTranlation();
-
-  return (
-    <>
-      {props.openFilter && (
-        <Modal show={true} onClose={onClose} size="md">
-          <div ref={ref}>
-            <Modal.Header>{translation.filter}</Modal.Header>
-            <FilterPost filter={filter} setFilter={setFilter} close={onClose} />
-          </div>
-        </Modal>
-      )}
-
-      <div
-        className="scroll-container flex flex-col"
-        ref={animationParent}
-        style={{
-          position: "relative",
-          overflowY: "auto",
-          overflowX: "hidden",
-          height: "80vh",
-          paddingInline: 10,
-        }}
-      >
-        {posts?.map((post, index) => (
-          <div key={index} className={`item`}>
-            <EachPost
-              id={post.id}
-              name={post.creatorUser.username}
-              avatar={post.avatar}
-              time={timeAgo(post.created_at)!}
-              postContent={post.content}
-              likedBy={post.likedBy}
-              topic_id={post.topic_id}
-              handleSelection={() => handleSelectPost(post)}
-              selectedPost={selectedPost!}
-              type={post.type}
-            />
-            <div className="w-full bg-gray-200" />
-          </div>
-        ))}
-      </div>
-    </>
-  );
-}
-
-export default React.memo(PostList);
-
-type EachPostType = {
+type PostType = {
   id: number;
   name: string;
   avatar: string;
@@ -122,9 +16,10 @@ type EachPostType = {
   handleSelection: () => void;
   selectedPost: number;
   type: "question" | "comment";
+  replies: any;
 };
 
-function EachPost({
+function Post({
   id,
   name,
   avatar,
@@ -135,16 +30,19 @@ function EachPost({
   handleSelection,
   selectedPost,
   type,
-}: EachPostType) {
-  const [openReply, setOpenReply] = React.useState(false);
-  const [showReplies, setShowReplies] = React.useState(false);
-  const [replyCount, setReplyCount] = React.useState(0);
+  replies,
+}: PostType) {
+  const [openReply, setOpenReply] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
   const likeFetcher = useFetcher();
   const data = useLoaderData();
   const translation = uselitteraTranlation();
-  const likedByMe = data.user
+  let likedByMe = data.user
     ? likedBy.some((l) => l.username === data.user.username)
     : false;
+  let likedByMeFromFetcher = likeFetcher.data?.some(
+    (l) => l.username === data.user.username
+  );
   function handleLikeClick() {
     likeFetcher.submit(
       {
@@ -155,11 +53,12 @@ function EachPost({
       { method: "post", action: "api/like" }
     );
   }
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = useState(false);
   let avatar_img = ("http://lopenling.org" + avatar).replace("{size}", "30");
   const postref = useDetectClickOutside({
     onTriggered: () => setSelected(false),
   });
+  let replyCount = replies.posts.length;
   return (
     <>
       <div
@@ -192,9 +91,10 @@ function EachPost({
           <div className="flex w-full flex-1 items-center justify-between pb-3">
             <div className="flex h-full w-64 items-center justify-start space-x-4">
               <button
-                disabled={likeFetcher.state !== "idle" || !data.user}
+                disabled={!data.user}
                 className="flex cursor-pointer items-center justify-start space-x-1.5"
                 onClick={handleLikeClick}
+                style={{ opacity: !!likeFetcher.submission ? 0.5 : 1 }}
               >
                 <svg
                   width="14"
@@ -207,8 +107,7 @@ function EachPost({
                     d="M0.800049 7.95005C0.800049 7.77276 0.834968 7.59722 0.902812 7.43343C0.970655 7.26964 1.0701 7.12081 1.19545 6.99545C1.32081 6.8701 1.46964 6.77066 1.63343 6.70281C1.79722 6.63497 1.97276 6.60005 2.15005 6.60005C2.32733 6.60005 2.50288 6.63497 2.66667 6.70281C2.83046 6.77066 2.97928 6.8701 3.10464 6.99545C3.23 7.12081 3.32944 7.26964 3.39729 7.43343C3.46513 7.59722 3.50005 7.77276 3.50005 7.95005V13.35C3.50005 13.7081 3.35782 14.0515 3.10464 14.3046C2.85147 14.5578 2.50809 14.7 2.15005 14.7C1.79201 14.7 1.44863 14.5578 1.19545 14.3046C0.942281 14.0515 0.800049 13.7081 0.800049 13.35V7.95005ZM4.40005 7.79975V12.6867C4.39989 13.0212 4.49295 13.3492 4.66877 13.6337C4.84459 13.9183 5.09623 14.1482 5.39545 14.2977L5.44045 14.3202C5.93985 14.5698 6.49045 14.6999 7.04875 14.7H11.9231C12.3394 14.7002 12.7429 14.5561 13.0648 14.2922C13.3868 14.0284 13.6074 13.6611 13.6889 13.2528L14.7689 7.85285C14.8211 7.59173 14.8147 7.32229 14.7502 7.06395C14.6857 6.8056 14.5647 6.56478 14.3959 6.35886C14.227 6.15293 14.0146 5.98703 13.774 5.87311C13.5333 5.75918 13.2703 5.70008 13.004 5.70005H9.80005V2.10005C9.80005 1.62266 9.61041 1.16482 9.27284 0.827257C8.93528 0.489691 8.47744 0.300049 8.00005 0.300049C7.76135 0.300049 7.53244 0.39487 7.36365 0.563653C7.19487 0.732435 7.10005 0.961354 7.10005 1.20005V1.80035C7.10005 2.57928 6.84741 3.3372 6.38005 3.96035L5.12005 5.63975C4.65269 6.2629 4.40005 7.02082 4.40005 7.79975V7.79975Z"
                     style={{
                       fill:
-                        likedByMe ||
-                        likeFetcher.submission?.formData.get("_action")
+                        likedByMe | likedByMeFromFetcher
                           ? "rgb(49,196,141)"
                           : "gray",
                     }}
@@ -216,11 +115,7 @@ function EachPost({
                 </svg>
 
                 <div className="  text-sm font-medium leading-tight text-gray-500">
-                  {likeFetcher.submission
-                    ? likedByMe
-                      ? likedBy.length - 1
-                      : likedBy.length + 1
-                    : likedBy.length}
+                  {likeFetcher.data ? likeFetcher.data?.length : likedBy.length}
                 </div>
               </button>
               <div className="flex items-center justify-start space-x-1.5">
@@ -240,7 +135,7 @@ function EachPost({
 
                 <button
                   onClick={() => setShowReplies((prev) => !prev)}
-                  className="text-sm font-medium leading-tight text-gray-500"
+                  className=" lowercase text-sm font-medium leading-tight text-gray-500"
                 >
                   <span className="mr-1">{replyCount}</span>
                   {showReplies ? "Hide reply" : translation.reply}
@@ -270,7 +165,7 @@ function EachPost({
           </div>
         </div>
       </div>
-      <Reply
+      <Replies
         postId={id}
         topicId={topic_id}
         showReplies={showReplies}
@@ -278,9 +173,11 @@ function EachPost({
         closeReply={() => setOpenReply(false)}
         isCreator={data?.user?.username === name}
         type={type}
-        setReplyCount={setReplyCount}
+        replies={replies}
       />
       <hr />
     </>
   );
 }
+
+export default Post;

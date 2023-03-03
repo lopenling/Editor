@@ -66,7 +66,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     : "/";
   return redirect(redirectUrl, {
     headers: {
-      "set-cookie": await commitSession(session),
+      "set-cookie": await commitSession(session, { sameSite: "lax" }),
     },
   });
 };

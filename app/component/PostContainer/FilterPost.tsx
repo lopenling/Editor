@@ -1,47 +1,40 @@
 import { Avatar, Button } from "flowbite-react";
-import React, { useState, useId } from "react";
+import React, { useState, useId, useEffect } from "react";
 import { useFetcher } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
-
+import crossIcon from "~/assets/icon_cross.svg";
 export default function FilterPost({ setFilter, filter, close }) {
   const [filterData, setFilterData] = useState(filter);
   const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
   const typeId = useId();
-  function handleTypeCheck(e) {
-    let value = e.target.value;
-    if (e.target.checked)
-      setFilterData((prev) => ({
-        ...prev,
-        type: value,
-      }));
-  }
-  function handleDateChange(e) {
-    let value = e;
+
+  useEffect(() => {
+    setUserInput("");
+  }, [filterData]);
+
+  const handleTypeCheck = (e) => {
+    setFilterData((prevData) => ({ ...prevData, type: e.target.value }));
+  };
+
+  const handleDateChange = (e) => {
+    setFilterData((prevData) => ({ ...prevData, date: e.target.value }));
+  };
+
+  function handleNameClick(userToAdd: string) {
+    if (filterData.user.includes(userToAdd) || !userToAdd.length) {
+      return;
+    }
     setFilterData((prev) => ({
       ...prev,
-      date: value,
+      user: [...prev.user, userToAdd],
     }));
   }
-  function handleNameClick(name: string) {
-    if (filterData.user.includes(name)) return;
-    if (!name.length) return;
-    setFilterData((prev) => {
-      let newData = [...prev.user, name];
-      return {
-        ...prev,
-        user: newData,
-      };
-    });
-  }
-  function handleRemoveUser(name: string) {
-    setFilterData((prev) => {
-      let newData = prev.user.filter((names) => names !== name);
-      return {
-        ...prev,
-        user: newData,
-      };
-    });
+  function handleRemoveUser(userToRemove: string) {
+    setFilterData((prev) => ({
+      ...prev,
+      user: prev.user.filter((names) => names !== userToRemove),
+    }));
   }
   function apply() {
     setFilter(filterData);
@@ -53,7 +46,6 @@ export default function FilterPost({ setFilter, filter, close }) {
       date: { startDate: null, endDate: null },
       user: [],
     });
-    setUserInput("");
   }
   let isFetchingUser = searchUser.state === "loading";
   return (
@@ -66,57 +58,29 @@ export default function FilterPost({ setFilter, filter, close }) {
               Type
             </p>
             <div className="flex flex-col items-start justify-start space-y-0.5">
-              <div className="flex py-2">
-                <input
-                  id={typeId + "-all"}
-                  type="radio"
-                  onChange={handleTypeCheck}
-                  value="all"
-                  checked={filterData.type === "all"}
-                  name="filter-type"
-                  className="h-4 w-4 rounded  border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  htmlFor={typeId + "-all"}
-                  className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-                >
-                  All
-                </label>
-              </div>
-              <div className="flex py-2">
-                <input
-                  id={typeId + "-comment"}
-                  type="radio"
-                  onChange={handleTypeCheck}
-                  checked={filterData.type === "comment"}
-                  value="comment"
-                  name="filter-type"
-                  className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  htmlFor={typeId + "-comment"}
-                  className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-                >
-                  Comments only
-                </label>
-              </div>
-              <div className="flex py-2">
-                <input
-                  id={typeId + "-question"}
-                  type="radio"
-                  onChange={handleTypeCheck}
-                  checked={filterData.type === "question"}
-                  value="question"
-                  name="filter-type"
-                  className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  htmlFor={typeId + "-question"}
-                  className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-                >
-                  Questions only
-                </label>
-              </div>
+              {[
+                { value: "all", label: "All" },
+                { value: "comment", label: "Comments only" },
+                { value: "question", label: "Questions only" },
+              ].map(({ value, label }) => (
+                <div key={value} className="flex py-2">
+                  <input
+                    id={`${typeId}-${value}`}
+                    type="radio"
+                    onChange={handleTypeCheck}
+                    checked={filterData.type === value}
+                    value={value}
+                    name="filter-type"
+                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    htmlFor={`${typeId}-${value}`}
+                    className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
+                  >
+                    {label}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
           {/* DateFilter */}
@@ -145,20 +109,13 @@ export default function FilterPost({ setFilter, filter, close }) {
                   <p className="text-center text-xs font-medium leading-none text-gray-600">
                     {user}
                   </p>
-                  <svg
+                  <img
+                    src={crossIcon}
+                    alt="x"
+                    height={18}
+                    width={18}
                     onClick={() => handleRemoveUser(user)}
-                    width="18"
-                    height="18"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8.18966 6.2102L8.18971 6.21014L8.18346 6.2041C7.91942 5.94908 7.56578 5.80797 7.1987 5.81116C6.83162 5.81435 6.48049 5.96159 6.22091 6.22116C5.96134 6.48073 5.81411 6.83187 5.81092 7.19894C5.80773 7.56602 5.94884 7.91966 6.20386 8.1837L6.20381 8.18376L6.20995 8.1899L7.0201 9.00005L6.2127 9.80745C6.0806 9.93591 5.97515 10.0892 5.90241 10.2585C5.82903 10.4293 5.79041 10.6131 5.7888 10.7989C5.78718 10.9848 5.82261 11.1692 5.893 11.3412C5.96339 11.5133 6.06735 11.6696 6.1988 11.8011C6.33025 11.9325 6.48656 12.0365 6.65861 12.1069C6.83067 12.1772 7.01502 12.2127 7.20091 12.2111C7.3868 12.2094 7.57051 12.1708 7.74132 12.0974C7.91064 12.0247 8.06392 11.9193 8.19237 11.7872L8.9998 10.9798L9.80995 11.7899L9.8099 11.79L9.81615 11.796C10.0802 12.051 10.4338 12.1921 10.8009 12.1889C11.168 12.1857 11.5191 12.0385 11.7787 11.7789C12.0383 11.5194 12.1855 11.1682 12.1887 10.8012C12.1919 10.4341 12.0508 10.0804 11.7957 9.81639L11.7958 9.81634L11.7897 9.8102L10.9795 9.00005L11.7897 8.1899L11.7897 8.18996L11.7957 8.1837C12.0508 7.91966 12.1919 7.56602 12.1887 7.19894C12.1855 6.83187 12.0383 6.48073 11.7787 6.22116C11.5191 5.96159 11.168 5.81435 10.8009 5.81116C10.4338 5.80797 10.0802 5.94908 9.81615 6.2041L9.8161 6.20405L9.80995 6.2102L8.9998 7.02034L8.18966 6.2102ZM13.7374 13.7377C12.4809 14.9942 10.7768 15.7 8.9998 15.7C7.22285 15.7 5.51868 14.9942 4.26219 13.7377C3.0057 12.4812 2.2998 10.777 2.2998 9.00005C2.2998 7.2231 3.0057 5.51893 4.26219 4.26243C5.51868 3.00594 7.22285 2.30005 8.9998 2.30005C10.7768 2.30005 12.4809 3.00594 13.7374 4.26243C14.9939 5.51893 15.6998 7.2231 15.6998 9.00005C15.6998 10.777 14.9939 12.4812 13.7374 13.7377Z"
-                      fill="#9CA3AF"
-                      stroke="#9CA3AF"
-                    />
-                  </svg>
+                  ></img>
                 </div>
               );
             })}

@@ -30,19 +30,17 @@ export async function getUserSession(request: Request) {
 export async function destroyUserSession(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
   session.set("user", null);
-  return await destroySession(session);
+  return await destroySession(session, { sameSite: "lax" });
 }
 
 export async function login(request: Request, next: any, redirectTo: string) {
   let session = await getSession(request.headers.get("Cookie"));
-  if (!session.get("user")) {
+  const user = session.get("user");
+  if (!user) {
     let url = await redirectDiscourse();
     session.set("success-redirect", redirectTo);
-    return redirect(url, {
-      headers: {
-        "set-cookie": await commitSession(session),
-      },
-    });
+    const headers = { "set-cookie": await commitSession(session) };
+    return redirect(url, { headers });
   }
   return next(session);
 }

@@ -15,8 +15,6 @@ import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import React, { useEffect } from "react";
 // import SelectTextOnRender from "~/extension/selectionOnFirstRender";
 import CopyIcon from "~/assets/icon_copy.svg";
-import Post from "./Post";
-import PostList from "./PostList";
 import { FontSize } from "~/tiptap-extension/fontSize";
 import EditorSettings from "./EditorSettings";
 // import applyAnnotation from "~/tiptap-extension/applyMarks";
@@ -25,6 +23,8 @@ import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE, MAX_WIDTH_PAGE } from "~/constants";
 import Loading from "react-loading";
 import { uselitteraTranlation } from "~/locales/translations";
+import Posts from "./PostContainer/Posts";
+import PostForm from "./PostContainer/PostForm";
 function Editor({ content }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = React.useState(false);
@@ -282,10 +282,10 @@ function Editor({ content }) {
             />
           </svg>
         </div>
-        <Post postInfo={postInfo} setPostInfo={setPostInfo} ref={null} />
+        <PostForm postInfo={postInfo} setPostInfo={setPostInfo} ref={null} />
 
         {data.posts.length > 0 && (
-          <PostList
+          <Posts
             editor={editor}
             setOpenFilter={setOpenFilter}
             openFilter={openFilter}

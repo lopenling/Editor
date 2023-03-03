@@ -1,11 +1,12 @@
-import { Form, Link, useLocation } from "@remix-run/react";
-import { Navbar, Dropdown, Avatar, Select } from "flowbite-react";
+import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
+import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import LopenlingLogo from "~/assets/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
-
+import { useEffect, useState } from "react";
 export default function Header({ user }: any) {
   const location = useLocation();
+  const loginFetcher = useFetcher();
   return (
     <div
       className=" max-w-full"
@@ -23,13 +24,14 @@ export default function Header({ user }: any) {
           margin: "0 auto",
         }}
       >
-        <Link to="/" className="flex items-center  ">
+        <NavLink preventScrollReset to={"/"} className="flex items-center">
           <img
             src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
             alt="logo"
             style={{ maxHeight: 37, maxWidth: 324 }}
           />
-        </Link>
+        </NavLink>
+
         <div className="flex">
           <div className="hidden md:block">
             <Translation />
@@ -80,7 +82,9 @@ export default function Header({ user }: any) {
                 </Dropdown.Item>
                 <Dropdown.Item>
                   {user?.admin === "true" && (
-                    <Link to="/text-upload">UploadText</Link>
+                    <NavLink preventScrollReset to="/text-upload">
+                      UploadText
+                    </NavLink>
                   )}
                 </Dropdown.Item>
                 <div className="block md:hidden">
@@ -90,7 +94,7 @@ export default function Header({ user }: any) {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <Form
+              <loginFetcher.Form
                 method="post"
                 action="/sso/login"
                 className="flex items-center"
@@ -109,7 +113,7 @@ export default function Header({ user }: any) {
                 >
                   log in
                 </button>
-              </Form>
+              </loginFetcher.Form>
               <div className="flex items-center justify-center space-x-2 rounded-lg border border-green-400 px-5 py-2.5">
                 <a
                   href={"https://lopenling.org/signup"}

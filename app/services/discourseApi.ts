@@ -27,8 +27,8 @@ class DiscourseApi {
       `${this.DiscourseUrl}/categories.json?include_subcategories=true`
     );
     const categories = await res.json();
-    const filterCategory = categories.category_list.categories.find(
-      (l) => l?.id === parseInt(id)
+    const filterCategory = categories?.category_list.categories.find(
+      (category) => category?.id === parseInt(id)
     );
     if (!filterCategory.subcategory_ids.length) return null;
     return filterCategory.subcategory_list;
@@ -215,27 +215,29 @@ export async function createThread(
   postContent: string,
   start: string,
   end: string,
-  parent_category_id: string,
+  parentCategoryId: string,
   textId: number,
   type: string
 ) {
   if (!start || !end) throw new Error("start and end values not available");
   if (!postTitle || !blockquoteArea || !postContent)
     throw new Error("failed to access Topic Id");
-  const apiObj: DiscourseApi = new DiscourseApi(userName);
-  let response = await apiObj.fetchCategoryList(parent_category_id);
-  let checkIfCategoryPresent = response?.find(
-    (l: any) => l.name === postTitle.replace(/^\s+|\s+$/gm, "")
-  );
-  if (!checkIfCategoryPresent) {
-    let res = await apiObj.addCategory(postTitle, parseInt(parent_category_id));
-    checkIfCategoryPresent = {
-      id: res.category?.id,
-    };
+  const api: DiscourseApi = new DiscourseApi(userName);
+  const categories = await api.fetchCategoryList(parentCategoryId);
+  const category = categories.find((c: any) => c.name === postTitle.trim());
+  let categoryId: number;
+  if (category) {
+    categoryId = category.id;
+  } else {
+    const newCategory = await api.addCategory(
+      postTitle,
+      parseInt(parentCategoryId)
+    );
+    categoryId = newCategory.category.id;
   }
-  let createTopic = await apiObj.addTopic(
+  let topic = await api.addTopic(
     userName,
-    checkIfCategoryPresent.id,
+    categoryId,
     parseInt(start as string),
     parseInt(end as string),
     blockquoteArea,
@@ -243,7 +245,7 @@ export async function createThread(
     textId,
     type
   );
-  return createTopic;
+  return topic;
 }
 
 function addLinktoQuestion(question: string, url: string) {

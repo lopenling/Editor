@@ -65,7 +65,7 @@ function Document({ children, title }: { children: any; title: string }) {
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           {header}
           {routeChanged ? <Loading /> : children}
-          <ScrollRestoration />
+          <ScrollRestoration getKey={(location) => location.pa} />
           <Scripts />
           <LiveReload />
         </LitteraProvider>
