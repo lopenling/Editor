@@ -60,7 +60,7 @@ function Replies({
           }
           return a.isAproved ? -1 : 1;
         }),
-    []
+    [replies.posts]
   );
   const textareaRef = React.useRef(null);
   return (

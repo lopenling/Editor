@@ -58,7 +58,7 @@ function Post({
   const postref = useDetectClickOutside({
     onTriggered: () => setSelected(false),
   });
-  let replyCount = replies.posts.length;
+  let replyCount = replies.posts.length - 1;
   return (
     <>
       <div
