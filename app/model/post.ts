@@ -61,7 +61,7 @@ export async function findPostByTextId(textId: number, domain = "") {
     });
     let postWithReply = await Promise.all(
       posts.map(async (post) => {
-        let url = `${domain}/api/${post?.topic_id}`;
+        let url = `${domain}/api/replies/${post?.topic_id}`;
         let replies = await (await fetch(url)).json();
         // replies.posts.shift();
         return { ...post, replies: replies };
