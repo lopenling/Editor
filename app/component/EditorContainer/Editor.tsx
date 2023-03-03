@@ -23,8 +23,8 @@ import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE, MAX_WIDTH_PAGE } from "~/constants";
 import Loading from "react-loading";
 import { uselitteraTranlation } from "~/locales/translations";
-import Posts from "./PostContainer/Posts";
-import PostForm from "./PostContainer/PostForm";
+import Posts from "../PostContainer/Posts";
+import PostForm from "../PostContainer/PostForm";
 function Editor({ content }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = React.useState(false);
