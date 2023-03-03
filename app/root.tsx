@@ -61,11 +61,11 @@ function Document({ children, title }: { children: any; title: string }) {
         <title>{title}</title>
       </head>
 
-      <body>
+      <body style={{ fontFamily: "monlam" }}>
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           {header}
           {routeChanged ? <Loading /> : children}
-          <ScrollRestoration getKey={(location) => location.pa} />
+          <ScrollRestoration getKey={(location) => location.pathname} />
           <Scripts />
           <LiveReload />
         </LitteraProvider>
