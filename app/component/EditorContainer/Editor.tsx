@@ -119,7 +119,10 @@ function Editor({ content }) {
       className="mt-5 mx-auto flex w-full flex-col gap-5 lg:flex-row  container "
       style={{ maxWidth: MAX_WIDTH_PAGE }}
     >
-      <div className="relative flex-1" style={{ maxHeight: "75vh" }}>
+      <div
+        className="relative flex-1 textEditorContainer"
+        style={{ maxHeight: "75vh" }}
+      >
         <EditorSettings
           editor={editor}
           showFindText={showFindText}

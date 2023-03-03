@@ -61,7 +61,7 @@ function Document({ children, title }: { children: any; title: string }) {
         <title>{title}</title>
       </head>
 
-      <body style={{ fontFamily: "monlam" }}>
+      <body>
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           {header}
           {routeChanged ? <Loading /> : children}
