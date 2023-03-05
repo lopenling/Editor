@@ -1,6 +1,7 @@
 // create post
 
 import { db } from "~/db.server";
+import { getposts } from "~/services/discourseApi";
 
 export async function createPostOnDB(
   id: string,
@@ -61,10 +62,9 @@ export async function findPostByTextId(textId: number, domain = "") {
     });
     let postWithReply = await Promise.all(
       posts.map(async (post) => {
-        let url = `${domain}/api/replies/${post?.topic_id}`;
-        let { posts } = await (await fetch(url)).json();
-        // replies.posts.shift();
-
+        let replies = await getposts(post?.topic_id);
+        let { posts } = replies?.post_stream;
+        console.log(posts.length);
         return { ...post, replyCount: posts?.length };
       })
     );

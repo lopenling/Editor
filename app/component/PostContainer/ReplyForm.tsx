@@ -1,6 +1,6 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Button, Textarea } from "flowbite-react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 type ReplyFormPropsType = {
   closeReply: () => void;
@@ -11,6 +11,7 @@ export default function ReplyForm({ closeReply, topicId }: ReplyFormPropsType) {
   const postFetcher = useFetcher();
   const textareaRef = useRef(null);
   const loaderData = useLoaderData();
+  const [textArea, setTextArea] = useState("");
   useEffect(() => {
     if (postFetcher.type === "done") closeReply();
   }, [postFetcher.submission, loaderData.posts, topicId]);
@@ -35,6 +36,8 @@ export default function ReplyForm({ closeReply, topicId }: ReplyFormPropsType) {
           autoFocus
           id="textArea"
           ref={(ref) => (textareaRef.current = ref)}
+          value={textArea}
+          onChange={(e) => setTextArea(e.target.value)}
         />
         <div className="flex justify-end gap-2 mt-2">
           <Button
@@ -51,7 +54,7 @@ export default function ReplyForm({ closeReply, topicId }: ReplyFormPropsType) {
             size="xs"
             className="bg-green-400 text-white"
             type="submit"
-            disabled={false}
+            disabled={textArea === ""}
           >
             respond
           </Button>

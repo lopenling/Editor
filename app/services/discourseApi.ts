@@ -262,8 +262,8 @@ function addLinktoQuestion(question: string, url: string) {
 //   return res;
 // }
 
-export async function getposts(topicId: number, username: string) {
-  const apiObj: DiscourseApi = new DiscourseApi(username);
+export async function getposts(topicId: number) {
+  const apiObj: DiscourseApi = new DiscourseApi();
   const res = apiObj.fetchposts(topicId);
   return res;
 }
