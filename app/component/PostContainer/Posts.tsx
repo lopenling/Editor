@@ -97,11 +97,11 @@ function Posts(props: PostPropsType) {
             time={timeAgo(post.created_at)!}
             postContent={post.content}
             likedBy={post.likedBy}
-            topic_id={post.topic_id}
+            topicId={post.topic_id}
             handleSelection={() => handleSelectPost(post)}
             selectedPost={selectedPost!}
             type={post.type}
-            replies={post.replies}
+            replyCount={post?.replyCount}
           />
         ))}
       </div>

@@ -4,6 +4,7 @@ import { uselitteraTranlation } from "~/locales/translations";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { Avatar } from "flowbite-react";
 import Replies from "./Replies";
+import ReplyForm from "./ReplyForm";
 
 type PostType = {
   id: number;
@@ -12,11 +13,11 @@ type PostType = {
   time: string;
   postContent: string;
   likedBy: any;
-  topic_id: number;
+  topicId: number;
   handleSelection: () => void;
   selectedPost: number;
   type: "question" | "comment";
-  replies: any;
+  replyCount: any;
 };
 
 function Post({
@@ -26,11 +27,11 @@ function Post({
   time,
   postContent,
   likedBy,
-  topic_id,
+  topicId,
   handleSelection,
   selectedPost,
   type,
-  replies,
+  replyCount,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -58,7 +59,6 @@ function Post({
   const postref = useDetectClickOutside({
     onTriggered: () => setSelected(false),
   });
-  let replyCount = replies.posts.length - 1;
   return (
     <>
       <div
@@ -137,7 +137,7 @@ function Post({
                   onClick={() => setShowReplies((prev) => !prev)}
                   className=" lowercase text-sm font-medium leading-tight text-gray-500"
                 >
-                  <span className="mr-1">{replyCount}</span>
+                  <span className="mr-1">{replyCount - 1}</span>
                   {showReplies ? "Hide reply" : translation.reply}
                 </button>
               </div>
@@ -165,16 +165,20 @@ function Post({
           </div>
         </div>
       </div>
-      <Replies
-        postId={id}
-        topicId={topic_id}
-        showReplies={showReplies}
-        openReply={openReply}
-        closeReply={() => setOpenReply(false)}
-        isCreator={data?.user?.username === name}
-        type={type}
-        replies={replies}
-      />
+      {openReply && (
+        <ReplyForm topicId={topicId} closeReply={() => setOpenReply(false)} />
+      )}
+      {showReplies && (
+        <Replies
+          postId={id}
+          topicId={topicId}
+          openReply={openReply}
+          closeReply={() => setOpenReply(false)}
+          isCreator={data?.user?.username === name}
+          type={type}
+          replyCount={replyCount}
+        />
+      )}
       <hr />
     </>
   );

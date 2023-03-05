@@ -13,7 +13,6 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   let replyList: [] = [];
   const data = getposts(topicId, user?.username);
   const replyListPromise = findReplyByPostId(post.id);
-
   let result = await Promise.all([data, replyListPromise]);
   posts = result[0].post_stream?.posts;
   replyList = result[1];

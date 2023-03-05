@@ -36,7 +36,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     text: text,
     posts,
   };
-  return json(data, { status: 200 });
+  return json(data, {
+    status: 200,
+  });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -65,7 +67,7 @@ export default function () {
   let content = React.useMemo(() => {
     return textFetcher.data?.content.replace(/\n/g, "<br>");
   }, [textFetcher.data]);
-
+  console.log(data.posts);
   return (
     <>
       <main className="container m-auto">

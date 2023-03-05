@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { MAX_CATEGORY_NAME_LENGTH } from "~/constants";
 import { createPostOnDB } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
 class DiscourseApi {
@@ -224,7 +225,12 @@ export async function createThread(
     throw new Error("failed to access Topic Id");
   const api: DiscourseApi = new DiscourseApi(userName);
   const categories = await api.fetchCategoryList(parentCategoryId);
-  const category = categories.find((c: any) => c.name === postTitle.trim());
+  if (postTitle.length > 40) {
+    postTitle =
+      postTitle.trim().substring(0, MAX_CATEGORY_NAME_LENGTH) +
+      `_text_${textId}`;
+  }
+  const category = categories.find((c: any) => c.name === postTitle);
   let categoryId: number;
   if (category) {
     categoryId = category.id;
