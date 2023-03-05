@@ -37,8 +37,8 @@ function Editor({ content }) {
     content: string;
   }>(null);
   const [selection, setSelection] = React.useState<null | {
-    start: number;
-    end: number;
+    start: number | null;
+    end: number | null;
     text: string;
   }>(null);
   const [openFilter, setOpenFilter] = React.useState<boolean>(false);
@@ -158,6 +158,9 @@ function Editor({ content }) {
         </div>
         {editor && (
           <BubbleMenu
+            shouldShow={(editor) => {
+              return editor.state.selection.content().size > 5;
+            }}
             className="BubbleMenu"
             editor={editor}
             tippyOptions={{ duration: 800, zIndex: 1 }}

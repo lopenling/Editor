@@ -36,6 +36,7 @@ function Post({
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const likeFetcher = useFetcher();
+  const [ReplyCount, setReplyCount] = useState(replyCount);
   const data = useLoaderData();
   const translation = uselitteraTranlation();
   let likedByMe = data.user
@@ -137,7 +138,7 @@ function Post({
                   onClick={() => setShowReplies((prev) => !prev)}
                   className=" lowercase text-sm font-medium leading-tight text-gray-500"
                 >
-                  <span className="mr-1">{replyCount - 1}</span>
+                  <span className="mr-1">{ReplyCount - 1}</span>
                   {showReplies ? "Hide reply" : translation.reply}
                 </button>
               </div>
@@ -177,6 +178,7 @@ function Post({
           isCreator={data?.user?.username === name}
           type={type}
           replyCount={replyCount}
+          setReplyCount={setReplyCount}
         />
       )}
       <hr />

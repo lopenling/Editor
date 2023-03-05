@@ -10,8 +10,8 @@ type RepliesProps = {
   isCreator: boolean;
   type: "question" | "comment";
   replyCount: number;
+  setReplyCount: any;
 };
-
 function Replies({
   postId,
   topicId,
@@ -20,25 +20,24 @@ function Replies({
   isCreator,
   type,
   replyCount,
+  setReplyCount,
 }: RepliesProps) {
   const [replies, setReplies] = useState([]);
   const postFetcher = useFetcher();
   const postListFetcher = useFetcher();
-  const location = useLocation();
   useEffect(() => {
-    console.log(location);
-    let url = "http://localhost:8787" + "/api/replies/" + topicId;
     postListFetcher.submit(
       {},
       { method: "get", action: `/api/replies/${topicId}` }
     );
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setReplies(data.posts);
-      });
-    return () => console.log("hide");
-  }, [replyCount]);
+  }, []);
+  useEffect(() => {
+    let data = postListFetcher.data;
+    if (data) {
+      setReplies(data.posts);
+      setReplyCount(data.posts.length);
+    }
+  }, [replyCount, postListFetcher.data]);
 
   const handleDelete = (id, TopicId) => {
     postFetcher.submit(
@@ -65,6 +64,7 @@ function Replies({
         }),
     [replies]
   );
+  if (!postListFetcher.data) return null;
   return (
     <>
       {postdata.map((reply: any, index: number) => {

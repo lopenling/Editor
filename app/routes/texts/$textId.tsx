@@ -67,7 +67,6 @@ export default function () {
   let content = React.useMemo(() => {
     return textFetcher.data?.content.replace(/\n/g, "<br>");
   }, [textFetcher.data]);
-  console.log(data.posts);
   return (
     <>
       <main className="container m-auto">

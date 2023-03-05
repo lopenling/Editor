@@ -227,10 +227,9 @@ export async function createThread(
   const categories = await api.fetchCategoryList(parentCategoryId);
   if (postTitle.length > 40) {
     postTitle =
-      postTitle.trim().substring(0, MAX_CATEGORY_NAME_LENGTH) +
-      `_text_${textId}`;
+      postTitle.substring(0, MAX_CATEGORY_NAME_LENGTH) + `_text_${textId}`;
   }
-  const category = categories.find((c: any) => c.name === postTitle);
+  const category = categories.find((c: any) => c.name === postTitle.trim());
   let categoryId: number;
   if (category) {
     categoryId = category.id;
