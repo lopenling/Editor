@@ -2,7 +2,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "build": "npm run build:css && remix build",
+    "build": " remix build",
     "build:css": "npm run generate:css -- --minify ",
     "deploy": "wrangler publish",
     "dev": "remix build && run-p \"dev:*\" ",
