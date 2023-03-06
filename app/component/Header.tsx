@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function Header({ user }: any) {
   const location = useLocation();
   const loginFetcher = useFetcher();
+
   return (
     <div
       className=" max-w-full"
@@ -159,7 +160,7 @@ function Translation() {
     <div className="mr-10 flex items-center justify-start space-x-0.5">
       <select
         onChange={changeLanguage}
-        className="text-sm font-medium leading-tight text-gray-900 border-0 outline-none focus:outline-none"
+        className="text-sm font-medium leading-tight text-gray-900 "
       >
         <option value="en">English</option>
         <option value="bo">བོད་ཡིག་</option>

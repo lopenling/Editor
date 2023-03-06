@@ -207,6 +207,19 @@ class DiscourseApi {
       console.log("upload Failed" + e.message);
     }
   }
+  async logout(id: string) {
+    let auth_headers = this.authHeader(true);
+    try {
+      let url = `${this.DiscourseUrl}/admin/users/${id}/log_out`;
+      const response = await fetch(url, {
+        method: "post",
+        headers: auth_headers,
+      });
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 export async function createThread(
@@ -290,6 +303,12 @@ export async function deletePost(postId: number, username: string) {
   const apiObj: DiscourseApi = new DiscourseApi(username);
 
   const res = apiObj.deletePost(postId);
+  return res;
+}
+
+export async function logout(id: string) {
+  const apiObj: DiscourseApi = new DiscourseApi();
+  const res = await apiObj.logout(id);
   return res;
 }
 

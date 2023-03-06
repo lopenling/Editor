@@ -4,6 +4,7 @@ import {
   createCookie,
   createCloudflareKVSessionStorage,
 } from "@remix-run/cloudflare";
+import { logout } from "./discourseApi";
 // let secret = process.env.COOKIE_SECRET;
 // if (!secret) {
 //   throw new Error("set a COOKIE_SECRET in env");
@@ -27,8 +28,11 @@ export async function getUserSession(request: Request) {
 
   return user;
 }
+
 export async function destroyUserSession(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
+  let external_id = session.get("user").external_id;
+  await logout(external_id);
   session.set("user", null);
   return await destroySession(session, { sameSite: "lax" });
 }

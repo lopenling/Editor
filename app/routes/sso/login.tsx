@@ -11,6 +11,7 @@ import {
   login,
 } from "~/services/session.server";
 import { createUserInDB, findUserByUsername } from "~/model/user";
+import { logout } from "~/services/discourseApi";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -31,6 +32,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       let name = params.get("name");
       let username = params.get("username");
       let avatarUrl = params.get("avatar_url");
+      let external_id = params.get("external_id");
       if (avatarUrl === null) {
         let url = DISCOURSE_SITE + `/u/${username}.json`;
         let result = await fetch(url);
@@ -54,7 +56,14 @@ export let loader: LoaderFunction = async ({ request }) => {
           avatarUrl
         );
       }
-      session.set("user", { email, admin, name, username, avatarUrl });
+      session.set("user", {
+        email,
+        admin,
+        name,
+        username,
+        avatarUrl,
+        external_id,
+      });
     } catch (e) {
       session.flash("error", {
         error: e,
