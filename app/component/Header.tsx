@@ -1,5 +1,5 @@
 import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
-import { Navbar, Dropdown, Avatar } from "flowbite-react";
+import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 import LopenlingLogo from "~/assets/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
@@ -18,22 +18,30 @@ export default function Header({ user }: any) {
         rounded={true}
         fluid={false}
         style={{
-          height: 56,
+          minHeight: 56,
           padding: 0,
           maxWidth: MAX_WIDTH_PAGE,
           margin: "0 auto",
+          display: "flex",
+          alignItems: "center",
         }}
       >
         <NavLink preventScrollReset to={"/"} className="flex items-center">
           <img
             src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
             alt="logo"
+            className="hidden md:block"
+            style={{ maxHeight: 37, maxWidth: 324 }}
+          />
+          <img
+            src={LopenlingLogo}
+            alt="logo"
+            className="block md:hidden"
             style={{ maxHeight: 37, maxWidth: 324 }}
           />
         </NavLink>
-
-        <div className="flex">
-          <div className="hidden md:block">
+        <div className="md:flex">
+          <div className="hidden md:flex items-center">
             <Translation />
           </div>
           {user ? (
@@ -93,7 +101,7 @@ export default function Header({ user }: any) {
               </Dropdown>
             </div>
           ) : (
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2">
               <loginFetcher.Form
                 method="post"
                 action="/sso/login"
@@ -114,14 +122,18 @@ export default function Header({ user }: any) {
                   log in
                 </button>
               </loginFetcher.Form>
-              <div className="flex items-center justify-center space-x-2 rounded-lg border border-green-400 px-5 py-2.5">
+              <Button
+                outline={true}
+                color=""
+                className=" text-green-300 border-2 border-green-300"
+              >
                 <a
                   href={"https://lopenling.org/signup"}
                   className="text-sm font-medium leading-tight text-green-400"
                 >
                   Sign Up
                 </a>
-              </div>
+              </Button>
             </div>
           )}
         </div>
