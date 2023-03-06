@@ -26,12 +26,12 @@ jobs:
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
 
-      # - name: Setup Environment Vars
-      #   run: python3 ./scripts/set_env_vars.py
-      #   env:
-      #     PROD_ENV_VARS: ${{ secrets.PROD_ENV_VARS }}
-      #     CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-      #     CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+      - name: Setup Environment Vars
+        run: python3 ./scripts/set_env_vars.py
+        env:
+          PROD_ENV_VARS: ${{ secrets.PROD_ENV_VARS }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
 
       - name: Publish
         run: |
