@@ -64,7 +64,6 @@ export async function findPostByTextId(textId: number, domain = "") {
       posts.map(async (post) => {
         let replies = await getposts(post?.topic_id);
         let { posts } = replies?.post_stream;
-        console.log(posts.length);
         return { ...post, replyCount: posts?.length };
       })
     );
