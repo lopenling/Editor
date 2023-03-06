@@ -28,11 +28,20 @@ export default function ReplyForm({
   }
   return (
     <div className="flex justify-between mb-2">
-      <div style={{ borderLeft: "6px solid #e5e7eb", height: 180 }}></div>
+      <div
+        style={{
+          borderLeft: "6px solid #e5e7eb",
+          height: 180,
+        }}
+      ></div>
       <postFetcher.Form
         action="/api/postReply"
         method="post"
         className="flex w-11/12 flex-col justify-center"
+        style={{
+          opacity: postFetcher.state !== "idle" ? 0.5 : 1,
+          cursor: postFetcher.state !== "idle" ? "not-allowed" : "auto",
+        }}
       >
         <input hidden defaultValue={topicId} name="topicId" />
         <Textarea
@@ -62,7 +71,7 @@ export default function ReplyForm({
             size="xs"
             className="bg-green-400 text-white"
             type="submit"
-            disabled={textArea === ""}
+            disabled={textArea === "" || postFetcher.state !== "idle"}
           >
             {postFetcher.state === "submitting" ? (
               <div>submiting</div>
