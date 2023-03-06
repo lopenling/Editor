@@ -6,7 +6,14 @@ module.exports = {
     "node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "red",
+        secondary: "red",
+        success: "red",
+        "text-base": "white",
+      },
+    },
   },
   plugins: [require("flowbite/plugin")],
 };

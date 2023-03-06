@@ -11,7 +11,12 @@ import {
   useLocation,
   useTransition,
 } from "@remix-run/react";
-import { Progress, Spinner } from "flowbite-react";
+import {
+  CustomFlowbiteTheme,
+  Flowbite,
+  Progress,
+  Spinner,
+} from "flowbite-react";
 import React from "react";
 import ErrorPage from "./component/ErrorPage";
 import Header from "./component/Header";
@@ -53,6 +58,7 @@ function Document({ children, title }: { children: any; title: string }) {
     () => <Header user={loaderData.user} />,
     [loaderData.user]
   );
+
   return (
     <html>
       <head>

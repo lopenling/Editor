@@ -1,5 +1,11 @@
 import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
-import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
+import {
+  Navbar,
+  Dropdown,
+  Avatar,
+  Button,
+  CustomFlowbiteTheme,
+} from "flowbite-react";
 import LopenlingLogo from "~/assets/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
@@ -8,6 +14,7 @@ export default function Header({ user }: any) {
   const location = useLocation();
   const loginFetcher = useFetcher();
   const translation = uselitteraTranlation();
+
   return (
     <div
       className=" max-w-full"
@@ -124,14 +131,11 @@ export default function Header({ user }: any) {
                 </button>
               </loginFetcher.Form>
               <Button
-                outline={true}
+                // gradientDuoTone="tealToLime"
+                className=" text-green-400 border-2 border-green-300"
                 color=""
-                className=" text-green-300 border-2 border-green-300"
               >
-                <a
-                  href={"https://lopenling.org/signup"}
-                  className="text-sm font-medium leading-tight text-green-400"
-                >
+                <a href={"https://lopenling.org/signup"}>
                   {translation.signup}
                 </a>
               </Button>
