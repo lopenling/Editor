@@ -5,6 +5,7 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { Avatar } from "flowbite-react";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
+import { getposts } from "~/services/discourseApi";
 
 type PostType = {
   id: number;
@@ -60,6 +61,9 @@ function Post({
   const postref = useDetectClickOutside({
     onTriggered: () => setSelected(false),
   });
+  async function updateReplyCount(id) {
+    setReplyCount((prev) => prev + 1);
+  }
   return (
     <>
       <div
@@ -167,7 +171,11 @@ function Post({
         </div>
       </div>
       {openReply && (
-        <ReplyForm topicId={topicId} closeReply={() => setOpenReply(false)} />
+        <ReplyForm
+          topicId={topicId}
+          closeReply={() => setOpenReply(false)}
+          updateReplyCount={() => updateReplyCount(topicId)}
+        />
       )}
       {showReplies && (
         <Replies

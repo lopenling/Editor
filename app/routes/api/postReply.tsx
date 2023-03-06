@@ -14,14 +14,14 @@ export const action: ActionFunction = async ({ request }) => {
     if (request.method === "POST") {
       const postString = formData.get("postString");
       let create = await createPost(topicId, postString, user.username);
+
+      return {
+        posts: await create.json(),
+      };
     }
   } catch (e) {
     return {
       post: e.message,
     };
   }
-
-  return {
-    posts: "ok",
-  };
 };

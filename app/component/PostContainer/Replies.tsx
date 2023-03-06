@@ -1,4 +1,5 @@
 import { useFetcher, useLoaderData, useLocation } from "@remix-run/react";
+import { Spinner } from "flowbite-react";
 import { useState, useMemo, useEffect } from "react";
 import Reply from "./Reply";
 
@@ -23,9 +24,11 @@ function Replies({
   setReplyCount,
 }: RepliesProps) {
   const [replies, setReplies] = useState([]);
+  const [loading, setLoading] = useState(false);
   const postFetcher = useFetcher();
   const postListFetcher = useFetcher();
   useEffect(() => {
+    setLoading(true);
     postListFetcher.submit(
       {},
       { method: "get", action: `/api/replies/${topicId}` }
@@ -36,6 +39,7 @@ function Replies({
     if (data) {
       setReplies(data.posts);
       setReplyCount(data.posts.length);
+      setLoading(false);
     }
   }, [replyCount, postListFetcher.data]);
 
@@ -64,6 +68,12 @@ function Replies({
         }),
     [replies]
   );
+  if (loading)
+    return (
+      <div className="flex my-2 justify-center items-center">
+        <Spinner />
+      </div>
+    );
   if (!postListFetcher.data) return null;
   return (
     <>
