@@ -6,5 +6,8 @@
   "question": "Question",
   "filter": "Filter",
   "fontSize": "Font size",
-  "reply": "Reply"
+  "reply": "Reply",
+  "login": "log in",
+  "signup": "sign up",
+  "logout": "log out"
 }

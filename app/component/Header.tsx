@@ -3,11 +3,11 @@ import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 import LopenlingLogo from "~/assets/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
-import { useEffect, useState } from "react";
+import { uselitteraTranlation } from "~/locales/translations";
 export default function Header({ user }: any) {
   const location = useLocation();
   const loginFetcher = useFetcher();
-
+  const translation = uselitteraTranlation();
   return (
     <div
       className=" max-w-full"
@@ -85,7 +85,7 @@ export default function Header({ user }: any) {
                       name="_action"
                       value="logout"
                     >
-                      logout
+                      {translation.logout}
                     </button>
                   </Form>
                 </Dropdown.Item>
@@ -120,7 +120,7 @@ export default function Header({ user }: any) {
                   value="login"
                   className="text-sm font-medium leading-tight text-gray-900 capitalize"
                 >
-                  log in
+                  {translation.login}
                 </button>
               </loginFetcher.Form>
               <Button
@@ -132,7 +132,7 @@ export default function Header({ user }: any) {
                   href={"https://lopenling.org/signup"}
                   className="text-sm font-medium leading-tight text-green-400"
                 >
-                  Sign Up
+                  {translation.signup}
                 </a>
               </Button>
             </div>
