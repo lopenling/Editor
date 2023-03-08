@@ -28,7 +28,7 @@ function Posts(props: PostPropsType) {
     user: [],
   });
   const [selectedPost, setSelectedPost] = React.useState(null);
-  let posts = data.posts?.sort(
+  let posts = data?.posts?.sort(
     (a, b) => new Date(b.created_at) - new Date(a.created_at)
   );
   if (filter) {
@@ -88,22 +88,24 @@ function Posts(props: PostPropsType) {
           paddingInline: 10,
         }}
       >
-        {posts?.map((post) => (
-          <Post
-            key={post.id}
-            id={post.id}
-            name={post.creatorUser.username}
-            avatar={post.avatar}
-            time={timeAgo(post.created_at)!}
-            postContent={post.content}
-            likedBy={post.likedBy}
-            topicId={post.topic_id}
-            handleSelection={() => handleSelectPost(post)}
-            selectedPost={selectedPost!}
-            type={post.type}
-            replyCount={post?.replyCount}
-          />
-        ))}
+        {posts?.map((post) => {
+          return post.isAvailable ? (
+            <Post
+              key={post.id}
+              id={post.id}
+              name={post.creatorUser.username}
+              avatar={post.avatar}
+              time={timeAgo(post.created_at)!}
+              postContent={post.content}
+              likedBy={post.likedBy}
+              topicId={post.topic_id}
+              handleSelection={() => handleSelectPost(post)}
+              selectedPost={selectedPost!}
+              type={post.type}
+              replyCount={post?.replyCount}
+            />
+          ) : null;
+        })}
       </div>
     </>
   );

@@ -46,7 +46,7 @@ export async function findPostByTopicId(TopicId: number) {
     });
     return posts;
   } catch (e) {
-    return "couldnot find the post with error" + e.message;
+    return "couldnot find the by TopicId" + e.message;
   }
 }
 export async function findPostByTextId(textId: number, domain = "") {
@@ -63,13 +63,18 @@ export async function findPostByTextId(textId: number, domain = "") {
     let postWithReply = await Promise.all(
       posts.map(async (post) => {
         let replies = await getposts(post?.topic_id);
-        let { posts } = replies?.post_stream;
-        return { ...post, replyCount: posts?.length };
+        let postsResponse = replies?.post_stream?.posts;
+        if (!postsResponse) return { ...post, isAvailable: false };
+        return {
+          ...post,
+          replyCount: postsResponse?.length,
+          isAvailable: true,
+        };
       })
     );
     return postWithReply;
   } catch (e) {
-    return "couldnot find the post with error" + e.message;
+    return "couldnot find the post with textId" + e.message;
   }
 }
 

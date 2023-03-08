@@ -18,7 +18,7 @@ export default function FilterPost({ setFilter, filter, close }) {
   };
 
   const handleDateChange = (e) => {
-    setFilterData((prevData) => ({ ...prevData, date: e.target.value }));
+    setFilterData((prevData) => ({ ...prevData, date: e }));
   };
 
   function handleNameClick(userToAdd: string) {

@@ -1,25 +1,28 @@
 import { Link, Form } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Footer";
-import { LoaderFunction, redirect } from "@remix-run/server-runtime";
 import { json } from "@remix-run/cloudflare";
 import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { uselitteraTranlation } from "~/locales/translations";
-
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
   if (searchText === "") return json([]);
   try {
     let textList = await searchTextWithName(searchText);
-    return json(textList, {
-      headers: {
-        "cache-control":
-          "public, max-age=60, s-maxage=60480, stale-while-revalidate=315400000",
-      },
-    });
+    return json(
+      { list: textList, search: searchText },
+      {
+        headers: {
+          "cache-control":
+            "public, max-age=60, s-maxage=60480, stale-while-revalidate=315400000",
+        },
+      }
+    );
   } catch (e) {
     throw new Error(e.message);
   }
@@ -31,17 +34,28 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   };
 }
 
+export const meta: MetaFunction = ({ data, params }) => {
+  return {
+    viewport: "width=device-width,initial-scale=1",
+    description: "annotation of text and discussion on budhist text",
+    title: data?.search
+      ? `${data?.search} - Lopenling Search`
+      : "Lopenling App",
+  };
+};
+
 export default function Index() {
   const data = useLoaderData();
   const transition = useTransition();
   const translation = uselitteraTranlation();
   const [animationParent] = useAutoAnimate();
-  const list = data;
+  const list = data?.list;
   const isLoading =
     transition.state !== "idle" &&
     transition.submission?.formData.get("search");
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
   let des = "here is information about the text.";
+
   return (
     <>
       <div className=" max-w-2xl mx-auto">
@@ -56,6 +70,7 @@ export default function Index() {
               <TextInput
                 name="search"
                 placeholder={translation.searchPlaceholder}
+                defaultValue={data?.search && data.search}
                 type="search"
                 style={{
                   height: 50,
@@ -101,7 +116,7 @@ export default function Index() {
         {list && (
           <div
             ref={animationParent}
-            className="inline-flex h-screen w-full flex-col items-center justify-start space-y-3.5 py-10"
+            className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10"
           >
             {list.length === 0 && (
               <div

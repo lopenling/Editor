@@ -1,11 +1,5 @@
 import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
-import {
-  Navbar,
-  Dropdown,
-  Avatar,
-  Button,
-  CustomFlowbiteTheme,
-} from "flowbite-react";
+import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 import LopenlingLogo from "~/assets/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
@@ -48,8 +42,8 @@ export default function Header({ user }: any) {
             style={{ maxHeight: 37, maxWidth: 324 }}
           />
         </NavLink>
-        <div className="md:flex">
-          <div className="hidden md:flex items-center">
+        <div className="flex">
+          <div className="flex items-center">
             <Translation />
           </div>
           {user ? (
@@ -68,12 +62,21 @@ export default function Header({ user }: any) {
                 }
               >
                 <Dropdown.Header>
-                  <span className="block text-sm">{user?.username}</span>
-                  <span className="block truncate text-sm font-medium">
-                    {user.email}
+                  <span
+                    className="block truncate text-sm font-medium"
+                    title={user?.username}
+                  >
+                    {user?.email}
                   </span>
                 </Dropdown.Header>
-                <Dropdown.Divider />
+                <Dropdown.Item
+                  className={user?.admin === "true" ? "" : "hidden"}
+                >
+                  <NavLink preventScrollReset to="/text-upload">
+                    UploadText
+                  </NavLink>
+                </Dropdown.Item>
+
                 <Dropdown.Item>
                   <Form
                     method="post"
@@ -96,16 +99,6 @@ export default function Header({ user }: any) {
                     </button>
                   </Form>
                 </Dropdown.Item>
-                <Dropdown.Item>
-                  {user?.admin === "true" && (
-                    <NavLink preventScrollReset to="/text-upload">
-                      UploadText
-                    </NavLink>
-                  )}
-                </Dropdown.Item>
-                <div className="block md:hidden">
-                  <Translation />
-                </div>
               </Dropdown>
             </div>
           ) : (
@@ -164,7 +157,7 @@ function Translation() {
     <div className="mr-10 flex items-center justify-start space-x-0.5">
       <select
         onChange={changeLanguage}
-        className="text-sm font-medium leading-tight text-gray-900 "
+        className="border-transparent focus:border-transparent focus:ring-0"
       >
         <option value="en">English</option>
         <option value="bo">བོད་ཡིག་</option>

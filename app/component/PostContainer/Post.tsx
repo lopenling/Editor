@@ -142,7 +142,9 @@ function Post({
                   onClick={() => setShowReplies((prev) => !prev)}
                   className=" lowercase text-sm font-medium leading-tight text-gray-500"
                 >
-                  <span className="mr-1">{ReplyCount - 1}</span>
+                  <span className="mr-1">
+                    {ReplyCount === 0 ? 0 : ReplyCount - 1}
+                  </span>
                   {showReplies ? "Hide reply" : translation.reply}
                 </button>
               </div>

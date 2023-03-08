@@ -11,12 +11,7 @@ import {
   useLocation,
   useTransition,
 } from "@remix-run/react";
-import {
-  CustomFlowbiteTheme,
-  Flowbite,
-  Progress,
-  Spinner,
-} from "flowbite-react";
+import { Spinner } from "flowbite-react";
 import React from "react";
 import ErrorPage from "./component/ErrorPage";
 import Header from "./component/Header";
@@ -29,6 +24,7 @@ export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
   description: "annotation of text and discussion on budhist text",
+  title: "Lopenling App",
 });
 export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUserSession(request);
@@ -47,7 +43,7 @@ export function links() {
   ];
 }
 
-function Document({ children, title }: { children: any; title: string }) {
+function Document({ children }: { children: any }) {
   const transition = useTransition();
   const loaderData = useLoaderData();
   let routeChanged =
@@ -64,7 +60,6 @@ function Document({ children, title }: { children: any; title: string }) {
       <head>
         <Meta />
         <Links />
-        <title>{title}</title>
       </head>
 
       <body>
@@ -118,7 +113,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 function App() {
   return (
     <>
-      <Document title={"Lopenling App"}>
+      <Document>
         <Outlet />
       </Document>
     </>
