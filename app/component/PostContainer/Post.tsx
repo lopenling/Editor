@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { uselitteraTranlation } from "~/locales/translations";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -6,11 +6,11 @@ import { Avatar } from "flowbite-react";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import { getposts } from "~/services/discourseApi";
-
+import shareIcon from "~/assets/svg/icon_share.svg";
+import { Editor } from "@tiptap/react";
 type PostType = {
   id: number;
-  name: string;
-  avatar: string;
+  creatorUser: any;
   time: string;
   postContent: string;
   likedBy: any;
@@ -19,12 +19,12 @@ type PostType = {
   selectedPost: number;
   type: "question" | "comment";
   replyCount: any;
+  editor: Editor;
 };
 
 function Post({
   id,
-  name,
-  avatar,
+  creatorUser,
   time,
   postContent,
   likedBy,
@@ -33,6 +33,7 @@ function Post({
   selectedPost,
   type,
   replyCount,
+  editor,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -56,13 +57,30 @@ function Post({
       { method: "post", action: "api/like" }
     );
   }
-  const [selected, setSelected] = useState(false);
-  let avatar_img = ("http://lopenling.org" + avatar).replace("{size}", "30");
+  const [selected, setSelected] = useState(() => (selectedPost ? true : false));
+
+  useEffect(() => {
+    if (id === selectedPost && postref.current && selected) {
+      postref.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+    }
+  }, []);
   const postref = useDetectClickOutside({
     onTriggered: () => setSelected(false),
   });
-  async function updateReplyCount(id) {
+  async function updateReplyCount() {
     setReplyCount((prev) => prev + 1);
+  }
+  function shareHandler(postId) {
+    const { origin, pathname } = window.location;
+    const url = origin + pathname + "?post=" + postId;
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(url);
+    // Alert the copied text
+    alert("Copied the text: " + url);
   }
   return (
     <>
@@ -70,19 +88,19 @@ function Post({
         style={{
           backgroundColor:
             selectedPost === id && selected ? "#FDFDEA" : "transparent",
+          padding: "4px 2px 2px 4px",
         }}
-        className="md:px-3"
         ref={postref}
         onClick={() => {
           handleSelection();
           setSelected(true);
         }}
       >
-        <div className="mt-3 inline-flex w-full items-start justify-start">
+        <div className="inline-flex w-full items-start justify-start">
           <div className="flex items-center justify-start space-x-3">
-            <Avatar img={avatar_img} rounded={true} size="xs" />
+            <Avatar img={creatorUser.avatarUrl} rounded={true} size="xs" />
             <p className="text-base font-medium leading-tight text-gray-900">
-              {name}
+              {creatorUser.name}
             </p>
           </div>
           <p className="flex-1 text-right text-sm leading-tight text-gray-500">
@@ -93,7 +111,7 @@ function Post({
           <p className="text-base leading-normal text-gray-500">
             {postContent}
           </p>
-          <div className="flex w-full flex-1 items-center justify-between pb-3">
+          <div className="flex w-full flex-1 items-center justify-between ">
             <div className="flex h-full w-64 items-center justify-start space-x-4">
               <button
                 disabled={!data.user}
@@ -148,6 +166,16 @@ function Post({
                   {showReplies ? "Hide reply" : translation.reply}
                 </button>
               </div>
+              <div className="flex items-center justify-start ">
+                <img src={shareIcon} alt="alt" />
+                <button
+                  onClick={() => shareHandler(id)}
+                  className="text-sm font-medium leading-tight text-gray-500 hover:text-blue-500"
+                >
+                  <span className="mr-1"></span>
+                  share
+                </button>
+              </div>
             </div>
             {data.user && (
               <div className="flex items-start justify-start space-x-1.5">
@@ -176,22 +204,24 @@ function Post({
         <ReplyForm
           topicId={topicId}
           closeReply={() => setOpenReply(false)}
-          updateReplyCount={() => updateReplyCount(topicId)}
+          updateReplyCount={updateReplyCount}
         />
       )}
       {showReplies && (
-        <Replies
-          postId={id}
-          topicId={topicId}
-          openReply={openReply}
-          closeReply={() => setOpenReply(false)}
-          isCreator={data?.user?.username === name}
-          type={type}
-          replyCount={replyCount}
-          setReplyCount={setReplyCount}
-        />
+        <div className="mt-3">
+          <Replies
+            postId={id}
+            topicId={topicId}
+            openReply={openReply}
+            closeReply={() => setOpenReply(false)}
+            isCreator={data?.user?.username === creatorUser.username}
+            type={type}
+            replyCount={replyCount}
+            setReplyCount={setReplyCount}
+          />
+        </div>
       )}
-      <hr />
+      <hr className=" my-6" />
     </>
   );
 }

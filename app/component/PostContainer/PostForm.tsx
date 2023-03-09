@@ -57,7 +57,7 @@ const PostForm = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
     <ErrorSubmission errorMessage={createPost.data.error.message} />;
   if (!postInfo?.type) return null;
   return (
-    <section style={{ position: "sticky" }}>
+    <section>
       <div className="inline-flex items-start justify-start">
         <p className="text-base font-medium leading-tight text-gray-900 mb-3 capitalize">
           {postInfo.type === "question" ? "ask question" : "new comment"}
@@ -76,7 +76,7 @@ const PostForm = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
               name="body"
               onChange={(e) => setBody(e.target.value)}
               style={{ height: 108 }}
-              className=" w-full bg-gray-50 focus:border-0 focus:outline-0"
+              className=" w-full bg-gray-50 focus:border-0 focus:outline-0 "
             ></Textarea>
             <div className="flex justify-end gap-2">
               <Button
@@ -99,7 +99,7 @@ const PostForm = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
             </div>
           </>
         ) : (
-          <div style={{ color: "red" }}>You must login first !</div>
+          <div className="text-red-600">You must login first !</div>
         )}
       </createPost.Form>
       <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
@@ -198,8 +198,7 @@ function TemporaryPost({ user, postContent }: any) {
           </div>
         </div>
       </div>
-
-      <hr />
+      <hr className=" my-6" />
     </>
   );
 }

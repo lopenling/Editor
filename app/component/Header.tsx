@@ -1,6 +1,6 @@
 import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
-import LopenlingLogo from "~/assets/logo.svg";
+import LopenlingLogo from "~/assets/svg/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { uselitteraTranlation } from "~/locales/translations";
@@ -10,36 +10,29 @@ export default function Header({ user }: any) {
   const translation = uselitteraTranlation();
 
   return (
-    <div
-      className=" max-w-full"
-      style={{
-        boxShadow: "0 2px 4px -1px rgb(0 0 0 / 25%)",
-      }}
-    >
+    <div className=" max-w-full shadow-header px-2">
       <Navbar
         rounded={true}
         fluid={false}
+        className="mx-auto my-0 flex items-center"
         style={{
           minHeight: 56,
           padding: 0,
           maxWidth: MAX_WIDTH_PAGE,
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "center",
         }}
       >
         <NavLink preventScrollReset to={"/"} className="flex items-center">
           <img
             src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
             alt="logo"
-            className="hidden md:block"
-            style={{ maxHeight: 37, maxWidth: 324 }}
+            className="hidden md:block object-contain"
+            style={{ maxHeight: 37 }}
           />
           <img
             src={LopenlingLogo}
             alt="logo"
-            className="block md:hidden"
-            style={{ maxHeight: 37, maxWidth: 324 }}
+            className="block md:hidden object-contain"
+            style={{ maxHeight: 37 }}
           />
         </NavLink>
         <div className="flex">
@@ -58,14 +51,12 @@ export default function Header({ user }: any) {
                     img={user.avatarUrl}
                     rounded={true}
                     size="sm"
+                    title={user?.name}
                   />
                 }
               >
                 <Dropdown.Header>
-                  <span
-                    className="block truncate text-sm font-medium"
-                    title={user?.username}
-                  >
+                  <span className="block truncate text-sm font-medium">
                     {user?.email}
                   </span>
                 </Dropdown.Header>
@@ -154,7 +145,7 @@ function Translation() {
     }
   }
   return (
-    <div className="mr-10 flex items-center justify-start space-x-0.5">
+    <div className="md:mr-10 flex items-center justify-start space-x-0.5">
       <select
         onChange={changeLanguage}
         className="border-transparent focus:border-transparent focus:ring-0"

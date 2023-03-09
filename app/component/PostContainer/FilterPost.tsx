@@ -2,7 +2,7 @@ import { Avatar, Button } from "flowbite-react";
 import React, { useState, useId, useEffect } from "react";
 import { useFetcher } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
-import crossIcon from "~/assets/icon_cross.svg";
+import crossIcon from "~/assets/svg/icon_cross.svg";
 export default function FilterPost({ setFilter, filter, close }) {
   const [filterData, setFilterData] = useState(filter);
   const [userInput, setUserInput] = React.useState("");

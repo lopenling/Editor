@@ -14,7 +14,8 @@ import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUserSession(request);
-
+  const url = new URL(request.url);
+  const selectedPost = url.searchParams.get("post");
   const textId = parseInt(params.textId);
   if (!textId) throw new Error("not valid textId");
   let userInfo = null;
@@ -42,6 +43,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     user: userInfo,
     text: text,
     posts,
+    selectedPost,
   };
   return json(data, {
     status: 200,

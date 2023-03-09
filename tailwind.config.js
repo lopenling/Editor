@@ -7,11 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: "red",
-        secondary: "red",
-        success: "red",
-        "text-base": "white",
+      boxShadow: {
+        header: "0 2px 4px -1px rgb(0 0 0 / 25%)",
+        textEditor:
+          "inset 0px 11px 8px -10px #ccc, inset 0px -11px 8px -10px #ccc",
       },
     },
   },

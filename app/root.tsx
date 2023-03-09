@@ -8,7 +8,6 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useLocation,
   useTransition,
 } from "@remix-run/react";
 import { Spinner } from "flowbite-react";

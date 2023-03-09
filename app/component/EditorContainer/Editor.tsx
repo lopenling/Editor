@@ -12,9 +12,11 @@ import Bold from "@tiptap/extension-bold";
 import Text from "@tiptap/extension-text";
 import HardBreak from "@tiptap/extension-hard-break";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
-import React, { useEffect } from "react";
+import { useState } from "react";
 // import SelectTextOnRender from "~/extension/selectionOnFirstRender";
-import CopyIcon from "~/assets/icon_copy.svg";
+import copyIcon from "~/assets/svg/icon_copy.svg";
+import searchIcon from "~/assets/svg/icon_search.svg";
+
 import { FontSize } from "~/tiptap-extension/fontSize";
 import EditorSettings from "./EditorSettings";
 // import applyAnnotation from "~/tiptap-extension/applyMarks";
@@ -27,21 +29,21 @@ import Posts from "../PostContainer/Posts";
 import PostForm from "../PostContainer/PostForm";
 function Editor({ content }) {
   const data = useLoaderData();
-  const [showEditorSettings, setShowEditorSettings] = React.useState(false);
-  const [showFindText, setShowFindText] = React.useState(false);
-  const [showFontSize, setShowFontSize] = React.useState(false);
-  const [postInfo, setPostInfo] = React.useState<null | {
+  const [showEditorSettings, setShowEditorSettings] = useState(false);
+  const [showFindText, setShowFindText] = useState(false);
+  const [showFontSize, setShowFontSize] = useState(false);
+  const [postInfo, setPostInfo] = useState<null | {
     type: string;
     start: number;
     end: number;
     content: string;
   }>(null);
-  const [selection, setSelection] = React.useState<null | {
+  const [selection, setSelection] = useState<null | {
     start: number | null;
     end: number | null;
     text: string;
   }>(null);
-  const [openFilter, setOpenFilter] = React.useState<boolean>(false);
+  const [openFilter, setOpenFilter] = useState<boolean>(false);
   const editor = useEditor(
     {
       extensions: [
@@ -62,13 +64,12 @@ function Editor({ content }) {
             class: "pageBreak",
           },
         }),
-        // SelectTextOnRender,
       ],
       content: content,
       editable: true,
       editorProps: {
         handleDOMEvents: {
-          keydown: (value, event) => {
+          keydown: (v, event) => {
             let charCode = String.fromCharCode(event.which).toLowerCase();
             let copyPressed =
               (event.ctrlKey || event.metaKey) && charCode === "c";
@@ -76,13 +77,13 @@ function Editor({ content }) {
               event.preventDefault();
             }
           },
-          textInput: (value, evt) => {
+          textInput: (v, evt) => {
             evt.preventDefault();
           },
-          drop: (value, e) => {
+          drop: (v, e) => {
             e.preventDefault();
           },
-          dragstart: (value, e) => {
+          dragstart: (v, e) => {
             e.preventDefault();
           },
         },
@@ -113,7 +114,6 @@ function Editor({ content }) {
       });
   };
   const translation = uselitteraTranlation();
-
   return (
     <div
       className="mt-5 mx-auto flex w-full flex-col gap-5 lg:flex-row  container "
@@ -136,10 +136,7 @@ function Editor({ content }) {
         >
           {data?.text?.name}
         </h1>
-        <div
-          className=" max-h-80 overflow-y-scroll lg:max-h-full "
-          id="editor-Container"
-        >
+        <div className=" max-h-80 overflow-y-scroll lg:max-h-full shadow-textEditor">
           {!content || !editor ? (
             <div className="flex justify-center">
               <Loading color="#111" />
@@ -149,9 +146,8 @@ function Editor({ content }) {
               editor={editor}
               className="editor"
               style={{
+                minHeight: "40vh",
                 fontSize: DEFAULT_FONT_SIZE,
-                transition: "all ease 0.3s",
-                boxShadow: "0 2px 4px -1px rgb(0 0 0 / 25%) ",
               }}
             />
           )}
@@ -195,25 +191,14 @@ function Editor({ content }) {
                 className="bg-white text-gray-700 flex justify-between items-center gap-2 p-1"
                 onClick={() => setShowFindText(true)}
               >
-                <svg
-                  width="16"
-                  height="13"
-                  viewBox="0 0 16 13"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5.9361 6.76371C5.85308 6.67775 5.75377 6.60919 5.64397 6.56202C5.53417 6.51485 5.41607 6.49003 5.29657 6.48899C5.17706 6.48795 5.05855 6.51072 4.94795 6.55597C4.83734 6.60123 4.73685 6.66805 4.65235 6.75256C4.56785 6.83706 4.50102 6.93755 4.45577 7.04815C4.41051 7.15876 4.38774 7.27727 4.38878 7.39677C4.38982 7.51627 4.41465 7.63437 4.46181 7.74418C4.50898 7.85398 4.57755 7.95329 4.66351 8.03631L7.36351 10.7363C7.53228 10.905 7.76116 10.9998 7.9998 10.9998C8.23845 10.9998 8.46733 10.905 8.6361 10.7363L11.3361 8.03631C11.5 7.86657 11.5908 7.63923 11.5887 7.40325C11.5867 7.16727 11.492 6.94154 11.3251 6.77468C11.1583 6.60781 10.9325 6.51316 10.6966 6.51111C10.4606 6.50906 10.2332 6.59977 10.0635 6.76371L8.89981 7.92741V2.90001H13.3998C13.8772 2.90001 14.335 3.08965 14.6726 3.42722C15.0102 3.76479 15.1998 4.22262 15.1998 4.70001V11C15.1998 11.4774 15.0102 11.9352 14.6726 12.2728C14.335 12.6104 13.8772 12.8 13.3998 12.8H2.5998C2.12242 12.8 1.66458 12.6104 1.32701 12.2728C0.989447 11.9352 0.799805 11.4774 0.799805 11V4.70001C0.799805 4.22262 0.989447 3.76479 1.32701 3.42722C1.66458 3.08965 2.12242 2.90001 2.5998 2.90001H7.0998V7.92741L5.9361 6.76371ZM7.0998 1.10001C7.0998 0.861317 7.19463 0.632399 7.36341 0.463616C7.53219 0.294833 7.76111 0.200012 7.9998 0.200012C8.2385 0.200012 8.46742 0.294833 8.6362 0.463616C8.80498 0.632399 8.89981 0.861317 8.89981 1.10001V2.90001H7.0998V1.10001Z"
-                    fill="#6B7280"
-                  />
-                </svg>
+                <img src={searchIcon} alt="search" height={16} width={16} />
                 {translation.search}
               </button>
               <button
                 className="bg-white text-gray-700 flex justify-between items-center gap-2 p-1"
                 onClick={() => setShowFontSize(true)}
               >
-                <img src={CopyIcon} alt="copy" height={16} width={16} />
+                <img src={copyIcon} alt="copy" height={16} width={16} />
                 {translation.fontSize}
               </button>
             </div>

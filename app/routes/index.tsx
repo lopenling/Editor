@@ -1,4 +1,4 @@
-import { Link, Form } from "@remix-run/react";
+import { Link, Form, useSearchParams } from "@remix-run/react";
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
@@ -8,23 +8,26 @@ import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { uselitteraTranlation } from "~/locales/translations";
+import SearchIcon from "~/assets/svg/icon_search.svg";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
   if (searchText === "") return json([]);
   try {
     let textList = await searchTextWithName(searchText);
+    return json(textList, {
+      headers: {
+        "cache-control":
+          "public, max-age=60, s-maxage=60480, stale-while-revalidate=315400000",
+      },
+    });
+  } catch (e) {
     return json(
-      { list: textList, search: searchText },
+      { message: e.message },
       {
-        headers: {
-          "cache-control":
-            "public, max-age=60, s-maxage=60480, stale-while-revalidate=315400000",
-        },
+        status: 400,
       }
     );
-  } catch (e) {
-    throw new Error(e.message);
   }
 };
 
@@ -49,7 +52,8 @@ export default function Index() {
   const transition = useTransition();
   const translation = uselitteraTranlation();
   const [animationParent] = useAutoAnimate();
-  const list = data?.list;
+  const [params] = useSearchParams();
+  const list = data;
   const isLoading =
     transition.state !== "idle" &&
     transition.submission?.formData.get("search");
@@ -70,31 +74,11 @@ export default function Index() {
               <TextInput
                 name="search"
                 placeholder={translation.searchPlaceholder}
-                defaultValue={data?.search && data.search}
+                defaultValue={params.get("search")}
                 type="search"
-                style={{
-                  height: 50,
-                  color: "gray",
-                }}
                 required
-                className="flex-1"
-                icon={() => (
-                  <svg
-                    aria-hidden="true"
-                    className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    ></path>
-                  </svg>
-                )}
+                className="flex-1 h-12 text-gray-500"
+                icon={() => <img src={SearchIcon} alt="search" />}
               />
               <Button
                 type="submit"

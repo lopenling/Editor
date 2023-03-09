@@ -5,8 +5,8 @@ export default function FooterContainer() {
   return (
     <>
       <div
-        style={{ height: 198, fontFamily: "Inter", fontWeight: "800" }}
-        className=" text-3xl capitalize font-extrabold items-center justify-center flex"
+        style={{ height: 198, fontFamily: "Inter" }}
+        className=" text-3xl capitalize font-extrabold items-center justify-center flex "
       >
         our partners
       </div>

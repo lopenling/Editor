@@ -27,10 +27,10 @@ export default function ReplyForm({
     if (textareaRef.current) textareaRef.current.value = "";
   }
   return (
-    <div className="flex justify-between mb-2">
+    <div className="flex justify-between mt-3">
       <div
         style={{
-          borderLeft: "6px solid #e5e7eb",
+          borderLeft: "4px solid #e5e7eb",
           height: 180,
         }}
       ></div>

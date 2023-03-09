@@ -27,7 +27,8 @@ function Posts(props: PostPropsType) {
     date: { startDate: null, endDate: null },
     user: [],
   });
-  const [selectedPost, setSelectedPost] = React.useState(null);
+  const [selectedPost, setSelectedPost] = React.useState(data.selectedPost);
+  if (!data.posts) return null;
   let posts = data?.posts?.sort(
     (a, b) => new Date(b.created_at) - new Date(a.created_at)
   );
@@ -65,6 +66,7 @@ function Posts(props: PostPropsType) {
   });
 
   const translation = uselitteraTranlation();
+  if (!props.editor) return null;
 
   return (
     <>
@@ -78,14 +80,10 @@ function Posts(props: PostPropsType) {
       )}
 
       <div
-        className="scroll-container flex flex-col"
+        className="scroll-container flex flex-col overflow-x-hidden overflow-y-auto relative pr-2"
         ref={animationParent}
         style={{
-          position: "relative",
-          overflowY: "auto",
-          overflowX: "hidden",
           height: "80vh",
-          paddingInline: 10,
         }}
       >
         {posts?.map((post) => {
@@ -93,8 +91,7 @@ function Posts(props: PostPropsType) {
             <Post
               key={post.id}
               id={post.id}
-              name={post.creatorUser.username}
-              avatar={post.avatar}
+              creatorUser={post.creatorUser}
               time={timeAgo(post.created_at)!}
               postContent={post.content}
               likedBy={post.likedBy}
@@ -103,6 +100,7 @@ function Posts(props: PostPropsType) {
               selectedPost={selectedPost!}
               type={post.type}
               replyCount={post?.replyCount}
+              editor={props.editor}
             />
           ) : null;
         })}
