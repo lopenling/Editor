@@ -77,7 +77,8 @@ export default function Index() {
                 defaultValue={params.get("search")}
                 type="search"
                 required
-                className="flex-1 h-12 text-gray-500"
+                style={{ height: "100%" }}
+                className="flex-1 text-gray-500"
                 icon={() => <img src={SearchIcon} alt="search" />}
               />
               <Button
