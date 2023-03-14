@@ -47,28 +47,25 @@ const PostForm = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
       );
     setPostInfo(null);
   }
+
   if (isPosting) {
     return createPortal(
-      <>
-        <Post
-          creatorUser={data.user}
-          time="now"
-          likedBy={[]}
-          replyCount={0}
-          id={Math.random()}
-          isSolved={false}
-          postContent={createPost.submission.formData.get("body") as string}
-          topicId={null}
-          type={
-            createPost.submission.formData.get("type") as "question" | "comment"
-          }
-          handleSelection={null}
-          selectedPost={null}
-        />
-        {createPost.data?.error && (
-          <button className="text-red-500 text-center">retry</button>
-        )}
-      </>,
+      <Post
+        creatorUser={data.user}
+        time="now"
+        likedBy={[]}
+        replyCount={0}
+        id={Math.random()}
+        isSolved={false}
+        postContent={createPost.submission.formData.get("body") as string}
+        topicId={null}
+        type={
+          createPost.submission.formData.get("type") as "question" | "comment"
+        }
+        handleSelection={null}
+        selectedPost={null}
+      />,
+
       document.getElementById("temporaryPost")
     );
   }

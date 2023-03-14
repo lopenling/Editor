@@ -99,14 +99,14 @@ export function CatchBoundary() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <>
+    <body>
       <h1 className=" text-3xl text-red-600 font-sans">App Error</h1>
       <pre color="red">{error.message}</pre>
       <p>
         try to go to
         <Link to={"/"}> home page</Link>
       </p>
-    </>
+    </body>
   );
 }
 

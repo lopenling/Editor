@@ -74,7 +74,6 @@ function Posts({
 
   const translation = uselitteraTranlation();
   if (!editor) return null;
-
   return (
     <>
       {openFilter && (
@@ -93,24 +92,25 @@ function Posts({
         }}
       >
         <div id="temporaryPost"></div>
-        {posts?.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              id={post.id}
-              creatorUser={post.creatorUser}
-              time={timeAgo(post.created_at)!}
-              postContent={post.content}
-              likedBy={post.likedBy}
-              topicId={post.topic_id}
-              handleSelection={() => handleSelectPost(post)}
-              selectedPost={selectedPost!}
-              type={post.type}
-              replyCount={post?.replyCount}
-              isSolved={post?.isSolved}
-            />
-          );
-        })}
+        {posts?.length > 0 &&
+          posts?.map((post) => {
+            return (
+              <Post
+                key={post.id}
+                id={post.id}
+                creatorUser={post.creatorUser}
+                time={timeAgo(post.created_at)!}
+                postContent={post.content}
+                likedBy={post.likedBy}
+                topicId={post.topic_id}
+                handleSelection={() => handleSelectPost(post)}
+                selectedPost={selectedPost!}
+                type={post.type}
+                replyCount={post?.replyCount}
+                isSolved={post?.isSolved}
+              />
+            );
+          })}
       </div>
     </>
   );

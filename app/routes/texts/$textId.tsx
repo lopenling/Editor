@@ -18,7 +18,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
 
-  console.time("doSomething");
   if (!textId) throw new Error("not valid textId");
 
   const domain = new URL(request.url).origin;
@@ -27,7 +26,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     findTextByTextId(textId, false),
   ]);
 
-  console.timeEnd("doSomething");
   return json(
     { user, text: text, posts, selectedPost },
     {

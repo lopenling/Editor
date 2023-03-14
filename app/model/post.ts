@@ -51,35 +51,42 @@ export async function findPostByTopicId(TopicId: number) {
   }
 }
 export async function findPostByTextId(textId: number, domain = "") {
-  let posts = await db.post.findMany({
-    include: {
-      creatorUser: true,
-      likedBy: true,
-    },
-    where: {
-      text_id: textId,
-    },
-  });
-  let postWithReply = posts.map(async (post) => {
-    let [replies, repliesFromDb] = await Promise.all([
-      getposts(post?.topic_id),
-      findReplyByPostId(post.id),
-    ]);
-    let isSolved = repliesFromDb.filter((l) => l.isAproved === true).length > 0;
-    let postsResponse = replies?.post_stream?.posts;
-    if (!postsResponse) return null;
-    return {
-      ...post,
-      replyCount: postsResponse?.length,
-      isSolved: isSolved,
-    };
-  });
-  let post = await Promise.allSettled(postWithReply);
-  let filtered = post.filter((l) => {
-    return l.status === "fulfilled";
-  });
-
-  return filtered.map((l) => ({ ...l.value }));
+  try {
+    let posts = await db.post.findMany({
+      include: {
+        creatorUser: true,
+        likedBy: true,
+      },
+      where: {
+        text_id: textId,
+      },
+    });
+    let postWithReply = posts.map(async (post) => {
+      let [replies, repliesFromDb] = await Promise.all([
+        getposts(post?.topic_id),
+        findReplyByPostId(post.id),
+      ]);
+      let isSolved =
+        repliesFromDb.filter((l) => l.isAproved === true).length > 0;
+      let postsResponse = replies?.post_stream?.posts;
+      if (!postsResponse) return null;
+      return {
+        ...post,
+        replyCount: postsResponse?.length,
+        isSolved: isSolved,
+      };
+    });
+    let post = await Promise.allSettled(postWithReply);
+    let filtered = post
+      .filter((l) => {
+        return l.status === "fulfilled";
+      })
+      .map((l) => ({ ...l.value }))
+      .filter((value) => Object.keys(value).length !== 0);
+    return filtered;
+  } catch (e) {
+    console.log(e.message);
+  }
 }
 
 export async function findPostByUserLiked(id: string, userId: string) {

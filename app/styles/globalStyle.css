@@ -78,4 +78,6 @@ select:focus {
 }
 .sortDiv:hover > .popup {
   display: flex;
+  z-index: 10;
+  background-color: white;
 }
