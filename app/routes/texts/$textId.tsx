@@ -24,7 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       let findUserInDatabase = await findUserByUsername(user.username);
       userInfo = { ...findUserInDatabase, ...user };
     } catch (e) {
-      console.log(e);
+      throw new Error("User not available in Database");
     }
   }
   const domain = new URL(request.url).origin;

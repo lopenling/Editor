@@ -3,6 +3,7 @@ import { Avatar, Button, Textarea, Toast } from "flowbite-react";
 import React, { useEffect } from "react";
 import Loading from "react-loading";
 import ErrorSubmission from "./SubmissionError";
+import { createPortal } from "react-dom";
 type QuestionFormProps = {
   postInfo: null | {
     type: string;
@@ -46,11 +47,12 @@ const PostForm = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
     setPostInfo(null);
   }
   if (isPosting) {
-    return (
+    return createPortal(
       <TemporaryPost
         postContent={createPost.submission.formData.get("body")}
         user={data.user}
-      />
+      />,
+      document.getElementById("temporaryPost")
     );
   }
   if (createPost.data?.error && !postInfo)

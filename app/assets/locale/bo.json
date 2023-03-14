@@ -1,12 +1,13 @@
 {
   "language": "སྐད་ཡིག་",
   "search": "འཚོལ།",
-  "searchPlaceholder": "པད་ཆ་འཚོལ།",
+  "searchText": "པད་ཆ་འཚོལ།",
   "comment": "འགྲེལ་པ།",
   "question": "དྲི་བ།",
   "filter": "ཚགས།",
   "fontSize": "ཡིག་གཟུགས་ཆེ་ཆུངྲ།",
   "reply": "ལན།",
+  "replies": "ལན།",
   "login": "ནང་འཛུལ།",
   "signup": "ཐོ་འགོད།",
   "logout": "ཕྱིར་ཐོན།"

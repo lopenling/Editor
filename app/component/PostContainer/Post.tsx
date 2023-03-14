@@ -2,12 +2,13 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { uselitteraTranlation } from "~/locales/translations";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { Avatar } from "flowbite-react";
+import { Avatar, Button } from "flowbite-react";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import { getposts } from "~/services/discourseApi";
 import shareIcon from "~/assets/svg/icon_share.svg";
 import { Editor } from "@tiptap/react";
+import { SolvedLogo } from "./Reply";
 type PostType = {
   id: number;
   creatorUser: any;
@@ -16,10 +17,10 @@ type PostType = {
   likedBy: any;
   topicId: number;
   handleSelection: () => void;
-  selectedPost: number;
+  selectedPost: string;
   type: "question" | "comment";
   replyCount: any;
-  editor: Editor;
+  isSolved: boolean;
 };
 
 function Post({
@@ -33,7 +34,7 @@ function Post({
   selectedPost,
   type,
   replyCount,
-  editor,
+  isSolved,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -87,7 +88,11 @@ function Post({
       <div
         style={{
           backgroundColor:
-            selectedPost === id && selected ? "#FDFDEA" : "transparent",
+            selectedPost === id && selected
+              ? "#FDFDEA"
+              : type === "comment"
+              ? "#eee"
+              : "transparent",
           padding: "4px 2px 2px 4px",
         }}
         ref={postref}
@@ -102,6 +107,7 @@ function Post({
             <p className="text-base font-medium leading-tight text-gray-900">
               {creatorUser.name}
             </p>
+            {isSolved && <SolvedLogo />}
           </div>
           <p className="flex-1 text-right text-sm leading-tight text-gray-500">
             {time}
@@ -157,13 +163,15 @@ function Post({
                 </svg>
 
                 <button
+                  disabled={replyCount - 1 < 1}
                   onClick={() => setShowReplies((prev) => !prev)}
                   className=" lowercase text-sm font-medium leading-tight text-gray-500"
                 >
+                  {showReplies && "Hide "}
                   <span className="mr-1">
                     {ReplyCount === 0 ? 0 : ReplyCount - 1}
                   </span>
-                  {showReplies ? "Hide reply" : translation.reply}
+                  {ReplyCount - 1 > 1 ? translation.replies : translation.reply}
                 </button>
               </div>
               <div className="flex items-center justify-start ">

@@ -2,6 +2,7 @@
 
 import { db } from "~/db.server";
 import { getposts } from "~/services/discourseApi";
+import { findReplyByPostId } from "./reply";
 
 export async function createPostOnDB(
   id: string,
@@ -30,6 +31,7 @@ export async function createPostOnDB(
         creatorUser_id,
       },
     });
+    console.log(createdPost);
     return createdPost;
   } catch (e) {
     throw new Error("post couldnot be created " + e);
@@ -50,32 +52,33 @@ export async function findPostByTopicId(TopicId: number) {
   }
 }
 export async function findPostByTextId(textId: number, domain = "") {
-  try {
-    let posts = await db.post.findMany({
-      include: {
-        creatorUser: true,
-        likedBy: true,
-      },
-      where: {
-        text_id: textId,
-      },
-    });
-    let postWithReply = await Promise.all(
-      posts.map(async (post) => {
-        let replies = await getposts(post?.topic_id);
-        let postsResponse = replies?.post_stream?.posts;
-        if (!postsResponse) return { ...post, isAvailable: false };
-        return {
-          ...post,
-          replyCount: postsResponse?.length,
-          isAvailable: true,
-        };
-      })
-    );
-    return postWithReply;
-  } catch (e) {
-    return "couldnot find the post with textId" + e.message;
-  }
+  let posts = await db.post.findMany({
+    include: {
+      creatorUser: true,
+      likedBy: true,
+    },
+    where: {
+      text_id: textId,
+    },
+  });
+  let postWithReply = posts.map(async (post) => {
+    let [replies, repliesFromDb] = await Promise.all([
+      getposts(post?.topic_id),
+      findReplyByPostId(post.id),
+    ]);
+    let isSolved = repliesFromDb.filter((l) => l.isAproved === true).length > 0;
+    let postsResponse = replies?.post_stream?.posts;
+    if (!postsResponse) return { ...post, isAvailable: false };
+    return {
+      ...post,
+      replyCount: postsResponse?.length,
+      isAvailable: true,
+      isSolved: isSolved,
+    };
+  });
+  let post = await Promise.allSettled(postWithReply);
+  let filtered = post.filter((p) => p.status === "fulfilled");
+  return filtered.map((v) => ({ ...v.value }));
 }
 
 export async function findPostByUserLiked(id: string, userId: string) {

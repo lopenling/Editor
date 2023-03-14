@@ -2,7 +2,6 @@ import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import React from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
-import Reply from "./Replies";
 import { Avatar, Modal, Spinner } from "flowbite-react";
 import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
@@ -14,24 +13,33 @@ type PostPropsType = {
   editor: Editor | null;
   openFilter: boolean;
   setOpenFilter: any;
+  isLatestPost: boolean;
 };
 
 export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
-function Posts(props: PostPropsType) {
-  const [animationParent] = useAutoAnimate();
+function Posts({
+  editor,
+  openFilter,
+  isLatestPost,
+  setOpenFilter,
+}: PostPropsType) {
   const data = useLoaderData();
+  const [animationParent] = useAutoAnimate();
   const [filter, setFilter] = React.useState({
     type: "all",
     date: { startDate: null, endDate: null },
     user: [],
+    solved: "both",
   });
+  let posts = data.posts;
   const [selectedPost, setSelectedPost] = React.useState(data.selectedPost);
-  if (!data.posts) return null;
-  let posts = data?.posts?.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-  );
+  if (!posts && !posts.length) return null;
+  posts = posts?.sort((a, b) => {
+    if (isLatestPost) return new Date(b.created_at) - new Date(a.created_at);
+    else return new Date(a.created_at) - new Date(b.created_at);
+  });
   if (filter) {
     if (filter.type && filter.type !== "all")
       posts = posts.filter((l) => {
@@ -50,27 +58,27 @@ function Posts(props: PostPropsType) {
             new Date(filter.date.endDate).getTime()
         );
       });
+    if (filter.solved && filter.solved !== "both")
+      posts = posts.filter((l) => {
+        return l.isSolved === (filter.solved === "solved");
+      });
   }
   function handleSelectPost({ start, end, id }) {
-    props.editor
-      ?.chain()
-      .focus()
-      .setTextSelection({ from: start, to: end })
-      .run();
+    editor?.chain().focus().setTextSelection({ from: start, to: end }).run();
     setSelectedPost(id);
   }
 
-  const onClose = () => props.setOpenFilter((prev) => !prev);
+  const onClose = () => setOpenFilter((prev) => !prev);
   const ref = useDetectClickOutside({
     onTriggered: onClose,
   });
 
   const translation = uselitteraTranlation();
-  if (!props.editor) return null;
+  if (!editor) return null;
 
   return (
     <>
-      {props.openFilter && (
+      {openFilter && (
         <Modal show={true} onClose={onClose} size="md">
           <div ref={ref}>
             <Modal.Header>{translation.filter}</Modal.Header>
@@ -86,6 +94,7 @@ function Posts(props: PostPropsType) {
           height: "80vh",
         }}
       >
+        <div id="temporaryPost"></div>
         {posts?.map((post) => {
           return post.isAvailable ? (
             <Post
@@ -100,7 +109,7 @@ function Posts(props: PostPropsType) {
               selectedPost={selectedPost!}
               type={post.type}
               replyCount={post?.replyCount}
-              editor={props.editor}
+              isSolved={post?.isSolved}
             />
           ) : null;
         })}

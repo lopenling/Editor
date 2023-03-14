@@ -128,7 +128,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
                     <>loading</>
                   ) : (
                     <>
-                      {solvedLogo("#046C4E")}
+                      <SolvedLogo />
                       Mark as Solved
                     </>
                   )}
@@ -145,7 +145,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
                   <>loading</>
                 ) : (
                   <>
-                    {solvedLogo("white")}
+                    <SolvedLogo color="white" />
                     <div className="ml-2">Solved</div>
                   </>
                 )}
@@ -158,7 +158,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
   );
 }
 
-export function solvedLogo(color: string) {
+export function SolvedLogo({ color = "#046C4E" }: { color?: string }) {
   return (
     <svg
       width="14"

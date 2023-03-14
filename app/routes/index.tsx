@@ -73,7 +73,7 @@ export default function Index() {
             <div className="relative flex w-full space-x-3 ">
               <TextInput
                 name="search"
-                placeholder={translation.searchPlaceholder}
+                placeholder={translation.searchText}
                 defaultValue={params.get("search")}
                 type="search"
                 required
@@ -87,7 +87,7 @@ export default function Index() {
                 color={"#1C64F2"}
                 size="lg"
               >
-                {translation.search}
+                {translation.searchText}
               </Button>
             </div>
           </Form>

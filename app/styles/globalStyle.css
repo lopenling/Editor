@@ -76,3 +76,6 @@ select:focus {
   outline: transparent !important;
   border: none !important;
 }
+.sortDiv:hover > .popup {
+  display: flex;
+}

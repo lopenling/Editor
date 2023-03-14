@@ -31,7 +31,7 @@ function Replies({
     setLoading(true);
     postListFetcher.submit(
       {},
-      { method: "get", action: `/api/replies/${topicId}` }
+      { method: "get", action: `/api/reply/${topicId}` }
     );
   }, []);
   useEffect(() => {

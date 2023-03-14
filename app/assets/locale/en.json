@@ -1,12 +1,12 @@
 {
   "language": "Language",
-  "search": "Search",
-  "searchPlaceholder": "Search Text",
+  "searchText": "Search Text",
   "comment": "Comment",
   "question": "Question",
   "filter": "Filter",
   "fontSize": "Font size",
   "reply": "Reply",
+  "replies": "Replies",
   "login": "log in",
   "signup": "sign up",
   "logout": "log out"
