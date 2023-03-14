@@ -61,29 +61,27 @@ export async function findPostByTextId(textId: number, domain = "") {
         text_id: textId,
       },
     });
-    let postWithReply = posts.map(async (post) => {
-      let [replies, repliesFromDb] = await Promise.all([
-        getposts(post?.topic_id),
-        findReplyByPostId(post.id),
-      ]);
-      let isSolved =
-        repliesFromDb.filter((l) => l.isAproved === true).length > 0;
-      let postsResponse = replies?.post_stream?.posts;
-      if (!postsResponse) return null;
-      return {
-        ...post,
-        replyCount: postsResponse?.length,
-        isSolved: isSolved,
-      };
-    });
-    let post = await Promise.allSettled(postWithReply);
-    let filtered = post
-      .filter((l) => {
-        return l.status === "fulfilled";
+    const postWithReply = await Promise.all(
+      posts.map(async (post) => {
+        const [replies, repliesFromDb] = await Promise.all([
+          getposts(post?.topic_id),
+          findReplyByPostId(post.id),
+        ]);
+
+        const isSolved =
+          repliesFromDb.filter((l) => l.isAproved === true).length > 0;
+
+        const postsResponse = replies?.post_stream?.posts;
+        if (!postsResponse) return null;
+
+        return {
+          ...post,
+          replyCount: postsResponse?.length,
+          isSolved,
+        };
       })
-      .map((l) => ({ ...l.value }))
-      .filter((value) => Object.keys(value).length !== 0);
-    return filtered;
+    );
+    return postWithReply.filter(Boolean);
   } catch (e) {
     console.log(e.message);
   }
