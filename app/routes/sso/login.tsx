@@ -45,18 +45,31 @@ export let loader: LoaderFunction = async ({ request }) => {
       if (!email || !name || !username) {
         throw new Error("discourse SSO returned error URL");
       }
+      let userData = null;
+      let id = 0;
       let isUserInDatabase = await findUserByUsername(username);
       if (isUserInDatabase === null) {
         let isAdmin = admin === "true" ? true : false;
-        const newUser = await createUserInDB(
+        userData = await createUserInDB(
           username,
           name,
           email,
           isAdmin,
           avatarUrl
         );
+        id = userData.id;
+      } else {
+        if (email) {
+          try {
+            let findUserInDatabase = await findUserByUsername(username);
+            id = findUserInDatabase.id;
+          } catch (e) {
+            throw new Error("User not available in Database");
+          }
+        }
       }
       session.set("user", {
+        id,
         email,
         admin,
         name,

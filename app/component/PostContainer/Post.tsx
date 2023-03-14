@@ -5,9 +5,7 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { Avatar, Button } from "flowbite-react";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
-import { getposts } from "~/services/discourseApi";
 import shareIcon from "~/assets/svg/icon_share.svg";
-import { Editor } from "@tiptap/react";
 import { SolvedLogo } from "./Reply";
 type PostType = {
   id: number;
@@ -75,13 +73,12 @@ function Post({
   async function updateReplyCount() {
     setReplyCount((prev) => prev + 1);
   }
-  function shareHandler(postId) {
-    const { origin, pathname } = window.location;
-    const url = origin + pathname + "?post=" + postId;
-    // Copy the text inside the text field
-    navigator.clipboard.writeText(url);
-    // Alert the copied text
-    alert("Copied the text: " + url);
+  function shareHandler(postId: number) {
+    if (postId) {
+      const { origin, pathname } = window.location;
+      const url = origin + pathname + "?post=" + postId;
+      navigator.clipboard.writeText(url);
+    }
   }
   return (
     <>
@@ -120,7 +117,7 @@ function Post({
           <div className="flex w-full flex-1 items-center justify-between ">
             <div className="flex h-full w-64 items-center justify-start space-x-4">
               <button
-                disabled={!data.user}
+                disabled={likeFetcher.state !== "idle"}
                 className="flex cursor-pointer items-center justify-start space-x-1.5"
                 onClick={handleLikeClick}
                 style={{ opacity: !!likeFetcher.submission ? 0.5 : 1 }}
@@ -163,7 +160,6 @@ function Post({
                 </svg>
 
                 <button
-                  disabled={replyCount - 1 < 1}
                   onClick={() => setShowReplies((prev) => !prev)}
                   className=" lowercase text-sm font-medium leading-tight text-gray-500"
                 >

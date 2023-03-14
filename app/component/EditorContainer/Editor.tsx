@@ -311,14 +311,12 @@ function Editor({ content }) {
         </div>
         <PostForm postInfo={postInfo} setPostInfo={setPostInfo} ref={null} />
 
-        {data.posts.length > 0 && (
-          <Posts
-            editor={editor}
-            setOpenFilter={setOpenFilter}
-            openFilter={openFilter}
-            isLatestPost={isLatestPost}
-          />
-        )}
+        <Posts
+          editor={editor}
+          setOpenFilter={setOpenFilter}
+          openFilter={openFilter}
+          isLatestPost={isLatestPost}
+        />
       </div>
     </div>
   );

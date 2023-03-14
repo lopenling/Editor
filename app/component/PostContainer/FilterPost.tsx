@@ -214,36 +214,38 @@ export default function FilterPost({ setFilter, filter, close }) {
                 )}
             </div>
           </div>
-          <div className="flex flex-col items-start justify-start space-y-2">
-            <p className="text-sm font-medium leading-tight text-gray-900">
-              Solved
-            </p>
-            <div className="flex flex-col items-start justify-start space-y-0.5">
-              {[
-                { value: "both", label: "both" },
-                { value: "solved", label: "solved only" },
-                { value: "unsolved", label: "unsolved only" },
-              ].map(({ value, label }) => (
-                <div key={value} className="flex py-2">
-                  <input
-                    id={`${solvedId}-${value}`}
-                    type="radio"
-                    value={value}
-                    onChange={handleSolvedChange}
-                    checked={filterData.solved === value}
-                    name="filter-solved"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                  />
-                  <label
-                    htmlFor={`${solvedId}-${value}`}
-                    className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-                  >
-                    {label}
-                  </label>
-                </div>
-              ))}
+          {filterData.type !== "comment" && (
+            <div className="flex flex-col items-start justify-start space-y-2">
+              <p className="text-sm font-medium leading-tight text-gray-900">
+                Solved
+              </p>
+              <div className="flex flex-col items-start justify-start space-y-0.5">
+                {[
+                  { value: "both", label: "both" },
+                  { value: "solved", label: "solved only" },
+                  { value: "unsolved", label: "unsolved only" },
+                ].map(({ value, label }) => (
+                  <div key={value} className="flex py-2">
+                    <input
+                      id={`${solvedId}-${value}`}
+                      type="radio"
+                      value={value}
+                      onChange={handleSolvedChange}
+                      checked={filterData.solved === value}
+                      name="filter-solved"
+                      className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    />
+                    <label
+                      htmlFor={`${solvedId}-${value}`}
+                      className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
+                    >
+                      {label}
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="flex w-full items-start justify-start gap-3 mt-2">

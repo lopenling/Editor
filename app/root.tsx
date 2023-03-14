@@ -18,6 +18,7 @@ import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
+import { findUserByUsername } from "./model/user";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -27,6 +28,7 @@ export const meta: MetaFunction = () => ({
 });
 export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUserSession(request);
+
   return { user };
 };
 
@@ -97,14 +99,14 @@ export function CatchBoundary() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <Document>
+    <>
       <h1 className=" text-3xl text-red-600 font-sans">App Error</h1>
       <pre color="red">{error.message}</pre>
       <p>
         try to go to
         <Link to={"/"}> home page</Link>
       </p>
-    </Document>
+    </>
   );
 }
 

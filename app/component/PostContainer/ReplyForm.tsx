@@ -35,7 +35,7 @@ export default function ReplyForm({
         }}
       ></div>
       <postFetcher.Form
-        action="/api/postReply"
+        action="/api/reply"
         method="post"
         className="flex w-11/12 flex-col justify-center"
         style={{

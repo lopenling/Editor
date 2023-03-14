@@ -13,41 +13,27 @@ import { findPostByTextId } from "~/model/post";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await getUserSession(request);
   const url = new URL(request.url);
   const selectedPost = url.searchParams.get("post");
+  let user = await getUserSession(request);
   const textId = parseInt(params.textId);
+
+  console.time("doSomething");
   if (!textId) throw new Error("not valid textId");
-  let userInfo = null;
-  if (user?.email) {
-    try {
-      let findUserInDatabase = await findUserByUsername(user.username);
-      userInfo = { ...findUserInDatabase, ...user };
-    } catch (e) {
-      throw new Error("User not available in Database");
-    }
-  }
+
   const domain = new URL(request.url).origin;
   const [posts, text] = await Promise.all([
     findPostByTextId(textId, domain),
     findTextByTextId(textId, false),
   ]);
-  if (text === null)
-    return json(
-      { error: "text not available , try refreshing the search engine" },
-      {
-        status: 404,
-      }
-    );
-  const data = {
-    user: userInfo,
-    text: text,
-    posts,
-    selectedPost,
-  };
-  return json(data, {
-    status: 200,
-  });
+
+  console.timeEnd("doSomething");
+  return json(
+    { user, text: text, posts, selectedPost },
+    {
+      status: 200,
+    }
+  );
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -69,10 +55,10 @@ export function links() {
 export default function () {
   const data = useLoaderData();
 
-  if (data.error)
+  if (data.text === null)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
-        <p>{data.error + "  "}</p>
+        <p>text not available</p>
         <Link className="text-blue-600 underline" to="/">
           go back
         </Link>

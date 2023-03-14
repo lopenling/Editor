@@ -35,11 +35,10 @@ export const action: ActionFunction = async ({ request }) => {
         parseInt(Obj.textId),
         Obj.type
       );
+      return { message: "success" };
     } catch (e) {
-      console.log(e);
       return { error: { message: e.message } };
     }
-    return { message: "success" };
   }
   return null;
 };

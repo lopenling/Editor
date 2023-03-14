@@ -26,7 +26,6 @@ function Posts({
   setOpenFilter,
 }: PostPropsType) {
   const data = useLoaderData();
-  const [animationParent] = useAutoAnimate();
   const [filter, setFilter] = React.useState({
     type: "all",
     date: { startDate: null, endDate: null },
@@ -89,14 +88,13 @@ function Posts({
 
       <div
         className="scroll-container flex flex-col overflow-x-hidden overflow-y-auto relative pr-2"
-        ref={animationParent}
         style={{
           height: "80vh",
         }}
       >
         <div id="temporaryPost"></div>
         {posts?.map((post) => {
-          return post.isAvailable ? (
+          return (
             <Post
               key={post.id}
               id={post.id}
@@ -111,7 +109,7 @@ function Posts({
               replyCount={post?.replyCount}
               isSolved={post?.isSolved}
             />
-          ) : null;
+          );
         })}
       </div>
     </>

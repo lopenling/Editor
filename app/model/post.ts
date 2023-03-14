@@ -31,7 +31,6 @@ export async function createPostOnDB(
         creatorUser_id,
       },
     });
-    console.log(createdPost);
     return createdPost;
   } catch (e) {
     throw new Error("post couldnot be created " + e);
@@ -68,17 +67,19 @@ export async function findPostByTextId(textId: number, domain = "") {
     ]);
     let isSolved = repliesFromDb.filter((l) => l.isAproved === true).length > 0;
     let postsResponse = replies?.post_stream?.posts;
-    if (!postsResponse) return { ...post, isAvailable: false };
+    if (!postsResponse) return null;
     return {
       ...post,
       replyCount: postsResponse?.length,
-      isAvailable: true,
       isSolved: isSolved,
     };
   });
   let post = await Promise.allSettled(postWithReply);
-  let filtered = post.filter((p) => p.status === "fulfilled");
-  return filtered.map((v) => ({ ...v.value }));
+  let filtered = post.filter((l) => {
+    return l.status === "fulfilled";
+  });
+
+  return filtered.map((l) => ({ ...l.value }));
 }
 
 export async function findPostByUserLiked(id: string, userId: string) {
@@ -121,7 +122,7 @@ export async function updatePostLike(
             },
       },
       where: {
-        id: id,
+        id,
       },
       select: {
         likedBy: true,
