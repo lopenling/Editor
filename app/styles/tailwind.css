@@ -1488,10 +1488,6 @@ input:checked + .toggle-bg {
   min-height: 285px;
 }
 
-.min-h-\[40vh\] {
-  min-height: 40vh;
-}
-
 .w-6 {
   width: 1.5rem;
 }
