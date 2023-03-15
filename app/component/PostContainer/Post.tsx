@@ -75,8 +75,7 @@ function Post({
   }
   function shareHandler(postId: number) {
     if (postId) {
-      const { origin, pathname } = window.location;
-      const url = origin + pathname + "?post=" + postId;
+      const url = window?.location.href + "?post=" + postId;
       navigator.clipboard.writeText(url);
     }
   }

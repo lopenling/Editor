@@ -6,27 +6,28 @@ import { MAX_WIDTH_PAGE } from "~/constants";
 import { useEffect } from "react";
 import { uselitteraTranlation } from "~/locales/translations";
 export default function Header({ user }: any) {
-  const location = useLocation();
   const loginFetcher = useFetcher();
   const translation = uselitteraTranlation();
+  const redirectTo = useLocation().pathname;
   let timeout;
   let scroll = 0;
   useEffect(() => {
-    window.onscroll = () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-
-      timeout = setTimeout(() => {
-        if (scroll >= window.scrollY && window.scrollY > 10) {
-          document.getElementById("header").classList.add("sticky");
-        } else {
-          document.getElementById("header").classList.remove("sticky");
+    if (window)
+      window.onscroll = () => {
+        if (timeout) {
+          clearTimeout(timeout);
         }
 
-        scroll = window.scrollY;
-      }, 10);
-    };
+        timeout = setTimeout(() => {
+          if (scroll >= window.scrollY && window.scrollY > 10) {
+            document.getElementById("header").classList.add("sticky");
+          } else {
+            document.getElementById("header").classList.remove("sticky");
+          }
+
+          scroll = window.scrollY;
+        }, 10);
+      };
   }, []);
   return (
     <div
@@ -106,7 +107,7 @@ export default function Header({ user }: any) {
                         type="hidden"
                         name="redirectTo"
                         className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
-                        defaultValue={location.pathname}
+                        defaultValue={redirectTo}
                       />
                       <button
                         className="text-sm font-medium leading-tight text-gray-900"
@@ -130,7 +131,7 @@ export default function Header({ user }: any) {
                   <input
                     type="hidden"
                     name="redirectTo"
-                    defaultValue={window.location.href}
+                    defaultValue={redirectTo}
                   />
 
                   <button
