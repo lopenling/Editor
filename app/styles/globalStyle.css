@@ -62,6 +62,7 @@ nav > div {
 }
 .textEditorContainer {
   font-family: monlam;
+  min-height: 40vh;
 }
 button,
 ::placeholder {

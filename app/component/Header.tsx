@@ -3,14 +3,36 @@ import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 import LopenlingLogo from "~/assets/svg/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
+import { useEffect } from "react";
 import { uselitteraTranlation } from "~/locales/translations";
 export default function Header({ user }: any) {
   const location = useLocation();
   const loginFetcher = useFetcher();
   const translation = uselitteraTranlation();
+  let timeout;
+  let scroll = 0;
+  useEffect(() => {
+    window.onscroll = () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
 
+      timeout = setTimeout(() => {
+        if (scroll >= window.scrollY && window.scrollY > 10) {
+          document.getElementById("header").classList.add("sticky");
+        } else {
+          document.getElementById("header").classList.remove("sticky");
+        }
+
+        scroll = window.scrollY;
+      }, 10);
+    };
+  }, []);
   return (
-    <div className=" max-w-full shadow-header px-2">
+    <div
+      id="header"
+      className="max-w-full shadow-header bg-white sticky top-0 z-20 px-2"
+    >
       <Navbar
         fluid={false}
         className="mx-auto my-0 flex items-center"
@@ -108,7 +130,7 @@ export default function Header({ user }: any) {
                   <input
                     type="hidden"
                     name="redirectTo"
-                    defaultValue={location.pathname}
+                    defaultValue={window.location.href}
                   />
 
                   <button
@@ -140,7 +162,7 @@ export default function Header({ user }: any) {
 
 function Translation() {
   const methods = useLitteraMethods();
-  function changeLanguage(e) {
+  const changeLanguage: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     switch (e.target.value) {
       case "en":
         methods.setLocale("en_US");
@@ -150,7 +172,7 @@ function Translation() {
 
         break;
     }
-  }
+  };
   return (
     <div className="md:mr-10 flex items-center justify-start space-x-0.5">
       <select

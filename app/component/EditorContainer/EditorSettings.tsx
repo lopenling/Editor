@@ -1,7 +1,7 @@
 import { Editor } from "@tiptap/react";
 import crossIcon from "~/assets/svg/icon_cross.svg";
 import SearchString from "./SearchString";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useTransition } from "react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 
 interface Props {
@@ -20,10 +20,10 @@ function EditorSetting({
   setShowFontSize,
 }: Props) {
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
-
+  const [isPending, startTransition] = useTransition();
   const changeFontSize = useCallback(
     (value: number) => {
-      setFontSize(value);
+      startTransition(() => setFontSize(value));
       editor?.chain()?.selectAll()?.setFontSize(value)?.run();
     },
     [editor]

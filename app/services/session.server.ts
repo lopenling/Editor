@@ -42,8 +42,10 @@ export async function login(request: Request, next: any, redirectTo: string) {
   const user = session.get("user");
   if (!user) {
     let url = await redirectDiscourse();
-    session.set("success-redirect", redirectTo);
-    const headers = { "set-cookie": await commitSession(session) };
+    session.set("success-redirect", { redirectTo });
+    const headers = {
+      "set-cookie": await commitSession(session, { sameSite: "lax" }),
+    };
     return redirect(url, { headers });
   }
   return next(session);

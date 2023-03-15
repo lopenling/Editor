@@ -4,7 +4,7 @@ import { db } from "~/db.server";
 import { getposts as getPostsDiscourse } from "~/services/discourseApi";
 import { findReplyByPostId } from "./reply";
 
-export async function createPostOnDB(
+export async function createPost(
   id: string,
   type: string,
   avatar: string,

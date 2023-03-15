@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { MAX_CATEGORY_NAME_LENGTH } from "~/constants";
-import { createPostOnDB } from "~/model/post";
+import { createPost as createPostOnDB } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
 class DiscourseApi {
   DiscourseUrl: string;
@@ -88,7 +88,7 @@ class DiscourseApi {
   ) {
     let auth_headers = this.authHeader();
     let questionId = uuidv4();
-    let url = `${ORIGIN_LOCATION}/texts/${textId}?start=${start}&end=${end}`;
+    let url = `${ORIGIN_LOCATION}/texts/${textId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `<div>
     <blockquote>${topic_name}</blockquote>

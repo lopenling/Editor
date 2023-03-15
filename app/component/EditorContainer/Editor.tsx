@@ -7,7 +7,7 @@ import Bold from "@tiptap/extension-bold";
 import Text from "@tiptap/extension-text";
 import HardBreak from "@tiptap/extension-hard-break";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
-import { useState, Suspense } from "react";
+import { useState, Suspense, startTransition } from "react";
 // import SelectTextOnRender from "~/extension/selectionOnFirstRender";
 import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
@@ -23,6 +23,7 @@ import { uselitteraTranlation } from "~/locales/translations";
 import Posts from "../PostContainer/Posts";
 import PostForm from "../PostContainer/PostForm";
 import Skeleton from "../PostContainer/Skeleton";
+import FontFamily from "@tiptap/extension-font-family";
 function Editor({ content }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = useState(false);
@@ -50,6 +51,7 @@ function Editor({ content }) {
         Bold,
         TextStyle,
         FontSize,
+        FontFamily,
         searchMarks,
         SearchAndReplace.configure({
           searchResultClass: "search",
@@ -143,7 +145,6 @@ function Editor({ content }) {
               editor={editor}
               className="editor"
               style={{
-                minHeight: "40vh",
                 fontSize: DEFAULT_FONT_SIZE,
               }}
             />
@@ -152,7 +153,8 @@ function Editor({ content }) {
         {editor && (
           <BubbleMenu
             shouldShow={(editor) => {
-              return editor.state.selection.content().size > 5;
+              let length = editor.state.selection.content().size;
+              return length > 5 && length < 244;
             }}
             className="BubbleMenu"
             editor={editor}
@@ -310,7 +312,7 @@ function Editor({ content }) {
           <Await resolve={data.posts}>
             {(posts) => (
               <Posts
-                posts={posts}
+                posts={[...posts]}
                 editor={editor}
                 setOpenFilter={setOpenFilter}
                 openFilter={openFilter}

@@ -20,7 +20,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   return defer({ user, text: text, posts, selectedPost });
 };
-
+export function ErrorBoundary({ error }) {
+  console.error(error);
+  return <div>ohh Snap! There is an error</div>;
+}
 export const meta: MetaFunction = ({ data }) => {
   let dataName = data?.text?.name;
   let title = dataName ? dataName : "text";
@@ -49,7 +52,6 @@ export default function () {
         </Link>
       </div>
     );
-
   const textFetcher = useFetcher();
   React.useEffect(() => {
     if (textFetcher.type === "init")
