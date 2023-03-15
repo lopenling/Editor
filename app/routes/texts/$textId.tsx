@@ -1,14 +1,8 @@
 import React, { Suspense } from "react";
 import { getUserSession } from "~/services/session.server";
-import {
-  ActionFunction,
-  json,
-  MetaFunction,
-  redirect,
-} from "@remix-run/server-runtime";
+import { defer, MetaFunction } from "@remix-run/server-runtime";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import { useLoaderData, useFetcher, Link } from "@remix-run/react";
-import { findUserByUsername } from "~/model/user";
 import { findPostByTextId } from "~/model/post";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
@@ -21,17 +15,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!textId) throw new Error("not valid textId");
 
   const domain = new URL(request.url).origin;
-  const [posts, text] = await Promise.all([
-    findPostByTextId(textId, domain),
-    findTextByTextId(textId, false),
-  ]);
+  const posts = findPostByTextId(textId, domain);
+  const text = await findTextByTextId(textId, false);
 
-  return json(
-    { user, text: text, posts, selectedPost },
-    {
-      status: 200,
-    }
-  );
+  return defer({ user, text: text, posts, selectedPost });
 };
 
 export const meta: MetaFunction = ({ data }) => {

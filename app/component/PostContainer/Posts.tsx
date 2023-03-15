@@ -10,6 +10,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { uselitteraTranlation } from "~/locales/translations";
 import Post from "./Post";
 type PostPropsType = {
+  posts: any;
   editor: Editor | null;
   openFilter: boolean;
   setOpenFilter: any;
@@ -20,6 +21,7 @@ export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
 function Posts({
+  posts,
   editor,
   openFilter,
   isLatestPost,
@@ -32,7 +34,6 @@ function Posts({
     user: [],
     solved: "both",
   });
-  let posts = data.posts;
   const [selectedPost, setSelectedPost] = React.useState(data.selectedPost);
   if (!posts && !posts.length) return null;
   posts = posts?.sort((a, b) => {
@@ -92,6 +93,7 @@ function Posts({
         }}
       >
         <div id="temporaryPost"></div>
+
         {posts?.length > 0 &&
           posts?.map((post) => {
             return (

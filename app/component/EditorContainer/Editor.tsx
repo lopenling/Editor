@@ -1,9 +1,4 @@
-import {
-  Form,
-  useLoaderData,
-  useTransition,
-  useFetcher,
-} from "@remix-run/react";
+import { useLoaderData, Await } from "@remix-run/react";
 import Document from "@tiptap/extension-document";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import TextStyle from "@tiptap/extension-text-style";
@@ -12,7 +7,7 @@ import Bold from "@tiptap/extension-bold";
 import Text from "@tiptap/extension-text";
 import HardBreak from "@tiptap/extension-hard-break";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 // import SelectTextOnRender from "~/extension/selectionOnFirstRender";
 import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
@@ -27,6 +22,7 @@ import Loading from "react-loading";
 import { uselitteraTranlation } from "~/locales/translations";
 import Posts from "../PostContainer/Posts";
 import PostForm from "../PostContainer/PostForm";
+import Skeleton from "../PostContainer/Skeleton";
 function Editor({ content }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = useState(false);
@@ -310,13 +306,19 @@ function Editor({ content }) {
           </svg>
         </div>
         <PostForm postInfo={postInfo} setPostInfo={setPostInfo} ref={null} />
-
-        <Posts
-          editor={editor}
-          setOpenFilter={setOpenFilter}
-          openFilter={openFilter}
-          isLatestPost={isLatestPost}
-        />
+        <Suspense fallback={<Skeleton />}>
+          <Await resolve={data.posts}>
+            {(posts) => (
+              <Posts
+                posts={posts}
+                editor={editor}
+                setOpenFilter={setOpenFilter}
+                openFilter={openFilter}
+                isLatestPost={isLatestPost}
+              />
+            )}
+          </Await>
+        </Suspense>
       </div>
     </div>
   );

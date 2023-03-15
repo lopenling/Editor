@@ -26,10 +26,9 @@ export const action: ActionFunction = async ({ request }) => {
   if (_action === "likePost") {
     let id = Obj.id as string;
     let userId = Obj.userId as string;
-    console.log(id, userId);
     const likedUsers = await findPostByUserLiked(id, userId);
     try {
-      let response = await updatePostLike(id, userId, !likedUsers);
+      let response = await updatePostLike(id, userId, likedUsers === null);
       return response.likedBy;
     } catch (e) {
       console.log(e);

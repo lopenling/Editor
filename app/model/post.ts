@@ -1,7 +1,7 @@
 // create post
 
 import { db } from "~/db.server";
-import { getposts } from "~/services/discourseApi";
+import { getposts as getPostsDiscourse } from "~/services/discourseApi";
 import { findReplyByPostId } from "./reply";
 
 export async function createPostOnDB(
@@ -64,7 +64,7 @@ export async function findPostByTextId(textId: number, domain = "") {
     const postWithReply = await Promise.all(
       posts.map(async (post) => {
         const [replies, repliesFromDb] = await Promise.all([
-          getposts(post?.topic_id),
+          getPostsDiscourse(post.topic_id),
           findReplyByPostId(post.id),
         ]);
 
