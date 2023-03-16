@@ -3,8 +3,10 @@ import React, { useState, useId, useEffect } from "react";
 import { useFetcher } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
 import crossIcon from "~/assets/svg/icon_cross.svg";
-export default function FilterPost({ setFilter, filter, close }) {
-  const [filterData, setFilterData] = useState(filter);
+import { useRecoilState } from "recoil";
+import { filterDataState } from "~/states";
+export default function FilterPost({ close }) {
+  const [filterData, setFilterData] = useRecoilState(filterDataState);
   const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
   const typeId = useId();
@@ -40,7 +42,6 @@ export default function FilterPost({ setFilter, filter, close }) {
     }));
   }
   function apply() {
-    setFilter(filterData);
     close();
   }
   function reset() {

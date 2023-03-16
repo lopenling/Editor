@@ -9,31 +9,21 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { uselitteraTranlation } from "~/locales/translations";
 import Post from "./Post";
+import { useRecoilState } from "recoil";
+import { filterDataState, openFilterState } from "~/states";
 type PostPropsType = {
   posts: any;
   editor: Editor | null;
-  openFilter: boolean;
-  setOpenFilter: any;
   isLatestPost: boolean;
 };
 
 export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
-function Posts({
-  posts,
-  editor,
-  openFilter,
-  isLatestPost,
-  setOpenFilter,
-}: PostPropsType) {
+function Posts({ posts, editor, isLatestPost }: PostPropsType) {
   const data = useLoaderData();
-  const [filter, setFilter] = React.useState({
-    type: "all",
-    date: { startDate: null, endDate: null },
-    user: [],
-    solved: "both",
-  });
+  const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
+  const [filter] = useRecoilState(filterDataState);
   const [selectedPost, setSelectedPost] = React.useState(data.selectedPost);
   if (!posts && !posts.length) return null;
   posts = posts?.sort((a, b) => {
@@ -68,7 +58,7 @@ function Posts({
     setSelectedPost(id);
   }
 
-  const onClose = () => setOpenFilter((prev) => !prev);
+  const closeFilter = () => setOpenFilter((prev) => !prev);
   const ref = useDetectClickOutside({
     onTriggered: onClose,
   });
@@ -78,10 +68,10 @@ function Posts({
   return (
     <>
       {openFilter && (
-        <Modal show={true} onClose={onClose} size="md">
+        <Modal show={true} onClose={closeFilter} size="md">
           <div ref={ref}>
             <Modal.Header>{translation.filter}</Modal.Header>
-            <FilterPost filter={filter} setFilter={setFilter} close={onClose} />
+            <FilterPost close={closeFilter} />
           </div>
         </Modal>
       )}

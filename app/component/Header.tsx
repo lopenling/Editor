@@ -32,7 +32,7 @@ export default function Header({ user }: any) {
   return (
     <div
       id="header"
-      className="max-w-full shadow-header bg-white sticky top-0 z-20 px-2"
+      className="max-w-full shadow-header bg-white sticky top-0 z-20 px-2 "
     >
       <Navbar
         fluid={false}

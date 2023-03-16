@@ -11,7 +11,7 @@ import { useState, Suspense, startTransition } from "react";
 // import SelectTextOnRender from "~/extension/selectionOnFirstRender";
 import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
-
+import { useRecoilState } from "recoil";
 import { FontSize } from "~/tiptap-extension/fontSize";
 import EditorSettings from "./EditorSettings";
 // import applyAnnotation from "~/tiptap-extension/applyMarks";
@@ -24,24 +24,20 @@ import Posts from "../PostContainer/Posts";
 import PostForm from "../PostContainer/PostForm";
 import Skeleton from "../PostContainer/Skeleton";
 import FontFamily from "@tiptap/extension-font-family";
+import { openFilterState, selectionRangeState } from "~/states";
 function Editor({ content }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = useState(false);
   const [showFindText, setShowFindText] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
-  const [postInfo, setPostInfo] = useState<null | {
-    type: string;
-    start: number;
-    end: number;
-    content: string;
-  }>(null);
+  const [, setPostInfo] = useRecoilState(selectionRangeState);
   const [isLatestPost, setIsLatestPost] = useState(true);
   const [selection, setSelection] = useState<null | {
     start: number | null;
     end: number | null;
     text: string;
   }>(null);
-  const [openFilter, setOpenFilter] = useState<boolean>(false);
+  const [, setOpenFilter] = useRecoilState(openFilterState);
   const editor = useEditor(
     {
       extensions: [
@@ -307,15 +303,13 @@ function Editor({ content }) {
             />
           </svg>
         </div>
-        <PostForm postInfo={postInfo} setPostInfo={setPostInfo} ref={null} />
+        <PostForm />
         <Suspense fallback={<Skeleton />}>
           <Await resolve={data.posts}>
             {(posts) => (
               <Posts
                 posts={[...posts]}
                 editor={editor}
-                setOpenFilter={setOpenFilter}
-                openFilter={openFilter}
                 isLatestPost={isLatestPost}
               />
             )}

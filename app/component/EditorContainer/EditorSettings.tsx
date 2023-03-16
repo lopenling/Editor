@@ -97,4 +97,4 @@ function EditorSetting({
     </>
   );
 }
-export default EditorSetting;
+export default React.memo(EditorSetting);

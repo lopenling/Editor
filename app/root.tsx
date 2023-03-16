@@ -19,6 +19,7 @@ import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
 import { findUserByUsername } from "./model/user";
+import { RecoilRoot } from "recoil";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -64,13 +65,15 @@ function Document({ children }: { children: any }) {
       </head>
 
       <body>
-        <LitteraProvider locales={["en_US", "bo_TI"]}>
-          {header}
-          {routeChanged ? <Loading /> : children}
-          <ScrollRestoration getKey={(location) => location.pathname} />
-          <Scripts />
-          <LiveReload />
-        </LitteraProvider>
+        <RecoilRoot>
+          <LitteraProvider locales={["en_US", "bo_TI"]}>
+            {header}
+            {routeChanged ? <Loading /> : children}
+            <ScrollRestoration getKey={(location) => location.pathname} />
+            <Scripts />
+            <LiveReload />
+          </LitteraProvider>
+        </RecoilRoot>
       </body>
     </html>
   );

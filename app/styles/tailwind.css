@@ -1210,6 +1210,11 @@ input:checked + .toggle-bg {
   margin-right: 1rem;
 }
 
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
 .mt-0\.5 {
   margin-top: 0.125rem;
 }
@@ -5357,6 +5362,11 @@ input:checked + .toggle-bg {
 .dark .dark\:bg-purple-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(144 97 249 / var(--tw-bg-opacity));
+}
+
+.dark .dark\:bg-slate-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
 }
 
 .dark .dark\:bg-opacity-80 {

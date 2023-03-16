@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { uselitteraTranlation } from "~/locales/translations";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -77,6 +77,7 @@ function Post({
     if (postId) {
       const url = window?.location.href + "?post=" + postId;
       navigator.clipboard.writeText(url);
+      alert("share url has been copied on clipboard");
     }
   }
   return (
@@ -89,7 +90,7 @@ function Post({
               : type === "comment"
               ? "#eee"
               : "transparent",
-          padding: "4px 2px 2px 4px",
+          padding: "10px 2px 10px 4px",
         }}
         ref={postref}
         onClick={() => {
@@ -174,10 +175,13 @@ function Post({
                 </div>
               )}
 
-              <div className="flex items-center justify-start ">
+              <div
+                onClick={() => shareHandler(id)}
+                className="flex items-center justify-start "
+              >
                 <img src={shareIcon} alt="alt" />
                 <button
-                  onClick={() => shareHandler(id)}
+                  type="button"
                   className="text-sm font-medium leading-tight text-gray-500 hover:text-blue-500"
                 >
                   <span className="mr-1"></span>
@@ -228,7 +232,7 @@ function Post({
           />
         </div>
       )}
-      <hr className=" my-6" />
+      <hr className=" my-5" />
     </>
   );
 }

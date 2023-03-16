@@ -5,17 +5,10 @@ import Loading from "react-loading";
 import ErrorSubmission from "./SubmissionError";
 import { createPortal } from "react-dom";
 import Post from "./Post";
-type QuestionFormProps = {
-  postInfo: null | {
-    type: string;
-    start: number;
-    end: number;
-    content: string;
-  };
-  setPostInfo: (e: null | any) => void;
-};
-
-const PostForm = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
+import { selectionRangeState } from "~/states";
+import { useRecoilState } from "recoil";
+const PostForm = () => {
+  const [postInfo, setPostInfo] = useRecoilState(selectionRangeState);
   const data = useLoaderData();
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
@@ -79,11 +72,7 @@ const PostForm = ({ postInfo, setPostInfo }: QuestionFormProps, ref: any) => {
           {postInfo.type === "question" ? "ask question" : "new comment"}
         </p>
       </div>
-      <createPost.Form
-        ref={ref}
-        className="flex flex-col gap-3"
-        onSubmit={handleSubmit}
-      >
+      <createPost.Form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         {data.user ? (
           <>
             <Textarea
