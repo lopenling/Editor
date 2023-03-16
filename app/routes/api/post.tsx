@@ -12,7 +12,9 @@ export const loader: LoaderFunction = () => {
 
 export const action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
+  let Obj = Object.fromEntries(formData);
   const user = await getUserSession(request);
+  const timeStart = Date.now();
   let DiscourseUrl = DISCOURSE_SITE;
   let api = DISCOURSE_API_KEY;
   let parent_category_id = DISCOURSE_QA_CATEGORY_ID;
@@ -20,7 +22,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (!DiscourseUrl || !api || !parent_category_id) {
     throw new Error("set a DISCOURSE_SITE/DISCOURSE_API_KEY in env");
   }
-  let Obj = Object.fromEntries(formData);
 
   if (request.method === "POST") {
     try {
@@ -35,7 +36,12 @@ export const action: ActionFunction = async ({ request }) => {
         parseInt(Obj.textId),
         Obj.type
       );
-      return { message: "success" };
+      const timeEnd = Date.now();
+
+      return {
+        message: "success",
+        timedif: new Date(timeEnd).getTime() - new Date(timeStart).getTime(),
+      };
     } catch (e) {
       return { error: { message: e.message } };
     }

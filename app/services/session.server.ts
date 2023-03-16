@@ -5,10 +5,6 @@ import {
   createCloudflareKVSessionStorage,
 } from "@remix-run/cloudflare";
 import { logout } from "./discourseApi";
-// let secret = process.env.COOKIE_SECRET;
-// if (!secret) {
-//   throw new Error("set a COOKIE_SECRET in env");
-// }
 
 const sessionCookie = createCookie("__session", {
   secrets: ["r3m1xr0ck5"],

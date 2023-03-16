@@ -86,6 +86,23 @@ export async function findPostByTextId(textId: number, domain = "") {
     console.log(e.message);
   }
 }
+export async function findPostByTextIdDemo(textId: number, domain = "") {
+  try {
+    let posts = await db.post.findMany({
+      include: {
+        creatorUser: true,
+        likedBy: true,
+      },
+      where: {
+        text_id: textId,
+      },
+    });
+
+    return posts;
+  } catch (e) {
+    console.log(e.message);
+  }
+}
 
 export async function findPostByUserLiked(id: string, userId: string) {
   try {

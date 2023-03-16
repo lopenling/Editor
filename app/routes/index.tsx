@@ -126,9 +126,6 @@ export default function Index() {
                     <h5 className="text-2xl tracking-tight text-gray-900 dark:text-white">
                       {list.name}
                     </h5>
-                    <p className=" text-base font-normal text-gray-500 dark:text-gray-400">
-                      {des.length > 60 ? des.slice(0, 60) + "..." : des}
-                    </p>
                   </Card>
                 </Link>
               );

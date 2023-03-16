@@ -119,6 +119,7 @@ class DiscourseApi {
     }
     try {
       if (data["topic_id"] && user) {
+        console.log("created topic on Discouse");
         const createQuestion = await createPostOnDB(
           questionId,
           type,

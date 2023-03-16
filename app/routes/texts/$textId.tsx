@@ -60,7 +60,18 @@ export default function () {
   let content = React.useMemo(() => {
     return textFetcher.data?.content.replace(/\n/g, "<br>");
   }, [textFetcher.data]);
+  React.useEffect(() => {
+    const perfObserver = new PerformanceObserver((observedEntries) => {
+      const entry: PerformanceEntry =
+        observedEntries.getEntriesByType("navigation")[0];
+      console.log("pageload time: ", entry.duration);
+    });
 
+    perfObserver.observe({
+      type: "navigation",
+      buffered: true,
+    });
+  }, []);
   return (
     <>
       <main className="container m-auto">

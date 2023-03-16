@@ -24,19 +24,20 @@ import Posts from "../PostContainer/Posts";
 import PostForm from "../PostContainer/PostForm";
 import Skeleton from "../PostContainer/Skeleton";
 import FontFamily from "@tiptap/extension-font-family";
-import { openFilterState, selectionRangeState } from "~/states";
+import {
+  openFilterState,
+  selectedTextOnEditor,
+  selectionRangeState,
+  showLatest,
+} from "~/states";
 function Editor({ content }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = useState(false);
   const [showFindText, setShowFindText] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
-  const [, setPostInfo] = useRecoilState(selectionRangeState);
-  const [isLatestPost, setIsLatestPost] = useState(true);
-  const [selection, setSelection] = useState<null | {
-    start: number | null;
-    end: number | null;
-    text: string;
-  }>(null);
+  const [, setSelectionRange] = useRecoilState(selectionRangeState);
+  const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
+  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const [, setOpenFilter] = useRecoilState(openFilterState);
   const editor = useEditor(
     {
@@ -89,7 +90,7 @@ function Editor({ content }) {
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
-        setPostInfo(null);
+        setSelectionRange(null);
         setSelection({
           start: from,
           end: to,
@@ -101,7 +102,7 @@ function Editor({ content }) {
   );
   const handleBubbleClick = (type: string) => {
     if (selection.start)
-      setPostInfo({
+      setSelectionRange({
         type: type,
         start: selection.start,
         end: selection.end,
@@ -306,13 +307,7 @@ function Editor({ content }) {
         <PostForm />
         <Suspense fallback={<Skeleton />}>
           <Await resolve={data.posts}>
-            {(posts) => (
-              <Posts
-                posts={[...posts]}
-                editor={editor}
-                isLatestPost={isLatestPost}
-              />
-            )}
+            {(posts) => <Posts posts={[...posts]} editor={editor} />}
           </Await>
         </Suspense>
       </div>
