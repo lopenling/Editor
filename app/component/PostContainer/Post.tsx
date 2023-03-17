@@ -38,7 +38,7 @@ function Post({
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
-  const [ReplyCount, setReplyCount] = useState(replyCount);
+  const [ReplyCount, setReplyCount] = useState(replyCount - 1);
   const likeFetcher = useFetcher();
   const data = useLoaderData();
   const translation = uselitteraTranlation();
@@ -165,7 +165,7 @@ function Post({
                       : likedBy.length}
                   </div>
                 </button>
-                {ReplyCount - 1 > 0 && (
+                {ReplyCount > 0 && (
                   <div className="flex items-center justify-start space-x-1.5">
                     <svg
                       width="16"
@@ -187,11 +187,9 @@ function Post({
                     >
                       {showReplies && "Hide "}
                       <span className="mr-1">
-                        {ReplyCount === 0 ? 0 : ReplyCount - 1}
+                        {ReplyCount === 0 ? 0 : ReplyCount}
                       </span>
-                      {ReplyCount - 1 > 1
-                        ? translation.replies
-                        : translation.reply}
+                      {ReplyCount > 1 ? translation.replies : translation.reply}
                     </button>
                   </div>
                 )}

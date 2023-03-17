@@ -8,7 +8,9 @@ import { logout } from "./discourseApi";
 
 const sessionCookie = createCookie("__session", {
   secrets: ["r3m1xr0ck5"],
-  sameSite: true,
+  sameSite: "lax",
+  maxAge: 43200, // this is half day in sec
+  secure: true,
 });
 
 const { getSession, commitSession, destroySession } =

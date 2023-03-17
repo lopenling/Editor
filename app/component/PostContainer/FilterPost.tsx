@@ -17,7 +17,12 @@ export default function FilterPost({ close }) {
   }, [filterData]);
 
   const handleTypeCheck = (e) => {
-    setFilterData((prevData) => ({ ...prevData, type: e.target.value }));
+    let solved = e.target.value === "comment" ? "both" : filterData.solved;
+    setFilterData((prevData) => ({
+      ...prevData,
+      type: e.target.value,
+      solved,
+    }));
   };
 
   const handleDateChange = (e) => {

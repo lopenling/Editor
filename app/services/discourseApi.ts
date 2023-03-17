@@ -6,6 +6,8 @@ class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
   username: string;
+  category: number;
+  categoryName: string;
   constructor(username: string = "") {
     if (!DISCOURSE_API_KEY || !DISCOURSE_SITE)
       throw new Error("asign api and url  in env");
@@ -13,6 +15,8 @@ class DiscourseApi {
     this.DiscourseUrl = DISCOURSE_SITE;
     this.apiKey = DISCOURSE_API_KEY;
     this.username = username;
+    this.category = DISCOURSE_QA_CATEGORY_ID;
+    this.categoryName = "test";
   }
 
   authHeader(admin = false) {
@@ -23,7 +27,7 @@ class DiscourseApi {
     return auth_headers;
   }
   async fetchCategoryData() {
-    let url = `${this.DiscourseUrl}/c/test/65.json`;
+    let url = `${this.DiscourseUrl}/c/${this.categoryName}/${this.category}.json`;
     const res = await fetch(url);
     return await res.json();
   }
@@ -98,12 +102,9 @@ class DiscourseApi {
     let questionId = uuidv4();
     let url = `${ORIGIN_LOCATION}/texts/${textId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
-    let post_text = `<div>
-    <blockquote>${topic_name}</blockquote>
-    <div>
+    let post_text = `
 <p>${bodyContentWithLink}</p>
-<br/>
-<div>`;
+`;
     let new_Topic_data = {
       title: topic_name as string,
       category: category_id,

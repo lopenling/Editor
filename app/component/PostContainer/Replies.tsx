@@ -34,7 +34,7 @@ function Replies({
     let data = postListFetcher.data;
     if (data) {
       setReplies(data.posts);
-      setReplyCount(data.posts.length);
+      setReplyCount(data.posts.length - 1);
       setLoading(false);
     }
   }, [replyCount, postListFetcher.data]);
