@@ -3,23 +3,17 @@ import { Button, Textarea } from "flowbite-react";
 import { useRef, useEffect, useState } from "react";
 
 type ReplyFormPropsType = {
-  updateReplyCount: () => void;
   closeReply: () => void;
   topicId: number;
 };
 
-export default function ReplyForm({
-  updateReplyCount,
-  closeReply,
-  topicId,
-}: ReplyFormPropsType) {
+export default function ReplyForm({ closeReply, topicId }: ReplyFormPropsType) {
   const postFetcher = useFetcher();
   const textareaRef = useRef(null);
   const loaderData = useLoaderData();
   const [textArea, setTextArea] = useState("");
   useEffect(() => {
     if (postFetcher.type === "done") {
-      updateReplyCount();
       closeReply();
     }
   }, [postFetcher.submission, loaderData.posts, topicId]);

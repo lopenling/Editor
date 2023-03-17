@@ -1,4 +1,4 @@
-import { useFetcher, useLoaderData, useLocation } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { Spinner } from "flowbite-react";
 import { useState, useMemo, useEffect } from "react";
 import Reply from "./Reply";
@@ -16,8 +16,6 @@ type RepliesProps = {
 function Replies({
   postId,
   topicId,
-  openReply,
-  closeReply,
   isCreator,
   type,
   replyCount,

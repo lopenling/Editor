@@ -22,7 +22,11 @@ class DiscourseApi {
     };
     return auth_headers;
   }
-
+  async fetchCategoryData() {
+    let url = `${this.DiscourseUrl}/c/test/65.json`;
+    const res = await fetch(url);
+    return await res.json();
+  }
   async fetchCategoryList(id: string | undefined) {
     const res = await fetch(
       `${this.DiscourseUrl}/categories.json?include_subcategories=true`
@@ -37,6 +41,10 @@ class DiscourseApi {
   async fetchposts(topicId: number) {
     if (topicId) {
       const res = await fetch(`${this.DiscourseUrl}/t/${topicId}/posts.json`);
+      if (res.status !== 200) {
+        console.log(res.statusText);
+        return {};
+      }
       const data = await res.json();
       return data;
     }
@@ -311,6 +319,10 @@ export async function logout(id: string) {
   const apiObj: DiscourseApi = new DiscourseApi();
   const res = await apiObj.logout(id);
   return res;
+}
+export async function fetchCategoryData() {
+  const apiObj: DiscourseApi = new DiscourseApi();
+  return await apiObj.fetchCategoryData();
 }
 
 export default DiscourseApi;

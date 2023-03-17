@@ -3,9 +3,10 @@ import { getUserSession } from "~/services/session.server";
 import { defer, MetaFunction } from "@remix-run/server-runtime";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import { useLoaderData, useFetcher, Link } from "@remix-run/react";
-import { findPostByTextId } from "~/model/post";
+import { findPostByTextId, findPostByTextIdDemo } from "~/model/post";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
+import { fetchCategoryData } from "~/services/discourseApi";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const selectedPost = url.searchParams.get("post");
@@ -14,10 +15,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   if (!textId) throw new Error("not valid textId");
 
-  const domain = new URL(request.url).origin;
-  const posts = findPostByTextId(textId, domain);
+  const CategoryData = await fetchCategoryData();
+  const topicList = CategoryData.topic_list.topics;
+  const posts = findPostByTextId(textId, topicList);
   const text = await findTextByTextId(textId, false);
-
   return defer({ user, text: text, posts, selectedPost });
 };
 export function ErrorBoundary({ error }) {
@@ -60,18 +61,6 @@ export default function () {
   let content = React.useMemo(() => {
     return textFetcher.data?.content.replace(/\n/g, "<br>");
   }, [textFetcher.data]);
-  React.useEffect(() => {
-    const perfObserver = new PerformanceObserver((observedEntries) => {
-      const entry: PerformanceEntry =
-        observedEntries.getEntriesByType("navigation")[0];
-      console.log("pageload time: ", entry.duration);
-    });
-
-    perfObserver.observe({
-      type: "navigation",
-      buffered: true,
-    });
-  }, []);
   return (
     <>
       <main className="container m-auto">

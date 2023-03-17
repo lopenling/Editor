@@ -57,6 +57,7 @@ const PostForm = () => {
         }
         handleSelection={null}
         selectedPost={null}
+        isOptimistic={true}
       />,
 
       document.getElementById("temporaryPost")

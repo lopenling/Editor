@@ -44,18 +44,22 @@ export async function findPostByTopicId(TopicId: number) {
       where: {
         topic_id: TopicId,
       },
+      include: {
+        Reply: true,
+      },
     });
     return posts;
   } catch (e) {
     return "couldnot find the by TopicId" + e.message;
   }
 }
-export async function findPostByTextId(textId: number, domain = "") {
+export async function findPostByTextId(textId: number, topicList = []) {
   try {
     let posts = await db.post.findMany({
       include: {
         creatorUser: true,
         likedBy: true,
+        Reply: true,
       },
       where: {
         text_id: textId,
@@ -63,20 +67,14 @@ export async function findPostByTextId(textId: number, domain = "") {
     });
     const postWithReply = await Promise.all(
       posts.map(async (post) => {
-        const [replies, repliesFromDb] = await Promise.all([
-          getPostsDiscourse(post.topic_id),
-          findReplyByPostId(post.id),
-        ]);
+        const replies = topicList.find((l) => l.id === post.topic_id);
 
         const isSolved =
-          repliesFromDb.filter((l) => l.isAproved === true).length > 0;
-
-        const postsResponse = replies?.post_stream?.posts;
-        if (!postsResponse) return null;
+          post.Reply.filter((l) => l.isAproved === true).length > 0;
 
         return {
           ...post,
-          replyCount: postsResponse?.length,
+          replyCount: replies?.posts_count,
           isSolved,
         };
       })

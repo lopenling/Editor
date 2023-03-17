@@ -2,7 +2,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "build": "npm run build:css && remix build && npm run minify",
+    "build": "npm run build:css && remix build ",
     "build:css": "npm run generate:css -- --minify ",
     "deploy": "wrangler publish",
     "dev": "remix build && run-p \"dev:*\" ",
@@ -11,8 +11,7 @@
     "dev:css": "npm run generate:css -- --watch",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
-    "typecheck": "tsc",
-    "minify": "terser ./build/index.js -c -m --output ./build/index.js"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@assembless/react-littera": "^2.4.0",

@@ -49,11 +49,11 @@ export async function findReply(id: string, likedBy: string) {
     throw new Error("couldnot find reply error" + e.message);
   }
 }
-export async function findReplyByPostId(id: string) {
+export async function findReplyByPostId(post_id: string) {
   try {
     let res = await db.reply.findMany({
       where: {
-        post_id: id,
+        post_id,
       },
       include: {
         likedBy: true,

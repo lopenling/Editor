@@ -62,7 +62,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
         post_id: postId,
         likedBy: data?.user?.id,
         id: reply?.id,
-        create: replyList ? 1 : 0,
+        create: replyList ? "update" : "create",
       },
       {
         method: "post",

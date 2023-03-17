@@ -12,8 +12,9 @@ export const action: ActionFunction = async ({ request }) => {
     let likedBy = Obj.likedBy as string;
     let id = Obj.id as string;
     let create = Obj.create as string;
+    console.log(post_id, likedBy, id, create);
     //check if user already like it
-    if (create === "0") {
+    if (create === "create") {
       await createReply(id, post_id, likedBy);
     } else {
       const alreadyLiked = await findReply(id, likedBy);

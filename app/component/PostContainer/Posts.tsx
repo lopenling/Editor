@@ -81,6 +81,7 @@ function Posts({ posts, editor }: PostPropsType) {
                   type={post.type}
                   replyCount={post?.replyCount}
                   isSolved={post?.isSolved}
+                  isOptimistic={false}
                 />
               </>
             );
