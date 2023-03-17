@@ -38,8 +38,8 @@ function Post({
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
-  const likeFetcher = useFetcher();
   const [ReplyCount, setReplyCount] = useState(replyCount);
+  const likeFetcher = useFetcher();
   const data = useLoaderData();
   const translation = uselitteraTranlation();
   let likedByMe = data.user
@@ -59,7 +59,9 @@ function Post({
     );
   }
   const [selected, setSelected] = useState(() => (selectedPost ? true : false));
-
+  const updateReplyCount = () => {
+    setReplyCount((p) => p + 1);
+  };
   useEffect(() => {
     if (id === selectedPost && postref.current && selected) {
       postref.current?.scrollIntoView({
@@ -85,7 +87,7 @@ function Post({
       <div
         style={{
           backgroundColor:
-            selectedPost === id && selected ? "#FDFDEA" : "transparent",
+            selectedPost == id && selected ? "#FDFDEA" : "transparent",
           padding: "10px 2px 10px 4px",
         }}
         ref={postref}
@@ -122,12 +124,12 @@ function Post({
           </p>
         </div>
         <div className="flex flex-col items-start justify-start space-y-4">
-          <p className=" w-full text-base leading-normal text-gray-500">
+          <div className=" w-full text-base leading-normal text-gray-500">
             <div className="w-full flex items-center justify-end font-light text-xs italic uppercase">
               {type}
             </div>
             {postContent}
-          </p>
+          </div>
           {isOptimistic ? (
             <div className="text-sm text-gray-300 font-sans">posting ...</div>
           ) : (
@@ -163,7 +165,7 @@ function Post({
                       : likedBy.length}
                   </div>
                 </button>
-                {replyCount - 1 > 0 && (
+                {ReplyCount - 1 > 0 && (
                   <div className="flex items-center justify-start space-x-1.5">
                     <svg
                       width="16"
@@ -232,19 +234,21 @@ function Post({
         </div>
       </div>
       {openReply && (
-        <ReplyForm topicId={topicId} closeReply={() => setOpenReply(false)} />
+        <ReplyForm
+          topicId={topicId}
+          closeReply={() => setOpenReply(false)}
+          updateReplyCount={updateReplyCount}
+        />
       )}
       {showReplies && (
         <div className="mt-3">
           <Replies
             postId={id}
             topicId={topicId}
-            openReply={openReply}
-            closeReply={() => setOpenReply(false)}
             isCreator={data?.user?.username === creatorUser.username}
             type={type}
-            replyCount={replyCount}
             setReplyCount={setReplyCount}
+            replyCount={ReplyCount}
           />
         </div>
       )}

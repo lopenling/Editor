@@ -5,15 +5,21 @@ import { useRef, useEffect, useState } from "react";
 type ReplyFormPropsType = {
   closeReply: () => void;
   topicId: number;
+  updateReplyCount: () => void;
 };
 
-export default function ReplyForm({ closeReply, topicId }: ReplyFormPropsType) {
+export default function ReplyForm({
+  closeReply,
+  topicId,
+  updateReplyCount,
+}: ReplyFormPropsType) {
   const postFetcher = useFetcher();
   const textareaRef = useRef(null);
   const loaderData = useLoaderData();
   const [textArea, setTextArea] = useState("");
   useEffect(() => {
     if (postFetcher.type === "done") {
+      updateReplyCount();
       closeReply();
     }
   }, [postFetcher.submission, loaderData.posts, topicId]);

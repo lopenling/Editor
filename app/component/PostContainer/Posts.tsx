@@ -67,23 +67,21 @@ function Posts({ posts, editor }: PostPropsType) {
         {filteredPost?.length > 0 &&
           filteredPost?.map((post) => {
             return (
-              <>
-                <Post
-                  key={post.id}
-                  id={post.id}
-                  creatorUser={post.creatorUser}
-                  time={timeAgo(post.created_at)!}
-                  postContent={post.content}
-                  likedBy={post.likedBy}
-                  topicId={post.topic_id}
-                  handleSelection={() => handleSelectPost(post)}
-                  selectedPost={selectedPost!}
-                  type={post.type}
-                  replyCount={post?.replyCount}
-                  isSolved={post?.isSolved}
-                  isOptimistic={false}
-                />
-              </>
+              <Post
+                key={post.id}
+                id={post.id}
+                creatorUser={post.creatorUser}
+                time={timeAgo(post.created_at)!}
+                postContent={post.content}
+                likedBy={post.likedBy}
+                topicId={post.topic_id}
+                handleSelection={() => handleSelectPost(post)}
+                selectedPost={selectedPost!}
+                type={post.type}
+                replyCount={post?.replyCount}
+                isSolved={post?.isSolved}
+                isOptimistic={false}
+              />
             );
           })}
       </div>

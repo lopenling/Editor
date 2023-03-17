@@ -12,13 +12,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const selectedPost = url.searchParams.get("post");
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
+  const text = await findTextByTextId(textId, false);
 
   if (!textId) throw new Error("not valid textId");
 
   const CategoryData = await fetchCategoryData();
   const topicList = CategoryData.topic_list.topics;
   const posts = findPostByTextId(textId, topicList);
-  const text = await findTextByTextId(textId, false);
   return defer({ user, text: text, posts, selectedPost });
 };
 export function ErrorBoundary({ error }) {
