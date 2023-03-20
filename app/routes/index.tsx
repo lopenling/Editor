@@ -13,13 +13,13 @@ export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
   if (searchText === "") return json([]);
+  let headers = {
+    "cache-control": "max-age=60, s-maxage=60480",
+  };
+  let textList = await searchTextWithName(searchText);
   try {
-    let textList = await searchTextWithName(searchText);
     return json(textList, {
-      headers: {
-        "cache-control":
-          "public, max-age=60, s-maxage=60480, stale-while-revalidate=315400000",
-      },
+      headers,
     });
   } catch (e) {
     return json(
@@ -31,11 +31,11 @@ export let loader: LoaderFunction = async ({ request }) => {
   }
 };
 
-export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
-  return {
-    "Cache-Control": loaderHeaders.get("Cache-Control"),
-  };
-}
+// export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
+//   return {
+//     "Cache-Control": loaderHeaders.get("Cache-Control"),
+//   };
+// }
 
 export const meta: MetaFunction = ({ data, params }) => {
   return {
@@ -58,7 +58,6 @@ export default function Index() {
     transition.state !== "idle" &&
     transition.submission?.formData.get("search");
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
-  let des = "here is information about the text.";
 
   return (
     <>

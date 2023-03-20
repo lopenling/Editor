@@ -1,4 +1,4 @@
-import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
+import { Form, NavLink, useFetcher, useLocation } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 import LopenlingLogo from "~/assets/svg/logo.svg";
 import { useLitteraMethods } from "@assembless/react-littera";
@@ -125,6 +125,7 @@ export default function Header({ user }: any) {
               <div className="flex gap-2 justify-between p-3">
                 <loginFetcher.Form
                   method="post"
+                  id="login"
                   action="/sso/login"
                   className="flex items-center"
                 >
@@ -147,6 +148,7 @@ export default function Header({ user }: any) {
                   // gradientDuoTone="tealToLime"
                   className=" text-green-400 border-2 border-green-300"
                   color=""
+                  id="signup"
                 >
                   <a href={"https://lopenling.org/signup"}>
                     {translation.signup}
@@ -161,7 +163,7 @@ export default function Header({ user }: any) {
   );
 }
 
-function Translation() {
+export function Translation() {
   const methods = useLitteraMethods();
   const changeLanguage: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     switch (e.target.value) {

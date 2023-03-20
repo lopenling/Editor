@@ -76,7 +76,7 @@ export default function ReplyForm({
             {postFetcher.state === "submitting" ? (
               <div>submiting</div>
             ) : postFetcher.state === "loading" ? (
-              <div>✔️</div>
+              <div>post created</div>
             ) : (
               <div>respond</div>
             )}

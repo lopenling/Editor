@@ -11,9 +11,12 @@
     "dev:css": "npm run generate:css -- --watch",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
-    "typecheck": "tsc"
+    "test": "npx cypress run",
+    "cypress-open": "npx cypress open",
+    "pretty": "prettier --write \"./**/*.{js,jsx,tsx,json}\""
   },
   "dependencies": {
+    "@applitools/eyes-cypress": "^3.30.0",
     "@assembless/react-littera": "^2.4.0",
     "@formkit/auto-animate": "^1.0.0-beta.6",
     "@prisma/client": "^4.9.0",
@@ -50,7 +53,8 @@
     "remix-utils": "^6.0.0",
     "tiptap-extension-font-size": "^1.2.0",
     "tiptap-extensions": "^1.35.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vitest": "^0.29.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.19.0",
@@ -60,6 +64,7 @@
     "@types/react-dom": "^18.0.8",
     "autoprefixer": "^10.4.13",
     "concurrently": "^7.6.0",
+    "cypress": "^12.8.1",
     "eslint": "^8.27.0",
     "miniflare": "^2.11.0",
     "npm-run-all": "^4.1.5",

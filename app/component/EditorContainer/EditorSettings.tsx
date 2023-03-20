@@ -23,8 +23,8 @@ function EditorSetting({
   const [isPending, startTransition] = useTransition();
   const changeFontSize = useCallback(
     (value: number) => {
-      startTransition(() => setFontSize(value));
       editor?.chain()?.selectAll()?.setFontSize(value)?.run();
+      startTransition(() => setFontSize(value));
     },
     [editor]
   );

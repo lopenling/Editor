@@ -6,7 +6,7 @@ import { Avatar, Badge, Button } from "flowbite-react";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import shareIcon from "~/assets/svg/icon_share.svg";
-import { SolvedLogo } from "./Reply";
+import tickIcon from "~/assets/svg/icon_tick.svg";
 type PostType = {
   id: number;
   creatorUser: any;
@@ -90,8 +90,8 @@ function Post({
             selectedPost == id && selected ? "#FDFDEA" : "transparent",
           padding: "10px 2px 10px 4px",
         }}
-        ref={postref}
         onClick={() => {
+          ref = { postref };
           handleSelection();
           setSelected(true);
         }}
@@ -102,22 +102,7 @@ function Post({
             <p className="text-base font-medium leading-tight text-gray-900">
               {creatorUser.name}
             </p>
-            {isSolved && (
-              <svg
-                width="14"
-                height="10"
-                viewBox="0 0 14 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M13.707 0.293031C13.8945 0.480558 13.9998 0.734866 13.9998 1.00003C13.9998 1.26519 13.8945 1.5195 13.707 1.70703L5.70704 9.70703C5.51951 9.8945 5.26521 9.99982 5.00004 9.99982C4.73488 9.99982 4.48057 9.8945 4.29304 9.70703L0.293041 5.70703C0.110883 5.51843 0.0100885 5.26583 0.0123669 5.00363C0.0146453 4.74143 0.119814 4.49062 0.305222 4.30521C0.490631 4.1198 0.741443 4.01464 1.00364 4.01236C1.26584 4.01008 1.51844 4.11087 1.70704 4.29303L5.00004 7.58603L12.293 0.293031C12.4806 0.10556 12.7349 0.000244141 13 0.000244141C13.2652 0.000244141 13.5195 0.10556 13.707 0.293031Z"
-                  fill="#046C4E"
-                />
-              </svg>
-            )}
+            {isSolved && <img src={tickIcon} alt="tickIcon" />}
           </div>
           <p className="flex-1 text-right text-sm leading-tight text-gray-500">
             {time}

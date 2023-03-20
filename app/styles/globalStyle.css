@@ -3,7 +3,9 @@
   font-family: "monlam";
   src: url("/app/assets/font/MonlamOuchan2.ttf") format("tff");
 }
-
+:root {
+  --headerHeight: 72px;
+}
 *,
 html {
   margin: 0;
@@ -25,7 +27,7 @@ body > * ::-webkit-scrollbar {
   width: 10px;
 }
 main {
-  height: calc(100vh - 72px);
+  height: calc(100vh - var(--headerHeight));
 }
 /* Track */
 ::-webkit-scrollbar-track {
@@ -35,7 +37,6 @@ main {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #d9d9d9;
-
   width: 10px;
 }
 
@@ -82,6 +83,3 @@ select:focus {
   z-index: 10;
   background-color: white;
 }
-/* #temporaryPost {
-  opacity: 0.3;
-} */
