@@ -21,7 +21,6 @@ function Replies({
 }: RepliesProps) {
   const [replies, setReplies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const postFetcher = useFetcher();
   const postListFetcher = useFetcher();
   useEffect(() => {
     setLoading(true);
@@ -39,18 +38,6 @@ function Replies({
     }
   }, [replyCount, postListFetcher.data]);
 
-  const handleDelete = (id, TopicId) => {
-    postFetcher.submit(
-      {
-        postId: id,
-        topicId: TopicId,
-      },
-      {
-        method: "delete",
-        action: "/api/postReply",
-      }
-    );
-  };
   let postdata = useMemo(
     () =>
       replies
