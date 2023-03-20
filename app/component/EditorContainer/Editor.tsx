@@ -1,15 +1,12 @@
 import { useLoaderData } from "@remix-run/react";
 import { BubbleMenu, EditorContent } from "@tiptap/react";
 import { useState } from "react";
-// import SelectTextOnRender from "~/extension/selectionOnFirstRender";
 import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
 import { useRecoilState } from "recoil";
 import EditorSettings from "./EditorSettings";
-// import applyAnnotation from "~/tiptap-extension/applyMarks";
-import { Button, Dropdown } from "flowbite-react";
-import { DEFAULT_FONT_SIZE, MAX_WIDTH_PAGE } from "~/constants";
-import Loading from "react-loading";
+import { Button, Spinner } from "flowbite-react";
+import { DEFAULT_FONT_SIZE } from "~/constants";
 import { uselitteraTranlation } from "~/locales/translations";
 import { selectedTextOnEditor, selectionRangeState } from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
@@ -50,7 +47,7 @@ function Editor({ content, editor }) {
       <div className=" max-h-80 overflow-y-scroll lg:max-h-full shadow-textEditor">
         {!content || !editor ? (
           <div className="flex justify-center">
-            <Loading color="#111" />
+            <Spinner color="#111" />
           </div>
         ) : (
           <EditorContent

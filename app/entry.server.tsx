@@ -1,7 +1,6 @@
 import type { EntryContext } from "@remix-run/cloudflare";
 import { RemixServer } from "@remix-run/react";
-import { renderToReadableStream, renderToString } from "react-dom/server";
-import isbot from "isbot";
+import { renderToReadableStream } from "react-dom/server";
 const ABORT_DELAY = 10000;
 
 export default async function handleRequest(
@@ -27,9 +26,6 @@ export default async function handleRequest(
     }
   );
 
-  if (isbot(request.headers.get("user-agent"))) {
-    await stream.allReady;
-  }
   responseHeaders.set("Content-Type", "text/html");
 
   return new Response(stream, {

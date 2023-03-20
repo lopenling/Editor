@@ -31,11 +31,11 @@ export let loader: LoaderFunction = async ({ request }) => {
   }
 };
 
-// export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
-//   return {
-//     "Cache-Control": loaderHeaders.get("Cache-Control"),
-//   };
-// }
+export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
+  return {
+    "Cache-Control": loaderHeaders.get("Cache-Control"),
+  };
+}
 
 export const meta: MetaFunction = ({ data, params }) => {
   return {

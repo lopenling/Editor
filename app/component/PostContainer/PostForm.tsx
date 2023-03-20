@@ -1,7 +1,6 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Avatar, Button, Textarea, Toast } from "flowbite-react";
-import React, { useEffect } from "react";
-import Loading from "react-loading";
+import { Button, Textarea } from "flowbite-react";
+import React from "react";
 import ErrorSubmission from "./SubmissionError";
 import { createPortal } from "react-dom";
 import Post from "./Post";
@@ -48,7 +47,7 @@ const PostForm = () => {
         time="now"
         likedBy={[]}
         replyCount={0}
-        id={Math.random()}
+        id={10}
         isSolved={false}
         postContent={createPost.submission.formData.get("body") as string}
         topicId={null}

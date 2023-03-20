@@ -1,15 +1,26 @@
 import { getSession } from "~/services/session.server";
 var CryptoJS = require("crypto-js");
-import randomString from "randomstring";
+
+function randomString(length) {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
+
 async function getNonce() {
   let nonce;
   let session = await getSession();
   if (session.has("sso_nonce")) {
     nonce = session.get("sso_nonce");
   } else {
-    nonce = randomString.generate({
-      length: 32,
-    });
+    nonce = randomString(32);
     console.log(nonce);
     session.set("sso_nonce", nonce);
   }
