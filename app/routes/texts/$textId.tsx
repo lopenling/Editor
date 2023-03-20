@@ -1,9 +1,9 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { getUserSession } from "~/services/session.server";
 import { defer, MetaFunction } from "@remix-run/server-runtime";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import { useLoaderData, useFetcher, Link } from "@remix-run/react";
-import { findPostByTextId, findPostByTextIdDemo } from "~/model/post";
+import { findPostByTextId } from "~/model/post";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
 import { fetchCategoryData } from "~/services/discourseApi";
@@ -35,7 +35,7 @@ import Posts from "~/component/PostContainer/Posts";
 import filterIcon from "~/assets/svg/icon_filter.svg";
 import sortIcon from "~/assets/svg/icon_sort.svg";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
-
+import { useEventSource } from "remix-utils";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const selectedPost = url.searchParams.get("post");
@@ -95,6 +95,14 @@ export default function () {
   const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
   const [, setOpenFilter] = useRecoilState(openFilterState);
   const translation = uselitteraTranlation();
+  const Loaderfetcher = useFetcher();
+  const revalidate = () => {
+    Loaderfetcher.load(window.location.pathname);
+  };
+  let lastMessageId = useEventSource("/posts/subscribe", {
+    event: "newPost",
+  });
+  useEffect(() => revalidate, [lastMessageId]);
   const editor = useEditor(
     {
       extensions: [
@@ -157,6 +165,7 @@ export default function () {
     [content]
   );
 
+  const posts = Loaderfetcher.data?.posts || data.posts;
   return (
     <>
       <main className="container m-auto">
@@ -217,7 +226,7 @@ export default function () {
             {/* used differ at loader for post list to fetch posts as a promise */}
 
             <Suspense fallback={<Skeleton />}>
-              <Await resolve={data.posts}>
+              <Await resolve={posts}>
                 {(posts) => <Posts posts={[...posts]} editor={editor} />}
               </Await>
             </Suspense>

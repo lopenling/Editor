@@ -90,8 +90,8 @@ function Post({
             selectedPost == id && selected ? "#FDFDEA" : "transparent",
           padding: "10px 2px 10px 4px",
         }}
+        ref={postref}
         onClick={() => {
-          ref = { postref };
           handleSelection();
           setSelected(true);
         }}

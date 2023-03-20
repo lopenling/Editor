@@ -5,7 +5,7 @@ import {
 } from "@remix-run/server-runtime";
 import { createThread } from "~/services/discourseApi";
 import { getUserSession } from "~/services/session.server";
-
+import { emitter } from "~/services/emitter.server";
 export const loader: LoaderFunction = () => {
   return redirect("/");
 };
@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
         Obj.type
       );
       const timeEnd = Date.now();
-
+      emitter.emit("newPost", { id: Obj.topic });
       return {
         message: "success",
         timedif: new Date(timeEnd).getTime() - new Date(timeStart).getTime(),
