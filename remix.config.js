@@ -3,7 +3,7 @@ module.exports = {
   serverBuildTarget: "cloudflare-workers",
   server: "./server.js",
   devServerBroadcastDelay: 1000,
-  ignoredRouteFiles: ["**/.*", "**/__tests__/**"],
+  ignoredRouteFiles: ["**/.*", "**/cypress**"],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "build/index.js",
