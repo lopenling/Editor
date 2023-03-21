@@ -206,6 +206,7 @@ export default function () {
               </Dropdown>
               {/* filter button */}
               <button
+                id="filterButton"
                 onClick={() => setOpenFilter((prev) => !prev)}
                 className="flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2"
               >

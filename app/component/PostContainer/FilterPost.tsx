@@ -5,7 +5,12 @@ import Datepicker from "react-tailwindcss-datepicker";
 import crossIcon from "~/assets/svg/icon_cross.svg";
 import { useRecoilState } from "recoil";
 import { filterDataState } from "~/states";
-export default function FilterPost({ close }) {
+
+type FilterProps = {
+  close: () => void;
+};
+
+export default function FilterPost({ close }: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);
   const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
