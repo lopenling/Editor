@@ -230,7 +230,7 @@ function Post({
           <Replies
             postId={id}
             topicId={topicId}
-            isCreator={data?.user?.username === creatorUser.username}
+            isCreator={user?.username === creatorUser.username}
             type={type}
             setReplyCount={setReplyCount}
             replyCount={ReplyCount}
