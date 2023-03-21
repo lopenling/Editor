@@ -92,7 +92,7 @@ export default function Header({ user }: any) {
                   <Dropdown.Item
                     className={user?.admin === "true" ? "" : "hidden"}
                   >
-                    <NavLink preventScrollReset to="/text-upload">
+                    <NavLink preventScrollReset to="/texts/upload">
                       UploadText
                     </NavLink>
                   </Dropdown.Item>

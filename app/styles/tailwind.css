@@ -1741,10 +1741,6 @@ input:checked + .toggle-bg {
   cursor: grab;
 }
 
-.resize {
-  resize: both;
-}
-
 .snap-x {
   scroll-snap-type: x var(--tw-scroll-snap-strictness);
 }

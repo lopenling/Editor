@@ -3,9 +3,7 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 
 function hydrate() {
-  startTransition(() => {
-    hydrateRoot(document, <RemixBrowser />);
-  });
+  hydrateRoot(document, <RemixBrowser />);
 }
 
 if (typeof requestIdleCallback === "function") {

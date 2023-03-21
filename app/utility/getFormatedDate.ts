@@ -13,7 +13,7 @@ const MONTH_NAMES = [
   "December",
 ];
 
-function getFormattedDate(
+export default function getFormattedDate(
   date,
   prefomattedDate: boolean | string = false,
   hideYear = false

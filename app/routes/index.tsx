@@ -117,7 +117,7 @@ export default function Index() {
             {list?.map((list: { id: number; name: string }) => {
               return (
                 <Link
-                  to={"/texts/" + list.id}
+                  to={"/texts/" + list.id + "/posts"}
                   key={"id" + list.id}
                   className="container w-full"
                 >

@@ -1,4 +1,5 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useAsyncValue, useLoaderData } from "@remix-run/react";
+import type { SerializeFrom } from "@remix-run/cloudflare";
 import { Editor } from "@tiptap/react";
 import React, { useState, useEffect } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
@@ -6,7 +7,6 @@ import { Avatar, Badge, Modal, Spinner } from "flowbite-react";
 import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { uselitteraTranlation } from "~/locales/translations";
 import Post from "./Post";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -16,14 +16,14 @@ import {
   postslist,
 } from "~/states";
 type PostPropsType = {
-  posts: any;
   editor: Editor | null;
 };
 
 export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
-function Posts({ posts, editor }: PostPropsType) {
+function Posts({ editor }: PostPropsType) {
+  const posts: any = useAsyncValue();
   const data = useLoaderData();
   const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
   const setPostList = useSetRecoilState(postslist);

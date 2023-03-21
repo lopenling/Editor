@@ -1,4 +1,4 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Button, Textarea } from "flowbite-react";
 import React from "react";
 import ErrorSubmission from "./SubmissionError";
@@ -11,6 +11,8 @@ const PostForm = () => {
   const data = useLoaderData();
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
+  const { user }: { user: any } = useOutletContext();
+
   let isFormEmpty = body.length === 0;
   let isPosting =
     createPost.submission && createPost.submission.formData.get("body") !== "";
@@ -43,7 +45,7 @@ const PostForm = () => {
   if (isPosting) {
     return createPortal(
       <Post
-        creatorUser={data.user}
+        creatorUser={user}
         time="now"
         likedBy={[]}
         replyCount={0}
@@ -73,7 +75,7 @@ const PostForm = () => {
         </p>
       </div>
       <createPost.Form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-        {data.user ? (
+        {user ? (
           <>
             <Textarea
               placeholder="what are your thoughts?"

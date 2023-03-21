@@ -1,5 +1,5 @@
 import { useState, useEffect, memo } from "react";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData, useOutletContext } from "@remix-run/react";
 import { uselitteraTranlation } from "~/locales/translations";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { Avatar, Badge, Button } from "flowbite-react";
@@ -42,18 +42,20 @@ function Post({
   const likeFetcher = useFetcher();
   const data = useLoaderData();
   const translation = uselitteraTranlation();
-  let likedByMe = data.user
-    ? likedBy.some((l) => l.username === data.user.username)
+  const { user }: { user: any } = useOutletContext();
+
+  let likedByMe = user
+    ? likedBy.some((l) => l.username === user.username)
     : false;
   let likedByMeFromFetcher = likeFetcher.data?.some(
-    (l) => l.username === data.user.username
+    (l) => l.username === user.username
   );
   function handleLikeClick() {
     likeFetcher.submit(
       {
         id,
         _action: "likePost",
-        userId: data.user.id,
+        userId: user.id,
       },
       { method: "post", action: "api/like" }
     );
@@ -77,7 +79,7 @@ function Post({
 
   function shareHandler(postId: number) {
     if (postId) {
-      const url = window?.location.href + "?post=" + postId;
+      const url = window?.location.href.split("?")[0] + "?post=" + postId;
       navigator.clipboard.writeText(url);
       alert("share url has been copied on clipboard");
     }
@@ -193,7 +195,7 @@ function Post({
                   </button>
                 </div>
               </div>
-              {data.user && (
+              {user && (
                 <div
                   onClick={() => setOpenReply((prev) => !prev)}
                   className="flex items-start justify-start space-x-1.5"

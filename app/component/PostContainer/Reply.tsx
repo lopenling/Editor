@@ -1,3 +1,4 @@
+import { useOutletContext } from "@remix-run/react";
 import { useFetcher, useLoaderData } from "@remix-run/react/dist/components";
 import { Button } from "flowbite-react";
 import { timeAgo } from "~/utility/getFormatedDate";
@@ -13,9 +14,9 @@ type ReplyPropType = {
 function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
   const replyLikeFetcher = useFetcher();
   const approvedFetcher = useFetcher();
-  const data = useLoaderData();
-  const likedByMe = data.user
-    ? replyList?.likedBy?.some((d) => d.username == data.user.username)
+  const { user }: { user: any } = useOutletContext();
+  const likedByMe = user
+    ? replyList?.likedBy?.some((d) => d.username == user.username)
     : false;
   const solved = replyList?.isAproved;
   const like_Count = replyList?.likedBy?.length || 0;
@@ -60,7 +61,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
       {
         _action: "likeReply",
         post_id: postId,
-        likedBy: data?.user?.id,
+        likedBy: user?.id,
         id: reply?.id,
         create: replyList ? "update" : "create",
       },
@@ -93,7 +94,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
       ></p>
       <div className="flex justify-between">
         <button
-          disabled={!!replyLikeFetcher.submission || !data.user}
+          disabled={!!replyLikeFetcher.submission || !user}
           onClick={handleLikeReply}
           className="flex cursor-pointer items-center"
         >
