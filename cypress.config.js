@@ -1,6 +1,9 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+  component: {
+    devServer: "localhost:8787",
+  },
   e2e: {
     setupNodeEvents: (on, config) => {
       const port = process.env.PORT ?? "8787";
