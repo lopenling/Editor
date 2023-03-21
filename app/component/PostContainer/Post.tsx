@@ -237,7 +237,7 @@ function Post({
           />
         </div>
       )}
-      <hr className=" my-5" />
+      <hr className="my-5" />
     </>
   );
 }
