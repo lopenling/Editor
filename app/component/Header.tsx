@@ -57,7 +57,6 @@ export default function Header({ user }: any) {
           } else {
             brandRef.current.innerHTML = original;
           }
-
           scroll = window.scrollY;
         }, 10);
       };
