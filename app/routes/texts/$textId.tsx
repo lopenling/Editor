@@ -5,9 +5,9 @@ import type { LoaderFunction } from "@remix-run/server-runtime";
 import { useLoaderData, useFetcher, Link, Outlet } from "@remix-run/react";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
-import { selectedTextOnEditor, selectionRangeState } from "~/states";
+import { selectedTextOnEditor, selectionRangeState, textName } from "~/states";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
@@ -19,12 +19,12 @@ import { FontSize } from "~/tiptap-extension/fontSize";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
+import Header from "~/component/Header";
 export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
   const text = await findTextByTextId(textId, false);
   if (!textId) throw new Error("not valid textId");
-
   return json({ user, text: text });
 };
 export function ErrorBoundary({ error }) {
@@ -49,7 +49,7 @@ export function links() {
 }
 export default function () {
   const data = useLoaderData();
-
+  const textNameSetter = useSetRecoilState(textName);
   if (data.text === null)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
@@ -61,14 +61,15 @@ export default function () {
     );
   const textFetcher = useFetcher();
   React.useEffect(() => {
+    textNameSetter(data.text?.name);
     if (textFetcher.type === "init")
       textFetcher.load(`/api/text?textId=${data.text?.id}`);
   }, []);
   let content = React.useMemo(() => {
     return textFetcher.data?.content.replace(/\n/g, "<br>");
   }, [textFetcher.data]);
-  const [, setSelectionRange] = useRecoilState(selectionRangeState);
-  const [, setSelection] = useRecoilState(selectedTextOnEditor);
+  const setSelectionRange = useSetRecoilState(selectionRangeState);
+  const setSelection = useSetRecoilState(selectedTextOnEditor);
 
   const editor = useEditor(
     {
@@ -133,16 +134,12 @@ export default function () {
   );
 
   return (
-    <>
-      <main className="container m-auto">
-        <div
-          className="mt-5 mx-auto flex w-full flex-col gap-5 lg:flex-row  container "
-          style={{ maxWidth: MAX_WIDTH_PAGE }}
-        >
-          <Editor content={content} editor={editor} />
-          <Outlet context={{ user: data.user, editor }} />
-        </div>
-      </main>
-    </>
+    <main
+      className="pt-5 relative mx-auto flex w-full flex-col gap-5 lg:flex-row  container "
+      style={{ maxWidth: MAX_WIDTH_PAGE }}
+    >
+      <Editor content={content} editor={editor} />
+      <Outlet context={{ user: data.user, editor, text: data.text }} />
+    </main>
   );
 }

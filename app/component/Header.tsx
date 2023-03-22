@@ -1,34 +1,67 @@
 import { Form, NavLink, useFetcher, useLocation } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 import LopenlingLogo from "~/assets/svg/logo.svg";
+import logoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
-import { useEffect } from "react";
-import { uselitteraTranlation } from "~/locales/translations";
+import { useEffect, useMemo, useRef } from "react";
+import uselitteraTranlation from "~/locales/useLitteraTranslations";
+import { useRecoilValue } from "recoil";
+import { textName } from "~/states";
+
+function Logo() {
+  return (
+    <>
+      <img
+        src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
+        alt="logo"
+        className="hidden md:block object-contain"
+        style={{ maxHeight: 37 }}
+      />
+    </>
+  );
+}
+
 export default function Header({ user }: any) {
   const loginFetcher = useFetcher();
   const translation = uselitteraTranlation();
+  const brandRef = useRef();
   const redirectTo = useLocation().pathname;
   let timeout;
+  let text_name = useRecoilValue(textName);
   let scroll = 0;
+  let logoWithTextName = useMemo(
+    () => `
+    <div class="flex items-start gap-1">
+      <img
+        src=${logoOnly}
+        alt="logo"
+             class="hidden md:block object-contain"
+        style="max-height: 37px"
+      />
+      <h1 class="text-2xl text-light">${text_name}</h1>
+    </div>`,
+    [text_name]
+  );
   useEffect(() => {
-    if (window)
+    let original = brandRef.current.innerHTML;
+
+    if (window && text_name)
       window.onscroll = () => {
         if (timeout) {
           clearTimeout(timeout);
         }
-
         timeout = setTimeout(() => {
-          if (scroll >= window.scrollY && window.scrollY > 10) {
-            document.getElementById("header").classList.add("sticky");
+          if (window.scrollY > 10) {
+            brandRef.current.innerHTML = logoWithTextName;
           } else {
-            document.getElementById("header").classList.remove("sticky");
+            brandRef.current.innerHTML = original;
           }
 
           scroll = window.scrollY;
         }, 10);
       };
-  }, []);
+  }, [text_name]);
   return (
     <div
       id="header"
@@ -44,18 +77,9 @@ export default function Header({ user }: any) {
         }}
       >
         <Navbar.Brand to={"/"} as={NavLink} className="flex items-center">
-          <img
-            src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
-            alt="logo"
-            className="hidden md:block object-contain"
-            style={{ maxHeight: 37 }}
-          />
-          <img
-            src={LopenlingLogo}
-            alt="logo"
-            className="block md:hidden object-contain"
-            style={{ maxHeight: 37 }}
-          />
+          <div ref={brandRef}>
+            <Logo />
+          </div>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>

@@ -7,14 +7,13 @@ import filterIcon from "~/assets/svg/icon_filter.svg";
 import sortIcon from "~/assets/svg/icon_sort.svg";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
 import { Dropdown } from "flowbite-react";
-import { uselitteraTranlation } from "~/locales/translations";
-import { useRecoilState } from "recoil";
+import uselitteraTranlation from "~/locales/useLitteraTranslations";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { openFilterState, showLatest } from "~/states";
 import { findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer } from "@remix-run/cloudflare";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
-import { getUserSession } from "~/services/session.server";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const selectedPost = url.searchParams.get("post");
@@ -27,13 +26,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function Post() {
   const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
-  const [, setOpenFilter] = useRecoilState(openFilterState);
+  const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
   const data = useLoaderData();
   const posts = data.posts;
   const { editor }: { editor: Editor } = useOutletContext();
   return (
-    <div className=" relative sm:w-full lg:w-1/3">
+    <div className=" sticky top-16 sm:w-full lg:w-1/3 max-h-[80vh]">
       <div className="hidden w-full items-center justify-end md:inline-flex gap-2">
         {/* sort button */}
         <Dropdown

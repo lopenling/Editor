@@ -3,11 +3,11 @@ import { BubbleMenu, EditorContent } from "@tiptap/react";
 import { useState } from "react";
 import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import EditorSettings from "./EditorSettings";
 import { Button, Spinner } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
-import { uselitteraTranlation } from "~/locales/translations";
+import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { selectedTextOnEditor, selectionRangeState } from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
 
@@ -16,7 +16,7 @@ function Editor({ content, editor }) {
   const [showEditorSettings, setShowEditorSettings] = useState(false);
   const [showFindText, setShowFindText] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
-  const [, setSelectionRange] = useRecoilState(selectionRangeState);
+  const setSelectionRange = useSetRecoilState(selectionRangeState);
   const [selection] = useRecoilState(selectedTextOnEditor);
 
   const handleBubbleClick = (type: string) => {
@@ -30,10 +30,7 @@ function Editor({ content, editor }) {
   };
   const translation = uselitteraTranlation();
   return (
-    <div
-      className="relative flex-1 textEditorContainer"
-      style={{ maxHeight: "75vh" }}
-    >
+    <div className="relative flex-1 textEditorContainer">
       <EditorSettings
         editor={editor}
         showFindText={showFindText}

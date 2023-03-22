@@ -8,11 +8,10 @@ import { selectionRangeState } from "~/states";
 import { useRecoilState } from "recoil";
 const PostForm = () => {
   const [postInfo, setPostInfo] = useRecoilState(selectionRangeState);
-  const data = useLoaderData();
+  const data = useOutletContext();
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
   const { user }: { user: any } = useOutletContext();
-
   let isFormEmpty = body.length === 0;
   let isPosting =
     createPost.submission && createPost.submission.formData.get("body") !== "";

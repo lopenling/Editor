@@ -27,7 +27,6 @@ body > * ::-webkit-scrollbar {
   width: 10px;
 }
 main {
-  height: calc(100vh - var(--headerHeight));
 }
 /* Track */
 ::-webkit-scrollbar-track {

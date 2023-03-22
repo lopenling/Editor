@@ -16,9 +16,7 @@ for (const key in en) {
   };
 }
 
-export function uselitteraTranlation() {
+export default function uselitteraTranlation() {
   const translation = useLittera(translations);
   return translation;
 }
-
-export default translations;

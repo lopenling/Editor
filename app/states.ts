@@ -1,4 +1,10 @@
 import { atom, selector } from "recoil";
+//textName
+
+export const textName = atom({
+  key: "textName",
+  default: null,
+});
 
 //posts
 

@@ -7,7 +7,7 @@ import { Avatar, Badge, Modal, Spinner } from "flowbite-react";
 import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { uselitteraTranlation } from "~/locales/translations";
+import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Post from "./Post";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -57,7 +57,7 @@ function Posts({ editor }: PostPropsType) {
         </Modal>
       )}
       <div
-        className="scroll-container flex flex-col overflow-x-hidden overflow-y-auto relative pr-2"
+        className="scroll-container flex flex-col overflow-x-hidden overflow-y-scroll relative pr-2"
         style={{
           height: "80vh",
         }}

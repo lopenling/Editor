@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from "react";
 import { useFetcher, useLoaderData, useOutletContext } from "@remix-run/react";
-import { uselitteraTranlation } from "~/locales/translations";
+import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { Avatar, Badge, Button } from "flowbite-react";
 import Replies from "./Replies";

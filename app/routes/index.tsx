@@ -7,7 +7,7 @@ import { json } from "@remix-run/cloudflare";
 import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { uselitteraTranlation } from "~/locales/translations";
+import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import SearchIcon from "~/assets/svg/icon_search.svg";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
