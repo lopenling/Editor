@@ -21,7 +21,6 @@ export default async function handleRequest(
         didError = true;
         console.error(error);
       },
-      // signal: AbortSignal.timeout(ABORT_DELAY),
     }
   );
 

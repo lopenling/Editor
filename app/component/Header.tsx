@@ -45,7 +45,6 @@ export default function Header({ user }: any) {
   );
   useEffect(() => {
     let original = brandRef.current.innerHTML;
-
     if (window && text_name)
       window.onscroll = () => {
         if (timeout) {
@@ -90,7 +89,6 @@ export default function Header({ user }: any) {
             <div className="flex items-center">
               <Translation />
             </div>
-
             {user ? (
               <div className="flex md:order-2">
                 <Dropdown

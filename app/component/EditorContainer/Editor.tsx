@@ -3,12 +3,16 @@ import { BubbleMenu, EditorContent } from "@tiptap/react";
 import { useState } from "react";
 import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import EditorSettings from "./EditorSettings";
 import { Button, Spinner } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
-import { selectedTextOnEditor, selectionRangeState } from "~/states";
+import {
+  selectedPost as selectedPostState,
+  selectedTextOnEditor,
+  selectionRangeState,
+} from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
 
 function Editor({ content, editor }) {
@@ -18,6 +22,8 @@ function Editor({ content, editor }) {
   const [showFontSize, setShowFontSize] = useState(false);
   const setSelectionRange = useSetRecoilState(selectionRangeState);
   const [selection] = useRecoilState(selectedTextOnEditor);
+  let user = data.user;
+  const selectedPost = useRecoilValue(selectedPostState);
 
   const handleBubbleClick = (type: string) => {
     if (selection.start)
@@ -58,31 +64,33 @@ function Editor({ content, editor }) {
       </div>
       {editor && (
         <BubbleMenu
-          shouldShow={(editor) => {
-            let length = editor.state.selection.content().size;
-            return length > 5 && length < 244;
+          shouldShow={({ state }) => {
+            let length = state.selection.content().size;
+            let lengthCheck = length > 5 && length < 244;
+            return lengthCheck;
           }}
           editor={editor}
-          tippyOptions={{ duration: 800, zIndex: 1 }}
         >
-          <Button.Group className="rounded ">
-            <Button
-              size="sm"
-              color=""
-              className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500  border-gray-300 border-2"
-              onClick={() => handleBubbleClick("comment")}
-            >
-              {translation.comment}
-            </Button>
-            <Button
-              size="sm"
-              color=""
-              className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 border-gray-300 border-2"
-              onClick={() => handleBubbleClick("question")}
-            >
-              {translation.question}
-            </Button>
-          </Button.Group>
+          {!selectedPost?.id && (
+            <Button.Group className="rounded ">
+              <Button
+                size="sm"
+                color=""
+                className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500  border-gray-300 border-2"
+                onClick={() => handleBubbleClick("comment")}
+              >
+                {translation.comment}
+              </Button>
+              <Button
+                size="sm"
+                color=""
+                className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 border-gray-300 border-2"
+                onClick={() => handleBubbleClick("question")}
+              >
+                {translation.question}
+              </Button>
+            </Button.Group>
+          )}
         </BubbleMenu>
       )}
       <div

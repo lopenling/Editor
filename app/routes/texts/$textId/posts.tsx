@@ -1,7 +1,12 @@
-import { Suspense } from "react";
+import { startTransition, Suspense, useEffect } from "react";
 import PostForm from "~/component/PostContainer/PostForm";
 import Skeleton from "~/component/PostContainer/Skeleton";
-import { Await, useLoaderData, useOutletContext } from "@remix-run/react";
+import {
+  Await,
+  Outlet,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
 import Posts from "~/component/PostContainer/Posts";
 import filterIcon from "~/assets/svg/icon_filter.svg";
 import sortIcon from "~/assets/svg/icon_sort.svg";
@@ -10,18 +15,26 @@ import { Dropdown } from "flowbite-react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { openFilterState, showLatest } from "~/states";
-import { findPostByTextId } from "~/model/post";
+import { findPostByPostId, findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer } from "@remix-run/cloudflare";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
+import { ClientOnly } from "remix-utils";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
-  const selectedPost = url.searchParams.get("post");
+  const postId = url.searchParams.get("post");
+
+  const selectedPost = postId ? await findPostByPostId(postId) : null;
+
   const textId = parseInt(params.textId);
   const CategoryData = await fetchCategoryData();
   const topicList = CategoryData.topic_list.topics;
   const posts = findPostByTextId(textId, topicList);
+
   return defer({ posts, selectedPost, text: { id: textId } });
+};
+export const ErrorBoundary = ({ error }) => {
+  return <div>{error.message}</div>;
 };
 
 export default function Post() {
@@ -31,6 +44,7 @@ export default function Post() {
   const data = useLoaderData();
   const posts = data.posts;
   const { editor }: { editor: Editor } = useOutletContext();
+
   return (
     <div className=" sticky top-16 sm:w-full lg:w-1/3 max-h-[80vh]">
       <div className="hidden w-full items-center justify-end md:inline-flex gap-2">
@@ -84,9 +98,13 @@ export default function Post() {
 
       {/* used differ at loader for post list to fetch posts as a promise */}
       <Suspense fallback={<Skeleton />}>
-        <Await resolve={posts} errorElement={<p>Error loading posts!</p>}>
-          <Posts editor={editor} />
-        </Await>
+        <ClientOnly fallback={<Skeleton />}>
+          {() => (
+            <Await resolve={posts} errorElement={<p>Error loading posts!</p>}>
+              <Posts editor={editor} />
+            </Await>
+          )}
+        </ClientOnly>
       </Suspense>
     </div>
   );

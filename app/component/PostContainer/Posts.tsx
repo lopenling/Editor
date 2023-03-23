@@ -1,9 +1,8 @@
 import { useAsyncValue, useLoaderData } from "@remix-run/react";
-import type { SerializeFrom } from "@remix-run/cloudflare";
 import { Editor } from "@tiptap/react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
-import { Avatar, Badge, Modal, Spinner } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import FilterPost from "./FilterPost";
 import ModalStyle from "react-responsive-modal/styles.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -14,6 +13,7 @@ import {
   filteredPost as filteredValue,
   openFilterState,
   postslist,
+  selectedPost as selectedPostState,
 } from "~/states";
 type PostPropsType = {
   editor: Editor | null;
@@ -23,20 +23,24 @@ export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
 function Posts({ editor }: PostPropsType) {
-  const posts: any = useAsyncValue();
   const data = useLoaderData();
+  const posts: any = useAsyncValue();
   const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
   const setPostList = useSetRecoilState(postslist);
-  const [selectedPost, setSelectedPost] = useState(data.selectedPost);
+  const [selectedPost, setSelectedPost] = useRecoilState(selectedPostState);
+
   if (!posts && !posts.length) return null;
   useEffect(() => {
     setPostList(posts);
   }, [posts]);
+  useEffect(() => {
+    setSelectedPost(data.selectedPost);
+  }, [data.selectedPost]);
 
   const filteredPost = useRecoilValue(filteredValue);
   function handleSelectPost({ start, end, id }) {
+    setSelectedPost({ start, end, id });
     editor?.chain().focus().setTextSelection({ from: start, to: end }).run();
-    setSelectedPost(id);
   }
 
   const closeFilter = () => setOpenFilter((prev) => !prev);
@@ -76,7 +80,6 @@ function Posts({ editor }: PostPropsType) {
                 likedBy={post.likedBy}
                 topicId={post.topic_id}
                 handleSelection={() => handleSelectPost(post)}
-                selectedPost={selectedPost!}
                 type={post.type}
                 replyCount={post?.replyCount}
                 isSolved={post?.isSolved}

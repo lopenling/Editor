@@ -5,9 +5,14 @@ import type { LoaderFunction } from "@remix-run/server-runtime";
 import { useLoaderData, useFetcher, Link, Outlet } from "@remix-run/react";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
-import { selectedTextOnEditor, selectionRangeState, textName } from "~/states";
+import {
+  selectedPost as selectedPostState,
+  selectedTextOnEditor,
+  selectionRangeState,
+  textName,
+} from "~/states";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
@@ -19,13 +24,17 @@ import { FontSize } from "~/tiptap-extension/fontSize";
 import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
-import Header from "~/component/Header";
+import { findPostByPostId } from "~/model/post";
 export const loader: LoaderFunction = async ({ request, params }) => {
+  const url = new URL(request.url);
+  const postId = url.searchParams.get("post");
+
+  const selectedPost = postId ? await findPostByPostId(postId) : null;
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
   const text = await findTextByTextId(textId, false);
   if (!textId) throw new Error("not valid textId");
-  return json({ user, text: text });
+  return json({ user, text: text, selectedPost });
 };
 export function ErrorBoundary({ error }) {
   console.error(error);
@@ -128,6 +137,13 @@ export default function () {
           end: to,
           text: editor?.state.doc.textBetween(from, to, ""),
         });
+      },
+      onCreate: ({ editor }) => {
+        if (data.selectedPost) {
+          let from = data.selectedPost.start;
+          let to = data.selectedPost.end;
+          editor?.chain().focus().setTextSelection({ from, to }).run();
+        }
       },
     },
     [content]

@@ -13,6 +13,15 @@ export const postslist = atom({
   default: [],
 });
 
+export const selectedPost = atom({
+  key: "selectedPost",
+  default: {
+    id: null,
+    start: null,
+    end: null,
+  },
+});
+
 //filter related states
 export const openFilterState = atom({
   key: "openFilter", // unique ID (with respect to other atoms/selectors)

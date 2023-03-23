@@ -1,5 +1,9 @@
 import { useState, useEffect, memo } from "react";
-import { useFetcher, useLoaderData, useOutletContext } from "@remix-run/react";
+import {
+  useFetcher,
+  useSearchParams,
+  useOutletContext,
+} from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { Avatar, Badge, Button } from "flowbite-react";
@@ -7,6 +11,8 @@ import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import shareIcon from "~/assets/svg/icon_share.svg";
 import tickIcon from "~/assets/svg/icon_tick.svg";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedPost as selectedPostState } from "~/states";
 type PostType = {
   id: number;
   creatorUser: any;
@@ -14,12 +20,11 @@ type PostType = {
   postContent: string;
   likedBy: any;
   topicId: number;
-  handleSelection: () => void;
-  selectedPost: string;
   type: "question" | "comment";
   replyCount: any;
   isSolved: boolean;
   isOptimistic: boolean;
+  handleSelection: any;
 };
 
 function Post({
@@ -29,21 +34,20 @@ function Post({
   postContent,
   likedBy,
   topicId,
-  handleSelection,
-  selectedPost,
   type,
   replyCount,
   isSolved,
   isOptimistic = false,
+  handleSelection,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [ReplyCount, setReplyCount] = useState(replyCount - 1);
   const likeFetcher = useFetcher();
-  const data = useLoaderData();
   const translation = uselitteraTranlation();
   const { user }: { user: any } = useOutletContext();
-
+  const [selectedPost, setSelectedPost] = useRecoilState(selectedPostState);
+  const isSelected = selectedPost?.id === id;
   let likedByMe = user
     ? likedBy.some((l) => l.username === user.username)
     : false;
@@ -60,12 +64,12 @@ function Post({
       { method: "post", action: "api/like" }
     );
   }
-  const [selected, setSelected] = useState(() => (selectedPost ? true : false));
+
   const updateReplyCount = () => {
     setReplyCount((p) => p + 1);
   };
   useEffect(() => {
-    if (id === selectedPost && postref.current && selected) {
+    if (isSelected && postref.current) {
       postref.current?.scrollIntoView({
         behavior: "smooth",
         block: "center",
@@ -74,7 +78,9 @@ function Post({
     }
   }, []);
   const postref = useDetectClickOutside({
-    onTriggered: () => setSelected(false),
+    onTriggered: () => {
+      setSelectedPost({ id: null, start: null, end: null });
+    },
   });
 
   function shareHandler(postId: number) {
@@ -88,14 +94,12 @@ function Post({
     <>
       <div
         style={{
-          backgroundColor:
-            selectedPost == id && selected ? "#FDFDEA" : "transparent",
+          backgroundColor: isSelected ? "#FDFDEA" : "transparent",
           padding: "10px 2px 10px 4px",
         }}
         ref={postref}
         onClick={() => {
           handleSelection();
-          setSelected(true);
         }}
       >
         <div className="inline-flex w-full items-center justify-start">

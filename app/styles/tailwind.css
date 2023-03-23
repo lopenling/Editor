@@ -1076,6 +1076,10 @@ input:checked + .toggle-bg {
   right: -0.5rem;
 }
 
+.top-16 {
+  top: 4rem;
+}
+
 .-bottom-1 {
   bottom: -0.25rem;
 }
@@ -1114,18 +1118,6 @@ input:checked + .toggle-bg {
 
 .-left-3 {
   left: -0.75rem;
-}
-
-.top-24 {
-  top: 6rem;
-}
-
-.top-12 {
-  top: 3rem;
-}
-
-.top-16 {
-  top: 4rem;
 }
 
 .z-20 {
@@ -1501,10 +1493,6 @@ input:checked + .toggle-bg {
   max-height: 80vh;
 }
 
-.max-h-\[30px\] {
-  max-height: 30px;
-}
-
 .min-h-\[285px\] {
   min-height: 285px;
 }
@@ -1843,6 +1831,10 @@ input:checked + .toggle-bg {
   gap: 2rem;
 }
 
+.gap-1 {
+  gap: 0.25rem;
+}
+
 .gap-4 {
   gap: 1rem;
 }
@@ -1857,10 +1849,6 @@ input:checked + .toggle-bg {
 
 .gap-5 {
   gap: 1.25rem;
-}
-
-.gap-1 {
-  gap: 0.25rem;
 }
 
 .gap-y-0\.5 {
@@ -2007,10 +1995,6 @@ input:checked + .toggle-bg {
 
 .overflow-hidden {
   overflow: hidden;
-}
-
-.overflow-scroll {
-  overflow: scroll;
 }
 
 .overflow-x-auto {
@@ -3277,6 +3261,10 @@ input:checked + .toggle-bg {
   padding-left: 1.25rem;
 }
 
+.pt-5 {
+  padding-top: 1.25rem;
+}
+
 .pl-0 {
   padding-left: 0px;
 }
@@ -3313,10 +3301,6 @@ input:checked + .toggle-bg {
   padding-left: 0.5rem;
 }
 
-.pt-5 {
-  padding-top: 1.25rem;
-}
-
 .text-left {
   text-align: left;
 }
@@ -3348,14 +3332,14 @@ input:checked + .toggle-bg {
   line-height: 1;
 }
 
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
-
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .text-4xl {

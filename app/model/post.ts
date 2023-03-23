@@ -1,8 +1,6 @@
 // create post
 
 import { db } from "~/db.server";
-import { getposts as getPostsDiscourse } from "~/services/discourseApi";
-import { findReplyByPostId } from "./reply";
 
 export async function createPost(
   id: string,
@@ -84,7 +82,19 @@ export async function findPostByTextId(textId: number, topicList = []) {
     console.log(e.message);
   }
 }
-
+export async function findPostByPostId(id: string) {
+  let post = await db.post.findFirst({
+    where: {
+      id,
+    },
+    select: {
+      start: true,
+      end: true,
+      id: true,
+    },
+  });
+  return post;
+}
 export async function findPostByUserLiked(id: string, userId: string) {
   try {
     let f = await db.post.findFirst({

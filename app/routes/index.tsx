@@ -14,7 +14,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   if (searchText === null) return null;
   if (searchText === "") return json([]);
   let headers = {
-    "cache-control": "max-age=60, s-maxage=60480",
+    "Cache-Control": "max-age=60, s-maxage=60480",
   };
   let textList = await searchTextWithName(searchText);
   try {

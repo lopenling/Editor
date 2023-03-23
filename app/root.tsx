@@ -11,14 +11,12 @@ import {
   useTransition,
 } from "@remix-run/react";
 import { Spinner } from "flowbite-react";
-import React from "react";
 import ErrorPage from "./component/ErrorPage";
 import Header from "./component/Header";
 import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
-import { findUserByUsername } from "./model/user";
 import { RecoilRoot } from "recoil";
 
 export const meta: MetaFunction = () => ({
@@ -43,40 +41,6 @@ export function links() {
     { rel: "stylesheet", href: tailwindStyle, as: "style" },
     { rel: "stylesheet", href: globalStyle, as: "style" },
   ];
-}
-
-function Document({ children }: { children: any }) {
-  const transition = useTransition();
-  const loaderData = useLoaderData();
-  let routeChanged =
-    transition.state === "loading" &&
-    transition.location.pathname.includes("/texts") &&
-    !transition.location.state;
-  const header = React.useMemo(
-    () => <Header user={loaderData.user} />,
-    [loaderData.user]
-  );
-
-  return (
-    <html>
-      <head>
-        <Meta />
-        <Links />
-      </head>
-
-      <body>
-        <RecoilRoot>
-          <LitteraProvider locales={["en_US", "bo_TI"]}>
-            {header}
-            {routeChanged ? <Loading /> : children}
-            <ScrollRestoration getKey={(location) => location.pathname} />
-            <Scripts />
-            <LiveReload />
-          </LitteraProvider>
-        </RecoilRoot>
-      </body>
-    </html>
-  );
 }
 
 function Loading() {
@@ -114,12 +78,32 @@ export function ErrorBoundary({ error }: { error: Error }) {
 }
 
 function App() {
+  const data = useLoaderData();
+  const transition = useTransition();
+  let routeChanged =
+    transition.state === "loading" &&
+    transition.location.pathname.includes("/texts") &&
+    !transition.location.state;
+
   return (
-    <>
-      <Document>
-        <Outlet />
-      </Document>
-    </>
+    <html>
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <RecoilRoot>
+          <LitteraProvider locales={["en_US", "bo_TI"]}>
+            <Header user={data.user} />
+            {routeChanged ? <Loading /> : <Outlet />}
+          </LitteraProvider>
+        </RecoilRoot>
+        <ScrollRestoration getKey={(location) => location.pathname} />
+
+        <LiveReload />
+        <Scripts />
+      </body>
+    </html>
   );
 }
 export default App;
