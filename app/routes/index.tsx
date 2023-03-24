@@ -120,6 +120,7 @@ export default function Index() {
                   to={"/texts/" + list.id + "/posts"}
                   key={"id" + list.id}
                   className="container w-full"
+                  prefetch="render"
                 >
                   <Card>
                     <h5 className="text-2xl tracking-tight text-gray-900 dark:text-white">

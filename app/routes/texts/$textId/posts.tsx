@@ -98,13 +98,11 @@ export default function Post() {
 
       {/* used differ at loader for post list to fetch posts as a promise */}
       <Suspense fallback={<Skeleton />}>
-        <ClientOnly fallback={<Skeleton />}>
-          {() => (
-            <Await resolve={posts} errorElement={<p>Error loading posts!</p>}>
-              <Posts editor={editor} />
-            </Await>
-          )}
-        </ClientOnly>
+        <Await resolve={posts} errorElement={<p>Error loading posts!</p>}>
+          {(posts) => {
+            return <Posts posts={posts} editor={editor} />;
+          }}
+        </Await>
       </Suspense>
     </div>
   );

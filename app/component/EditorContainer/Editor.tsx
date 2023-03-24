@@ -14,6 +14,7 @@ import {
   selectionRangeState,
 } from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
+import Skeleton from "../PostContainer/Skeleton";
 
 function Editor({ content, editor }) {
   const data = useLoaderData();
@@ -22,7 +23,6 @@ function Editor({ content, editor }) {
   const [showFontSize, setShowFontSize] = useState(false);
   const setSelectionRange = useSetRecoilState(selectionRangeState);
   const [selection] = useRecoilState(selectedTextOnEditor);
-  let user = data.user;
   const selectedPost = useRecoilValue(selectedPostState);
 
   const handleBubbleClick = (type: string) => {
@@ -49,8 +49,8 @@ function Editor({ content, editor }) {
       </h1>
       <div className=" max-h-80 overflow-y-scroll lg:max-h-full shadow-textEditor">
         {!content || !editor ? (
-          <div className="flex justify-center">
-            <Spinner color="#111" />
+          <div className="flex justify-center h-[400px] w-full animate-pulse">
+            <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>
           </div>
         ) : (
           <EditorContent

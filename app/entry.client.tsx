@@ -1,14 +1,8 @@
 import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 
 function hydrate() {
-  hydrateRoot(
-    document,
-    <Suspense fallback={<div>loading</div>}>
-      <RemixBrowser />
-    </Suspense>
-  );
+  hydrateRoot(document, <RemixBrowser />);
 }
 
 if (typeof requestIdleCallback === "function") {

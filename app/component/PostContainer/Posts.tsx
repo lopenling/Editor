@@ -17,14 +17,14 @@ import {
 } from "~/states";
 type PostPropsType = {
   editor: Editor | null;
+  posts: any;
 };
 
 export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
-function Posts({ editor }: PostPropsType) {
+function Posts({ editor, posts }: PostPropsType) {
   const data = useLoaderData();
-  const posts: any = useAsyncValue();
   const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
   const setPostList = useSetRecoilState(postslist);
   const [selectedPost, setSelectedPost] = useRecoilState(selectedPostState);
