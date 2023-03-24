@@ -4,32 +4,24 @@ import LopenlingLogo from "~/assets/svg/logo.svg";
 import logoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { MAX_WIDTH_PAGE } from "~/constants";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilValue } from "recoil";
 import { textName } from "~/states";
 
-function Logo() {
-  return (
-    <>
-      <img
-        src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
+const Logo = `<img src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
         alt="logo"
         className="hidden md:block object-contain"
-        style={{ maxHeight: 37 }}
-      />
-    </>
-  );
-}
+        style="max-height:37px"
+  /> `;
 
 export default function Header({ user }: any) {
   const loginFetcher = useFetcher();
   const translation = uselitteraTranlation();
-  const brandRef = useRef();
   const redirectTo = useLocation().pathname;
+  const [headerLogo, setHeaderLogo] = useState(Logo);
   let timeout;
   let text_name = useRecoilValue(textName);
-  let scroll = 0;
   let logoWithTextName = useMemo(
     () => `
     <div class="flex items-start gap-1">
@@ -44,22 +36,23 @@ export default function Header({ user }: any) {
     [text_name]
   );
   useEffect(() => {
-    let original = brandRef.current.innerHTML;
-    if (window && text_name)
-      window.onscroll = () => {
+    if (window) {
+      const scrollEvent = () => {
         if (timeout) {
           clearTimeout(timeout);
         }
         timeout = setTimeout(() => {
-          if (window.scrollY > 10) {
-            brandRef.current.innerHTML = logoWithTextName;
+          if (window.scrollY > 10 && redirectTo.includes("texts")) {
+            setHeaderLogo(logoWithTextName);
           } else {
-            brandRef.current.innerHTML = original;
+            setHeaderLogo(Logo);
           }
-          scroll = window.scrollY;
         }, 10);
       };
-  }, [text_name]);
+      window.addEventListener("scroll", scrollEvent);
+      return () => window.removeEventListener("scroll", scrollEvent);
+    }
+  }, [text_name, redirectTo]);
   return (
     <div
       id="header"
@@ -67,7 +60,7 @@ export default function Header({ user }: any) {
     >
       <Navbar
         fluid={false}
-        className="mx-auto my-0 flex items-center"
+        className="mx-auto my-0 flex items-center "
         style={{
           minHeight: 56,
           padding: 0,
@@ -75,9 +68,7 @@ export default function Header({ user }: any) {
         }}
       >
         <Navbar.Brand to={"/"} as={NavLink} className="flex items-center">
-          <div ref={brandRef}>
-            <Logo />
-          </div>
+          <div dangerouslySetInnerHTML={{ __html: headerLogo }}></div>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>

@@ -1,6 +1,6 @@
 import { Link, Form, useSearchParams } from "@remix-run/react";
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
-
+import { useEffect } from "react";
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Footer";
 import { json } from "@remix-run/cloudflare";
@@ -9,6 +9,8 @@ import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import SearchIcon from "~/assets/svg/icon_search.svg";
+import { useSetRecoilState } from "recoil";
+import { textName } from "~/states";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;

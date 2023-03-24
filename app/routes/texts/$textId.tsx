@@ -147,7 +147,7 @@ export default function () {
   );
   return (
     <main
-      className="pt-5 relative mx-auto flex w-full flex-col gap-5 lg:flex-row  container "
+      className="pt-5 container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
       style={{ maxWidth: MAX_WIDTH_PAGE }}
     >
       <Editor content={content} editor={editor} />

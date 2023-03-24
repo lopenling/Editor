@@ -35,7 +35,7 @@ function Editor({ content, editor }) {
   };
   const translation = uselitteraTranlation();
   return (
-    <div className="relative flex-1 textEditorContainer">
+    <div className="relative flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll mb-4 px-4 lg:max-h-max">
       <EditorSettings
         editor={editor}
         showFindText={showFindText}
