@@ -42,12 +42,15 @@ function Posts({ editor, posts }: PostPropsType) {
     setSelectedPost(data.selectedPost);
   }, [data.selectedPost]);
   const filteredPost = useRecoilValue(filteredValue);
+  let timeout;
   function handleSelectPost({ start, end, id }) {
     setSelectedPost({ start, end, id });
     window.scroll(0, 0);
     editor?.chain().focus().setTextSelection({ from: start, to: end }).run();
-
-    setTimeout(() => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
       let r = document.querySelector(".ProseMirror");
       let position = r.getBoundingClientRect();
       if (position.top < 80) {
