@@ -5,7 +5,7 @@ import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import EditorSettings from "./EditorSettings";
-import { Button, Spinner } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import {
@@ -14,7 +14,6 @@ import {
   selectionRangeState,
 } from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
-import Skeleton from "../PostContainer/Skeleton";
 
 function Editor({ content, editor }) {
   const data = useLoaderData();
@@ -47,7 +46,7 @@ function Editor({ content, editor }) {
       <h1 className=" my-4 text-center  flex items-center justify-center  text-3xl  text-gray-900">
         {data?.text?.name}
       </h1>
-      <div className=" max-h-80 overflow-y-scroll lg:max-h-full shadow-textEditor">
+      <div className="sticky top-[110px] shadow-textEditor">
         {!content || !editor ? (
           <div className="flex justify-center h-[400px] w-full animate-pulse">
             <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>

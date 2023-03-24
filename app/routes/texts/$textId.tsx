@@ -1,27 +1,21 @@
-import React from "react";
 import { getUserSession } from "~/services/session.server";
 import { json, MetaFunction } from "@remix-run/cloudflare";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import { useLoaderData, useFetcher, Link, Outlet } from "@remix-run/react";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
-import {
-  selectedPost as selectedPostState,
-  selectedTextOnEditor,
-  selectionRangeState,
-  textName,
-} from "~/states";
+import { selectedTextOnEditor, selectionRangeState, textName } from "~/states";
+import { useEffect, useMemo } from "react";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
-import TextStyle from "@tiptap/extension-text-style";
 import HardBreak from "@tiptap/extension-hard-break";
+import Highlight from "@tiptap/extension-highlight";
 import FontFamily from "@tiptap/extension-font-family";
 import { FontSize } from "~/tiptap-extension/fontSize";
-import { searchMarks } from "~/tiptap-extension/searchMarks";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { findPostByPostId } from "~/model/post";
@@ -69,12 +63,12 @@ export default function () {
       </div>
     );
   const textFetcher = useFetcher();
-  React.useEffect(() => {
+  useEffect(() => {
     textNameSetter(data.text?.name);
     if (textFetcher.type === "init")
       textFetcher.load(`/api/text?textId=${data.text?.id}`);
   }, []);
-  let content = React.useMemo(() => {
+  let content = useMemo(() => {
     return textFetcher.data?.content.replace(/\n/g, "<br>");
   }, [textFetcher.data]);
   const setSelectionRange = useSetRecoilState(selectionRangeState);
@@ -87,9 +81,7 @@ export default function () {
         Paragraph,
         Text,
         Bold,
-        TextStyle,
         FontFamily,
-        searchMarks,
         FontSize,
         SearchAndReplace.configure({
           searchResultClass: "search",
@@ -99,6 +91,11 @@ export default function () {
         HardBreak.configure({
           HTMLAttributes: {
             class: "pageBreak",
+          },
+        }),
+        Highlight.configure({
+          HTMLAttributes: {
+            class: "my-custom-class",
           },
         }),
       ],
@@ -148,7 +145,6 @@ export default function () {
     },
     [content]
   );
-
   return (
     <main
       className="pt-5 relative mx-auto flex w-full flex-col gap-5 lg:flex-row  container "

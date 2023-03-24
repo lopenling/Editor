@@ -46,8 +46,8 @@ export default function Post() {
   const { editor }: { editor: Editor } = useOutletContext();
 
   return (
-    <div className=" sticky top-16 sm:w-full lg:w-1/3 max-h-[80vh]">
-      <div className="hidden w-full items-center justify-end md:inline-flex gap-2">
+    <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
+      <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4">
         {/* sort button */}
         <Dropdown
           label={

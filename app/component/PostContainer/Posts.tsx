@@ -19,7 +19,12 @@ type PostPropsType = {
   editor: Editor | null;
   posts: any;
 };
-
+function scrollToSelection(editor: Editor): void {
+  const { node } = editor.view.domAtPos(editor.state.selection.anchor);
+  if (node.parentElement) {
+    (node.parentElement as any).scrollIntoView();
+  }
+}
 export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
@@ -36,11 +41,19 @@ function Posts({ editor, posts }: PostPropsType) {
   useEffect(() => {
     setSelectedPost(data.selectedPost);
   }, [data.selectedPost]);
-
   const filteredPost = useRecoilValue(filteredValue);
   function handleSelectPost({ start, end, id }) {
     setSelectedPost({ start, end, id });
+    window.scroll(0, 0);
     editor?.chain().focus().setTextSelection({ from: start, to: end }).run();
+
+    setTimeout(() => {
+      let r = document.querySelector(".ProseMirror");
+      let position = r.getBoundingClientRect();
+      if (position.top < 80) {
+        window.scrollBy(0, 200);
+      }
+    }, 0);
   }
 
   const closeFilter = () => setOpenFilter((prev) => !prev);
