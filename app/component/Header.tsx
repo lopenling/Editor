@@ -28,10 +28,10 @@ export default function Header({ user }: any) {
       <img
         src=${logoOnly}
         alt="logo"
-             class="hidden md:block object-contain"
+             class="hidden  md:block object-contain"
         style="max-height: 37px"
       />
-      <h1 class="text-2xl text-light">${text_name}</h1>
+      <h1 class="text-3xl font-bold ml-2 relative top-[-5px] text-light">${text_name}</h1>
     </div>`,
     [text_name]
   );

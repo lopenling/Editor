@@ -1056,6 +1056,10 @@ input:checked + .toggle-bg {
   right: 0px;
 }
 
+.top-\[-5px\] {
+  top: -5px;
+}
+
 .top-0 {
   top: 0px;
 }
@@ -1275,12 +1279,12 @@ input:checked + .toggle-bg {
   margin-top: 1rem;
 }
 
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
 }
 
 .mr-1 {
@@ -1493,12 +1497,12 @@ input:checked + .toggle-bg {
   height: 0px;
 }
 
-.max-h-\[80vh\] {
-  max-height: 80vh;
-}
-
 .max-h-\[70vh\] {
   max-height: 70vh;
+}
+
+.max-h-\[80vh\] {
+  max-height: 80vh;
 }
 
 .min-h-\[285px\] {

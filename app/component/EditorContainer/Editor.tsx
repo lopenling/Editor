@@ -43,7 +43,7 @@ function Editor({ content, editor }) {
         setShowFindText={setShowFindText}
         setShowFontSize={setShowFontSize}
       />
-      <h1 className=" my-4 text-center  flex items-center justify-center  text-3xl  text-gray-900">
+      <h1 className="text-3xl font-bold  relative top-[-5px] text-light my-4 text-center  flex items-center justify-center  text-gray-900">
         {data?.text?.name}
       </h1>
       <div className="sticky top-[110px] shadow-textEditor">
