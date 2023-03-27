@@ -21,7 +21,7 @@ export default function FooterContainer() {
         />
       </div>
 
-      <Footer bgDark={false}>
+      <Footer>
         <div className="w-full container m-auto">
           <div className="grid w-full grid-cols-2 gap-8 py-8 px-6 md:grid-cols-4">
             <div>

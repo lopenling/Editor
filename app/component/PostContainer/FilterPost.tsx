@@ -69,9 +69,7 @@ export default function FilterPost({ close }: FilterProps) {
         <div className="flex flex-col items-start justify-start space-y-4">
           {/* Type of post  */}
           <div className="flex flex-col items-start justify-start space-y-2">
-            <p className="text-sm font-medium leading-tight text-gray-900">
-              Type
-            </p>
+            <p className="text-sm font-medium leading-tight">Type</p>
             <div className="flex flex-col items-start justify-start space-y-0.5">
               {[
                 { value: "all", label: "All" },
@@ -100,9 +98,7 @@ export default function FilterPost({ close }: FilterProps) {
           </div>
           {/* DateFilter */}
           <div className="flex w-full flex-col items-start justify-start space-y-2">
-            <p className="text-sm font-medium leading-tight text-gray-900">
-              Date
-            </p>
+            <p className="text-sm font-medium leading-tight ">Date</p>
             <Datepicker
               value={filterData.date}
               inputName="date"
@@ -111,9 +107,7 @@ export default function FilterPost({ close }: FilterProps) {
           </div>
           {/* UserFilter */}
           <div className="flex w-full flex-col items-start justify-start space-y-2.5">
-            <p className="text-sm font-semibold leading-tight text-gray-900">
-              Users
-            </p>
+            <p className="text-sm font-semibold leading-tight ">Users</p>
 
             {filterData.user?.map((user) => {
               return (
@@ -194,7 +188,7 @@ export default function FilterPost({ close }: FilterProps) {
               {searchUser.data?.length > 0 &&
                 userInput !== "" &&
                 !isFetchingUser && (
-                  <div className="flex w-full flex-col items-center justify-start space-y-3 rounded-lg border border-gray-200 bg-white p-4 shadow">
+                  <div className="flex w-full flex-col items-center justify-start space-y-3 rounded-lg border border-gray-200  p-4 shadow">
                     {searchUser.data?.map((user) => {
                       let avatarUrl = (
                         "http://lopenling.org" + user?.avatar
@@ -227,9 +221,7 @@ export default function FilterPost({ close }: FilterProps) {
           </div>
           {filterData.type !== "comment" && (
             <div className="flex flex-col items-start justify-start space-y-2">
-              <p className="text-sm font-medium leading-tight text-gray-900">
-                Solved
-              </p>
+              <p className="text-sm font-medium leading-tight ">Solved</p>
               <div className="flex flex-col items-start justify-start space-y-0.5">
                 {[
                   { value: "both", label: "both" },

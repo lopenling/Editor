@@ -12,6 +12,7 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
+import TextStyle from "@tiptap/extension-text-style";
 import HardBreak from "@tiptap/extension-hard-break";
 import Highlight from "@tiptap/extension-highlight";
 import FontFamily from "@tiptap/extension-font-family";
@@ -83,6 +84,7 @@ export default function () {
         Bold,
         FontFamily,
         FontSize,
+        TextStyle,
         SearchAndReplace.configure({
           searchResultClass: "search",
           caseSensitive: false,

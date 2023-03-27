@@ -20,11 +20,10 @@ function EditorSetting({
   setShowFontSize,
 }: Props) {
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
-  const [isPending, startTransition] = useTransition();
   const changeFontSize = useCallback(
     (value: number) => {
       editor?.chain()?.selectAll()?.setFontSize(value)?.run();
-      startTransition(() => setFontSize(value));
+      setFontSize(value);
     },
     [editor]
   );
@@ -37,7 +36,9 @@ function EditorSetting({
   const FontSizeComponent = () => (
     <>
       <div className="inline-flex flex-1 items-center justify-between rounded-full">
-        <p className="text-sm leading-tight text-gray-500">A-</p>
+        <p className="text-sm leading-tight text-gray-500 dark:text-gray-50">
+          A-
+        </p>
         <div className="flex w-full items-center justify-start ">
           <div className=" flex  flex-1 items-center justify-start ">
             <input
@@ -52,7 +53,9 @@ function EditorSetting({
             ></input>
           </div>
         </div>
-        <p className="text-sm leading-tight text-gray-500">A+</p>
+        <p className="text-sm leading-tight text-gray-500 dark:text-gray-50">
+          A+
+        </p>
       </div>
     </>
   );

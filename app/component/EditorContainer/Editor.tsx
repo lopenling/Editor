@@ -35,7 +35,7 @@ function Editor({ content, editor }) {
   };
   const translation = uselitteraTranlation();
   return (
-    <div className="relative flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll mb-4 px-4 lg:max-h-max">
+    <div className="relative flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll md:overflow-y-auto mb-4 px-4 lg:max-h-max">
       <EditorSettings
         editor={editor}
         showFindText={showFindText}
@@ -43,7 +43,7 @@ function Editor({ content, editor }) {
         setShowFindText={setShowFindText}
         setShowFontSize={setShowFontSize}
       />
-      <h1 className="text-3xl font-bold  relative top-[-5px] text-light my-4 text-center  flex items-center justify-center  text-gray-900">
+      <h1 className="text-3xl font-bold  relative top-[-5px] text-light my-4 text-center  flex items-center justify-center  text-gray-900 dark:text-white">
         {data?.text?.name}
       </h1>
       <div className="sticky top-[110px] shadow-textEditor">

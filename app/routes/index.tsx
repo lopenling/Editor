@@ -146,8 +146,8 @@ export default function Index() {
 }
 
 const ExtraDetail = () => (
-  <div className="inline-flex w-full items-center justify-center bg-gray-50 px-16">
-    <div className="inline-flex flex-col items-center justify-center  bg-gray-50 py-24">
+  <div className="inline-flex w-full items-center justify-center bg-gray-50 px-16 dark:bg-slate-700">
+    <div className="inline-flex flex-col items-center justify-center   py-24">
       <div className="flex flex-col items-center justify-center ">
         <p className="text-center text-4xl font-extrabold leading-10 text-gray-900">
           Welcome to Lopenling

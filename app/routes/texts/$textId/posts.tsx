@@ -53,7 +53,7 @@ export default function Post() {
           label={
             <>
               <img src={sortIcon} alt="sortIcon" />
-              <span className="ml-2 text-sm font-medium leading-tight text-gray-500">
+              <span className="ml-2 text-sm font-medium leading-tight text-gray-500 dark:text-gray-50">
                 sort By
               </span>
             </>
@@ -83,7 +83,7 @@ export default function Post() {
           className="flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2"
         >
           <img src={filterIcon} alt="filterIcon" />
-          <span className="text-sm font-medium leading-tight text-gray-500">
+          <span className="text-sm font-medium leading-tight text-gray-500 dark:text-gray-50">
             {translation.filter}
           </span>
         </button>

@@ -91,7 +91,7 @@ function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="dark:bg-gray-600 dark:text-white">
         <RecoilRoot>
           <LitteraProvider locales={["en_US", "bo_TI"]}>
             <Header user={data.user} />
