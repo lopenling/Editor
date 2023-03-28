@@ -101,9 +101,7 @@ function Post({
         onClose={() => setOpenShare((p) => !p)}
         dismissible={true}
       >
-        <Modal.Header>
-          <h1 className="text-3xl font-bold text-center mb-4">Share</h1>
-        </Modal.Header>
+        <Modal.Header>Share</Modal.Header>
         <div className="container mx-auto my-8 p-3">
           <div className="flex justify-center">
             <div className="flex space-x-4">
@@ -157,8 +155,8 @@ function Post({
                     y2="21.084"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop offset="0" stop-color="#20b038"></stop>
-                    <stop offset="1" stop-color="#60d66a"></stop>
+                    <stop offset="0" stopColor="#20b038"></stop>
+                    <stop offset="1" stopColor="#60d66a"></stop>
                   </linearGradient>
                   <path
                     fill="url(#a)"
@@ -166,9 +164,9 @@ function Post({
                   ></path>
                   <path
                     fill="#FFF"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M462.273 349.294c-11.234-24.977-23.062-25.477-33.75-25.914-8.742-.375-18.75-.352-28.742-.352-10 0-26.25 3.758-39.992 18.766-13.75 15.008-52.5 51.289-52.5 125.078 0 73.797 53.75 145.102 61.242 155.117 7.5 10 103.758 166.266 256.203 226.383 126.695 49.961 152.477 40.023 179.977 37.523s88.734-36.273 101.234-71.297c12.5-35.016 12.5-65.031 8.75-71.305-3.75-6.25-13.75-10-28.75-17.5s-88.734-43.789-102.484-48.789-23.75-7.5-33.75 7.516c-10 15-38.727 48.773-47.477 58.773-8.75 10.023-17.5 11.273-32.5 3.773-15-7.523-63.305-23.344-120.609-74.438-44.586-39.75-74.688-88.844-83.438-103.859-8.75-15-.938-23.125 6.586-30.602 6.734-6.719 15-17.508 22.5-26.266 7.484-8.758 9.984-15.008 14.984-25.008 5-10.016 2.5-18.773-1.25-26.273s-32.898-81.67-46.234-111.326z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                   <path
                     fill="#FFF"
@@ -233,10 +231,9 @@ function Post({
             <div className="flex w-full flex-1 items-center justify-between ">
               <div className="flex h-full w-64 items-center justify-start space-x-4">
                 <button
-                  disabled={likeFetcher.state !== "idle" || !user}
+                  disabled={!user || !!likeFetcher.submission}
                   className="flex cursor-pointer items-center justify-start space-x-1.5"
                   onClick={handleLikeClick}
-                  style={{ opacity: !!likeFetcher.submission ? 0.5 : 1 }}
                 >
                   <svg
                     width="14"

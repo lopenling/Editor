@@ -1,6 +1,6 @@
-describe("testing homepage Header", () => {
+export default describe("testing homepage Header", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:8787");
+    cy.visit("http://localhost:8787/texts/1");
   });
   it("should contain logo in Header", () => {
     cy.get("nav").get("img").should("be.visible");
@@ -16,5 +16,13 @@ describe("testing homepage Header", () => {
   it("should have login and signup button", () => {
     cy.get("#login").get("button").contains("log in");
     cy.get("#signup").get("a").contains("sign up");
+  });
+  it("should contain text name on header when page scroll down", () => {
+    cy.url().should("include", "1");
+    let textTitle = "བྱང་ཆུབ་སེམས་དཔའི་སྤྱོད་པ་ལ་འཇུག་པ་བཞུགས་སོ།";
+    cy.scrollTo(0, 500);
+    cy.once("uncaught:exception", () => {
+      cy.get("nav").contains(textTitle);
+    });
   });
 });

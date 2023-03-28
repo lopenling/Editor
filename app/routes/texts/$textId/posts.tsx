@@ -19,7 +19,7 @@ import { findPostByPostId, findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer } from "@remix-run/cloudflare";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
-import { ClientOnly } from "remix-utils";
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const postId = url.searchParams.get("post");
@@ -98,7 +98,7 @@ export default function Post() {
 
       {/* used differ at loader for post list to fetch posts as a promise */}
       <Suspense fallback={<Skeleton />}>
-        <Await resolve={posts} errorElement={<p>Error loading posts!</p>}>
+        <Await resolve={posts}>
           {(posts) => {
             return <Posts posts={posts} editor={editor} />;
           }}

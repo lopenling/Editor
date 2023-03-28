@@ -1,4 +1,6 @@
 {
+  "name": "lopenling-app",
+  "author": "Tenzin Kunsang",
   "private": true,
   "sideEffects": false,
   "scripts": {

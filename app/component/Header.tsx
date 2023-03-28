@@ -1,11 +1,13 @@
-import { Form, NavLink, useFetcher, useLocation } from "@remix-run/react";
-import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
+import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
+import { Navbar, Dropdown, Avatar, Button, Select } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { useEffect, useMemo, useState } from "react";
-import uselitteraTranlation from "~/locales/useLitteraTranslations";
-import { useRecoilValue } from "recoil";
-import { textName } from "~/states";
+import uselitteraTranlation, {
+  translationCodes,
+} from "~/locales/useLitteraTranslations";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { textName, theme } from "~/states";
 
 const Logo = `<img src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
         alt="logo"
@@ -14,13 +16,19 @@ const Logo = `<img src="https://lopenling.org/uploads/default/original/1X/0ac3db
   /> `;
 const LogoWithTextName = ({ textNameValue }) => (
   <div className="flex items-start gap-1">
-    <img
-      src={LogoOnly}
-      alt="logo"
-      className="hidden md:block object-contain"
-      style={{ maxHeight: "37px" }}
-    />
-    <h1 className="text-3xl font-bold ml-2 relative top-[-5px] text-light">
+    <Link to="/">
+      {" "}
+      <img
+        src={LogoOnly}
+        alt="logo"
+        className="hidden md:block object-contain"
+        style={{ maxHeight: "37px" }}
+      />
+    </Link>
+    <h1
+      onClick={() => window?.scrollTo(0, 0)}
+      className="text-3xl font-bold ml-2 relative top-[-5px] text-light"
+    >
       {textNameValue}
     </h1>
   </div>
@@ -31,7 +39,11 @@ export default function Header({ user }: any) {
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
   const textNameValue = useRecoilValue(textName);
-
+  const [themeSelected, setThemeSelected] = useRecoilState(theme);
+  const changeTheme = () => {
+    if (themeSelected === "light") setThemeSelected("dark");
+    else setThemeSelected("light");
+  };
   useEffect(() => {
     let timeout;
 
@@ -58,17 +70,17 @@ export default function Header({ user }: any) {
           minHeight: 56,
         }}
       >
-        <Navbar.Brand to={"/"} as={NavLink} className="flex items-center">
-          {TextNameOnHeader ? (
-            <LogoWithTextName textNameValue={textNameValue} />
-          ) : (
+        {TextNameOnHeader ? (
+          <LogoWithTextName textNameValue={textNameValue} />
+        ) : (
+          <Navbar.Brand to={"/"} as={NavLink} className="flex items-center">
             <div
               dangerouslySetInnerHTML={{
                 __html: Logo,
               }}
             ></div>
-          )}
-        </Navbar.Brand>
+          </Navbar.Brand>
+        )}
         <Navbar.Toggle />
         <Navbar.Collapse>
           <div
@@ -90,7 +102,7 @@ export default function Header({ user }: any) {
                       alt={user.name}
                       img={user.avatarUrl}
                       rounded={true}
-                      size="sm"
+                      size="md"
                       title={user?.name}
                     />
                   }
@@ -107,7 +119,9 @@ export default function Header({ user }: any) {
                       UploadText
                     </NavLink>
                   </Dropdown.Item>
-
+                  <Dropdown.Item onClick={changeTheme}>
+                    {themeSelected === "light" ? "Dark Mode" : "Light Mode"}
+                  </Dropdown.Item>
                   <Dropdown.Item>
                     <Form
                       method="post"
@@ -177,25 +191,25 @@ export default function Header({ user }: any) {
 export function Translation() {
   const methods = useLitteraMethods();
   const changeLanguage: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
-    switch (e.target.value) {
-      case "en":
-        methods.setLocale("en_US");
-        break;
-      case "bo":
-        methods.setLocale("bo_TI");
-
-        break;
-    }
+    methods.setLocale(e.target.value);
   };
   return (
     <div className="md:mr-10 flex items-center justify-start space-x-0.5">
-      <select
+      <Select
         onChange={changeLanguage}
-        className="border-transparent focus:border-transparent focus:ring-0 text-gray-500 bg-gray-100hover:bg-gray-200  focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+        sizing="md"
+        className="border-transparent focus:border-transparent focus:ring-0 text-gray-500 bg-transparent  focus:outline-none focus:ring-gray-100 dark:bg-transparent  dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
       >
-        <option value="en">English</option>
-        <option value="bo">བོད་ཡིག་</option>
-      </select>
+        {translationCodes.map((code) => (
+          <option
+            key={code.code}
+            value={code.code}
+            className="dark:bg-slate-600 "
+          >
+            {code.name}
+          </option>
+        ))}
+      </Select>
     </div>
   );
 }

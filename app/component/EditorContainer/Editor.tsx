@@ -14,6 +14,7 @@ import {
   selectionRangeState,
 } from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
+import { ClientOnly } from "remix-utils";
 
 function Editor({ content, editor }) {
   const data = useLoaderData();
@@ -43,24 +44,27 @@ function Editor({ content, editor }) {
         setShowFindText={setShowFindText}
         setShowFontSize={setShowFontSize}
       />
-      <h1 className="text-3xl font-bold  relative top-[-5px] text-light my-4 text-center  flex items-center justify-center  text-gray-900 dark:text-white">
+      <div className="text-3xl font-bold  relative top-[-5px] text-light my-4 text-center  flex items-center justify-center  text-gray-900 dark:text-white">
         {data?.text?.name}
-      </h1>
-      <div className="sticky top-[110px] shadow-textEditor">
-        {!content || !editor ? (
-          <div className="flex justify-center h-[400px] w-full animate-pulse">
-            <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>
-          </div>
-        ) : (
-          <EditorContent
-            editor={editor}
-            className="editor"
-            style={{
-              fontSize: DEFAULT_FONT_SIZE,
-            }}
-          />
-        )}
       </div>
+      <ClientOnly fallback={<>loading</>}>
+        {() => (
+          <div className="sticky top-[110px] shadow-textEditor">
+            {!content || !editor ? (
+              <></>
+            ) : (
+              <EditorContent
+                editor={editor}
+                className="editor"
+                style={{
+                  fontSize: DEFAULT_FONT_SIZE,
+                }}
+              />
+            )}
+          </div>
+        )}
+      </ClientOnly>
+
       {editor && (
         <BubbleMenu
           shouldShow={({ state }) => {

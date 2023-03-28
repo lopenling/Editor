@@ -3,7 +3,7 @@ import { Editor } from "@tiptap/react";
 import React, { useEffect } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { Modal } from "flowbite-react";
-import FilterPost from "./FilterPost";
+import Filter from "./Filter";
 import ModalStyle from "react-responsive-modal/styles.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
@@ -72,7 +72,7 @@ function Posts({ editor, posts }: PostPropsType) {
         <Modal show={true} onClose={closeFilter} size="md">
           <div ref={ref}>
             <Modal.Header>{translation.filter}</Modal.Header>
-            <FilterPost close={closeFilter} />
+            <Filter close={closeFilter} />
           </div>
         </Modal>
       )}

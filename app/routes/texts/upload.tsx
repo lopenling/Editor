@@ -48,8 +48,8 @@ export default function UploadText() {
   }
   const [animationParent] = useAutoAnimate();
   return (
-    <div className="mx-10 my-4">
-      <Form method="post" ref={formRef}>
+    <div className="mx-10 my-4 ">
+      <Form method="post" ref={formRef} className="max-w-2xl m-auto">
         <div className="mb-6">
           <label
             htmlFor={uploadId + "textName"}
@@ -92,7 +92,7 @@ export default function UploadText() {
         </button>
       </Form>
       <div
-        style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 }}
+        className="flex flex-col space-y-3 w-max mx-auto text-lg"
         ref={animationParent}
       >
         {loaderData.textList.map((text: { id: number; name: string }) => (
@@ -122,14 +122,8 @@ function EachText({ text }: PropsType) {
   }
   return (
     <div
-      style={{
-        background: "#eee",
-        borderRadius: 20,
-        padding: 4,
-        paddingInline: 10,
-        position: "relative",
-        display: deleteFetcher.submission ? "none" : "block",
-      }}
+      className={` py-1 px-2 relative bg-white rounded-lg border-slate-600 border-2
+      ${deleteFetcher.submission && " hidden"} dark:text-slate-700`}
     >
       {text.name}
       <button

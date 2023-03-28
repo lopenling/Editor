@@ -1,4 +1,4 @@
-describe("<FilterPost>", () => {
+describe("<Filter>", () => {
   let body;
   beforeEach(() => {
     body = cy.request("http://localhost:8787/texts/1").its("body");
@@ -17,3 +17,5 @@ describe("<FilterPost>", () => {
     });
   });
 });
+
+export {};

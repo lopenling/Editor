@@ -1,4 +1,10 @@
 import { atom, selector } from "recoil";
+//theme
+
+export const theme = atom({
+  key: "theme-tailwind",
+  default: "light",
+});
 //textName
 
 export const textName = atom({

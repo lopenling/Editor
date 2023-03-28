@@ -17,7 +17,8 @@ import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
+import { theme } from "./states";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -84,20 +85,18 @@ function App() {
     transition.state === "loading" &&
     transition.location.pathname.includes("/texts") &&
     !transition.location.state;
-
+  let themeSelected = useRecoilValue(theme);
   return (
-    <html>
+    <html className={themeSelected}>
       <head>
         <Meta />
         <Links />
       </head>
       <body className="dark:bg-gray-600 dark:text-white">
-        <RecoilRoot>
-          <LitteraProvider locales={["en_US", "bo_TI"]}>
-            <Header user={data.user} />
-            {routeChanged ? <Loading /> : <Outlet />}
-          </LitteraProvider>
-        </RecoilRoot>
+        <LitteraProvider locales={["en_US", "bo_TI"]}>
+          <Header user={data.user} />
+          {routeChanged ? <Loading /> : <Outlet />}
+        </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />
 
         <LiveReload />
@@ -106,4 +105,10 @@ function App() {
     </html>
   );
 }
-export default App;
+export default function AppContainer() {
+  return (
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
+  );
+}

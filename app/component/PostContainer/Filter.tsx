@@ -10,7 +10,7 @@ type FilterProps = {
   close: () => void;
 };
 
-export default function FilterPost({ close }: FilterProps) {
+export default function Filter({ close }: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);
   const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
