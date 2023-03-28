@@ -112,9 +112,13 @@ export default function Header({ user }: any) {
                   }
                 >
                   <Dropdown.Header>
-                    <span className="block truncate text-sm font-medium">
+                    <a
+                      target={"_self"}
+                      href={`https://lopenling.org/u/${user?.username}/summary`}
+                      className="block truncate text-sm font-medium"
+                    >
                       {user?.email}
-                    </span>
+                    </a>
                   </Dropdown.Header>
                   <Dropdown.Item
                     className={user?.admin === "true" ? "" : "hidden"}
@@ -123,8 +127,20 @@ export default function Header({ user }: any) {
                       UploadText
                     </NavLink>
                   </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/posts">Posts</Link>
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={changeTheme}>
                     {themeSelected === "light" ? "Dark Mode" : "Light Mode"}
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={changeTheme}>
+                    <a
+                      target={"_blank"}
+                      href={`https://lopenling.org/u/${user?.username}/preferences/account`}
+                      className="block truncate text-sm font-medium"
+                    >
+                      preferences
+                    </a>
                   </Dropdown.Item>
                   <Dropdown.Item>
                     <Form

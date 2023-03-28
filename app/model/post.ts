@@ -36,6 +36,21 @@ export async function createPost(
 }
 
 //find post
+export async function findPostByUser(userId) {
+  try {
+    let posts = await db.post.findMany({
+      where: {
+        creatorUser_id: userId,
+      },
+      include: {
+        Reply: true,
+      },
+    });
+    return posts;
+  } catch (e) {
+    return "couldnot find by userId" + e.message;
+  }
+}
 export async function findPostByTopicId(TopicId: number) {
   try {
     let posts = await db.post.findFirst({

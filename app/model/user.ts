@@ -19,6 +19,9 @@ export async function findUserByUsername(username: string) {
       where: {
         username,
       },
+      include: {
+        likedPost: true,
+      },
     });
     return user;
   } catch (e) {
