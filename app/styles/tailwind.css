@@ -5176,6 +5176,10 @@ input:checked + .toggle-bg {
   border-color: rgb(55 65 81 / var(--tw-divide-opacity));
 }
 
+.dark .dark\:rounded-sm {
+  border-radius: 0.125rem;
+}
+
 .dark .dark\:border-none {
   border-style: none;
 }
@@ -5426,6 +5430,10 @@ input:checked + .toggle-bg {
 
 .dark .dark\:fill-gray-300 {
   fill: #D1D5DB;
+}
+
+.dark .dark\:fill-gray-100 {
+  fill: #F3F4F6;
 }
 
 .dark .dark\:text-blue-400 {
