@@ -12,7 +12,7 @@ const PostForm = () => {
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
   const { user }: { user: any } = useOutletContext();
-  let isFormEmpty = body.length === 0;
+  let isFormEmpty = body.length < 5;
   let isPosting =
     createPost.submission && createPost.submission.formData.get("body") !== "";
   function handleSubmit(e) {
@@ -69,7 +69,7 @@ const PostForm = () => {
   return (
     <section>
       <div className="inline-flex items-start justify-start">
-        <p className="text-base font-medium leading-tight text-gray-900 mb-3 capitalize">
+        <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-300 mb-3 capitalize">
           {postInfo.type === "question" ? "ask question" : "new comment"}
         </p>
       </div>

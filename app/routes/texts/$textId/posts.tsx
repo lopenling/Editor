@@ -64,13 +64,13 @@ export default function Post() {
           dismissOnClick={false}
         >
           <Dropdown.Item
-            className={isLatestPost && "bg-green-300"}
+            className={isLatestPost && "bg-green-500 dark:bg-gray-500"}
             onClick={() => setIsLatestPost(true)}
           >
             Latest
           </Dropdown.Item>
           <Dropdown.Item
-            className={!isLatestPost && "bg-green-300"}
+            className={!isLatestPost && "bg-green-500 dark:bg-gray-500"}
             onClick={() => setIsLatestPost(false)}
           >
             Earliest

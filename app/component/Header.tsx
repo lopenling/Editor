@@ -2,18 +2,20 @@ import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
 import { Navbar, Dropdown, Avatar, Button, Select } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { textName, theme } from "~/states";
 
-const Logo = `<img src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
-        alt="logo"
-        className="hidden md:block object-contain"
-        style="max-height:37px"
-  /> `;
+const Logo = () => (
+  <img
+    src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
+    alt="logo"
+    className="hidden md:block object-contain max-h-[37px] "
+  />
+);
 const LogoWithTextName = ({ textNameValue }) => (
   <div className="flex items-start gap-1">
     <Link to="/">
@@ -80,11 +82,7 @@ export default function Header({ user }: any) {
           <LogoWithTextName textNameValue={textNameValue} />
         ) : (
           <Navbar.Brand to={"/"} as={NavLink} className="flex items-center">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: Logo,
-              }}
-            ></div>
+            <Logo />
           </Navbar.Brand>
         )}
         <Navbar.Toggle />

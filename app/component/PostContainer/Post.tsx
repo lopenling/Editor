@@ -197,7 +197,7 @@ function Post({
         </div>
       </Modal>
       <div
-        className={` py-3 px-1 ${
+        className={` py-3 px-1 transition-all ${
           isSelected
             ? "bg-yellow-50 dark:bg-gray-700 dark:rounded-sm"
             : "bg-transparent"
