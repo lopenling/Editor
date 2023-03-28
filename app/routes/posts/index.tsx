@@ -1,31 +1,47 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
-import { useLoaderData, Link } from "@remix-run/react";
+import { useLoaderData, Link, Await } from "@remix-run/react";
 import { redirect } from "@remix-run/cloudflare";
 import { findPostByUser } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
 import { getUserSession } from "~/services/session.server";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { SolvedLogo } from "~/component/PostContainer/Reply";
+import { defer } from "@remix-run/cloudflare";
+import { Suspense } from "react";
+import { Spinner } from "flowbite-react";
 export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUserSession(request);
   if (!user) redirect("/");
   let userData = await findUserByUsername(user.username);
-  let posts = await findPostByUser(userData.id);
-  return { posts, userData };
+  let posts = findPostByUser(userData.id);
+  return defer({ posts, userData }, { status: 202 });
 };
 
 export default function Posts() {
   let data = useLoaderData();
-  let posts = data.posts;
-  console.log(posts);
-  if (posts.length < 1) return null;
+  console.log(data);
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center mt-36">
+          <Spinner /> Loading...
+        </div>
+      }
+    >
+      <Await resolve={data.posts}>
+        {(posts) => <Component posts={posts} user={data.userData} />}
+      </Await>
+    </Suspense>
+  );
+}
+
+const Component = ({ posts, user }) => {
   let postCount = posts?.length;
-  let likedCount = data?.userData?.likedPost.length;
+  let likedCount = user?.likedPost.length;
   let answeredCount = posts?.filter((d) => d.Reply.length > 0)?.length;
   let solvedPostCount = posts?.filter((d) =>
     d.Reply.some((d) => d.isAproved)
   )?.length;
-
   return (
     <div
       style={{ maxWidth: "80vw" }}
@@ -191,4 +207,4 @@ export default function Posts() {
       </section>
     </div>
   );
-}
+};

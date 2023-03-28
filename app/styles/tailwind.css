@@ -1383,6 +1383,10 @@ input:checked + .toggle-bg {
   margin-right: 1rem;
 }
 
+.mt-36 {
+  margin-top: 9rem;
+}
+
 .block {
   display: block;
 }

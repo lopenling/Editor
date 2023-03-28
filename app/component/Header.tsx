@@ -13,7 +13,7 @@ const Logo = () => (
   <img
     src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
     alt="logo"
-    className="hidden md:block object-contain max-h-[37px] "
+    className="block object-contain max-h-[37px] "
   />
 );
 const LogoWithTextName = ({ textNameValue }) => (
@@ -128,10 +128,12 @@ export default function Header({ user }: any) {
                     </NavLink>
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Link to="/posts">Posts</Link>
+                    <NavLink preventScrollReset to="/posts">
+                      Posts
+                    </NavLink>
                   </Dropdown.Item>
                   <Dropdown.Item onClick={changeTheme}>
-                    {themeSelected === "light" ? "Dark Mode" : "Light Mode"}
+                    {themeSelected !== "light" ? "Light Mode" : "Dark Mode"}
                   </Dropdown.Item>
                   <Dropdown.Item onClick={changeTheme}>
                     <a
