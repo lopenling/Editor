@@ -17,8 +17,9 @@ import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
-import { RecoilRoot, useRecoilValue } from "recoil";
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { theme } from "./states";
+import { useEffect } from "react";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -85,7 +86,13 @@ function App() {
     transition.state === "loading" &&
     transition.location.pathname.includes("/texts") &&
     !transition.location.state;
-  let themeSelected = useRecoilValue(theme);
+  let [themeSelected, setThemeSelected] = useRecoilState(theme);
+  useEffect(() => {
+    if (window) {
+      let oldSelection = window.localStorage.getItem("theme");
+      if (oldSelection !== themeSelected) setThemeSelected(oldSelection);
+    }
+  }, []);
   return (
     <html className={themeSelected}>
       <head>

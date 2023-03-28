@@ -197,10 +197,9 @@ function Post({
         </div>
       </Modal>
       <div
-        style={{
-          backgroundColor: isSelected ? "#FDFDEA" : "transparent",
-          padding: "10px 2px 10px 4px",
-        }}
+        className={` py-3 px-1 ${
+          isSelected ? "bg-yellow-50" : "bg-transparent"
+        }`}
         ref={postref}
         onClick={() => {
           handleSelection();

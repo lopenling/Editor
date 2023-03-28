@@ -1,6 +1,5 @@
 import { atom, selector } from "recoil";
 //theme
-
 export const theme = atom({
   key: "theme-tailwind",
   default: "light",

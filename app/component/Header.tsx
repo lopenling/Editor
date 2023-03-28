@@ -41,8 +41,14 @@ export default function Header({ user }: any) {
   const textNameValue = useRecoilValue(textName);
   const [themeSelected, setThemeSelected] = useRecoilState(theme);
   const changeTheme = () => {
-    if (themeSelected === "light") setThemeSelected("dark");
-    else setThemeSelected("light");
+    if (window)
+      if (themeSelected === "light") {
+        setThemeSelected("dark");
+        window.localStorage.setItem("theme", "dark");
+      } else {
+        setThemeSelected("light");
+        window.localStorage.setItem("theme", "light");
+      }
   };
   useEffect(() => {
     let timeout;

@@ -18,11 +18,9 @@ export default describe("testing homepage Header", () => {
     cy.get("#signup").get("a").contains("sign up");
   });
   it("should contain text name on header when page scroll down", () => {
-    cy.url().should("include", "1");
     let textTitle = "བྱང་ཆུབ་སེམས་དཔའི་སྤྱོད་པ་ལ་འཇུག་པ་བཞུགས་སོ།";
+    cy.url().should("include", "1");
     cy.scrollTo(0, 500);
-    cy.once("uncaught:exception", () => {
-      cy.get("nav").contains(textTitle);
-    });
+    cy.get("nav").contains(textTitle);
   });
 });
