@@ -4,6 +4,7 @@ export const theme = atom({
   key: "theme-tailwind",
   default: "light",
 });
+
 //textName
 
 export const textName = atom({
@@ -25,6 +26,12 @@ export const selectedPost = atom({
     start: null,
     end: null,
   },
+});
+//share State
+
+export const shareState = atom({
+  key: "sharePost",
+  default: false,
 });
 
 //filter related states

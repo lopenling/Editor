@@ -1,16 +1,17 @@
 import { Link, Form, useSearchParams } from "@remix-run/react";
-import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import type {
+  HeadersFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/cloudflare";
 import { useEffect } from "react";
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Footer";
 import { json } from "@remix-run/cloudflare";
 import { searchTextWithName } from "~/model/text";
 import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import SearchIcon from "~/assets/svg/icon_search.svg";
-import { useSetRecoilState } from "recoil";
-import { textName } from "~/states";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
@@ -50,10 +51,9 @@ export const meta: MetaFunction = ({ data, params }) => {
 };
 
 export default function Index() {
-  const data = useLoaderData();
+  const data = useLoaderData<typeof loader>();
   const transition = useTransition();
-  const translation = uselitteraTranlation();
-  const [animationParent] = useAutoAnimate();
+  const translation: any = uselitteraTranlation();
   const [params] = useSearchParams();
   const list = data;
   const isLoading =
@@ -134,7 +134,7 @@ export default function Index() {
       </div>
       {!list && !isLoading && (
         <>
-          <ExtraDetail />
+          <FeatureSection />
           <FooterContainer />
         </>
       )}
@@ -142,7 +142,7 @@ export default function Index() {
   );
 }
 
-const ExtraDetail = () => (
+const FeatureSection = () => (
   <section className="bg-gray-50 dark:bg-gray-700">
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center sm:py-16 lg:px-6">
       <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">

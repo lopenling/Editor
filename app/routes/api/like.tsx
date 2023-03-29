@@ -12,24 +12,22 @@ export const action: ActionFunction = async ({ request }) => {
     let likedBy = Obj.likedBy as string;
     let id = Obj.id as string;
     let create = Obj.create as string;
-    console.log(post_id, likedBy, id, create);
     //check if user already like it
     if (create === "create") {
       await createReply(id, post_id, likedBy);
-    } else {
+    }
+    if (create === "update") {
       const alreadyLiked = await findReply(id, likedBy);
-      const actionPromise = !alreadyLiked
-        ? updateReply(id, likedBy, true)
-        : updateReply(id, likedBy, false);
+      const actionPromise = updateReply(id, likedBy, !alreadyLiked);
       await actionPromise;
     }
   }
   if (_action === "likePost") {
-    let id = Obj.id as string;
+    let postId = Obj.id as string;
     let userId = Obj.userId as string;
-    const likedUsers = await findPostByUserLiked(id, userId);
+    const likedUsers = await findPostByUserLiked(postId, userId);
     try {
-      let response = await updatePostLike(id, userId, likedUsers === null);
+      let response = await updatePostLike(postId, userId, likedUsers === null);
       return response.likedBy;
     } catch (e) {
       console.log(e);

@@ -48,7 +48,7 @@ const PostForm = () => {
         time="now"
         likedBy={[]}
         replyCount={0}
-        id={10}
+        id={"random"}
         isSolved={false}
         postContent={createPost.submission.formData.get("body") as string}
         topicId={null}
@@ -56,10 +56,8 @@ const PostForm = () => {
           createPost.submission.formData.get("type") as "question" | "comment"
         }
         handleSelection={null}
-        selectedPost={null}
         isOptimistic={true}
       />,
-
       document.getElementById("temporaryPost")
     );
   }

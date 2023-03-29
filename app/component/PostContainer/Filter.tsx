@@ -1,17 +1,17 @@
-import { Avatar, Button } from "flowbite-react";
+import { Avatar, Button, Modal } from "flowbite-react";
 import React, { useState, useId, useEffect } from "react";
 import { useFetcher } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
 import crossIcon from "~/assets/svg/icon_cross.svg";
 import { useRecoilState } from "recoil";
-import { filterDataState } from "~/states";
+import { filterDataState, openFilterState } from "~/states";
+import uselitteraTranlation from "~/locales/useLitteraTranslations";
 
-type FilterProps = {
-  close: () => void;
-};
+type FilterProps = {};
 
-export default function Filter({ close }: FilterProps) {
+export default function Filter({}: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);
+  const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
   const [userInput, setUserInput] = React.useState("");
   const searchUser = useFetcher();
   const typeId = useId();
@@ -52,7 +52,7 @@ export default function Filter({ close }: FilterProps) {
     }));
   }
   function apply() {
-    close();
+    setOpenFilter(false);
   }
   function reset() {
     setFilterData({
@@ -62,9 +62,17 @@ export default function Filter({ close }: FilterProps) {
       solved: "both",
     });
   }
+  const translation = uselitteraTranlation();
+
   let isFetchingUser = searchUser.state === "loading";
   return (
-    <>
+    <Modal
+      show={openFilter}
+      onClose={() => setOpenFilter(false)}
+      size="md"
+      dismissible={true}
+    >
+      <Modal.Header>{translation.filter}</Modal.Header>
       <div className="p-5">
         <div className="flex flex-col items-start justify-start space-y-4">
           {/* Type of post  */}
@@ -258,6 +266,6 @@ export default function Filter({ close }: FilterProps) {
           </Button>
         </div>
       </div>
-    </>
+    </Modal>
   );
 }

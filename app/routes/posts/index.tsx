@@ -19,7 +19,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Posts() {
   let data = useLoaderData();
-  console.log(data);
   return (
     <Suspense
       fallback={
@@ -190,7 +189,7 @@ const Component = ({ posts, user }) => {
                             {post.content}
                           </Link>
                           {post.Reply.some((l) => l.isAproved) && (
-                            <SolvedLogo isSolved={true} />
+                            <SolvedLogo isSolved={false} />
                           )}
                         </h4>
                         <p className="text-gray-500 dark:text-gray-400 text-base font-normal">

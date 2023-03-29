@@ -24,7 +24,6 @@ export function translationList() {
   }
   return translations;
 }
-
 export default function uselitteraTranlation() {
   let translations = translationList();
   const translation = useLittera(translations);

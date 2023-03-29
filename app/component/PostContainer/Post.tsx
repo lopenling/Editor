@@ -1,20 +1,16 @@
-import { useState, useEffect, memo } from "react";
-import {
-  useFetcher,
-  useSearchParams,
-  useOutletContext,
-} from "@remix-run/react";
+import { useState, useEffect, useRef } from "react";
+import { useFetcher, useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { Avatar, Badge, Button, Modal } from "flowbite-react";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
-import shareIcon from "~/assets/svg/icon_share.svg";
 import tickIcon from "~/assets/svg/icon_tick.svg";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedPost as selectedPostState } from "~/states";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { selectedPost as selectedPostState, shareState } from "~/states";
+import Share from "./Share";
 type PostType = {
-  id: number;
+  id: string;
   creatorUser: any;
   time: string;
   postContent: string;
@@ -41,8 +37,9 @@ function Post({
   handleSelection,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
-  const [openShare, setOpenShare] = useState(false);
+  const setOpenShare = useSetRecoilState(shareState);
   const [showReplies, setShowReplies] = useState(false);
+  const [effect, setEffect] = useState(false);
   const [ReplyCount, setReplyCount] = useState(replyCount - 1);
   const likeFetcher = useFetcher();
   const translation = uselitteraTranlation();
@@ -52,15 +49,25 @@ function Post({
   let likedByMe = user
     ? likedBy.some((l) => l.username === user.username)
     : false;
-  let likedByMeFromFetcher = likeFetcher.data?.some(
-    (l) => l.username === user.username
-  );
+  let likeInFetcher = likeFetcher?.submission?.formData?.get("like");
+
+  let likeCount = likeFetcher.data ? likeFetcher.data?.length : likedBy.length;
+  if (likeInFetcher === "true") {
+    likedByMe = true;
+    if (likeFetcher.type === "actionSubmission") likeCount++;
+  }
+  if (likeInFetcher === "false") {
+    likedByMe = false;
+    if (likeFetcher.type === "actionSubmission") likeCount--;
+  }
   function handleLikeClick() {
+    setEffect(true);
     likeFetcher.submit(
       {
         id,
         _action: "likePost",
         userId: user.id,
+        like: !likedByMe ? "true" : "false",
       },
       { method: "post", action: "api/like" }
     );
@@ -83,119 +90,10 @@ function Post({
       setSelectedPost({ id: null, start: null, end: null });
     },
   });
-  function handleCopy(url) {
-    navigator.clipboard.writeText(url);
-    alert("Text copied to clipboard!");
-  }
-  function getUrl(postId: number) {
-    if (postId) {
-      const url = window?.location.href.split("?")[0] + "?post=" + postId;
-      return url;
-    }
-  }
-  let url = getUrl(id);
+
   return (
     <>
-      <Modal
-        show={openShare}
-        onClose={() => setOpenShare((p) => !p)}
-        dismissible={true}
-      >
-        <Modal.Header>Share</Modal.Header>
-        <div className="container mx-auto my-8 p-3">
-          <div className="flex justify-center">
-            <div className="flex space-x-4">
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className=" flex space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                <svg
-                  width={24}
-                  height={24}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1024 1024"
-                  id="facebook-logo-2019"
-                >
-                  <path
-                    fill="#1877f2"
-                    d="M1024,512C1024,229.23016,794.76978,0,512,0S0,229.23016,0,512c0,255.554,187.231,467.37012,432,505.77777V660H302V512H432V399.2C432,270.87982,508.43854,200,625.38922,200,681.40765,200,740,210,740,210V336H675.43713C611.83508,336,592,375.46667,592,415.95728V512H734L711.3,660H592v357.77777C836.769,979.37012,1024,767.554,1024,512Z"
-                  ></path>
-                  <path
-                    fill="#fff"
-                    d="M711.3,660,734,512H592V415.95728C592,375.46667,611.83508,336,675.43713,336H740V210s-58.59235-10-114.61078-10C508.43854,200,432,270.87982,432,399.2V512H302V660H432v357.77777a517.39619,517.39619,0,0,0,160,0V660Z"
-                  ></path>
-                </svg>
-                <div>Facebook</div>
-              </a>
-
-              <a
-                href={`https://wa.me/?text=${url}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex space-x-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 1219.547 1225.016"
-                  id="whatsapp"
-                >
-                  <path
-                    fill="#E0E0E0"
-                    d="M1041.858 178.02C927.206 63.289 774.753.07 612.325 0 277.617 0 5.232 272.298 5.098 606.991c-.039 106.986 27.915 211.42 81.048 303.476L0 1225.016l321.898-84.406c88.689 48.368 188.547 73.855 290.166 73.896h.258.003c334.654 0 607.08-272.346 607.222-607.023.056-162.208-63.052-314.724-177.689-429.463zm-429.533 933.963h-.197c-90.578-.048-179.402-24.366-256.878-70.339l-18.438-10.93-191.021 50.083 51-186.176-12.013-19.087c-50.525-80.336-77.198-173.175-77.16-268.504.111-278.186 226.507-504.503 504.898-504.503 134.812.056 261.519 52.604 356.814 147.965 95.289 95.36 147.728 222.128 147.688 356.948-.118 278.195-226.522 504.543-504.693 504.543z"
-                  ></path>
-                  <linearGradient
-                    id="a"
-                    x1="609.77"
-                    x2="609.77"
-                    y1="1190.114"
-                    y2="21.084"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop offset="0" stopColor="#20b038"></stop>
-                    <stop offset="1" stopColor="#60d66a"></stop>
-                  </linearGradient>
-                  <path
-                    fill="url(#a)"
-                    d="M27.875 1190.114l82.211-300.18c-50.719-87.852-77.391-187.523-77.359-289.602.133-319.398 260.078-579.25 579.469-579.25 155.016.07 300.508 60.398 409.898 169.891 109.414 109.492 169.633 255.031 169.57 409.812-.133 319.406-260.094 579.281-579.445 579.281-.023 0 .016 0 0 0h-.258c-96.977-.031-192.266-24.375-276.898-70.5l-307.188 80.548z"
-                  ></path>
-                  <path
-                    fill="#FFF"
-                    fillRule="evenodd"
-                    d="M462.273 349.294c-11.234-24.977-23.062-25.477-33.75-25.914-8.742-.375-18.75-.352-28.742-.352-10 0-26.25 3.758-39.992 18.766-13.75 15.008-52.5 51.289-52.5 125.078 0 73.797 53.75 145.102 61.242 155.117 7.5 10 103.758 166.266 256.203 226.383 126.695 49.961 152.477 40.023 179.977 37.523s88.734-36.273 101.234-71.297c12.5-35.016 12.5-65.031 8.75-71.305-3.75-6.25-13.75-10-28.75-17.5s-88.734-43.789-102.484-48.789-23.75-7.5-33.75 7.516c-10 15-38.727 48.773-47.477 58.773-8.75 10.023-17.5 11.273-32.5 3.773-15-7.523-63.305-23.344-120.609-74.438-44.586-39.75-74.688-88.844-83.438-103.859-8.75-15-.938-23.125 6.586-30.602 6.734-6.719 15-17.508 22.5-26.266 7.484-8.758 9.984-15.008 14.984-25.008 5-10.016 2.5-18.773-1.25-26.273s-32.898-81.67-46.234-111.326z"
-                    clipRule="evenodd"
-                  ></path>
-                  <path
-                    fill="#FFF"
-                    d="M1036.898 176.091C923.562 62.677 772.859.185 612.297.114 281.43.114 12.172 269.286 12.039 600.137 12 705.896 39.633 809.13 92.156 900.13L7 1211.067l318.203-83.438c87.672 47.812 186.383 73.008 286.836 73.047h.255.003c330.812 0 600.109-269.219 600.25-600.055.055-160.343-62.328-311.108-175.649-424.53zm-424.601 923.242h-.195c-89.539-.047-177.344-24.086-253.93-69.531l-18.227-10.805-188.828 49.508 50.414-184.039-11.875-18.867c-49.945-79.414-76.312-171.188-76.273-265.422.109-274.992 223.906-498.711 499.102-498.711 133.266.055 258.516 52 352.719 146.266 94.195 94.266 146.031 219.578 145.992 352.852-.118 274.999-223.923 498.749-498.899 498.749z"
-                  ></path>
-                </svg>
-                <div>WhatsApp</div>
-              </a>
-            </div>
-          </div>
-          <div className="flex justify-center mt-4">
-            <div className="flex space-x-4">
-              <input
-                type="text"
-                value={url}
-                id="copy-text-share"
-                className="w-64 p-2 border border-gray-400 rounded-md dark:bg-gray-600 dark:text-black"
-                readOnly
-              />
-              <button
-                onClick={() => handleCopy(url)}
-                className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Copy
-              </button>
-            </div>
-          </div>
-        </div>
-      </Modal>
+      <Share post_id={id} />
       <div
         className={` py-3 px-1 transition-all ${
           isSelected
@@ -233,8 +131,11 @@ function Post({
               <div className="flex h-full w-64 items-center justify-start space-x-4">
                 <button
                   disabled={!user || !!likeFetcher.submission}
-                  className="flex cursor-pointer items-center justify-start space-x-1.5"
+                  className={`${
+                    effect && "animate-wiggle"
+                  } flex cursor-pointer items-center justify-start space-x-1.5`}
                   onClick={handleLikeClick}
+                  onAnimationEnd={() => setEffect(false)}
                 >
                   <svg
                     width="14"
@@ -246,18 +147,13 @@ function Post({
                     <path
                       d="M0.800049 7.95005C0.800049 7.77276 0.834968 7.59722 0.902812 7.43343C0.970655 7.26964 1.0701 7.12081 1.19545 6.99545C1.32081 6.8701 1.46964 6.77066 1.63343 6.70281C1.79722 6.63497 1.97276 6.60005 2.15005 6.60005C2.32733 6.60005 2.50288 6.63497 2.66667 6.70281C2.83046 6.77066 2.97928 6.8701 3.10464 6.99545C3.23 7.12081 3.32944 7.26964 3.39729 7.43343C3.46513 7.59722 3.50005 7.77276 3.50005 7.95005V13.35C3.50005 13.7081 3.35782 14.0515 3.10464 14.3046C2.85147 14.5578 2.50809 14.7 2.15005 14.7C1.79201 14.7 1.44863 14.5578 1.19545 14.3046C0.942281 14.0515 0.800049 13.7081 0.800049 13.35V7.95005ZM4.40005 7.79975V12.6867C4.39989 13.0212 4.49295 13.3492 4.66877 13.6337C4.84459 13.9183 5.09623 14.1482 5.39545 14.2977L5.44045 14.3202C5.93985 14.5698 6.49045 14.6999 7.04875 14.7H11.9231C12.3394 14.7002 12.7429 14.5561 13.0648 14.2922C13.3868 14.0284 13.6074 13.6611 13.6889 13.2528L14.7689 7.85285C14.8211 7.59173 14.8147 7.32229 14.7502 7.06395C14.6857 6.8056 14.5647 6.56478 14.3959 6.35886C14.227 6.15293 14.0146 5.98703 13.774 5.87311C13.5333 5.75918 13.2703 5.70008 13.004 5.70005H9.80005V2.10005C9.80005 1.62266 9.61041 1.16482 9.27284 0.827257C8.93528 0.489691 8.47744 0.300049 8.00005 0.300049C7.76135 0.300049 7.53244 0.39487 7.36365 0.563653C7.19487 0.732435 7.10005 0.961354 7.10005 1.20005V1.80035C7.10005 2.57928 6.84741 3.3372 6.38005 3.96035L5.12005 5.63975C4.65269 6.2629 4.40005 7.02082 4.40005 7.79975V7.79975Z"
                       style={{
-                        fill:
-                          likedByMe | likedByMeFromFetcher
-                            ? "rgb(49,196,141)"
-                            : "gray",
+                        fill: likedByMe ? "rgb(49,196,141)" : "gray",
                       }}
                     />
                   </svg>
 
                   <div className="  text-sm font-medium leading-tight text-gray-500 dark:text-gray-100">
-                    {likeFetcher.data
-                      ? likeFetcher.data?.length
-                      : likedBy.length}
+                    {likeCount > 0 && likeCount}
                   </div>
                 </button>
                 {ReplyCount > 0 && (
@@ -291,14 +187,24 @@ function Post({
 
                 <div
                   onClick={() => setOpenShare(true)}
-                  className="flex items-center justify-start "
+                  className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-blue-400"
                 >
-                  <img src={shareIcon} alt="alt" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M13.0001 6C13.6092 6.00002 14.2039 5.8146 14.7051 5.4684C15.2064 5.1222 15.5903 4.63162 15.8059 4.06191C16.0215 3.49219 16.0586 2.87034 15.9122 2.27903C15.7658 1.68773 15.4429 1.15501 14.9864 0.7517C14.5299 0.348392 13.9614 0.0936137 13.3565 0.0212462C12.7517 -0.0511213 12.1392 0.062351 11.6004 0.346574C11.0616 0.630796 10.6221 1.0723 10.3404 1.61237C10.0586 2.15245 9.94792 2.7655 10.0231 3.37L5.08305 5.84C4.65928 5.43135 4.12465 5.15642 3.54574 5.04944C2.96684 4.94247 2.36926 5.00819 1.82744 5.2384C1.28561 5.46862 0.823499 5.85316 0.498659 6.34413C0.173819 6.8351 0.000610352 7.4108 0.000610352 7.9995C0.000610352 8.5882 0.173819 9.1639 0.498659 9.65487C0.823499 10.1458 1.28561 10.5304 1.82744 10.7606C2.36926 10.9908 2.96684 11.0565 3.54574 10.9496C4.12465 10.8426 4.65928 10.5676 5.08305 10.159L10.0231 12.629C9.93555 13.3312 10.0991 14.0418 10.4848 14.6351C10.8706 15.2284 11.4536 15.6663 12.1309 15.8713C12.8082 16.0763 13.5362 16.0353 14.1862 15.7555C14.8362 15.4757 15.3664 14.9751 15.683 14.3422C15.9996 13.7093 16.0823 12.9849 15.9165 12.2969C15.7506 11.6089 15.3469 11.0017 14.7767 10.5826C14.2065 10.1635 13.5065 9.9595 12.8004 10.0066C12.0943 10.0537 11.4276 10.3489 10.9181 10.84L5.97805 8.37C6.00832 8.12426 6.00832 7.87574 5.97805 7.63L10.9181 5.16C11.4561 5.68 12.1901 6 13.0001 6Z"
+                      className="fill-inherit"
+                    />
+                  </svg>
+
                   <button
                     type="button"
-                    className="text-sm font-medium leading-tight text-gray-500 dark:text-gray-100 hover:text-blue-500"
+                    className="text-sm font-medium leading-tigh "
                   >
-                    <span className="mr-1"></span>
                     share
                   </button>
                 </div>

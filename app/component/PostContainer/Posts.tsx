@@ -19,18 +19,12 @@ type PostPropsType = {
   editor: Editor | null;
   posts: any;
 };
-function scrollToSelection(editor: Editor): void {
-  const { node } = editor.view.domAtPos(editor.state.selection.anchor);
-  if (node.parentElement) {
-    (node.parentElement as any).scrollIntoView();
-  }
-}
+
 export function links() {
   return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
 }
 function Posts({ editor, posts }: PostPropsType) {
   const data = useLoaderData();
-  const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
   const setPostList = useSetRecoilState(postslist);
   const [selectedPost, setSelectedPost] = useRecoilState(selectedPostState);
 
@@ -59,23 +53,10 @@ function Posts({ editor, posts }: PostPropsType) {
     }, 0);
   }
 
-  const closeFilter = () => setOpenFilter((prev) => !prev);
-  const ref = useDetectClickOutside({
-    onTriggered: closeFilter,
-  });
-
-  const translation = uselitteraTranlation();
   if (!editor) return null;
   return (
     <>
-      {openFilter && (
-        <Modal show={true} onClose={closeFilter} size="md">
-          <div ref={ref}>
-            <Modal.Header>{translation.filter}</Modal.Header>
-            <Filter close={closeFilter} />
-          </div>
-        </Modal>
-      )}
+      <Filter />
       <div
         className="scroll-container flex flex-col overflow-x-hidden overflow-y-scroll relative pr-2"
         style={{

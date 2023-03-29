@@ -2,11 +2,11 @@ import { useOutletContext } from "@remix-run/react";
 import { useFetcher, useLoaderData } from "@remix-run/react/dist/components";
 import { Button } from "flowbite-react";
 import { timeAgo } from "~/utility/getFormatedDate";
-
+import { useState } from "react";
 type ReplyPropType = {
   reply: any;
   isCreator: boolean;
-  postId: number;
+  postId: string;
   replyList: any;
   type: "question" | "comment";
 };
@@ -14,12 +14,23 @@ type ReplyPropType = {
 function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
   const replyLikeFetcher = useFetcher();
   const approvedFetcher = useFetcher();
+  const [effect, setEffect] = useState(false);
   const { user }: { user: any } = useOutletContext();
-  const likedByMe = user
+  let likedByMe = user
     ? replyList?.likedBy?.some((d) => d.username == user.username)
     : false;
   const solved = replyList?.isAproved;
-  const like_Count = replyList?.likedBy?.length || 0;
+  let like_Count = replyList?.likedBy?.length || 0;
+  let likeInFetcher = replyLikeFetcher?.submission?.formData?.get("like");
+
+  if (likeInFetcher === "true") {
+    likedByMe = true;
+    like_Count++;
+  }
+  if (likeInFetcher === "false") {
+    likedByMe = false;
+    like_Count--;
+  }
   const innerHtml = () => {
     let html = "";
     if (reply?.cooked) {
@@ -57,13 +68,15 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
     );
   }
   function handleLikeReply() {
+    setEffect(true);
     replyLikeFetcher.submit(
       {
         _action: "likeReply",
         post_id: postId,
         likedBy: user?.id,
         id: reply?.id,
-        create: replyList ? "update" : "create",
+        like: !likedByMe ? "true" : "false",
+        create: !!replyList ? "update" : "create",
       },
       {
         method: "post",
@@ -96,14 +109,17 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
         <button
           disabled={!!replyLikeFetcher.submission || !user}
           onClick={handleLikeReply}
-          className="flex cursor-pointer items-center"
+          className={`${
+            effect && "animate-wiggle"
+          } flex cursor-pointer items-center`}
+          onAnimationEnd={() => setEffect(false)}
         >
           <svg
             width="16"
             height="16"
             viewBox="0 0 16 16"
             xmlns="http://www.w3.org/2000/svg"
-            className=" mr-2 fill-gray-500"
+            className="mr-2"
           >
             <path
               style={{
@@ -113,7 +129,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
             />
           </svg>
           <div className=" disabled:text-slate-300 text-sm font-medium leading-tight text-gray-500 dark:text-gray-200">
-            {like_Count}
+            {like_Count > 0 && like_Count}
           </div>
         </button>
         {like_Count > 0 && type === "question" && (

@@ -1,8 +1,16 @@
 import { Editor } from "@tiptap/react";
 import crossIcon from "~/assets/svg/icon_cross.svg";
 import SearchString from "./SearchString";
-import React, { useState, useCallback, useTransition } from "react";
+import React, { useState } from "react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
+
+const debounce = (fn, delay) => {
+  let timerId;
+  return (...args) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => fn(...args), delay);
+  };
+};
 
 interface Props {
   editor: Editor | null;
@@ -20,19 +28,15 @@ function EditorSetting({
   setShowFontSize,
 }: Props) {
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
-  const changeFontSize = useCallback(
-    (value: number) => {
-      editor?.chain()?.selectAll()?.setFontSize(value)?.run();
-      setFontSize(value);
-    },
-    [editor]
-  );
-  const handleRangeHover = useCallback(
-    (event) => {
-      event.target.title = fontSize;
-    },
-    [fontSize]
-  );
+  const handleFontChange = (e) => {
+    debounceChangeFont(e.target.value);
+  };
+  const changeFontSize = (value: number) => {
+    editor?.chain()?.selectAll()?.setFontSize(value)?.run();
+    setFontSize(value);
+  };
+
+  const debounceChangeFont = debounce(changeFontSize, 200);
   const FontSizeComponent = () => (
     <>
       <div className="inline-flex flex-1 items-center justify-between rounded-full">
@@ -46,10 +50,10 @@ function EditorSetting({
               className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-gray-700"
               min={18}
               step={1}
-              max={32}
-              value={fontSize}
-              onChange={(e) => changeFontSize(Number(e.target.value))}
-              onMouseOver={handleRangeHover}
+              max={38}
+              defaultValue={fontSize}
+              title={fontSize}
+              onChange={handleFontChange}
             ></input>
           </div>
         </div>

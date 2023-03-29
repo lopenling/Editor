@@ -41,7 +41,7 @@ export default function Post() {
   const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
-  const data = useLoaderData();
+  const data = useLoaderData<typeof loader>();
   const posts = data.posts;
   const { editor }: { editor: Editor } = useOutletContext();
 

@@ -40,7 +40,7 @@ export async function findPostByUser(userId) {
   try {
     let posts = await db.post.findMany({
       where: {
-        creatorUser_id: userId,
+        creatorUser: { id: userId },
       },
       include: {
         Reply: true,

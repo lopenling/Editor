@@ -14,7 +14,6 @@ import { useRef } from "react";
 import { getUserSession } from "~/services/session.server";
 import { createText, deleteText, findAllText } from "~/model/text";
 import { useId } from "react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const textList = await findAllText();
@@ -46,7 +45,6 @@ export default function UploadText() {
   if (transition.state !== "idle") {
     formRef.current.reset();
   }
-  const [animationParent] = useAutoAnimate();
   return (
     <div className="mx-10 my-4 ">
       <Form method="post" ref={formRef} className="max-w-2xl m-auto">
