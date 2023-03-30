@@ -131,11 +131,9 @@ export default function Header({ user }: any) {
                       UploadText
                     </NavLink>
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <NavLink to="/posts" prefetch="render">
-                      Posts
-                    </NavLink>
-                  </Dropdown.Item>
+                  <NavLink to="/posts" prefetch="render">
+                    <Dropdown.Item>Posts</Dropdown.Item>
+                  </NavLink>
                   <Dropdown.Divider />
                   <Dropdown.Item onClick={changeTheme}>
                     {themeSelected !== "light" ? (

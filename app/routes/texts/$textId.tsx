@@ -1,7 +1,13 @@
 import { getUserSession } from "~/services/session.server";
 import { json, MetaFunction } from "@remix-run/cloudflare";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import { useLoaderData, useFetcher, Link, Outlet } from "@remix-run/react";
+import {
+  useLoaderData,
+  useFetcher,
+  Link,
+  Outlet,
+  useLocation,
+} from "@remix-run/react";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
 import { useSetRecoilState } from "recoil";
@@ -20,6 +26,8 @@ import { FontSize } from "~/tiptap-extension/fontSize";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { findPostByPostId } from "~/model/post";
+import { motion } from "framer-motion";
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const postId = url.searchParams.get("post");
@@ -76,7 +84,6 @@ export default function () {
   }, [textFetcher.data]);
   const setSelectionRange = useSetRecoilState(selectionRangeState);
   const setSelection = useSetRecoilState(selectedTextOnEditor);
-
   const editor = useEditor(
     {
       extensions: [
@@ -150,12 +157,19 @@ export default function () {
     [content]
   );
   return (
-    <main
-      className="pt-5 container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
-      style={{ maxWidth: MAX_WIDTH_PAGE }}
+    <motion.div
+      key={useLocation().pathname}
+      initial={{ x: "5%", opacity: 0 }}
+      animate={{ x: "0%", opacity: 1 }}
+      exit={{ x: "5%", opacity: 0 }}
     >
-      <Editor content={content} editor={editor} />
-      <Outlet context={{ user: data.user, editor, text: data.text }} />
-    </main>
+      <main
+        className="pt-5 container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
+        style={{ maxWidth: MAX_WIDTH_PAGE }}
+      >
+        <Editor content={content} editor={editor} />
+        <Outlet context={{ user: data.user, editor, text: data.text }} />
+      </main>
+    </motion.div>
   );
 }

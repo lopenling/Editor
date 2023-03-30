@@ -57,8 +57,6 @@ const AudioRecorder = () => {
     };
   };
   const onStop = (blob) => {
-    console.log("uploading...");
-
     let data = new FormData();
 
     data.append("type", "composer");

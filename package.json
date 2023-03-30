@@ -38,7 +38,7 @@
     "crypto-js": "^4.1.1",
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",
-    "fs": "^0.0.1-security",
+    "framer-motion": "^10.10.0",
     "prosemirror-model": "^1.19.0",
     "prosemirror-state": "^1.4.2",
     "prosemirror-view": "^1.30.1",

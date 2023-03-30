@@ -9,6 +9,7 @@ import {
   ScrollRestoration,
   useLoaderData,
   useTransition,
+  useLocation,
 } from "@remix-run/react";
 import { Spinner } from "flowbite-react";
 import ErrorPage from "./component/ErrorPage";
@@ -20,6 +21,8 @@ import { LitteraProvider } from "@assembless/react-littera";
 import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { theme } from "./states";
 import { useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -102,7 +105,9 @@ function App() {
       <body className="dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           <Header user={data.user} />
-          {routeChanged ? <Loading /> : <Outlet />}
+          <AnimatePresence mode="wait" initial={false}>
+            {routeChanged ? <Loading /> : <Outlet />}
+          </AnimatePresence>
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />
 

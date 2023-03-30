@@ -4,7 +4,7 @@ import {
   Link,
   Await,
   Form,
-  useActionData,
+  useLocation,
 } from "@remix-run/react";
 import { redirect } from "@remix-run/cloudflare";
 import { findPostByUser } from "~/model/post";
@@ -15,16 +15,16 @@ import { SolvedLogo } from "~/component/PostContainer/Reply";
 import {
   defer,
   unstable_parseMultipartFormData,
-  unstable_composeUploadHandlers,
   unstable_createMemoryUploadHandler,
   UploadHandler,
-  UploadHandlerPart,
 } from "@remix-run/cloudflare";
 import { Suspense, useRef, useState } from "react";
 import { Spinner } from "flowbite-react";
 import { uploadFile } from "~/services/discourseApi";
 import AudioRecorder from "~/component/Media/AudioRecorder";
 import FileUpload from "~/component/Media/FileUpload";
+import { motion } from "framer-motion";
+
 export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUserSession(request);
   if (!user) redirect("/");
@@ -59,7 +59,12 @@ export default function Posts() {
   let data = useLoaderData();
 
   return (
-    <div>
+    <motion.div
+      key={useLocation().pathname}
+      initial={{ x: "5%", opacity: 0 }}
+      animate={{ x: "0%", opacity: 1 }}
+      exit={{ x: "5%", opacity: 0 }}
+    >
       <FileUpload />
       <AudioRecorder />
       <Suspense
@@ -73,7 +78,7 @@ export default function Posts() {
           {(posts) => <Component posts={posts} user={data.userData} />}
         </Await>
       </Suspense>
-    </div>
+    </motion.div>
   );
 }
 

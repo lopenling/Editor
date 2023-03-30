@@ -46,7 +46,9 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
             .getAttribute("src");
 
           let newUrl = "https://lopenling.org" + originalsrc;
-          l.getElementsByTagName("source")[0].setAttribute("src", newUrl);
+          let srcdata = l.getElementsByTagName("source")[0].getAttribute("src");
+          if (srcdata.startsWith("/"))
+            l.getElementsByTagName("source")[0].setAttribute("src", newUrl);
         });
         html = doc.body?.querySelector("audio").parentElement.innerHTML;
       }
@@ -114,7 +116,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
         </div>
       </div>
       <p
-        className=" w-full py-3 text-base leading-normal text-gray-500 dark:text-gray-100"
+        className=" max-w-full py-3 text-base leading-normal text-gray-500 dark:text-gray-100"
         dangerouslySetInnerHTML={innerHtml()}
       ></p>
       <div className="flex justify-between">

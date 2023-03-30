@@ -4,14 +4,14 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/cloudflare";
-import { useEffect } from "react";
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Footer";
 import { json } from "@remix-run/cloudflare";
 import { searchTextWithName } from "~/model/text";
-import { useLoaderData, useTransition } from "@remix-run/react/dist/components";
+import { useLocation, useLoaderData, useTransition } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import SearchIcon from "~/assets/svg/icon_search.svg";
+import { motion } from "framer-motion";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
@@ -62,7 +62,12 @@ export default function Index() {
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
 
   return (
-    <>
+    <motion.div
+      key={useLocation().pathname}
+      initial={{ x: "5%", opacity: 0 }}
+      animate={{ x: "0%", opacity: 1 }}
+      exit={{ x: "5%", opacity: 0 }}
+    >
       <div className=" max-w-2xl mx-auto">
         <div
           className="inline-flex w-full items-center justify-center  px-3 md:px-1.5"
@@ -138,7 +143,7 @@ export default function Index() {
           <FooterContainer />
         </>
       )}
-    </>
+    </motion.div>
   );
 }
 
