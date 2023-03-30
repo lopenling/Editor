@@ -1,14 +1,30 @@
-import type { LoaderFunction } from "@remix-run/cloudflare";
-import { useLoaderData, Link, Await } from "@remix-run/react";
+import type { ActionFunction, LoaderFunction } from "@remix-run/cloudflare";
+import {
+  useLoaderData,
+  Link,
+  Await,
+  Form,
+  useActionData,
+} from "@remix-run/react";
 import { redirect } from "@remix-run/cloudflare";
 import { findPostByUser } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
 import { getUserSession } from "~/services/session.server";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { SolvedLogo } from "~/component/PostContainer/Reply";
-import { defer } from "@remix-run/cloudflare";
-import { Suspense } from "react";
+import {
+  defer,
+  unstable_parseMultipartFormData,
+  unstable_composeUploadHandlers,
+  unstable_createMemoryUploadHandler,
+  UploadHandler,
+  UploadHandlerPart,
+} from "@remix-run/cloudflare";
+import { Suspense, useRef, useState } from "react";
 import { Spinner } from "flowbite-react";
+import { uploadFile } from "~/services/discourseApi";
+import AudioRecorder from "~/component/Media/AudioRecorder";
+import FileUpload from "~/component/Media/FileUpload";
 export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUserSession(request);
   if (!user) redirect("/");
@@ -16,21 +32,48 @@ export const loader: LoaderFunction = async ({ request }) => {
   let posts = findPostByUser(userData.id);
   return defer({ posts, userData }, { status: 202 });
 };
+export const action: ActionFunction = async ({ request }) => {
+  const uploadHandler: UploadHandler = unstable_createMemoryUploadHandler({
+    maxPartSize: 30_00_000, //3MB
+  });
+
+  const user = await getUserSession(request);
+  if (!user) {
+    return { error: "no user logged in" };
+  }
+  const formData = await unstable_parseMultipartFormData(
+    request,
+    uploadHandler
+  );
+  try {
+    const fileuploaded = await uploadFile(user.username, formData);
+    return {
+      data: fileuploaded,
+    };
+  } catch (e) {
+    return { error: e.message };
+  }
+};
 
 export default function Posts() {
   let data = useLoaderData();
+
   return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center mt-36">
-          <Spinner /> Loading...
-        </div>
-      }
-    >
-      <Await resolve={data.posts}>
-        {(posts) => <Component posts={posts} user={data.userData} />}
-      </Await>
-    </Suspense>
+    <div>
+      <FileUpload />
+      <AudioRecorder />
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center mt-36">
+            <Spinner /> Loading...
+          </div>
+        }
+      >
+        <Await resolve={data.posts}>
+          {(posts) => <Component posts={posts} user={data.userData} />}
+        </Await>
+      </Suspense>
+    </div>
   );
 }
 

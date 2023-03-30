@@ -29,8 +29,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = parseInt(params.textId);
   const text = await findTextByTextId(textId, false);
   if (!textId) throw new Error("not valid textId");
+
   return json({ user, text: text, selectedPost });
 };
+
 export function ErrorBoundary({ error }) {
   console.error(error);
   return <div>ohh Snap! There is an error</div>;

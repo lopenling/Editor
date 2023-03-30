@@ -1,7 +1,33 @@
-import type { EntryContext } from "@remix-run/cloudflare";
+import type {
+  EntryContext,
+  HandleDataRequestFunction,
+} from "@remix-run/cloudflare";
 import { RemixServer } from "@remix-run/react";
 import { renderToReadableStream } from "react-dom/server";
 const ABORT_DELAY = 10000;
+
+export const handleDataRequest: HandleDataRequestFunction = async (
+  response: Response,
+  { request }
+) => {
+  let isGet = request.method.toLowerCase() === "get";
+  let purpose =
+    request.headers.get("Purpose") ||
+    request.headers.get("X-Purpose") ||
+    request.headers.get("Sec-Purpose") ||
+    request.headers.get("Sec-Fetch-Purpose") ||
+    request.headers.get("Moz-Purpose");
+  let isPrefetch = purpose === "prefetch";
+
+  // If it's a GET request and it's a prefetch request and it doesn't have a Cache-Control header
+  if (isGet && isPrefetch && !response.headers.has("Cache-Control")) {
+    // we will cache for 10 seconds only on the browser
+    response.headers.set("Cache-Control", "private, max-age=10");
+  }
+
+  return response;
+};
+
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,

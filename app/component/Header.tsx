@@ -44,12 +44,12 @@ export default function Header({ user }: any) {
   const [themeSelected, setThemeSelected] = useRecoilState(theme);
   const changeTheme = () => {
     if (window)
-      if (themeSelected === "light") {
-        setThemeSelected("dark");
-        window.localStorage.setItem("theme", "dark");
-      } else {
+      if (themeSelected === "dark") {
         setThemeSelected("light");
         window.localStorage.setItem("theme", "light");
+      } else if (themeSelected === "light") {
+        setThemeSelected("dark");
+        window.localStorage.setItem("theme", "dark");
       }
   };
   useEffect(() => {

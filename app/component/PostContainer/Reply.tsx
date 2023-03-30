@@ -32,23 +32,35 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
     like_Count--;
   }
   const innerHtml = () => {
-    let html = "";
+    let html = reply.cooked;
     if (reply?.cooked) {
-      let doc = new DOMParser().parseFromString(reply.cooked, "text/xml");
-      let p = doc.getElementsByTagName("p")[0];
-      let audio = p.querySelectorAll("audio");
-
-      if (!audio.length) return { __html: reply.cooked };
+      let doc = new DOMParser().parseFromString(reply.cooked, "text/html");
+      let audio = doc.querySelectorAll("audio");
+      let video = doc.querySelectorAll("video");
+      if (!audio) return { __html: reply.cooked };
+      if (!video) return { __html: reply.cooked };
       if (audio?.length > 0) {
         audio.forEach((l) => {
           let originalsrc = l
             .getElementsByTagName("source")[0]
             .getAttribute("src");
+
           let newUrl = "https://lopenling.org" + originalsrc;
           l.getElementsByTagName("source")[0].setAttribute("src", newUrl);
         });
+        html = doc.body?.querySelector("audio").parentElement.innerHTML;
       }
-      html = p.outerHTML;
+      if (video?.length > 0) {
+        video.forEach((l) => {
+          let originalsrc = l
+            .getElementsByTagName("source")[0]
+            .getAttribute("src");
+
+          let newUrl = "https://lopenling.org" + originalsrc;
+          l.getElementsByTagName("source")[0].setAttribute("src", newUrl);
+        });
+        html = doc.body?.querySelector(".video-container")?.innerHTML;
+      }
     }
     return { __html: html };
   };
@@ -132,11 +144,13 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
             {like_Count > 0 && like_Count}
           </div>
         </button>
-        {like_Count > 0 && type === "question" && (
+        {type === "question" && (
           <div className="cursor-pointer">
             {!solved ? (
-              isCreator && (
+              isCreator &&
+              like_Count > 0 && (
                 <button
+                  disabled={replyLikeFetcher.state !== "idle"}
                   onClick={handleAproved}
                   style={{ borderRadius: 7 }}
                   className="flex gap-2 p-2  cursor-pointer text-xs font-medium leading-none text-green-700 border-green-700 border-2 dark:text-green-400 dark:border-green-400"

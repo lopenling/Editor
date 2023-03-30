@@ -203,19 +203,15 @@ class DiscourseApi {
   }
   async uploadFile(formData: any) {
     let auth_headers = this.authHeader();
-    try {
-      let res = await fetch(`${this.DiscourseUrl}/uploads.json`, {
-        method: "POST",
-        headers: auth_headers,
-        body: formData,
-      });
-      if (res.status === 200) {
-        let data = await res.json();
-        return data.url;
-      }
-    } catch (e) {
-      console.log("upload Failed" + e.message);
-    }
+
+    let res = await fetch(`${this.DiscourseUrl}/uploads.json`, {
+      method: "POST",
+      headers: auth_headers,
+      body: formData,
+    });
+    let data = await res.json();
+    if (data?.errors) throw new Error(data.errors);
+    return data;
   }
   async logout(id: string) {
     let auth_headers = this.authHeader(true);
