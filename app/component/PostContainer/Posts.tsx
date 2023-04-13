@@ -13,7 +13,6 @@ import {
   filteredPost as filteredValue,
   openFilterState,
   postslist,
-  selectedPost as selectedPostState,
 } from "~/states";
 type PostPropsType = {
   editor: Editor | null;
@@ -26,21 +25,21 @@ export function links() {
 function Posts({ editor, posts }: PostPropsType) {
   const data = useLoaderData();
   const setPostList = useSetRecoilState(postslist);
-  const [selectedPost, setSelectedPost] = useRecoilState(selectedPostState);
 
   if (!posts && !posts.length) return null;
   useEffect(() => {
     setPostList(posts);
   }, [posts]);
-  useEffect(() => {
-    setSelectedPost(data.selectedPost);
-  }, [data.selectedPost]);
+  // useEffect(() => {
+  //   setSelectedPost(data.selectedPost);
+  // }, [data.selectedPost]);
   const filteredPost = useRecoilValue(filteredValue);
   let timeout;
-  function handleSelectPost({ start, end, id }) {
-    setSelectedPost({ start, end, id });
+  function handleSelectPost({ thread_id, id }) {
+    let thread = document.getElementById(thread_id);
+    console.log(thread);
+    window.getSelection().selectAllChildren(thread);
     window.scroll(0, 0);
-    editor?.chain().focus().setTextSelection({ from: start, to: end }).run();
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -81,6 +80,7 @@ function Posts({ editor, posts }: PostPropsType) {
                 replyCount={post?.replyCount}
                 isSolved={post?.isSolved}
                 isOptimistic={false}
+                threadId={post?.thread_id}
               />
             );
           })}

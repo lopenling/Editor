@@ -48,6 +48,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       let userData = null;
       let id = 0;
       let isUserInDatabase = await findUserByUsername(username);
+      console.log(isUserInDatabase);
       if (isUserInDatabase === null) {
         let isAdmin = admin === "true" ? true : false;
         userData = await createUserInDB(

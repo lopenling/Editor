@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUserSession(request);
   if (!user) redirect("/");
   let userData = await findUserByUsername(user.username);
-  let posts = findPostByUser(userData.id);
+  let posts = findPostByUser(userData?.id);
   return defer({ posts, userData }, { status: 202 });
 };
 export const action: ActionFunction = async ({ request }) => {

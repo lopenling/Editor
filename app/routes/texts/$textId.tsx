@@ -10,35 +10,50 @@ import {
 } from "@remix-run/react";
 import { findTextByTextId } from "~/model/text";
 import Editor from "~/component/EditorContainer/Editor";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
-import { selectedTextOnEditor, selectionRangeState, textName } from "~/states";
-import { useEffect, useMemo } from "react";
+import {
+  openSuggestionState,
+  selectedTextOnEditor,
+  selectedThread,
+  selectionRangeState,
+  textName,
+} from "~/states";
+import { useEffect, useMemo, useState } from "react";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
-import TextStyle from "@tiptap/extension-text-style";
+import Collaboration from "@tiptap/extension-collaboration";
 import HardBreak from "@tiptap/extension-hard-break";
 import Highlight from "@tiptap/extension-highlight";
 import FontFamily from "@tiptap/extension-font-family";
+import { Suggestion } from "~/tiptap-extension/suggestion";
+import PostMark from "~/tiptap-extension/postMark";
+import SuggestionContainer from "~/component/Suggestion";
+// import { Comment } from "~/tiptap-extension/comment";
 import { FontSize } from "~/tiptap-extension/fontSize";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
-import { findPostByPostId } from "~/model/post";
 import { motion } from "framer-motion";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import * as Y from "yjs";
+import { WebsocketProvider } from "y-websocket";
+import { HocuspocusProvider } from "@hocuspocus/provider";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const postId = url.searchParams.get("post");
 
-  const selectedPost = postId ? await findPostByPostId(postId) : null;
+  // const selectedPost = postId ? await findPostByPostId(postId) : null;
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
   const text = await findTextByTextId(textId, false);
   if (!textId) throw new Error("not valid textId");
 
-  return json({ user, text: text, selectedPost });
+  return json({ user, text: text });
 };
 
 export function ErrorBoundary({ error }) {
@@ -61,9 +76,15 @@ export function links() {
     },
   ];
 }
+export interface CommentInstance {
+  uuid?: string;
+  comments?: any[];
+}
+
 export default function () {
   const data = useLoaderData();
   const textNameSetter = useSetRecoilState(textName);
+
   if (data.text === null)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
@@ -79,12 +100,40 @@ export default function () {
     if (textFetcher.type === "init")
       textFetcher.load(`/api/text?textId=${data.text?.id}`);
   }, []);
-  let content = useMemo(() => {
-    return textFetcher.data?.content.replace(/\n/g, "<br>");
-  }, [textFetcher.data]);
+  let content = textFetcher.data?.content.replace(/\n/g, "<br>");
   const setSelectionRange = useSetRecoilState(selectionRangeState);
   const setSelection = useSetRecoilState(selectedTextOnEditor);
-  const editor = useEditor(
+  const threadSelector = useSetRecoilState(selectedThread);
+  const [openSuggestion, setOpenSuggestion] =
+    useRecoilState(openSuggestionState);
+  const saveText = useFetcher();
+  const saveData = (content) => {
+    saveText.submit(
+      { content, id: data.text?.id },
+      { method: "post", action: "/api/text" }
+    );
+  };
+  function setter(id, type) {
+    threadSelector({
+      type: type,
+      id: id,
+    });
+  }
+  let user = data.user ? data.user.username : "random";
+  let ydoc = new Y.Doc();
+  let provider = useMemo(
+    () =>
+      new HocuspocusProvider({
+        url: "ws://localhost:1234",
+        name: data.text.name,
+        document: ydoc,
+        onConnect() {
+          console.log("connected");
+        },
+      }),
+    []
+  );
+  let editor = useEditor(
     {
       extensions: [
         Document,
@@ -93,7 +142,13 @@ export default function () {
         Bold,
         FontFamily,
         FontSize,
-        TextStyle,
+        Collaboration.configure({
+          document: provider.document,
+        }),
+        CollaborationCursor.configure({
+          provider: provider,
+          user: { name: user, color: "#ffcc00" },
+        }),
         SearchAndReplace.configure({
           searchResultClass: "search",
           caseSensitive: false,
@@ -106,7 +161,17 @@ export default function () {
         }),
         Highlight.configure({
           HTMLAttributes: {
-            class: "my-custom-class",
+            class: "highlight",
+          },
+        }),
+        Suggestion(setter).configure({
+          HTMLAttributes: {
+            class: "suggestion",
+          },
+        }),
+        PostMark(setter).configure({
+          HTMLAttributes: {
+            class: "post",
           },
         }),
       ],
@@ -145,17 +210,23 @@ export default function () {
           end: to,
           text: editor?.state.doc.textBetween(from, to, ""),
         });
+        setOpenSuggestion(false);
       },
       onCreate: ({ editor }) => {
         if (data.selectedPost) {
-          let from = data.selectedPost.start;
-          let to = data.selectedPost.end;
-          editor?.chain().focus().setTextSelection({ from, to }).run();
+          // let from = data.selectedPost.start;
+          // let to = data.selectedPost.end;
+          // editor?.chain().focus().setTextSelection({ from, to }).run();
         }
+      },
+      onUpdate: ({ editor }) => {
+        let content = editor.getHTML();
+        if (content.length > 2000) saveData(content);
       },
     },
     [content]
   );
+
   return (
     <motion.div
       key={useLocation().pathname}
@@ -168,7 +239,10 @@ export default function () {
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
         <Editor content={content} editor={editor} />
-        <Outlet context={{ user: data.user, editor, text: data.text }} />
+        <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
+          {openSuggestion && <SuggestionContainer editor={editor} />}
+          <Outlet context={{ user: data.user, editor, text: data.text }} />
+        </div>
       </main>
     </motion.div>
   );

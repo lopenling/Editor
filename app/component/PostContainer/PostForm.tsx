@@ -4,10 +4,12 @@ import React from "react";
 import ErrorSubmission from "./SubmissionError";
 import { createPortal } from "react-dom";
 import Post from "./Post";
-import { selectionRangeState } from "~/states";
+import { selectedTextOnEditor, selectionRangeState } from "~/states";
 import { useRecoilState } from "recoil";
+import { Editor } from "@tiptap/react";
 const PostForm = () => {
   const [postInfo, setPostInfo] = useRecoilState(selectionRangeState);
+  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const data = useOutletContext();
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
@@ -15,6 +17,7 @@ const PostForm = () => {
   let isFormEmpty = body.length < 5;
   let isPosting =
     createPost.submission && createPost.submission.formData.get("body") !== "";
+  const { editor }: { editor: Editor } = useOutletContext();
   function handleSubmit(e) {
     e.preventDefault();
     let lengthOfSelection = postInfo.end - postInfo?.start;
@@ -22,11 +25,11 @@ const PostForm = () => {
       alert("ERROR : selecting more then 255 letter not allowed");
       return null;
     }
+
     if (postInfo)
       createPost.submit(
         {
-          start: postInfo.start,
-          end: postInfo.end,
+          threadId: selection.thread,
           selectedTextSegment: postInfo.content,
           textId: data?.text?.id,
           topic: data?.text?.name,
@@ -57,6 +60,7 @@ const PostForm = () => {
         }
         handleSelection={null}
         isOptimistic={true}
+        threadId={selection.thread}
       />,
       document.getElementById("temporaryPost")
     );

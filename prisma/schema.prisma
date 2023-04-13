@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,57 +7,71 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         String   @id @unique @default(uuid())
-  name       String
-  username   String   @unique
-  email      String   @unique
-  role       Role     @default(BASIC)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  Post       Post[]   @relation("creatorPost")
-  likedPost  Post[]   @relation("likedPost")
-  likedReply Reply[]  @relation("ReplylikedUser")
-  isAdmin    Boolean
-  avatarUrl  String
-
-  @@index([email, username])
-}
-
-enum Role {
-  BASIC
-  SCHOLAR
-}
-
 model Post {
   id             String   @id @default(uuid())
   type           String
   avatar         String
   topic_id       Int
   post_id        Int
-  creatorUser    User     @relation("creatorPost", fields: [creatorUser_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   content        String
-  start          Int
-  end            Int
-  text           Text     @relation(fields: [text_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   created_at     DateTime @default(now())
   creatorUser_id String
-  Reply          Reply[]
   text_id        Int
+  thread_id      String
+  creatorUser    User     @relation("creatorPost", fields: [creatorUser_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Text           Text     @relation(fields: [text_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Reply          Reply[]
   likedBy        User[]   @relation("likedPost")
 }
 
 model Reply {
-  id         String   @id @unique @default(uuid())
-  parentPost Post     @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         String   @id @unique
   isAproved  Boolean?
   post_id    String
+  parentPost Post     @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   likedBy    User[]   @relation("ReplylikedUser")
 }
 
 model Text {
-  id      Int    @id @unique @default(autoincrement())
-  name    String
-  content String @db.Text()
-  Post    Post[]
+  id         Int          @id @unique @default(autoincrement())
+  name       String
+  content    String
+  Post       Post[]
+  Suggestion Suggestion[]
+}
+
+model User {
+  id              String       @id @unique @default(uuid())
+  name            String
+  username        String       @unique
+  email           String       @unique
+  role            Role         @default(BASIC)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  isAdmin         Boolean
+  avatarUrl       String
+  likedPost       Post[]       @relation("likedPost")
+  likedReply      Reply[]      @relation("ReplylikedUser")
+  likedSuggestion Suggestion[] @relation("likedSuggestion")
+  Post            Post[]       @relation("creatorPost")
+  Suggestion      Suggestion[] @relation("suggestionCreator")
+
+  @@index([email, username])
+}
+
+model Suggestion {
+  id       String @id @unique @default(uuid())
+  text     Text   @relation(fields: [textId], references: [id])
+  textId   Int
+  oldValue String
+  newValue String
+  user     User   @relation("suggestionCreator", fields: [userId], references: [id])
+  userId   String
+  threadId String
+  likedBy  User[] @relation("likedSuggestion")
+}
+
+enum Role {
+  BASIC
+  SCHOLAR
 }

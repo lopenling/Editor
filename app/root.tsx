@@ -23,6 +23,7 @@ import { theme } from "./states";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import { db } from "./db.server";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -32,7 +33,6 @@ export const meta: MetaFunction = () => ({
 });
 export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUserSession(request);
-
   return { user };
 };
 
@@ -110,7 +110,6 @@ function App() {
           </AnimatePresence>
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />
-
         <LiveReload />
         <Scripts />
       </body>

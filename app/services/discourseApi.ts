@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
 import { MAX_CATEGORY_NAME_LENGTH } from "~/constants";
-import { createPost as createPostOnDB } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
 class DiscourseApi {
   DiscourseUrl: string;
@@ -91,15 +90,11 @@ class DiscourseApi {
   async addTopic(
     username: string,
     category_id: number,
-    start: number,
-    end: number,
     topic_name: string | FormDataEntryValue,
     bodyContent: string,
-    textId: number,
-    type: string
+    textId: number
   ) {
     let auth_headers = this.authHeader();
-    let questionId = uuidv4();
     let url = `${ORIGIN_LOCATION}/texts/${textId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `
@@ -126,28 +121,7 @@ class DiscourseApi {
         "Post cannot be created due to dublication!" + data.errors
       );
     }
-    try {
-      if (data["topic_id"] && user) {
-        console.log("created topic on Discouse");
-        const createQuestion = await createPostOnDB(
-          questionId,
-          type,
-          data["avatar_template"],
-          data["topic_id"],
-          data["id"],
-          start,
-          end,
-          textId,
-          bodyContent,
-          user.id
-        );
-
-        return createQuestion;
-      }
-    } catch (error) {
-      console.error("Failed to create question:", error);
-      throw error;
-    }
+    return data;
   }
 
   async createPost(TopicId: number, postString: string) {
@@ -233,13 +207,11 @@ export async function createThread(
   postTitle: string,
   blockquoteArea: string,
   postContent: string,
-  start: string,
-  end: string,
+  threadId: string,
   parentCategoryId: string,
   textId: number,
   type: string
 ) {
-  if (!start || !end) throw new Error("start and end values not available");
   if (!postTitle || !blockquoteArea || !postContent)
     throw new Error("failed to access Topic Id");
   const api: DiscourseApi = new DiscourseApi(userName);
@@ -262,12 +234,9 @@ export async function createThread(
   let topic = await api.addTopic(
     userName,
     categoryId,
-    parseInt(start as string),
-    parseInt(end as string),
     blockquoteArea,
     postContent as string,
-    textId,
-    type
+    textId
   );
   return topic;
 }

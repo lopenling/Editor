@@ -16,7 +16,7 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { openFilterState, showLatest } from "~/states";
 import { findPostByPostId, findPostByTextId } from "~/model/post";
-import { LoaderFunction, defer } from "@remix-run/cloudflare";
+import { LoaderFunction, defer, json } from "@remix-run/cloudflare";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 
@@ -31,7 +31,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const topicList = CategoryData.topic_list.topics;
   const posts = findPostByTextId(textId, topicList);
 
-  return defer({ posts, selectedPost, text: { id: textId } });
+  return defer({ text: { id: textId }, posts });
 };
 export const ErrorBoundary = ({ error }) => {
   return <div>{error.message}</div>;
@@ -42,11 +42,9 @@ export default function Post() {
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
   const data = useLoaderData<typeof loader>();
-  const posts = data.posts;
   const { editor }: { editor: Editor } = useOutletContext();
-
   return (
-    <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
+    <div>
       <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4">
         {/* sort button */}
         <Dropdown
@@ -98,7 +96,7 @@ export default function Post() {
 
       {/* used differ at loader for post list to fetch posts as a promise */}
       <Suspense fallback={<Skeleton />}>
-        <Await resolve={posts}>
+        <Await resolve={data.posts}>
           {(posts) => {
             return <Posts posts={posts} editor={editor} />;
           }}

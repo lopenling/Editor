@@ -3,33 +3,29 @@
 import { db } from "~/db.server";
 
 export async function createPost(
-  id: string,
   type: string,
   avatar: string,
   topic_id: number,
   post_id: number,
-  start: number,
-  end: number,
+  thread_id: string,
   text_id: number,
   content: string,
   creatorUser_id: string
 ) {
   try {
-    let createdPost = await db.post.create({
+    const createPost = await db.post.create({
       data: {
-        id,
-        type,
-        avatar,
-        topic_id,
-        post_id,
-        start,
-        end,
-        text_id,
-        content,
-        creatorUser_id,
+        type: type,
+        avatar: avatar,
+        topic_id: topic_id,
+        post_id: post_id,
+        content: content,
+        thread_id: thread_id,
+        creatorUser_id: creatorUser_id,
+        text_id: text_id,
       },
     });
-    return createdPost;
+    return createPost;
   } catch (e) {
     throw new Error("post couldnot be created " + e);
   }
@@ -101,11 +97,6 @@ export async function findPostByPostId(id: string) {
   let post = await db.post.findFirst({
     where: {
       id,
-    },
-    select: {
-      start: true,
-      end: true,
-      id: true,
     },
   });
   return post;

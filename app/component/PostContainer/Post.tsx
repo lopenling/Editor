@@ -7,7 +7,7 @@ import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import tickIcon from "~/assets/svg/icon_tick.svg";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedPost as selectedPostState, shareState } from "~/states";
+import { selectedThread, shareState } from "~/states";
 import Share from "./Share";
 type PostType = {
   id: string;
@@ -21,6 +21,7 @@ type PostType = {
   isSolved: boolean;
   isOptimistic: boolean;
   handleSelection: any;
+  threadId: string;
 };
 
 function Post({
@@ -35,6 +36,7 @@ function Post({
   isSolved,
   isOptimistic = false,
   handleSelection,
+  threadId,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const setOpenShare = useSetRecoilState(shareState);
@@ -44,8 +46,10 @@ function Post({
   const likeFetcher = useFetcher();
   const translation = uselitteraTranlation();
   const { user }: { user: any } = useOutletContext();
-  const [selectedPost, setSelectedPost] = useRecoilState(selectedPostState);
-  const isSelected = selectedPost?.id === id;
+  const [selectedThreadId, setSelectedThreadId] =
+    useRecoilState(selectedThread);
+  const isSelected = selectedThreadId.id === threadId;
+  const { editor } = useOutletContext();
   let likedByMe = user
     ? likedBy.some((l) => l.username === user.username)
     : false;
@@ -87,7 +91,8 @@ function Post({
   }, []);
   const postref = useDetectClickOutside({
     onTriggered: () => {
-      setSelectedPost({ id: null, start: null, end: null });
+      if (!editor.isActive("post") && selectedThreadId.type === "post")
+        setSelectedThreadId({ id: null, type: null });
     },
   });
 

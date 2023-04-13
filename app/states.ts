@@ -19,12 +19,11 @@ export const postslist = atom({
   default: [],
 });
 
-export const selectedPost = atom({
-  key: "selectedPost",
+export const selectedThread = atom({
+  key: "selectedThread",
   default: {
     id: null,
-    start: null,
-    end: null,
+    type: "",
   },
 });
 //share State
@@ -34,6 +33,10 @@ export const shareState = atom({
   default: false,
 });
 
+export const openSuggestionState = atom({
+  key: "openSuggestion",
+  default: false,
+});
 //filter related states
 export const openFilterState = atom({
   key: "openFilter", // unique ID (with respect to other atoms/selectors)

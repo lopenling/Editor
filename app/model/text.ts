@@ -88,3 +88,20 @@ export async function deleteText(id: string) {
     throw new Error("delete text error" + e.message);
   }
 }
+
+//update text
+export async function updateText(id: number, content: string) {
+  try {
+    let res = db.text.update({
+      data: {
+        content,
+      },
+      where: {
+        id,
+      },
+    });
+    return res;
+  } catch (e) {
+    throw new Error("update text error" + e.message);
+  }
+}

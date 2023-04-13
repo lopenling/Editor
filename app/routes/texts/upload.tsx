@@ -89,10 +89,7 @@ export default function UploadText() {
             : "Upload"}
         </button>
       </Form>
-      <div
-        className="flex flex-col space-y-3 w-max mx-auto text-lg"
-        ref={animationParent}
-      >
+      <div className="flex flex-col space-y-3 w-max mx-auto text-lg">
         {loaderData.textList.map((text: { id: number; name: string }) => (
           <EachText text={text} key={text.id} />
         ))}

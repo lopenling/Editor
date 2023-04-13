@@ -1,6 +1,6 @@
 import { useLoaderData } from "@remix-run/react";
-import { BubbleMenu, EditorContent } from "@tiptap/react";
-import { useState } from "react";
+import { BubbleMenu, Editor, EditorContent } from "@tiptap/react";
+import { useEffect, useState } from "react";
 import copyIcon from "~/assets/svg/icon_copy.svg";
 import searchIcon from "~/assets/svg/icon_search.svg";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -9,22 +9,32 @@ import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import {
-  selectedPost as selectedPostState,
+  openSuggestionState,
   selectedTextOnEditor,
+  selectedThread,
   selectionRangeState,
 } from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
-
-function Editor({ content, editor }) {
+import { v4 as uuidv4 } from "uuid";
+function Editor({ content, editor }: { content: string; editor: Editor }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = useState(false);
   const [showFindText, setShowFindText] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
   const setSelectionRange = useSetRecoilState(selectionRangeState);
-  const [selection] = useRecoilState(selectedTextOnEditor);
-  const selectedPost = useRecoilValue(selectedPostState);
-
+  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
+  const [openSuggestion, setOpenSuggestion] =
+    useRecoilState(openSuggestionState);
   const handleBubbleClick = (type: string) => {
+    let uniqueId = uuidv4();
+    if (!editor.isActive("post")) {
+      editor.commands.setPost({
+        id: uniqueId,
+      });
+    } else {
+      uniqueId = editor.getAttributes("post").id;
+    }
+    setSelection({ ...selection, thread: uniqueId });
     if (selection.start)
       setSelectionRange({
         type: type,
@@ -34,6 +44,11 @@ function Editor({ content, editor }) {
       });
   };
   const translation = uselitteraTranlation();
+
+  function handleSuggestionClick() {
+    setOpenSuggestion(true);
+  }
+
   return (
     <div className="relative flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll md:overflow-y-auto mb-4 px-4 lg:max-h-max">
       <EditorSettings
@@ -70,26 +85,57 @@ function Editor({ content, editor }) {
           }}
           editor={editor}
         >
-          {!selectedPost?.id && (
-            <Button.Group className="rounded ">
-              <Button
-                size="sm"
-                color=""
-                className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500  border-gray-300 border-2"
-                onClick={() => handleBubbleClick("comment")}
-              >
-                {translation.comment}
-              </Button>
-              <Button
-                size="sm"
-                color=""
-                className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 border-gray-300 border-2"
-                onClick={() => handleBubbleClick("question")}
-              >
-                {translation.question}
-              </Button>
-            </Button.Group>
-          )}
+          {
+            <div className="flex rounded border-gray-300 border-2">
+              {!editor.isActive("post") && (
+                <>
+                  <Button
+                    size="sm"
+                    color=""
+                    className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none border-r-2 border-r-gray-300 "
+                    onClick={handleSuggestionClick}
+                  >
+                    suggestions
+                  </Button>
+                </>
+              )}
+              {!editor.isActive("suggestion") && (
+                <>
+                  <Button
+                    size="sm"
+                    color=""
+                    className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none border-r-2 border-r-gray-300"
+                    onClick={() => handleBubbleClick("comment")}
+                  >
+                    {translation.comment}
+                  </Button>
+                  <Button
+                    size="sm"
+                    color=""
+                    className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none "
+                    onClick={() => handleBubbleClick("question")}
+                  >
+                    {translation.question}
+                  </Button>
+                </>
+              )}
+            </div>
+          }
+          {/* <div className="bg-blue-300 text-center">
+                {suggestionList.length > 0 &&
+                  selectedSuggestion &&
+                  suggestionList
+                    .filter((item) => item.thread === selectedSuggestion)
+                    .map((suggest, index) => (
+                      <div
+                        onClick={() => console.log(suggest.thread, suggest.id)}
+                        key={suggest.suggestion + index}
+                        className="cursor-pointer"
+                      >
+                        {suggest.suggestion}
+                      </div>
+                    ))}
+              </div> */}
         </BubbleMenu>
       )}
       <div
