@@ -1,5 +1,22 @@
 import { db } from "~/db.server";
 
+export async function findAllSuggestionByTextId(textId) {
+  try {
+    let data = await db.suggestion.findMany({
+      where: {
+        textId,
+      },
+      include: {
+        user: true,
+        likedBy: true,
+      },
+    });
+    return data;
+  } catch (e) {
+    throw new Error("error fetching suggestion" + e);
+  }
+}
+
 export async function getSuggestionWithThreadId(threadId) {
   try {
     let data = await db.suggestion.findMany({

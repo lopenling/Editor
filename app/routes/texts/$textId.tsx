@@ -14,8 +14,9 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
 import {
   openSuggestionState,
+  selectedPostThread,
+  selectedSuggestionThread,
   selectedTextOnEditor,
-  selectedThread,
   selectionRangeState,
   textName,
 } from "~/states";
@@ -30,7 +31,7 @@ import Highlight from "@tiptap/extension-highlight";
 import FontFamily from "@tiptap/extension-font-family";
 import { Suggestion } from "~/tiptap-extension/suggestion";
 import PostMark from "~/tiptap-extension/postMark";
-import SuggestionContainer from "~/component/Suggestion";
+import SuggestionContainer, { SuggestionForm } from "~/component/Suggestion";
 // import { Comment } from "~/tiptap-extension/comment";
 import { FontSize } from "~/tiptap-extension/fontSize";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
@@ -40,6 +41,7 @@ import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { HocuspocusProvider } from "@hocuspocus/provider";
+import { findAllSuggestionByTextId } from "~/model/suggestion";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -51,9 +53,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
   const text = await findTextByTextId(textId, false);
+  const suggestion = await findAllSuggestionByTextId(textId);
   if (!textId) throw new Error("not valid textId");
 
-  return json({ user, text: text });
+  return json({ user, text: text, suggestion });
 };
 
 export function ErrorBoundary({ error }) {
@@ -103,7 +106,10 @@ export default function () {
   let content = textFetcher.data?.content.replace(/\n/g, "<br>");
   const setSelectionRange = useSetRecoilState(selectionRangeState);
   const setSelection = useSetRecoilState(selectedTextOnEditor);
-  const threadSelector = useSetRecoilState(selectedThread);
+  const [suggestionSelected, suggestionSelector] = useRecoilState(
+    selectedSuggestionThread
+  );
+  const [postSelected, postSelector] = useRecoilState(selectedPostThread);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const saveText = useFetcher();
@@ -113,9 +119,13 @@ export default function () {
       { method: "post", action: "/api/text" }
     );
   };
-  function setter(id, type) {
-    threadSelector({
-      type: type,
+  function suggestionSetter(id) {
+    suggestionSelector({
+      id: id,
+    });
+  }
+  function postSetter(id) {
+    postSelector({
       id: id,
     });
   }
@@ -164,12 +174,12 @@ export default function () {
             class: "highlight",
           },
         }),
-        Suggestion(setter).configure({
+        Suggestion(suggestionSetter).configure({
           HTMLAttributes: {
             class: "suggestion",
           },
         }),
-        PostMark(setter).configure({
+        PostMark(postSetter).configure({
           HTMLAttributes: {
             class: "post",
           },
@@ -197,6 +207,9 @@ export default function () {
             e.preventDefault();
           },
         },
+        transformPastedText(text) {
+          return "";
+        },
         attributes: {
           inputmode: "none",
         },
@@ -204,13 +217,13 @@ export default function () {
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
-        setSelectionRange(null);
         setSelection({
           start: from,
           end: to,
           text: editor?.state.doc.textBetween(from, to, ""),
         });
         setOpenSuggestion(false);
+        if (!editor.isActive("suggestion")) suggestionSelector({ id: null });
       },
       onCreate: ({ editor }) => {
         if (data.selectedPost) {
@@ -240,7 +253,10 @@ export default function () {
       >
         <Editor content={content} editor={editor} />
         <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
-          {openSuggestion && <SuggestionContainer editor={editor} />}
+          {suggestionSelected.id && <SuggestionContainer editor={editor} />}
+          {(openSuggestion || suggestionSelected.id) && (
+            <SuggestionForm editor={editor} />
+          )}
           <Outlet context={{ user: data.user, editor, text: data.text }} />
         </div>
       </main>

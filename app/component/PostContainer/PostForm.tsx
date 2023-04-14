@@ -7,6 +7,8 @@ import Post from "./Post";
 import { selectedTextOnEditor, selectionRangeState } from "~/states";
 import { useRecoilState } from "recoil";
 import { Editor } from "@tiptap/react";
+import { v4 as uuidv4 } from "uuid";
+
 const PostForm = () => {
   const [postInfo, setPostInfo] = useRecoilState(selectionRangeState);
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
@@ -25,11 +27,16 @@ const PostForm = () => {
       alert("ERROR : selecting more then 255 letter not allowed");
       return null;
     }
-
+    let id = null;
+    if (!editor.isActive("post")) {
+      id = uuidv4();
+    } else {
+      id = editor.getAttributes("post").id;
+    }
     if (postInfo)
       createPost.submit(
         {
-          threadId: selection.thread,
+          threadId: id,
           selectedTextSegment: postInfo.content,
           textId: data?.text?.id,
           topic: data?.text?.name,
@@ -42,6 +49,9 @@ const PostForm = () => {
         }
       );
     setPostInfo(null);
+    editor.commands.setPost({
+      id,
+    });
   }
 
   if (isPosting) {

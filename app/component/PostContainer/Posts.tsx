@@ -9,11 +9,7 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Post from "./Post";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  filteredPost as filteredValue,
-  openFilterState,
-  postslist,
-} from "~/states";
+import { filteredPost as filteredValue, postslist } from "~/states";
 type PostPropsType = {
   editor: Editor | null;
   posts: any;
@@ -34,23 +30,6 @@ function Posts({ editor, posts }: PostPropsType) {
   //   setSelectedPost(data.selectedPost);
   // }, [data.selectedPost]);
   const filteredPost = useRecoilValue(filteredValue);
-  let timeout;
-  function handleSelectPost({ thread_id, id }) {
-    let thread = document.getElementById(thread_id);
-    console.log(thread);
-    window.getSelection().selectAllChildren(thread);
-    window.scroll(0, 0);
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => {
-      let r = document.querySelector(".ProseMirror");
-      let position = r.getBoundingClientRect();
-      if (position.top < 80) {
-        window.scrollBy(0, 200);
-      }
-    }, 0);
-  }
 
   if (!editor) return null;
   return (
@@ -75,7 +54,6 @@ function Posts({ editor, posts }: PostPropsType) {
                 postContent={post.content}
                 likedBy={post.likedBy}
                 topicId={post.topic_id}
-                handleSelection={() => handleSelectPost(post)}
                 type={post.type}
                 replyCount={post?.replyCount}
                 isSolved={post?.isSolved}

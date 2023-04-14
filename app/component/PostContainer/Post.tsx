@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useFetcher, useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -7,7 +7,7 @@ import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import tickIcon from "~/assets/svg/icon_tick.svg";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedThread, shareState } from "~/states";
+import { selectedPostThread, shareState } from "~/states";
 import Share from "./Share";
 type PostType = {
   id: string;
@@ -20,7 +20,6 @@ type PostType = {
   replyCount: any;
   isSolved: boolean;
   isOptimistic: boolean;
-  handleSelection: any;
   threadId: string;
 };
 
@@ -35,7 +34,7 @@ function Post({
   replyCount,
   isSolved,
   isOptimistic = false,
-  handleSelection,
+
   threadId,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
@@ -47,14 +46,21 @@ function Post({
   const translation = uselitteraTranlation();
   const { user }: { user: any } = useOutletContext();
   const [selectedThreadId, setSelectedThreadId] =
-    useRecoilState(selectedThread);
+    useRecoilState(selectedPostThread);
   const isSelected = selectedThreadId.id === threadId;
-  const { editor } = useOutletContext();
+
   let likedByMe = user
     ? likedBy.some((l) => l.username === user.username)
     : false;
   let likeInFetcher = likeFetcher?.submission?.formData?.get("like");
-
+  const handleSelectPost = useCallback(
+    (id) => {
+      setSelectedThreadId({
+        id: id,
+      });
+    },
+    [threadId]
+  );
   let likeCount = likeFetcher.data ? likeFetcher.data?.length : likedBy.length;
   if (likeInFetcher === "true") {
     likedByMe = true;
@@ -91,8 +97,7 @@ function Post({
   }, []);
   const postref = useDetectClickOutside({
     onTriggered: () => {
-      if (!editor.isActive("post") && selectedThreadId.type === "post")
-        setSelectedThreadId({ id: null, type: null });
+      setSelectedThreadId({ id: null });
     },
   });
 
@@ -106,9 +111,7 @@ function Post({
             : "bg-transparent"
         }`}
         ref={postref}
-        onClick={() => {
-          handleSelection();
-        }}
+        onClick={() => handleSelectPost(threadId)}
       >
         <div className="inline-flex w-full items-center justify-start">
           <div className="flex items-center justify-start space-x-3">

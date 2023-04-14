@@ -60,15 +60,17 @@ model User {
 }
 
 model Suggestion {
-  id       String @id @unique @default(uuid())
-  text     Text   @relation(fields: [textId], references: [id])
-  textId   Int
-  oldValue String
-  newValue String
-  user     User   @relation("suggestionCreator", fields: [userId], references: [id])
-  userId   String
-  threadId String
-  likedBy  User[] @relation("likedSuggestion")
+  id         String    @id @unique @default(uuid())
+  text       Text      @relation(fields: [textId], references: [id])
+  textId     Int
+  oldValue   String
+  newValue   String
+  user       User      @relation("suggestionCreator", fields: [userId], references: [id])
+  userId     String
+  threadId   String
+  likedBy    User[]    @relation("likedSuggestion")
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
 }
 
 enum Role {

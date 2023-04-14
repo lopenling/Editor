@@ -263,24 +263,6 @@ export const SearchAndReplace = Extension.create<
 
           return false;
         },
-      replace:
-        () =>
-        ({ editor, state, dispatch }) => {
-          const { replaceTerm, results } = editor.storage.searchAndReplace;
-
-          replace(replaceTerm, results, { state, dispatch });
-
-          return false;
-        },
-      replaceAll:
-        () =>
-        ({ editor, tr, dispatch }) => {
-          const { replaceTerm, results } = editor.storage.searchAndReplace;
-
-          replaceAll(replaceTerm, results, { tr, dispatch });
-
-          return false;
-        },
     };
   },
 

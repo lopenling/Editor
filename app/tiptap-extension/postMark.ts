@@ -107,7 +107,7 @@ const PostMark = (setter) =>
               const range = getMarkRange(doc.resolve(pos), schema.marks.post);
               if (!range) return false;
               const clickedNode = event.target;
-              setter(clickedNode?.id, "post");
+              setter(clickedNode?.id);
               const [$start, $end] = [
                 doc.resolve(range.from),
                 doc.resolve(range.to),
