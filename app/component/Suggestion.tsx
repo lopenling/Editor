@@ -14,7 +14,7 @@ import Share from "./PostContainer/Share";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { Editor } from "@tiptap/react";
 
-export default function Suggestion({ editor }) {
+export default function Suggestion({ editor }: { editor: Editor }) {
   const [suggestionThread, setSelectedSuggestion] = useRecoilState(
     selectedSuggestionThread
   );
@@ -25,23 +25,28 @@ export default function Suggestion({ editor }) {
   return (
     <div className="p-2 bg-slate-50 shadow-md m-3">
       <div className="flex flex-col  gap-2 ">
+        <h2 className="font-light">Suggestion</h2>
         {list?.length > 0 &&
-          list.map((suggest) => (
-            <EachSuggestion
-              editor={editor}
-              suggest={suggest}
-              key={suggest.id}
-            />
-          ))}
+          list
+            .sort((a, b) => b.likedBy.length - a.likedBy.length)
+            .map((suggest) => (
+              <EachSuggestion
+                editor={editor}
+                suggest={suggest}
+                key={suggest.id}
+              />
+            ))}
       </div>
-      {/* <SuggestionForm editor={editor} /> */}
     </div>
   );
 }
 
 function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
   const likeFetcher = useFetcher();
+  const deleteFetcher = useFetcher();
   const data = useLoaderData();
+  const user = data.user;
+  let allowReplace = user ? user.admin === "true" : false;
   const [effect, setEffect] = useState(false);
   const setOpenShare = useSetRecoilState(shareState);
   let likedByMe = data.user
@@ -79,21 +84,41 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
     selectedSuggestionThread
   );
   function replaceHandler(replace: string) {
-    editor
-      .chain()
-      .focus()
-      .insertContentAt(
-        {
-          from: selection.start,
-          to: selection.end,
-        },
-        replace
-      )
-      .run();
+    if (allowReplace)
+      editor
+        .chain()
+        .focus()
+        .insertContentAt(
+          {
+            from: selection.start,
+            to: selection.end,
+          },
+          replace
+        )
+        .run();
     suggestionSelector({ id: null });
   }
+  function deleteSuggestion(id) {
+    let decision = confirm("do you want to delete the post");
+    if (decision) {
+      deleteFetcher.submit(
+        {
+          id,
+        },
+        {
+          action: "api/suggestion",
+          method: "delete",
+        }
+      );
+    } else {
+      console.log("cancelled");
+    }
+  }
   return (
-    <div key={suggest.id} className=" p-3">
+    <div
+      key={suggest.id}
+      className={`${deleteFetcher.submission && "hidden"} p-3`}
+    >
       <Share post_id={suggest.id} />
       <div className="flex justify-between mb-2">
         <div className="flex gap-3">
@@ -115,14 +140,18 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
         <span className="font-bold text-sm">Replace :</span>
         <span
           onClick={() => replaceHandler(suggest.oldValue)}
-          className="text-gray-500 dark:text-gray-100 cursor-pointer"
+          className={`text-gray-500 dark:text-gray-100 ${
+            allowReplace && "cursor-pointer"
+          }`}
         >
           "{suggest.oldValue}"
         </span>
         <span className="font-bold text-sm"> with :</span>
         <span
           onClick={() => replaceHandler(suggest.newValue)}
-          className="text-gray-500 dark:text-gray-100 cursor-pointer"
+          className={`text-gray-500 dark:text-gray-100 ${
+            allowReplace && "cursor-pointer"
+          }`}
         >
           "{suggest.newValue}"
         </span>
@@ -172,6 +201,26 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
               share
             </button>
           </div>
+          {data.user && data.user.username === suggest.user.username && (
+            <div
+              onClick={() => deleteSuggestion(suggest.id)}
+              className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
+            >
+              <svg
+                width="14"
+                height="16"
+                viewBox="0 0 14 16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M6 0C5.81434 9.91486e-05 5.63237 0.0518831 5.47447 0.149552C5.31658 0.247222 5.18899 0.386919 5.106 0.553L4.382 2H1C0.734784 2 0.48043 2.10536 0.292893 2.29289C0.105357 2.48043 0 2.73478 0 3C0 3.26522 0.105357 3.51957 0.292893 3.70711C0.48043 3.89464 0.734784 4 1 4V14C1 14.5304 1.21071 15.0391 1.58579 15.4142C1.96086 15.7893 2.46957 16 3 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V4C13.2652 4 13.5196 3.89464 13.7071 3.70711C13.8946 3.51957 14 3.26522 14 3C14 2.73478 13.8946 2.48043 13.7071 2.29289C13.5196 2.10536 13.2652 2 13 2H9.618L8.894 0.553C8.81101 0.386919 8.68342 0.247222 8.52553 0.149552C8.36763 0.0518831 8.18566 9.91486e-05 8 0H6ZM4 6C4 5.73478 4.10536 5.48043 4.29289 5.29289C4.48043 5.10536 4.73478 5 5 5C5.26522 5 5.51957 5.10536 5.70711 5.29289C5.89464 5.48043 6 5.73478 6 6V12C6 12.2652 5.89464 12.5196 5.70711 12.7071C5.51957 12.8946 5.26522 13 5 13C4.73478 13 4.48043 12.8946 4.29289 12.7071C4.10536 12.5196 4 12.2652 4 12V6ZM9 5C8.73478 5 8.48043 5.10536 8.29289 5.29289C8.10536 5.48043 8 5.73478 8 6V12C8 12.2652 8.10536 12.5196 8.29289 12.7071C8.48043 12.8946 8.73478 13 9 13C9.26522 13 9.51957 12.8946 9.70711 12.7071C9.89464 12.5196 10 12.2652 10 12V6C10 5.73478 9.89464 5.48043 9.70711 5.29289C9.51957 5.10536 9.26522 5 9 5Z"
+                  fill="inherit"
+                />
+              </svg>
+            </div>
+          )}
         </div>
         <div className="flex items-start justify-start space-x-1.5">
           <svg
@@ -192,12 +241,13 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
   );
 }
 export function SuggestionForm({ editor }) {
+  const data = useLoaderData();
+  let user = data.user;
   const [suggestionInput, setSuggestionInput] = useState("");
   const addSuggestion = useFetcher();
   const [suggestionThread, setSelectedSuggestion] = useRecoilState(
     selectedSuggestionThread
   );
-  const data = useLoaderData();
 
   const handleSuggestionSubmit = () => {
     const { state } = editor;
@@ -233,9 +283,13 @@ export function SuggestionForm({ editor }) {
     });
   };
   const handleSuggestionCancel = () => {
-    console.log("cancel");
-    if (editor.isActive("suggestion")) editor.commands.unsetSuggestion();
+    setSelectedSuggestion({
+      id: null,
+    });
+    // if (editor.isActive("suggestion")) editor.commands.unsetSuggestion();
   };
+  if (!user) return <div className="text-red-600">You must login first !</div>;
+
   return (
     <div className="p-2 bg-slate-50 shadow-md m-3">
       <div className="flex justify-evenly">

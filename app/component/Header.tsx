@@ -120,9 +120,7 @@ export default function Header({ user }: any) {
                       {user?.email}
                     </a>
                   </Dropdown.Header>
-                  <Dropdown.Item
-                    className={user?.admin === "true" ? "" : "hidden"}
-                  >
+                  <Dropdown.Item>
                     <NavLink
                       preventScrollReset
                       to="/texts/upload"

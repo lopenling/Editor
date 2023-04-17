@@ -35,9 +35,11 @@ model Reply {
 model Text {
   id         Int          @id @unique @default(autoincrement())
   name       String
+  author     User?        @relation(fields: [userId], references: [id])
   content    String
   Post       Post[]
   Suggestion Suggestion[]
+  userId     String?
 }
 
 model User {
@@ -55,6 +57,7 @@ model User {
   likedSuggestion Suggestion[] @relation("likedSuggestion")
   Post            Post[]       @relation("creatorPost")
   Suggestion      Suggestion[] @relation("suggestionCreator")
+  Text            Text[]
 
   @@index([email, username])
 }

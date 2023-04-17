@@ -4464,6 +4464,10 @@ input:checked + .toggle-bg {
   fill: #76A9FA;
 }
 
+.hover\:fill-red-400:hover {
+  fill: #F98080;
+}
+
 .hover\:text-blue-700:hover {
   --tw-text-opacity: 1;
   color: rgb(26 86 219 / var(--tw-text-opacity));

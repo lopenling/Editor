@@ -69,9 +69,6 @@ nav > div {
 .dark .ProseMirror ::selection {
   background: #374151;
 }
-.ProseMirror ::selection {
-  background: rgba(252, 233, 106, 0.3);
-}
 .ProseMirror-focused {
   outline: none;
 }

@@ -10,21 +10,24 @@ import {
   useLoaderData,
   useTransition,
 } from "@remix-run/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { getUserSession } from "~/services/session.server";
 import { createText, deleteText, findAllText } from "~/model/text";
 import { useId } from "react";
-
+import { FileUploader } from "react-drag-drop-files";
+import { Tabs } from "flowbite-react";
 export const loader: LoaderFunction = async ({ request }) => {
-  const textList = await findAllText();
   const user = await getUserSession(request);
-  if (!user || user?.admin !== "true") return redirect("/");
+  let textList = await findAllText();
+  if (user?.admin !== "true")
+    textList = textList.filter((text) => text.userId == user.id);
   return { textList, user };
 };
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const textName = formData.get("text-name") as string;
   const textContent = formData.get("text-content") as string;
+  const user = await getUserSession(request);
   let res = null;
   if (request.method === "DELETE") {
     const textId = formData.get("textId") as string;
@@ -32,7 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
   if (request.method === "POST") {
     if (!textName || !textContent) return null;
-    res = await createText(textName, textContent);
+    res = await createText(textName, textContent, user?.id);
   }
   return res;
 };
@@ -41,10 +44,28 @@ export default function UploadText() {
   const formRef = useRef();
   const loaderData = useLoaderData();
   const transition = useTransition();
+  const [textContent, setTextContent] = useState("");
   const uploadId = useId();
   if (transition.state !== "idle") {
     formRef.current.reset();
   }
+  const [file, setFile] = useState(null);
+
+  const handleChange = async (file) => {
+    setFile(file);
+    let text: string = await readFileContent(file);
+    setTextContent(text);
+  };
+  function readFileContent(file) {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsText(file);
+    });
+  }
+  const fileTypes = ["TXT"];
+  if (!loaderData.user) return <div>login first</div>;
   return (
     <div className="mx-10 my-4 ">
       <Form method="post" ref={formRef} className="max-w-2xl m-auto">
@@ -64,21 +85,31 @@ export default function UploadText() {
             required
           />
         </div>
-        <div className="mb-6">
-          <label
-            htmlFor={uploadId + "textContent"}
-            className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Text Content
-          </label>
-          <textarea
-            id={uploadId + "textContent"}
-            name="text-content"
-            rows={4}
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            placeholder="Content"
-          ></textarea>
-        </div>
+
+        <Tabs.Group aria-label="Default tabs" style="default">
+          <Tabs.Item title="Type text">
+            <div className="mb-6">
+              <label
+                htmlFor={uploadId + "textContent"}
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Text Content
+              </label>
+              <textarea
+                id={uploadId + "textContent"}
+                name="text-content"
+                rows={4}
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder="Content"
+                value={textContent}
+                onChange={(e) => setTextContent(e.target.value)}
+              ></textarea>
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Upload Txt">
+            <FileUploader handleChange={handleChange} types={fileTypes} />
+          </Tabs.Item>
+        </Tabs.Group>
         <button
           type="submit"
           className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

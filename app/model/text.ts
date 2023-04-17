@@ -11,6 +11,7 @@ export async function findAllText(id = true, name = true, content = false) {
         id,
         name,
         content,
+        userId: true,
       },
     });
     return text;
@@ -62,12 +63,13 @@ export async function findTextByTextId(id: number, content: boolean = false) {
 }
 
 //create text
-export async function createText(name: string, content: string) {
+export async function createText(name: string, content: string, id: string) {
   try {
     let res = await db.text.create({
       data: {
         name,
         content,
+        userId: id,
       },
     });
     return res;

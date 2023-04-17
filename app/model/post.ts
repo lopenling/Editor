@@ -152,3 +152,16 @@ export async function updatePostLike(
     throw new Error("update post like error: " + e.message);
   }
 }
+//delete post
+export async function deletePost(id: string) {
+  try {
+    let data = await db.post.delete({
+      where: {
+        id,
+      },
+    });
+    return data;
+  } catch (e) {
+    throw new Error("cannot delete post ", e);
+  }
+}

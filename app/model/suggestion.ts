@@ -109,3 +109,16 @@ export async function findSuggestionByUserLiked(id: string, userId: string) {
     throw new Error("could not find suggestion by userliked" + e.message);
   }
 }
+//delete post
+export async function deleteSuggestion(id: string) {
+  try {
+    let data = await db.suggestion.delete({
+      where: {
+        id,
+      },
+    });
+    return data;
+  } catch (e) {
+    throw new Error("cannot delete post ", e);
+  }
+}

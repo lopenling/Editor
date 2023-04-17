@@ -224,6 +224,7 @@ export default function () {
         });
         setOpenSuggestion(false);
         if (!editor.isActive("suggestion")) suggestionSelector({ id: null });
+        if (!editor.isActive("post")) postSelector({ id: null });
       },
       onCreate: ({ editor }) => {
         if (data.selectedPost) {

@@ -8,7 +8,7 @@ import { getUserSession } from "~/services/session.server";
 export const loader: LoaderFunction = () => {
   return redirect("/");
 };
-import { createPost as createPostOnDB } from "~/model/post";
+import { createPost as createPostOnDB, deletePost } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -62,6 +62,13 @@ export const action: ActionFunction = async ({ request }) => {
     } catch (e) {
       return { error: { message: e.message } };
     }
+  }
+  if (request.method === "DELETE") {
+    let id = Obj.id as string;
+    let res = await deletePost(id);
+    return {
+      deleted: res,
+    };
   }
   return null;
 };

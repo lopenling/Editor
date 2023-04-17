@@ -24,6 +24,7 @@ import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import { db } from "./db.server";
+import addingtohtml from "./utility/getHtmlWithMarks";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -91,6 +92,7 @@ function App() {
     !transition.location.state;
   let [themeSelected, setThemeSelected] = useRecoilState(theme);
   useEffect(() => {
+    // addingtohtml();
     if (window) {
       let oldSelection = window.localStorage.getItem("theme");
       if (oldSelection !== themeSelected) setThemeSelected(oldSelection);
