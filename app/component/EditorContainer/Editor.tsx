@@ -11,27 +11,20 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import {
   openSuggestionState,
   selectedPostThread,
-  selectedSuggestionThread,
   selectedTextOnEditor,
   selectionRangeState,
 } from "~/states";
 import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
-import { jsPDF } from "jspdf";
-import * as html2canvas from "html2canvas";
-import { JSDOM } from "jsdom";
-import { NodeSelection } from "prosemirror-state";
+
 function Editor({ content, editor }: { content: string; editor: Editor }) {
   const data = useLoaderData();
   const [showEditorSettings, setShowEditorSettings] = useState(false);
   const [showFindText, setShowFindText] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
   const setSelectionRange = useSetRecoilState(selectionRangeState);
-  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
-  const [suggestionSelected, suggestionSelector] = useRecoilState(
-    selectedSuggestionThread
-  );
-  const [openSuggestion, setOpenSuggestion] =
-    useRecoilState(openSuggestionState);
+  const selection = useRecoilValue(selectedTextOnEditor);
+
+  const setOpenSuggestion = useSetRecoilState(openSuggestionState);
 
   const handleBubbleClick = (type: string) => {
     let length = editor.state.selection.content().size;

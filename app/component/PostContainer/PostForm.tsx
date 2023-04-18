@@ -4,7 +4,7 @@ import React from "react";
 import ErrorSubmission from "./SubmissionError";
 import { createPortal } from "react-dom";
 import Post from "./Post";
-import { selectedTextOnEditor, selectionRangeState } from "~/states";
+import { selectionRangeState } from "~/states";
 import { useRecoilState } from "recoil";
 import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +12,6 @@ import AudioRecorder from "../Media/AudioRecorder";
 
 const PostForm = () => {
   const [postInfo, setPostInfo] = useRecoilState(selectionRangeState);
-  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const data = useOutletContext();
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
@@ -71,7 +70,7 @@ const PostForm = () => {
         }
         handleSelection={null}
         isOptimistic={true}
-        threadId={selection.thread}
+        threadId={null}
       />,
       document.getElementById("temporaryPost")
     );

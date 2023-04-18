@@ -1,23 +1,19 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
-  openSuggestionState,
   selectedSuggestionThread,
   selectedTextOnEditor,
-  selectionRangeState,
   shareState,
 } from "~/states";
-import { useEffect, useState, useMemo } from "react";
+import { useState } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Avatar, Button, Spinner, TextInput } from "flowbite-react";
+import { Avatar, Button, TextInput } from "flowbite-react";
 import { v4 as uuidv4 } from "uuid";
 import Share from "./PostContainer/Share";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { Editor } from "@tiptap/react";
 
 export default function Suggestion({ editor }: { editor: Editor }) {
-  const [suggestionThread, setSelectedSuggestion] = useRecoilState(
-    selectedSuggestionThread
-  );
+  const suggestionThread = useRecoilValue(selectedSuggestionThread);
   const data = useLoaderData();
 
   let list = data.suggestion.filter((l) => l.threadId === suggestionThread.id);
@@ -82,10 +78,8 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
     );
   };
   let time = timeAgo(suggest.created_at);
-  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
-  const [suggestionSelected, suggestionSelector] = useRecoilState(
-    selectedSuggestionThread
-  );
+  const selection = useRecoilValue(selectedTextOnEditor);
+  const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
   function replaceHandler(replace: string) {
     if (allowReplace)
       editor
@@ -248,9 +242,7 @@ export function SuggestionForm({ editor }) {
   let user = data.user;
   const [suggestionInput, setSuggestionInput] = useState("");
   const addSuggestion = useFetcher();
-  const [suggestionThread, setSelectedSuggestion] = useRecoilState(
-    selectedSuggestionThread
-  );
+  const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
 
   const handleSuggestionSubmit = () => {
     const { state } = editor;
