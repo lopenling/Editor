@@ -1302,12 +1302,12 @@ input:checked + .toggle-bg {
   margin-left: 0.25rem;
 }
 
-.mt-3 {
-  margin-top: 0.75rem;
-}
-
 .mr-1 {
   margin-right: 0.25rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
 }
 
 .mr-2 {
@@ -1940,12 +1940,12 @@ input:checked + .toggle-bg {
   gap: 1rem;
 }
 
-.gap-8 {
-  gap: 2rem;
-}
-
 .gap-10 {
   gap: 2.5rem;
+}
+
+.gap-8 {
+  gap: 2rem;
 }
 
 .gap-6 {

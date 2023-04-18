@@ -22,7 +22,6 @@ import { Suspense, useRef, useState } from "react";
 import { Spinner } from "flowbite-react";
 import { uploadFile } from "~/services/discourseApi";
 import AudioRecorder from "~/component/Media/AudioRecorder";
-import FileUpload from "~/component/Media/FileUpload";
 import { motion } from "framer-motion";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -65,7 +64,6 @@ export default function Posts() {
       animate={{ x: "0%", opacity: 1 }}
       exit={{ x: "5%", opacity: 0 }}
     >
-      <FileUpload />
       <AudioRecorder />
       <Suspense
         fallback={

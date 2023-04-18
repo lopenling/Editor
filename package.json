@@ -46,8 +46,6 @@
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",
     "framer-motion": "^10.10.0",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^2.5.1",
     "prisma": "^4.12.0",
     "prosemirror-model": "^1.19.0",
     "prosemirror-state": "^1.4.2",
