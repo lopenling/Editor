@@ -90,7 +90,6 @@ const PostForm = () => {
       {user ? (
         <Tabs.Group aria-label="Default tabs" style="default">
           <Tabs.Item title="Text">
-            {" "}
             <createPost.Form
               className="flex flex-col gap-3"
               onSubmit={handleSubmit}

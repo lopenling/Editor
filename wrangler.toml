@@ -4,7 +4,7 @@ workers_dev = true
 main = "./build/index.js"
 account_id = "542d340d71d90c60471c8a30e3f7c65e"
 compatibility_date = "2023-03-15"
-
+usage_model="unbound"
 [site]
 bucket = "./public"
 
