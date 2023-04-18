@@ -42,6 +42,7 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
+import { NodeSelection } from "prosemirror-state";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -225,6 +226,8 @@ export default function () {
         setOpenSuggestion(false);
         if (!editor.isActive("suggestion")) suggestionSelector({ id: null });
         if (!editor.isActive("post")) postSelector({ id: null });
+        // define the mark you want to check for
+        setSelectionRange(null);
       },
       onCreate: ({ editor }) => {
         if (data.selectedPost) {
@@ -252,7 +255,7 @@ export default function () {
         className="pt-5 container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
-        <Editor content={content} editor={editor} />
+        {editor ? <Editor content={content} editor={editor} /> : <div />}
         <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
           {suggestionSelected.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected.id) && (

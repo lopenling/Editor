@@ -54,6 +54,7 @@ export async function findTextByTextId(id: number, content: boolean = false) {
         content,
         id: true,
         name: true,
+        userId: true,
       },
     });
     return text;

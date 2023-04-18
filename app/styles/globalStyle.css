@@ -86,6 +86,7 @@ nav > div {
   text-decoration-thickness: auto;
   text-decoration-color: var(--suggestion-marker-deletion-stroke);
   text-decoration-thickness: 3px;
+  cursor: pointer;
 }
 .suggestion::selection {
   background-color: var(--suggestion-marker-deletion-background-active);
@@ -93,6 +94,7 @@ nav > div {
 }
 .post {
   background-color: var(--ck-color-comment-marker);
+  cursor: pointer;
 }
 .post::selection {
   background-color: var(--ck-color-comment-marker-active);

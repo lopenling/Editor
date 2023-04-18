@@ -64,7 +64,7 @@ model User {
 
 model Suggestion {
   id         String    @id @unique @default(uuid())
-  text       Text      @relation(fields: [textId], references: [id])
+  text       Text      @relation(fields: [textId], references: [id], onDelete: Cascade)
   textId     Int
   oldValue   String
   newValue   String

@@ -1916,6 +1916,10 @@ input:checked + .toggle-bg {
   justify-content: space-between;
 }
 
+.justify-around {
+  justify-content: space-around;
+}
+
 .justify-evenly {
   justify-content: space-evenly;
 }
@@ -1936,12 +1940,12 @@ input:checked + .toggle-bg {
   gap: 1rem;
 }
 
-.gap-10 {
-  gap: 2.5rem;
-}
-
 .gap-8 {
   gap: 2rem;
+}
+
+.gap-10 {
+  gap: 2.5rem;
 }
 
 .gap-6 {
@@ -2263,10 +2267,6 @@ input:checked + .toggle-bg {
 
 .border-r {
   border-right-width: 1px;
-}
-
-.border-r-2 {
-  border-right-width: 2px;
 }
 
 .border-l-4 {
@@ -3164,6 +3164,18 @@ input:checked + .toggle-bg {
   fill: #6B7280;
 }
 
+.fill-gray-600 {
+  fill: #4B5563;
+}
+
+.fill-green-400 {
+  fill: #31C48D;
+}
+
+.fill-red-700 {
+  fill: #C81E1E;
+}
+
 .fill-white {
   fill: #ffffff;
 }
@@ -3178,10 +3190,6 @@ input:checked + .toggle-bg {
 
 .fill-red-600 {
   fill: #E02424;
-}
-
-.fill-gray-600 {
-  fill: #4B5563;
 }
 
 .fill-blue-600 {
@@ -4244,6 +4252,16 @@ input:checked + .toggle-bg {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+.hover\:animate-pulse:hover {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .hover\:cursor-not-allowed:hover {
   cursor: not-allowed;
 }
@@ -4466,6 +4484,10 @@ input:checked + .toggle-bg {
 
 .hover\:fill-red-400:hover {
   fill: #F98080;
+}
+
+.hover\:fill-red-500:hover {
+  fill: #F05252;
 }
 
 .hover\:text-blue-700:hover {
