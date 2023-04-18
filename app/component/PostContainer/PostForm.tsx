@@ -1,7 +1,6 @@
 import { useFetcher, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Button, Tabs, Textarea } from "flowbite-react";
 import React from "react";
-import ErrorSubmission from "./SubmissionError";
 import { createPortal } from "react-dom";
 import Post from "./Post";
 import { selectionRangeState } from "~/states";
@@ -76,7 +75,7 @@ const PostForm = () => {
     );
   }
   if (createPost.data?.error && !postInfo)
-    <ErrorSubmission errorMessage={createPost.data.error.message} />;
+    return <div>{createPost.data.error.message} </div>;
   if (!postInfo) return null;
   return (
     <section>
