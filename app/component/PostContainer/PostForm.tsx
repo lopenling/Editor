@@ -3,14 +3,14 @@ import { Button, Tabs, Textarea } from "flowbite-react";
 import React from "react";
 import { createPortal } from "react-dom";
 import Post from "./Post";
-import { selectionRangeState } from "~/states";
+import { selectedTextOnEditor } from "~/states";
 import { useRecoilState } from "recoil";
 import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
 import AudioRecorder from "../Media/AudioRecorder";
 
 const PostForm = () => {
-  const [postInfo, setPostInfo] = useRecoilState(selectionRangeState);
+  const [postInfo, setPostInfo] = useRecoilState(selectedTextOnEditor);
   const data = useOutletContext();
   const createPost = useFetcher();
   const [body, setBody] = React.useState("");
@@ -47,7 +47,7 @@ const PostForm = () => {
           action: "/api/post",
         }
       );
-    setPostInfo(null);
+    setPostInfo({ ...postInfo, type: "" });
     editor.commands.setPost({
       id,
     });
@@ -76,7 +76,7 @@ const PostForm = () => {
   }
   if (createPost.data?.error && !postInfo)
     return <div>{createPost.data.error.message} </div>;
-  if (!postInfo) return null;
+  if (postInfo.type === "") return null;
   return (
     <section>
       <div className="inline-flex items-start justify-start">

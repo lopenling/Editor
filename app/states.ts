@@ -105,21 +105,13 @@ export const filteredPost = selector({
   },
 });
 //text selection
-export const selectionRangeState = atom({
-  key: "textSelectOnEditor",
+
+export const selectedTextOnEditor = atom({
+  key: "selectedTextOnEditor",
   default: {
     type: "",
     start: 0,
     end: 0,
     content: "",
-  },
-});
-
-export const selectedTextOnEditor = atom({
-  key: "selectedTextOnEditor",
-  default: {
-    start: 0,
-    end: 0,
-    text: "",
   },
 });

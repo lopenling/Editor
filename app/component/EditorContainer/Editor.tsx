@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import { BubbleMenu, Editor, EditorContent } from "@tiptap/react";
 import { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import EditorSettings from "./EditorSettings";
 import { Button } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
@@ -10,7 +10,6 @@ import {
   openSuggestionState,
   selectedPostThread,
   selectedTextOnEditor,
-  selectionRangeState,
 } from "~/states";
 
 function Editor({ content, editor }: { content: string; editor: Editor }) {
@@ -18,21 +17,15 @@ function Editor({ content, editor }: { content: string; editor: Editor }) {
   const [showEditorSettings, setShowEditorSettings] = useState(false);
   const [showFindText, setShowFindText] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
-  const setSelectionRange = useSetRecoilState(selectionRangeState);
-  const selection = useRecoilValue(selectedTextOnEditor);
+  const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
 
   const setOpenSuggestion = useSetRecoilState(openSuggestionState);
 
   const handleBubbleClick = (type: string) => {
-    let length = editor.state.selection.content().size;
-    let lengthCheck = length > 5 && length < 244;
-    if (!lengthCheck) return null;
     if (selection.start)
       setSelectionRange({
-        type: type,
-        start: selection.start,
-        end: selection.end,
-        content: selection.text,
+        ...selection,
+        type,
       });
   };
   const translation = uselitteraTranlation();
@@ -168,7 +161,7 @@ function Editor({ content, editor }: { content: string; editor: Editor }) {
           <div className="flex rounded border-gray-300 border-2">
             {!editor.isActive("suggestion") && !editor.isActive("post") ? (
               <>
-                {selection.text.length > 1 && (
+                {selection.content.length > 1 && (
                   <Button
                     size="sm"
                     title="suggestion"
@@ -190,56 +183,57 @@ function Editor({ content, editor }: { content: string; editor: Editor }) {
                     </svg>
                   </Button>
                 )}
-                {selection.text.length > 5 && selection.text.length < 245 && (
-                  <>
-                    <Button
-                      size="sm"
-                      title="comment"
-                      color=""
-                      className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none border-r-1 border-r-gray-300"
-                      onClick={() => handleBubbleClick("comment")}
-                    >
-                      <svg
-                        width="16"
-                        height="14"
-                        viewBox="0 0 16 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                {selection.content.length > 5 &&
+                  selection.content.length < 245 && (
+                    <>
+                      <Button
+                        size="sm"
+                        title="comment"
+                        color=""
+                        className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none border-r-1 border-r-gray-300"
+                        onClick={() => handleBubbleClick("comment")}
                       >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M16 7C16 10.866 12.418 14 8 14C6.58005 14.006 5.17955 13.6698 3.917 13.02L0 14L1.338 10.877C0.493 9.767 0 8.434 0 7C0 3.134 3.582 0 8 0C12.418 0 16 3.134 16 7ZM5 6H3V8H5V6ZM13 6H11V8H13V6ZM7 6H9V8H7V6Z"
-                          className="fill-green-400"
-                        />
-                      </svg>
-                    </Button>
-                    <Button
-                      size="sm"
-                      title="question"
-                      color=""
-                      className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none "
-                      onClick={() => handleBubbleClick("question")}
-                    >
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                        <svg
+                          width="16"
+                          height="14"
+                          viewBox="0 0 16 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M16 7C16 10.866 12.418 14 8 14C6.58005 14.006 5.17955 13.6698 3.917 13.02L0 14L1.338 10.877C0.493 9.767 0 8.434 0 7C0 3.134 3.582 0 8 0C12.418 0 16 3.134 16 7ZM5 6H3V8H5V6ZM13 6H11V8H13V6ZM7 6H9V8H7V6Z"
+                            className="fill-green-400"
+                          />
+                        </svg>
+                      </Button>
+                      <Button
+                        size="sm"
+                        title="question"
+                        color=""
+                        className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none "
+                        onClick={() => handleBubbleClick("question")}
                       >
-                        <path
-                          d="M6.228 7C6.777 5.835 8.258 5 10 5C12.21 5 14 6.343 14 8C14 9.4 12.722 10.575 10.994 10.907C10.452 11.011 10 11.447 10 12M10 15H10.01M19 10C19 11.1819 18.7672 12.3522 18.3149 13.4442C17.8626 14.5361 17.1997 15.5282 16.364 16.364C15.5282 17.1997 14.5361 17.8626 13.4442 18.3149C12.3522 18.7672 11.1819 19 10 19C8.8181 19 7.64778 18.7672 6.55585 18.3149C5.46392 17.8626 4.47177 17.1997 3.63604 16.364C2.80031 15.5282 2.13738 14.5361 1.68508 13.4442C1.23279 12.3522 1 11.1819 1 10C1 7.61305 1.94821 5.32387 3.63604 3.63604C5.32387 1.94821 7.61305 1 10 1C12.3869 1 14.6761 1.94821 16.364 3.63604C18.0518 5.32387 19 7.61305 19 10Z"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="fill-green-400"
-                        />
-                      </svg>
-                    </Button>
-                  </>
-                )}
+                        <svg
+                          width="15"
+                          height="15"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M6.228 7C6.777 5.835 8.258 5 10 5C12.21 5 14 6.343 14 8C14 9.4 12.722 10.575 10.994 10.907C10.452 11.011 10 11.447 10 12M10 15H10.01M19 10C19 11.1819 18.7672 12.3522 18.3149 13.4442C17.8626 14.5361 17.1997 15.5282 16.364 16.364C15.5282 17.1997 14.5361 17.8626 13.4442 18.3149C12.3522 18.7672 11.1819 19 10 19C8.8181 19 7.64778 18.7672 6.55585 18.3149C5.46392 17.8626 4.47177 17.1997 3.63604 16.364C2.80031 15.5282 2.13738 14.5361 1.68508 13.4442C1.23279 12.3522 1 11.1819 1 10C1 7.61305 1.94821 5.32387 3.63604 3.63604C5.32387 1.94821 7.61305 1 10 1C12.3869 1 14.6761 1.94821 16.364 3.63604C18.0518 5.32387 19 7.61305 19 10Z"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="fill-green-400"
+                          />
+                        </svg>
+                      </Button>
+                    </>
+                  )}
               </>
             ) : (
               (data?.user?.admin === "true" ||

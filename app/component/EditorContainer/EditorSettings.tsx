@@ -4,14 +4,6 @@ import SearchString from "./SearchString";
 import React, { useState } from "react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 
-const debounce = (fn, delay) => {
-  let timerId;
-  return (...args) => {
-    clearTimeout(timerId);
-    timerId = setTimeout(() => fn(...args), delay);
-  };
-};
-
 interface Props {
   editor: Editor | null;
   showFindText: boolean;
@@ -27,16 +19,13 @@ function EditorSetting({
   setShowFindText,
   setShowFontSize,
 }: Props) {
-  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
   const handleFontChange = (e) => {
-    debounceChangeFont(e.target.value);
+    changeFontSize(e.target.value);
   };
   const changeFontSize = (value: number) => {
     editor?.chain()?.selectAll()?.setFontSize(value)?.run();
-    setFontSize(value);
   };
 
-  const debounceChangeFont = debounce(changeFontSize, 200);
   const FontSizeComponent = () => (
     <>
       <div className="inline-flex flex-1 items-center justify-between rounded-full">
@@ -51,8 +40,7 @@ function EditorSetting({
               min={18}
               step={1}
               max={38}
-              defaultValue={fontSize}
-              title={fontSize}
+              defaultValue={DEFAULT_FONT_SIZE}
               onChange={handleFontChange}
             ></input>
           </div>

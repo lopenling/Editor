@@ -2,22 +2,15 @@ import { useAsyncValue, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import React, { useEffect } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
-import { Modal } from "flowbite-react";
 import Filter from "./Filter";
-import ModalStyle from "react-responsive-modal/styles.css";
-import { useDetectClickOutside } from "react-detect-click-outside";
-import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Post from "./Post";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { filteredPost as filteredValue, postslist } from "~/states";
 type PostPropsType = {
   editor: Editor | null;
   posts: any;
 };
 
-export function links() {
-  return [{ rel: "stylesheet", href: ModalStyle, as: "style" }];
-}
 function Posts({ editor, posts }: PostPropsType) {
   const data = useLoaderData();
   const setPostList = useSetRecoilState(postslist);
@@ -26,9 +19,6 @@ function Posts({ editor, posts }: PostPropsType) {
   useEffect(() => {
     setPostList(posts);
   }, [posts]);
-  // useEffect(() => {
-  //   setSelectedPost(data.selectedPost);
-  // }, [data.selectedPost]);
   const filteredPost = useRecoilValue(filteredValue);
 
   if (!editor) return null;

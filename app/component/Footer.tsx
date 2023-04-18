@@ -1,13 +1,12 @@
-import { Footer } from "flowbite-react";
 import indrajalaLogo from "~/assets/indrajalaLogo.png";
 
 export default function FooterContainer() {
   return (
     <>
-      <div className=" text-3xl capitalize font-extrabold items-center justify-center flex h-48">
-        our partners
-      </div>
-      <div className="inline-flex w-full items-center justify-center bg-green-700 h-[350px]">
+      <div className="flex flex-col w-full items-center justify-center bg-green-700 h-[350px]">
+        <div className=" text-3xl capitalize font-extrabold items-center justify-center flex h-30">
+          our partners
+        </div>
         <img
           src={indrajalaLogo}
           alt={"indrajala"}
@@ -16,7 +15,7 @@ export default function FooterContainer() {
       </div>
 
       <footer className="bg-white dark:bg-gray-900">
-        <div className="mx-auto w-full container">
+        <div className="mx-auto w-full ">
           <div className="px-4 py-6 bg-gray-100 dark:bg-gray-700 md:flex md:items-center md:justify-between">
             <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
               © 2023 <a href="https://flowbite.com/">Lopenling™</a>. All Rights

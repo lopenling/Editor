@@ -17,7 +17,6 @@ import {
   selectedPostThread,
   selectedSuggestionThread,
   selectedTextOnEditor,
-  selectionRangeState,
   textName,
 } from "~/states";
 import { useEffect, useMemo } from "react";
@@ -27,6 +26,7 @@ import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
 import HardBreak from "@tiptap/extension-hard-break";
 import Highlight from "@tiptap/extension-highlight";
+import TextStyle from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
 import { Suggestion } from "~/tiptap-extension/suggestion";
 import PostMark from "~/tiptap-extension/postMark";
@@ -98,8 +98,8 @@ export default function () {
       textFetcher.load(`/api/text?textId=${data.text?.id}`);
   }, []);
   let content = textFetcher.data?.content.replace(/\n/g, "<br>");
-  const setSelectionRange = useSetRecoilState(selectionRangeState);
-  const setSelection = useSetRecoilState(selectedTextOnEditor);
+  const [setSelection, setSelectionRange] =
+    useRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );
@@ -133,6 +133,7 @@ export default function () {
         Bold,
         FontFamily,
         FontSize,
+        TextStyle,
         SearchAndReplace.configure({
           searchResultClass: "search",
           caseSensitive: false,
@@ -191,16 +192,16 @@ export default function () {
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
-        setSelection({
+        setSelectionRange({
+          type: "",
           start: from,
           end: to,
-          text: editor?.state.doc.textBetween(from, to, ""),
+          content: editor?.state.doc.textBetween(from, to, ""),
         });
         setOpenSuggestion(false);
         if (!editor.isActive("suggestion")) suggestionSelector({ id: null });
         if (!editor.isActive("post")) postSelector({ id: null });
         // define the mark you want to check for
-        setSelectionRange(null);
       },
       onCreate: ({ editor }) => {
         if (data.selectedPost) {

@@ -41,7 +41,6 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
   const likeFetcher = useFetcher();
   const deleteFetcher = useFetcher();
   const data = useLoaderData();
-  console.log(data.text.userId);
   const user = data.user;
   let allowReplace = user
     ? user.admin === "true" || data.text.userId == user.id
