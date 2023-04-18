@@ -23,7 +23,7 @@ function EditorSetting({
     changeFontSize(e.target.value);
   };
   const changeFontSize = (value: number) => {
-    editor?.chain()?.selectAll()?.setFontSize(value)?.run();
+    editor?.chain()?.selectAll()?.setFontSize(value.toString())?.run();
   };
 
   const FontSizeComponent = () => (
