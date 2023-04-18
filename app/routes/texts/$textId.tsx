@@ -20,29 +20,22 @@ import {
   selectionRangeState,
   textName,
 } from "~/states";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
-import Collaboration from "@tiptap/extension-collaboration";
 import HardBreak from "@tiptap/extension-hard-break";
 import Highlight from "@tiptap/extension-highlight";
 import FontFamily from "@tiptap/extension-font-family";
 import { Suggestion } from "~/tiptap-extension/suggestion";
 import PostMark from "~/tiptap-extension/postMark";
 import SuggestionContainer, { SuggestionForm } from "~/component/Suggestion";
-// import { Comment } from "~/tiptap-extension/comment";
 import { FontSize } from "~/tiptap-extension/fontSize";
 import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { motion } from "framer-motion";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import * as Y from "yjs";
-import { WebsocketProvider } from "y-websocket";
-import { HocuspocusProvider } from "@hocuspocus/provider";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
-import { NodeSelection } from "prosemirror-state";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -130,20 +123,7 @@ export default function () {
       id: id,
     });
   }
-  let user = data.user ? data.user.username : "random";
-  let ydoc = new Y.Doc();
-  let provider = useMemo(
-    () =>
-      new HocuspocusProvider({
-        url: "ws://localhost:1234",
-        name: data.text.name,
-        document: ydoc,
-        onConnect() {
-          console.log("connected");
-        },
-      }),
-    []
-  );
+
   let editor = useEditor(
     {
       extensions: [
@@ -153,13 +133,6 @@ export default function () {
         Bold,
         FontFamily,
         FontSize,
-        Collaboration.configure({
-          document: provider.document,
-        }),
-        CollaborationCursor.configure({
-          provider: provider,
-          user: { name: user, color: "#ffcc00" },
-        }),
         SearchAndReplace.configure({
           searchResultClass: "search",
           caseSensitive: false,

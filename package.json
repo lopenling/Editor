@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@assembless/react-littera": "^2.4.0",
-    "@hocuspocus/provider": "^2.0.3",
     "@hocuspocus/transformer": "^2.0.3",
     "@prisma/client": "^4.12.0",
     "@remix-run/cloudflare": "^1.11.1",
@@ -29,8 +28,6 @@
     "@sereneinserenade/tiptap-extension-search-n-replace": "^2.0.0-beta.3",
     "@tiptap/core": "^2.0.2",
     "@tiptap/extension-bold": "^2.0.0-beta.209",
-    "@tiptap/extension-collaboration": "^2.0.2",
-    "@tiptap/extension-collaboration-cursor": "^2.0.2",
     "@tiptap/extension-document": "^2.0.0-beta.209",
     "@tiptap/extension-font-family": "^2.0.0-beta.220",
     "@tiptap/extension-hard-break": "^2.0.0-beta.219",
@@ -40,7 +37,6 @@
     "@tiptap/extension-text-style": "^2.0.0-beta.209",
     "@tiptap/pm": "^2.0.2",
     "@tiptap/react": "^2.0.0-beta.209",
-    "@tiptap/starter-kit": "^2.0.2",
     "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "flowbite": "^1.6.3",
@@ -61,11 +57,7 @@
     "remix-utils": "^6.0.0",
     "tiptap-extension-font-size": "^1.2.0",
     "tiptap-extensions": "^1.35.2",
-    "uuid": "^9.0.0",
-    "wavesurfer.js": "^6.6.3",
-    "y-prosemirror": "^1.2.1",
-    "y-websocket": "^1.5.0",
-    "yjs": "^13.5.52"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.19.0",
