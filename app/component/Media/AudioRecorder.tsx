@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
-import { Button } from "flowbite-react";
 const AudioRecorder = () => {
   const audioFetcher = useFetcher();
   const [permission, setPermission] = useState(false);
@@ -130,17 +129,19 @@ const AudioRecorder = () => {
             </a>
           </div>
           <div className="flex justify-around gap-3 ">
-            <Button size="xs" color="" className="bg-green-400 text-white">
+            <button
+              color=""
+              className="bg-green-400 text-white px-3 py-2 text-xs font-medium text-center"
+            >
               upload
-            </Button>
-            <Button
-              className="bg-gray-200 text-black"
+            </button>
+            <button
+              className="bg-gray-200 text-black px-3 py-2 text-xs font-medium text-center"
               color=""
               onClick={() => setAudio(null)}
-              size="xs"
             >
               cancel
-            </Button>
+            </button>
           </div>
         </>
       ) : null}

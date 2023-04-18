@@ -1,5 +1,5 @@
 import { useOutletContext } from "@remix-run/react";
-import { useFetcher, useLoaderData } from "@remix-run/react/dist/components";
+import { useFetcher } from "@remix-run/react/dist/components";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { useState } from "react";
 type ReplyPropType = {

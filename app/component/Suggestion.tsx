@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
 import { useState } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Avatar, Button, TextInput } from "flowbite-react";
+
 import { v4 as uuidv4 } from "uuid";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { Editor } from "@tiptap/react";
@@ -111,12 +111,11 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
     >
       <div className="flex justify-between mb-2">
         <div className="flex gap-3">
-          <Avatar
-            rounded={true}
-            size="xs"
-            img={suggest.user.avatarUrl}
-            alt="avataruser"
-          />
+          <img
+            className="w-6 h-6 rounded-full"
+            src={suggest.user.avatarUrl}
+            alt="Extra small avatar"
+          ></img>
           <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
             {suggest.user.name}
           </p>
@@ -280,30 +279,26 @@ export function SuggestionForm({ editor }) {
   return (
     <div className="p-2 bg-slate-50 shadow-md m-3">
       <div className="flex justify-evenly">
-        <TextInput
-          type="text"
-          sizing="sm"
+        <textarea
           placeholder="what is suggestion?"
           value={suggestionInput}
+          rows={1}
+          className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           onChange={(e) => setSuggestionInput(e.target.value)}
         />
-        <Button
-          color=""
-          size="sm"
-          className="bg-green-400 text-white"
+        <button
+          className="bg-green-400 text-white px-3 py-2 text-xs font-medium text-center"
           disabled={addSuggestion.state !== "idle"}
           onClick={handleSuggestionSubmit}
         >
           submit
-        </Button>
-        <Button
-          color=""
-          className="bg-gray-200 text-black"
-          size="sm"
+        </button>
+        <button
+          className="bg-gray-200 text-black px-3 py-2 text-xs font-medium text-center"
           onClick={handleSuggestionCancel}
         >
           cancel
-        </Button>
+        </button>
       </div>
     </div>
   );

@@ -125,7 +125,7 @@ function Post({
         <div className="inline-flex w-full items-center justify-start">
           <div className="flex items-center justify-start space-x-3">
             <img
-              className="w-6 h-6 rounded"
+              className="w-6 h-6 rounded-full"
               src={creatorUser.avatarUrl}
               alt="Extra small avatar"
             ></img>

@@ -207,11 +207,10 @@ export async function createThread(
   postTitle: string,
   blockquoteArea: string,
   postContent: string,
-  threadId: string,
   parentCategoryId: string,
-  textId: number,
-  type: string
+  textId: number
 ) {
+  console.log(postTitle, postContent, blockquoteArea);
   if (!postTitle || !blockquoteArea || !postContent)
     throw new Error("failed to access Topic Id");
   const api: DiscourseApi = new DiscourseApi(userName);
@@ -238,6 +237,7 @@ export async function createThread(
     postContent as string,
     textId
   );
+
   return topic;
 }
 

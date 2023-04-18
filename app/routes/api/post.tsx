@@ -29,38 +29,27 @@ export const action: ActionFunction = async ({ request }) => {
       const data = await createThread(
         user.username,
         Obj.topic,
-        Obj.selectedTextSegment,
+        Obj.selectionSegment,
         Obj.body,
-        Obj.threadId,
         parent_category_id,
-        textId,
         Obj.type
       );
-      try {
-        if (data["topic_id"] && user) {
-          console.log(userData);
-          const createPost = await createPostOnDB(
-            Obj.type,
-            data["avatar_template"],
-            data["topic_id"],
-            data["id"],
-            Obj.threadId,
-            textId,
-            Obj.body,
-            userData.id
-          );
-          return createPost;
-        }
-      } catch (error) {
-        console.error("Failed to create question:", error);
-        throw error;
+      if (data["topic_id"] && user) {
+        const createPost = await createPostOnDB(
+          Obj.type,
+          data["avatar_template"],
+          data["topic_id"],
+          data["id"],
+          Obj.threadId,
+          textId,
+          Obj.body,
+          userData.id
+        );
+        return createPost;
       }
-
-      return {
-        message: "success",
-      };
-    } catch (e) {
-      return { error: { message: e.message } };
+    } catch (error) {
+      console.error("Failed to create question:", error);
+      throw error;
     }
   }
   if (request.method === "DELETE") {

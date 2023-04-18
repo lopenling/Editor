@@ -1,4 +1,3 @@
-import { useAsyncValue, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useEffect } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
@@ -12,13 +11,14 @@ type PostPropsType = {
 };
 
 function Posts({ editor, posts }: PostPropsType) {
-  const data = useLoaderData();
   const setPostList = useSetRecoilState(postslist);
 
-  if (!posts && !posts.length) return null;
+  if (!posts && !posts?.length) return null;
   useEffect(() => {
-    setPostList(posts);
-  }, [posts]);
+    if (posts.length > 0) {
+      setPostList(posts);
+    }
+  }, [posts.length]);
   const filteredPost = useRecoilValue(filteredValue);
 
   if (!editor) return null;
@@ -31,8 +31,6 @@ function Posts({ editor, posts }: PostPropsType) {
           height: "80vh",
         }}
       >
-        <div id="temporaryPost"></div>
-
         {filteredPost?.length > 0 &&
           filteredPost?.map((post) => {
             return (

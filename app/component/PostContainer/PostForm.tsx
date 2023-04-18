@@ -1,7 +1,5 @@
 import { useFetcher, useOutletContext } from "@remix-run/react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import React from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import Post from "./Post";
 import { selectedTextOnEditor } from "~/states";
 import { useRecoilState } from "recoil";
@@ -9,10 +7,11 @@ import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
 import AudioRecorder from "../Media/AudioRecorder";
 const PostForm = () => {
-  const [postInfo, setPostInfo] = useRecoilState(selectedTextOnEditor);
+  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const data = useOutletContext();
   const createPost = useFetcher();
-  const [body, setBody] = React.useState("");
+  const [body, setBody] = useState("");
+  const [selectedTab, setSelectedTab] = useState("text");
   const { user }: { user: any } = useOutletContext();
   let isFormEmpty = body.length < 5;
   let isPosting =
@@ -20,7 +19,7 @@ const PostForm = () => {
   const { editor }: { editor: Editor } = useOutletContext();
   function handleSubmit(e) {
     e.preventDefault();
-    let lengthOfSelection = postInfo.end - postInfo?.start;
+    let lengthOfSelection = selection.end - selection?.start;
     if (lengthOfSelection > 254) {
       alert("ERROR : selecting more then 255 letter not allowed");
       return null;
@@ -31,29 +30,29 @@ const PostForm = () => {
     } else {
       id = editor.getAttributes("post").id;
     }
-    if (postInfo)
+    if (selection)
       createPost.submit(
         {
           threadId: id,
-          selectedTextSegment: postInfo.content,
+          selectionSegment: selection.content,
           textId: data?.text?.id,
           topic: data?.text?.name,
           body: body,
-          type: postInfo.type,
+          type: selection.type,
         },
         {
           method: "post",
           action: "/api/post",
         }
       );
-    setPostInfo({ ...postInfo, type: "" });
+    setSelection({ ...selection, type: "" });
     editor.commands.setPost({
       id,
     });
   }
 
   if (isPosting) {
-    return createPortal(
+    return (
       <Post
         creatorUser={user}
         time="now"
@@ -68,28 +67,37 @@ const PostForm = () => {
         }
         isOptimistic={true}
         threadId={null}
-      />,
-      document.getElementById("temporaryPost")
+      />
     );
   }
-  if (createPost.data?.error && !postInfo)
+  if (createPost.data?.error && !selection)
     return <div>{createPost.data.error.message} </div>;
-  if (postInfo.type === "") return null;
+  if (selection.type === "") return null;
   return (
     <section>
       <div className="inline-flex items-start justify-start">
         <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-300 mb-3 capitalize">
-          {postInfo.type === "question" ? "ask question" : "new comment"}
+          {selection.type === "question" ? "ask question" : "new comment"}
         </p>
       </div>
 
       {user ? (
-        <Tabs aria-label="Default tabs">
-          <TabList className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-4">
-            <Tab className="cursor-pointer">Text</Tab>
-            <Tab className="cursor-pointer">Audio</Tab>
-          </TabList>
-          <TabPanel>
+        <div aria-label="Default tabs">
+          <div className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-4">
+            <div
+              className="cursor-pointer"
+              onClick={() => setSelectedTab("text")}
+            >
+              Text
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => setSelectedTab("audio")}
+            >
+              Audio
+            </div>
+          </div>
+          {selectedTab === "text" && (
             <createPost.Form
               className="flex flex-col gap-3"
               onSubmit={handleSubmit}
@@ -105,7 +113,7 @@ const PostForm = () => {
                 ></textarea>
                 <div className="flex justify-end gap-2">
                   <button
-                    onClick={() => setPostInfo(null)}
+                    onClick={() => setSelection(null)}
                     color=""
                     className="bg-gray-200 text-black text-xs font-medium text-center rounded-lg p-2"
                   >
@@ -122,11 +130,10 @@ const PostForm = () => {
                 </div>
               </>
             </createPost.Form>
-          </TabPanel>
-          <TabPanel>
-            <AudioRecorder />
-          </TabPanel>
-        </Tabs>
+          )}
+
+          {selectedTab === "audio" && <AudioRecorder />}
+        </div>
       ) : (
         <div className="text-red-600">You must login first !</div>
       )}
@@ -135,4 +142,4 @@ const PostForm = () => {
   );
 };
 
-export default React.forwardRef(PostForm);
+export default PostForm;
