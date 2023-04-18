@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useFetcher, useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { Avatar } from "flowbite-react";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedPostThread, shareState } from "~/states";
-import Share from "./Share";
+import { useRecoilState } from "recoil";
+import { selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
 type PostType = {
   id: string;
@@ -37,7 +35,6 @@ function Post({
   threadId,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
-  const setOpenShare = useSetRecoilState(shareState);
   const [showReplies, setShowReplies] = useState(false);
   const [effect, setEffect] = useState(false);
   const [ReplyCount, setReplyCount] = useState(replyCount - 1);
@@ -87,15 +84,7 @@ function Post({
   const updateReplyCount = () => {
     setReplyCount((p) => p + 1);
   };
-  useEffect(() => {
-    if (isSelected && postref.current) {
-      postref.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-      });
-    }
-  }, []);
+
   const postref = useDetectClickOutside({
     onTriggered: () => {
       setSelectedThreadId({ id: null });
@@ -125,7 +114,6 @@ function Post({
       className={`${deleteFetcher.submission && "hidden"}`}
       id={`p_${threadId}`}
     >
-      <Share post_id={id} />
       <div
         className={` py-3 px-1 transition-all ${
           isSelected
@@ -136,7 +124,11 @@ function Post({
       >
         <div className="inline-flex w-full items-center justify-start">
           <div className="flex items-center justify-start space-x-3">
-            <Avatar img={creatorUser.avatarUrl} rounded={true} size="xs" />
+            <img
+              className="w-6 h-6 rounded"
+              src={creatorUser.avatarUrl}
+              alt="Extra small avatar"
+            ></img>
             <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
               {creatorUser.name}
             </p>
@@ -229,10 +221,7 @@ function Post({
                   </div>
                 )}
 
-                <div
-                  onClick={() => setOpenShare(true)}
-                  className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-blue-400"
-                >
+                <div className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-blue-400">
                   <svg
                     width="16"
                     height="16"

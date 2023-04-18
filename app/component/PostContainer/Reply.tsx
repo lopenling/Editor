@@ -1,6 +1,5 @@
 import { useOutletContext } from "@remix-run/react";
 import { useFetcher, useLoaderData } from "@remix-run/react/dist/components";
-import { Button } from "flowbite-react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { useState } from "react";
 type ReplyPropType = {
@@ -168,11 +167,10 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
                 </button>
               )
             ) : (
-              <Button
+              <button
                 disabled={!isCreator}
                 onClick={handleAproved}
-                color="success"
-                size="xs"
+                className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 {approvedFetcher.state !== "idle" ? (
                   <>loading</>
@@ -182,7 +180,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
                     <div className="ml-2">Solved</div>
                   </>
                 )}
-              </Button>
+              </button>
             )}
           </div>
         )}

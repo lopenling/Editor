@@ -1,7 +1,5 @@
 import { Editor } from "@tiptap/react";
-import crossIcon from "~/assets/svg/icon_cross.svg";
 import SearchString from "./SearchString";
-import React, { useState } from "react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 
 interface Props {
@@ -116,4 +114,4 @@ function EditorSetting({
     </>
   );
 }
-export default React.memo(EditorSetting);
+export default EditorSetting;

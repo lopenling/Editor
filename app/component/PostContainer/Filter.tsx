@@ -1,7 +1,6 @@
 import { Avatar, Button, Modal } from "flowbite-react";
-import React, { useState, useId, useEffect } from "react";
+import { useState, useId, useEffect } from "react";
 import { useFetcher } from "react-router-dom";
-import Datepicker from "react-tailwindcss-datepicker";
 import { useRecoilState } from "recoil";
 import { filterDataState, openFilterState } from "~/states";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
@@ -11,7 +10,7 @@ type FilterProps = {};
 export default function Filter({}: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);
   const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
-  const [userInput, setUserInput] = React.useState("");
+  const [userInput, setUserInput] = useState("");
   const searchUser = useFetcher();
   const typeId = useId();
   const solvedId = useId();
@@ -106,10 +105,15 @@ export default function Filter({}: FilterProps) {
           {/* DateFilter */}
           <div className="flex w-full flex-col items-start justify-start space-y-2">
             <p className="text-sm font-medium leading-tight ">Date</p>
-            <Datepicker
+
+            <input
+              datepicker
+              type="text"
               value={filterData.date}
               inputName="date"
               onChange={handleDateChange}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Select date"
             />
           </div>
           {/* UserFilter */}

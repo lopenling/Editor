@@ -1,5 +1,5 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Button, Textarea } from "flowbite-react";
+import { Textarea } from "flowbite-react";
 import { useRef, useEffect, useState } from "react";
 
 type ReplyFormPropsType = {
@@ -57,19 +57,15 @@ export default function ReplyForm({
           onChange={(e) => setTextArea(e.target.value)}
         />
         <div className="flex justify-end gap-2 mt-2">
-          <Button
-            color=""
-            size="xs"
+          <button
             onClick={closeReply}
-            className="bg-gray-300 text-black"
+            className="bg-gray-300 text-black px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none "
             type="reset"
           >
             cancel
-          </Button>
-          <Button
-            color=""
-            size="xs"
-            className="bg-green-400 text-white"
+          </button>
+          <button
+            className="bg-green-400 text-white  px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none "
             type="submit"
             disabled={textArea === "" || postFetcher.state !== "idle"}
           >
@@ -80,7 +76,7 @@ export default function ReplyForm({
             ) : (
               <div>respond</div>
             )}
-          </Button>
+          </button>
         </div>
       </postFetcher.Form>
     </div>

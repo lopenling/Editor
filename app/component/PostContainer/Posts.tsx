@@ -1,6 +1,6 @@
 import { useAsyncValue, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import Filter from "./Filter";
 import Post from "./Post";
@@ -57,4 +57,4 @@ function Posts({ editor, posts }: PostPropsType) {
   );
 }
 
-export default React.memo(Posts);
+export default Posts;

@@ -1,14 +1,9 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  selectedSuggestionThread,
-  selectedTextOnEditor,
-  shareState,
-} from "~/states";
+import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
 import { useState } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Avatar, Button, TextInput } from "flowbite-react";
 import { v4 as uuidv4 } from "uuid";
-import Share from "./PostContainer/Share";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { Editor } from "@tiptap/react";
 
@@ -46,7 +41,6 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
     ? user.admin === "true" || data.text.userId == user.id
     : false;
   const [effect, setEffect] = useState(false);
-  const setOpenShare = useSetRecoilState(shareState);
   let likedByMe = data.user
     ? suggest.likedBy.some((l) => l.username === data.user.username)
     : false;
@@ -115,7 +109,6 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
       key={suggest.id}
       className={`${deleteFetcher.submission && "hidden"} p-3`}
     >
-      <Share post_id={suggest.id} />
       <div className="flex justify-between mb-2">
         <div className="flex gap-3">
           <Avatar
@@ -178,7 +171,7 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
             </div>
           </button>
           <div
-            onClick={() => setOpenShare(true)}
+            onClick={() => console.log(true)}
             className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-blue-400"
           >
             <svg
