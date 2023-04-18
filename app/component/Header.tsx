@@ -72,8 +72,6 @@ export default function Header({ user }: any) {
   return (
     <div id="header" className=" shadow-header sticky top-0 z-20 ">
       <Navbar
-        fluid={false}
-        className="xl:px-48 py-0 flex items-center "
         style={{
           minHeight: 56,
         }}

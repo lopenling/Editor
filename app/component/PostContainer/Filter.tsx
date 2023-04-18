@@ -1,10 +1,9 @@
-import { Avatar, Button, Modal } from "flowbite-react";
 import { useState, useId, useEffect } from "react";
 import { useFetcher } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { filterDataState, openFilterState } from "~/states";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
-
+import Modal from "react-modal";
 type FilterProps = {};
 
 export default function Filter({}: FilterProps) {
@@ -65,12 +64,11 @@ export default function Filter({}: FilterProps) {
   let isFetchingUser = searchUser.state === "loading";
   return (
     <Modal
-      show={openFilter}
-      onClose={() => setOpenFilter(false)}
-      size="md"
-      dismissible={true}
+      isOpen={openFilter}
+      onRequestClose={() => setOpenFilter(false)}
+      shouldCloseOnOverlayClick={true}
     >
-      <Modal.Header>{translation.filter}</Modal.Header>
+      <h3>{translation.filter}</h3>
       <div className="p-5">
         <div className="flex flex-col items-start justify-start space-y-4">
           {/* Type of post  */}
@@ -108,7 +106,7 @@ export default function Filter({}: FilterProps) {
 
             <input
               datepicker
-              type="text"
+              type="date"
               value={filterData.date}
               inputName="date"
               onChange={handleDateChange}
@@ -217,7 +215,11 @@ export default function Filter({}: FilterProps) {
                           key={user?.username}
                         >
                           <div className="inline-flex w-full items-center justify-start space-x-2 rounded-lg">
-                            <Avatar rounded={true} img={avatarUrl} size="xs" />
+                            <img
+                              className="w-6 h-6 rounded-full"
+                              src={avatarUrl}
+                              alt="Extra small avatar"
+                            ></img>
                             <div
                               className="flex-1 text-sm leading-tight"
                               onClick={() => handleNameClick(user?.username)}
@@ -270,10 +272,10 @@ export default function Filter({}: FilterProps) {
         </div>
 
         <div className="flex w-full items-start justify-start gap-3 mt-2">
-          <Button onClick={apply}>Apply filters</Button>
-          <Button onClick={reset} color="light" type="reset">
+          <button onClick={apply}>Apply filters</button>
+          <button onClick={reset} color="light" type="reset">
             Reset
-          </Button>
+          </button>
         </div>
       </div>
     </Modal>

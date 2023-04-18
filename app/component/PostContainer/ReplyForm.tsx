@@ -1,5 +1,4 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { Textarea } from "flowbite-react";
 import { useRef, useEffect, useState } from "react";
 
 type ReplyFormPropsType = {
@@ -44,7 +43,7 @@ export default function ReplyForm({
         }}
       >
         <input hidden defaultValue={topicId} name="topicId" />
-        <Textarea
+        <textarea
           name="postString"
           required={true}
           placeholder="Write your reply here ..."

@@ -1016,6 +1016,10 @@ input:checked + .toggle-bg {
   visibility: collapse;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -1532,6 +1536,10 @@ input:checked + .toggle-bg {
   height: 0px;
 }
 
+.h-\[calc\(100\%-1rem\)\] {
+  height: calc(100% - 1rem);
+}
+
 .max-h-\[136px\] {
   max-height: 136px;
 }
@@ -1546,6 +1554,10 @@ input:checked + .toggle-bg {
 
 .max-h-\[80vh\] {
   max-height: 80vh;
+}
+
+.max-h-full {
+  max-height: 100%;
 }
 
 .min-h-\[285px\] {

@@ -1,5 +1,5 @@
-import { useFetcher, useLoaderData, useOutletContext } from "@remix-run/react";
-import { Button, Tabs, Textarea } from "flowbite-react";
+import { useFetcher, useOutletContext } from "@remix-run/react";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import React from "react";
 import { createPortal } from "react-dom";
 import Post from "./Post";
@@ -8,7 +8,6 @@ import { useRecoilState } from "recoil";
 import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
 import AudioRecorder from "../Media/AudioRecorder";
-
 const PostForm = () => {
   const [postInfo, setPostInfo] = useRecoilState(selectedTextOnEditor);
   const data = useOutletContext();
@@ -67,7 +66,6 @@ const PostForm = () => {
         type={
           createPost.submission.formData.get("type") as "question" | "comment"
         }
-        handleSelection={null}
         isOptimistic={true}
         threadId={null}
       />,
@@ -86,47 +84,49 @@ const PostForm = () => {
       </div>
 
       {user ? (
-        <Tabs.Group aria-label="Default tabs" style="default">
-          <Tabs.Item title="Text">
+        <Tabs aria-label="Default tabs">
+          <TabList className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-4">
+            <Tab className="cursor-pointer">Text</Tab>
+            <Tab className="cursor-pointer">Audio</Tab>
+          </TabList>
+          <TabPanel>
             <createPost.Form
               className="flex flex-col gap-3"
               onSubmit={handleSubmit}
             >
               <>
-                <Textarea
+                <textarea
                   placeholder="what are your thoughts?"
                   autoFocus
                   name="body"
                   onChange={(e) => setBody(e.target.value)}
                   style={{ height: 108 }}
-                  className=" w-full bg-gray-50 focus:border-0 focus:outline-0 "
-                ></Textarea>
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                ></textarea>
                 <div className="flex justify-end gap-2">
-                  <Button
+                  <button
                     onClick={() => setPostInfo(null)}
                     color=""
-                    className="bg-gray-200 text-black"
-                    size="xs"
+                    className="bg-gray-200 text-black text-xs font-medium text-center rounded-lg p-2"
                   >
                     cancel
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     onClick={handleSubmit}
                     color=""
-                    size="xs"
-                    className="bg-green-400 text-white"
+                    className="bg-green-400 text-white text-xs font-medium text-center rounded-lg p-2"
                     disabled={isFormEmpty}
                   >
                     post
-                  </Button>
+                  </button>
                 </div>
               </>
             </createPost.Form>
-          </Tabs.Item>
-          <Tabs.Item title="Audio">
+          </TabPanel>
+          <TabPanel>
             <AudioRecorder />
-          </Tabs.Item>
-        </Tabs.Group>
+          </TabPanel>
+        </Tabs>
       ) : (
         <div className="text-red-600">You must login first !</div>
       )}
