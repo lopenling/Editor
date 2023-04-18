@@ -25,6 +25,8 @@ jobs:
 
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm i --force
 
       - name: Setup Environment Vars
         run: python3 ./scripts/set_env_vars.py
