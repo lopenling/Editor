@@ -9,7 +9,7 @@ export const theme = atom({
 
 export const textName = atom({
   key: "textName",
-  default: null,
+  default: "",
 });
 
 //posts

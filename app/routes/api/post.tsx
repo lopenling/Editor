@@ -16,9 +16,9 @@ export const action: ActionFunction = async ({ request }) => {
   let Obj = Object.fromEntries(formData);
   const user = await getUserSession(request);
   const userData = await findUserByUsername(user.username);
-  let DiscourseUrl = DISCOURSE_SITE;
-  let api = DISCOURSE_API_KEY;
-  let parent_category_id = DISCOURSE_QA_CATEGORY_ID;
+  let DiscourseUrl = process.env.DISCOURSE_SITE;
+  let api = process.env.DISCOURSE_API_KEY;
+  let parent_category_id = process.env.DISCOURSE_QA_CATEGORY_ID;
   if (!user) throw new Error("user not logged in");
   if (!DiscourseUrl || !api || !parent_category_id) {
     throw new Error("set a DISCOURSE_SITE/DISCOURSE_API_KEY in env");

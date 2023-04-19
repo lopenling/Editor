@@ -70,12 +70,8 @@ export default function Header({ user }: any) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [redirectTo, textNameValue]);
   return (
-    <div id="header" className=" shadow-header sticky top-0 z-20 ">
-      <Navbar
-        style={{
-          minHeight: 56,
-        }}
-      >
+    <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-header sticky top-0 z-20 ">
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textNameValue={textNameValue} />
         ) : (
@@ -83,33 +79,38 @@ export default function Header({ user }: any) {
             <Logo />
           </Navbar.Brand>
         )}
-        <Navbar.Toggle />
-        <Navbar.Collapse>
-          <div
-            className={`flex ${
-              user ? "justify-between" : "flex-col"
-            } md:flex-row`}
-          >
-            <div className="flex items-center">
-              <Translation />
-            </div>
-            {user ? (
-              <div className="flex md:order-2">
-                <Dropdown
-                  className="z-10"
-                  inline={true}
-                  arrowIcon={null}
-                  label={
-                    <Avatar
-                      alt={user.name}
-                      img={user.avatarUrl}
-                      rounded={true}
-                      size="md"
-                      title={user?.name}
-                    />
-                  }
-                >
-                  <Dropdown.Header>
+        <div className="flex items-center md:order-2">
+          <div className="flex items-center">
+            <Translation />
+          </div>
+          {user ? (
+            <>
+              <button
+                type="button"
+                className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                id="user-menu-button"
+                aria-expanded="false"
+                data-dropdown-toggle="user-dropdown"
+                data-dropdown-placement="bottom"
+              >
+                <span className="sr-only">Open user menu</span>
+                <Avatar
+                  alt={user.name}
+                  img={user.avatarUrl}
+                  rounded={true}
+                  size="md"
+                  title={user?.name}
+                />
+              </button>
+              <div
+                className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                id="user-dropdown"
+              >
+                <div className="px-4 py-3">
+                  <span className="block text-sm text-gray-900 dark:text-white">
+                    {user.name}
+                  </span>
+                  <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
                     <a
                       target={"_self"}
                       href={`https://lopenling.org/u/${user?.username}/summary`}
@@ -117,21 +118,21 @@ export default function Header({ user }: any) {
                     >
                       {user?.email}
                     </a>
-                  </Dropdown.Header>
-                  <Dropdown.Item>
-                    <NavLink
-                      preventScrollReset
-                      to="/texts/upload"
-                      prefetch="render"
-                    >
-                      UploadText
-                    </NavLink>
-                  </Dropdown.Item>
-                  <NavLink to="/posts" prefetch="render">
-                    <Dropdown.Item>Posts</Dropdown.Item>
+                  </span>
+                </div>
+                <div
+                  className="py-2 flex flex-col justify-center pl-2 gap-3"
+                  aria-labelledby="user-menu-button "
+                >
+                  <NavLink
+                    preventScrollReset
+                    to="/texts/upload"
+                    prefetch="render"
+                  >
+                    UploadText
                   </NavLink>
-                  <Dropdown.Divider />
-                  <Dropdown.Item onClick={changeTheme}>
+
+                  <div onClick={changeTheme} className="cursor-pointer">
                     {themeSelected !== "light" ? (
                       <div className="flex gap-2">
                         <svg
@@ -163,8 +164,8 @@ export default function Header({ user }: any) {
                         Dark Mode
                       </div>
                     )}
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={changeTheme}>
+                  </div>
+                  <div>
                     <a
                       target={"_blank"}
                       href={`https://lopenling.org/u/${user?.username}/preferences/account`}
@@ -172,73 +173,97 @@ export default function Header({ user }: any) {
                     >
                       preferences
                     </a>
-                  </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Form
-                      method="post"
-                      action="/sso/login"
-                      className="flex items-center"
-                    >
-                      <input
-                        type="hidden"
-                        name="redirectTo"
-                        className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
-                        defaultValue={redirectTo}
-                      />
-                      <button
-                        className="text-sm font-medium leading-tight "
-                        type="submit"
-                        name="_action"
-                        value="logout"
-                      >
-                        {translation.logout}
-                      </button>
-                    </Form>
-                  </Dropdown.Item>
-                </Dropdown>
-              </div>
-            ) : (
-              <div className="flex gap-2 justify-between p-3">
-                <loginFetcher.Form
-                  method="post"
-                  id="login"
-                  action="/sso/login"
-                  className="flex items-center"
-                >
-                  <input
-                    type="hidden"
-                    name="redirectTo"
-                    defaultValue={redirectTo}
-                  />
-
-                  <button
-                    type="submit"
-                    name="_action"
-                    value="login"
-                    className="text-sm font-medium leading-tight text-gray-900 capitalize dark:text-white"
+                  </div>
+                  <Form
+                    method="post"
+                    action="/sso/login"
+                    className="flex items-center"
                   >
-                    {translation.login}
-                  </button>
-                </loginFetcher.Form>
-                <Button
-                  // gradientDuoTone="tealToLime"
-                  className=" text-green-400 border-2 border-green-300"
-                  color=""
-                  id="signup"
-                >
-                  <a href={"https://lopenling.org/signup"}>
-                    {translation.signup}
-                  </a>
-                </Button>
+                    <input
+                      type="hidden"
+                      name="redirectTo"
+                      className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
+                      defaultValue={redirectTo}
+                    />
+                    <button
+                      className="text-sm font-medium leading-tight "
+                      type="submit"
+                      name="_action"
+                      value="logout"
+                    >
+                      {translation.logout}
+                    </button>
+                  </Form>
+                </div>
               </div>
-            )}
-          </div>
-        </Navbar.Collapse>
-      </Navbar>
-    </div>
+            </>
+          ) : (
+            <div className="flex gap-2 justify-between p-3">
+              <loginFetcher.Form
+                method="post"
+                id="login"
+                action="/sso/login"
+                className="flex items-center"
+              >
+                <input
+                  type="hidden"
+                  name="redirectTo"
+                  defaultValue={redirectTo}
+                />
+
+                <button
+                  type="submit"
+                  name="_action"
+                  value="login"
+                  className="text-sm font-medium leading-tight text-gray-900 capitalize dark:text-white"
+                >
+                  {translation.login}
+                </button>
+              </loginFetcher.Form>
+              <Button
+                // gradientDuoTone="tealToLime"
+                className=" text-green-400 border-2 border-green-300"
+                color=""
+                id="signup"
+              >
+                <a href={"https://lopenling.org/signup"}>
+                  {translation.signup}
+                </a>
+              </Button>
+            </div>
+          )}
+
+          <button
+            data-collapse-toggle="mobile-menu-2"
+            type="button"
+            className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-controls="mobile-menu-2"
+            aria-expanded="false"
+          >
+            <span className="sr-only">Open main menu</span>
+            <svg
+              className="w-6 h-6"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div
+          className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="mobile-menu-2"
+        ></div>
+      </div>
+    </nav>
   );
 }
-
 export function Translation() {
   const methods = useLitteraMethods();
   const changeLanguage: React.ChangeEventHandler<HTMLSelectElement> = (e) => {

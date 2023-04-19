@@ -34,7 +34,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       let avatarUrl = params.get("avatar_url");
       let external_id = params.get("external_id");
       if (avatarUrl === null) {
-        let url = DISCOURSE_SITE + `/u/${username}.json`;
+        let url = process.env.DISCOURSE_SITE + `/u/${username}.json`;
         let result = await fetch(url);
         let res = await result.json();
         avatarUrl =

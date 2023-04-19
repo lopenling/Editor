@@ -32,7 +32,6 @@ html {
 
 body {
   min-height: 100vh;
-  max-width: 1519px;
   min-width: fit-content;
   margin: 0 auto;
   scrollbar-color: #d9d9d9;

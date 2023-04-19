@@ -13,7 +13,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   );
   let userListWithAvatar = await Promise.all(
     fetchData.map(async (l) => {
-      let url = DISCOURSE_SITE + `/u/${l.username}.json`;
+      let url = process.env.DISCOURSE_SITE + `/u/${l.username}.json`;
       let result = await fetch(url);
       let res = await result.json();
       let avatar = res?.user?.avatar_template;

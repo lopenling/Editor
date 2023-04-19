@@ -267,6 +267,7 @@ export function SuggestionForm({ editor }) {
       id: id,
       original: originalText,
     });
+    setSuggestionInput("");
   };
   const handleSuggestionCancel = () => {
     setSelectedSuggestion({
@@ -287,14 +288,14 @@ export function SuggestionForm({ editor }) {
           onChange={(e) => setSuggestionInput(e.target.value)}
         />
         <button
-          className="bg-green-400 text-white px-3 py-2 text-xs font-medium text-center"
+          className="bg-green-400 text-white px-3 py-2 text-xs font-medium text-center rounded"
           disabled={addSuggestion.state !== "idle"}
           onClick={handleSuggestionSubmit}
         >
           submit
         </button>
         <button
-          className="bg-gray-200 text-black px-3 py-2 text-xs font-medium text-center"
+          className="bg-gray-200 text-black px-3 py-2 text-xs font-medium text-center rounded"
           onClick={handleSuggestionCancel}
         >
           cancel
