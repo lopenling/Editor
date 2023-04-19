@@ -27,6 +27,7 @@ export async function createPost(
     });
     return createPost;
   } catch (e) {
+    console.log(e);
     throw new Error("post couldnot be created " + e);
   }
 }

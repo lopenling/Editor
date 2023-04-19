@@ -1,5 +1,9 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
+import {
+  openSuggestionState,
+  selectedSuggestionThread,
+  selectedTextOnEditor,
+} from "~/states";
 import { useState } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 
@@ -7,7 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { timeAgo } from "~/utility/getFormatedDate";
 import { Editor } from "@tiptap/react";
 
-export default function Suggestion({ editor }: { editor: Editor }) {
+export default function Suggestion({ editor }: { editor: Editor | null }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
   const data = useLoaderData();
 
@@ -234,7 +238,7 @@ export function SuggestionForm({ editor }) {
   const [suggestionInput, setSuggestionInput] = useState("");
   const addSuggestion = useFetcher();
   const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
-
+  const setOpenSuggestion = useSetRecoilState(openSuggestionState);
   const handleSuggestionSubmit = () => {
     const { state } = editor;
     const { from, to } = state.selection;
@@ -273,6 +277,7 @@ export function SuggestionForm({ editor }) {
     setSelectedSuggestion({
       id: null,
     });
+    setOpenSuggestion(false);
     // if (editor.isActive("suggestion")) editor.commands.unsetSuggestion();
   };
   if (!user) return <div className="text-red-600">You must login first !</div>;

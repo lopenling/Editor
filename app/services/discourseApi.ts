@@ -16,6 +16,7 @@ class DiscourseApi {
     this.username = username;
     this.category = process.env.DISCOURSE_QA_CATEGORY_ID;
     this.categoryName = "test";
+    this.origin = process.env.ORIGIN_LOCATION;
   }
 
   authHeader(admin = false) {
@@ -95,11 +96,15 @@ class DiscourseApi {
     textId: number
   ) {
     let auth_headers = this.authHeader();
-    let url = `${ORIGIN_LOCATION}/texts/${textId}`;
+    let url = `${this.origin}/texts/${textId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `
 <p>${bodyContentWithLink}</p>
 `;
+    if (bodyContent.includes("https://lopenling.s3.amazon")) {
+      post_text = `<audio controls><source src="${bodyContent}" type="audio/webm"></audio>`;
+    }
+
     let new_Topic_data = {
       title: topic_name as string,
       category: category_id,
@@ -204,28 +209,27 @@ class DiscourseApi {
 
 export async function createThread(
   userName: string,
-  postTitle: string,
+  textTitle: string,
   blockquoteArea: string,
   postContent: string,
   parentCategoryId: string,
   textId: number
 ) {
-  if (!postTitle || !blockquoteArea || !postContent)
+  if (!textTitle || !blockquoteArea || !postContent)
     throw new Error("failed to access Topic Id");
   const api: DiscourseApi = new DiscourseApi(userName);
   const categories = await api.fetchCategoryList(parentCategoryId);
-  if (postTitle.length > 40) {
-    postTitle =
-      postTitle.substring(0, MAX_CATEGORY_NAME_LENGTH) + `_text_${textId}`;
+  if (textTitle.length > 40) {
+    textTitle =
+      textTitle.substring(0, MAX_CATEGORY_NAME_LENGTH) + `_text_${textId}`;
   }
-  console.log(postTitle);
-  const category = categories.find((c: any) => c.name === postTitle.trim());
+  const category = categories.find((c: any) => c.name === textTitle.trim());
   let categoryId: number;
   if (category) {
     categoryId = category.id;
   } else {
     const newCategory = await api.addCategory(
-      postTitle,
+      textTitle,
       parseInt(parentCategoryId)
     );
     categoryId = newCategory.category.id;
@@ -237,7 +241,6 @@ export async function createThread(
     postContent as string,
     textId
   );
-
   return topic;
 }
 

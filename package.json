@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@assembless/react-littera": "^2.4.0",
+    "@aws-sdk/client-s3": "^3.315.0",
     "@netlify/functions": "^1.4.0",
     "@prisma/client": "^4.13.0",
     "@remix-run/netlify": "^1.15.0",
@@ -27,6 +28,7 @@
     "@tiptap/pm": "^2.0.3",
     "@tiptap/react": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
+    "aws-sdk": "^2.1360.0",
     "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "flowbite": "^1.6.3",
@@ -40,6 +42,7 @@
     "react-detect-click-outside": "^1.1.7",
     "react-dom": "^18.2.0",
     "react-drag-drop-files": "^2.3.9",
+    "react-h5-audio-player": "^3.8.6",
     "react-modal": "^3.16.1",
     "react-tailwindcss-datepicker": "^1.4.2",
     "recoil": "^0.7.7",

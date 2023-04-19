@@ -24,7 +24,6 @@ function EditorContainer({
   const [showFindText, setShowFindText] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
-
   const setOpenSuggestion = useSetRecoilState(openSuggestionState);
 
   const handleBubbleClick = (type: string) => {
@@ -33,11 +32,16 @@ function EditorContainer({
         ...selection,
         type,
       });
+    setOpenSuggestion(false);
   };
   const translation = uselitteraTranlation();
 
   function handleSuggestionClick() {
     setOpenSuggestion(true);
+    setSelectionRange({
+      ...selection,
+      type: "",
+    });
   }
   function handleDeleteMark() {
     if (editor.isActive("post")) {

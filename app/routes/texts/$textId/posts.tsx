@@ -21,12 +21,10 @@ import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const url = new URL(request.url);
-  const postId = url.searchParams.get("post");
-
-  const selectedPost = postId ? await findPostByPostId(postId) : null;
+  // const selectedPost = postId ? await findPostByPostId(postId) : null;
 
   const textId = parseInt(params.textId);
+
   const CategoryData = await fetchCategoryData();
   const topicList = CategoryData.topic_list.topics;
   const posts = findPostByTextId(textId, topicList);

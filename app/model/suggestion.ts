@@ -1,6 +1,6 @@
 import { db } from "~/db.server";
 
-export async function findAllSuggestionByTextId(textId) {
+export async function findAllSuggestionByTextId(textId: number) {
   try {
     let data = await db.suggestion.findMany({
       where: {

@@ -36,18 +36,13 @@ import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { motion } from "framer-motion";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
-import StarterKit from "@tiptap/starter-kit";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const url = new URL(request.url);
-  const postId = url.searchParams.get("post");
-
-  // const selectedPost = postId ? await findPostByPostId(postId) : null;
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
-  const text = await findTextByTextId(textId, false);
   const suggestion = await findAllSuggestionByTextId(textId);
+  const text = await findTextByTextId(textId, false);
   if (!textId) throw new Error("not valid textId");
 
   return json({ user, text: text, suggestion });
@@ -217,7 +212,6 @@ export default function () {
     },
     [content]
   );
-
   return (
     <motion.div
       key={useLocation().pathname}

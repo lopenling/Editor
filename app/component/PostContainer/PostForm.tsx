@@ -82,15 +82,19 @@ const PostForm = () => {
 
       {user ? (
         <div aria-label="Default tabs">
-          <div className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-4">
+          <div className="flex flex-wrap text-sm font-medium text-center text-gray-500  border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-4 pb-3">
             <div
-              className="cursor-pointer"
+              className={`cursor-pointer ${
+                selectedTab === "text" && "font-bold"
+              }`}
               onClick={() => setSelectedTab("text")}
             >
               Text
             </div>
             <div
-              className="cursor-pointer"
+              className={`cursor-pointer ${
+                selectedTab === "audio" && "font-bold"
+              }`}
               onClick={() => setSelectedTab("audio")}
             >
               Audio
@@ -112,7 +116,7 @@ const PostForm = () => {
                 ></textarea>
                 <div className="flex justify-end gap-2">
                   <button
-                    onClick={() => setSelection(null)}
+                    onClick={() => setSelection({ ...selection, type: "" })}
                     color=""
                     className="bg-gray-200 text-black text-xs font-medium text-center rounded-lg p-2"
                   >

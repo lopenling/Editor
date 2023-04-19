@@ -158,7 +158,15 @@ function Post({
             <div className="w-full flex items-center justify-end font-light text-xs italic uppercase">
               {type}
             </div>
-            {postContent}
+            {postContent.includes(
+              "https://lopenling.s3.amazonaws.com/comments/audio/"
+            ) ? (
+              <audio controls preload="auto">
+                <source src={postContent}></source>
+              </audio>
+            ) : (
+              postContent
+            )}
           </div>
           {isOptimistic ? (
             <div className="text-sm text-gray-300 font-sans">posting ...</div>

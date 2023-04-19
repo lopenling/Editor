@@ -22,8 +22,7 @@ import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { theme } from "./states";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { motion } from "framer-motion";
-import { db } from "./db.server";
+import Audiostyle from "react-h5-audio-player/lib/styles.css";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -45,6 +44,7 @@ export function links() {
     },
     { rel: "stylesheet", href: tailwindStyle, as: "style" },
     { rel: "stylesheet", href: globalStyle, as: "style" },
+    { rel: "stylesheet", href: Audiostyle, as: "style" },
   ];
 }
 

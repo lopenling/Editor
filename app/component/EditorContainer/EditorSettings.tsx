@@ -1,7 +1,7 @@
 import { Editor } from "@tiptap/react";
 import SearchString from "./SearchString";
 import { DEFAULT_FONT_SIZE } from "~/constants";
-
+import { useState } from "react";
 interface Props {
   editor: Editor | null;
   showFindText: boolean;
@@ -17,10 +17,12 @@ function EditorSetting({
   setShowFindText,
   setShowFontSize,
 }: Props) {
+  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
   const handleFontChange = (e) => {
     changeFontSize(e.target.value);
   };
   const changeFontSize = (value: number) => {
+    setFontSize(value);
     editor?.chain()?.selectAll()?.setFontSize(value.toString())?.run();
   };
 
@@ -38,7 +40,7 @@ function EditorSetting({
               min={18}
               step={1}
               max={38}
-              defaultValue={DEFAULT_FONT_SIZE}
+              value={fontSize}
               onChange={handleFontChange}
             ></input>
           </div>

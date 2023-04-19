@@ -1,14 +1,24 @@
 import { useState, useRef, useEffect } from "react";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, useOutletContext, useLoaderData } from "@remix-run/react";
+import { v4 as uuidv4 } from "uuid";
+import { Editor } from "@tiptap/react";
+import { useRecoilState } from "recoil";
+import { selectedTextOnEditor } from "~/states";
+import AudioPlayer from "react-h5-audio-player";
+
 const AudioRecorder = () => {
   const audioFetcher = useFetcher();
+  const { editor }: { editor: Editor } = useOutletContext();
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
-  const mimeType = "audio/webm";
+  const [blobs, setBlobs] = useState(null);
+  const loaderData = useLoaderData();
+  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
+  // const mimeType = "audio/wav";
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
       try {
@@ -29,7 +39,7 @@ const AudioRecorder = () => {
     setRecordingStatus("recording");
     handleStart();
     //create new Media recorder instance using the stream
-    const media = new MediaRecorder(stream, { mimeType });
+    const media = new MediaRecorder(stream);
     //set the MediaRecorder instance to the mediaRecorder ref
     mediaRecorder.current = media;
     //invokes the start method to start the recording process
@@ -49,7 +59,7 @@ const AudioRecorder = () => {
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
-      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      const audioBlob = new Blob(audioChunks);
       onStop(audioBlob);
       //creates a playable URL from the blob file.
       const audioUrl = URL.createObjectURL(audioBlob);
@@ -58,15 +68,34 @@ const AudioRecorder = () => {
     };
   };
   const onStop = (blob) => {
-    let data = new FormData();
+    setBlobs(blob);
     handleReset();
-    data.append("type", "composer");
-    data.append("file", blob, "recording.wav");
+  };
+  const handleUpload = () => {
+    let id = null;
 
-    // audioFetcher.submit(data, {
-    //   method: "post",
-    //   encType: "multipart/form-data",
-    // });
+    if (!editor.isActive("post")) {
+      id = uuidv4();
+    } else {
+      id = editor.getAttributes("post")?.id;
+    }
+    let data = new FormData();
+    data.append("file", blobs, `text-${loaderData.text.id}-${uuidv4()}.wav`);
+    data.append("threadId", id);
+    data.append("textId", loaderData.text.id);
+    data.append("textName", loaderData.text.name);
+
+    data.append("selectionSegment", selection.content);
+    data.append("type", selection.type);
+
+    audioFetcher.submit(data, {
+      method: "post",
+      encType: "multipart/form-data",
+      action: "api/uploadaudio",
+    });
+    editor.commands.setPost({
+      id,
+    });
   };
   useEffect(() => {
     getMicrophonePermission();
@@ -103,15 +132,15 @@ const AudioRecorder = () => {
     setIsActive(false);
     setTime(0);
   };
+  if (audioFetcher.data) setSelection({ ...selection, type: "" });
+
   return (
     <div className="flex justify-center items-center gap-3 flex-col">
-      <h2>Audio Recorder</h2>
-      <br />
       {audio ? (
         <>
-          <div className="audio-container flex items-center gap-3">
-            <audio src={audio} controls></audio>
-            <a download href={audio}>
+          <div className="w-full flex items-center gap-3 ">
+            <AudioPlayer src={audio} />
+            {/* <a download href={audio}>
               <svg
                 width="20"
                 height="20"
@@ -126,27 +155,32 @@ const AudioRecorder = () => {
                   fill="#111928"
                 />
               </svg>
-            </a>
+            </a> */}
           </div>
-          <div className="flex justify-around gap-3 ">
-            <button
-              color=""
-              className="bg-green-400 text-white px-3 py-2 text-xs font-medium text-center"
-            >
-              upload
-            </button>
-            <button
-              className="bg-gray-200 text-black px-3 py-2 text-xs font-medium text-center"
-              color=""
-              onClick={() => setAudio(null)}
-            >
-              cancel
-            </button>
-          </div>
+          {audioFetcher.state !== "idle" ? (
+            <div>uploading</div>
+          ) : (
+            <div className="flex justify-around gap-3 ">
+              <button
+                color=""
+                onClick={handleUpload}
+                className="bg-green-400  text-white px-3 py-2 text-xs font-medium text-center"
+              >
+                upload
+              </button>
+              <button
+                className="bg-gray-200 text-black px-3 py-2 text-xs font-medium text-center"
+                color=""
+                onClick={() => setAudio(null)}
+              >
+                cancel
+              </button>
+            </div>
+          )}
         </>
       ) : null}
       <main>
-        <div className="audio-controls">
+        <div className="audio-controls pt-4">
           {!permission ? (
             <button
               onClick={getMicrophonePermission}
@@ -161,7 +195,7 @@ const AudioRecorder = () => {
               onClick={startRecording}
               type="button"
               title="record"
-              className="fill-gray-500 hover:fill-red-500 hover:animate-pulse"
+              className="fill-gray-500 hover:fill-red-500 hover:animate-pulse "
             >
               <svg
                 width="20"
