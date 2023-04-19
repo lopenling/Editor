@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@font-face {
+  font-family: "monlam";
+  src: url("/app/assets/font/MonlamOuchan2.ttf") format("tff");
+}
+:root {
+  --headerHeight: 72px;
+  --suggestion-marker-insertion-background: rgba(102, 229, 119, 0.35);
+  --suggestion-marker-insertion-background-active: rgba(37, 218, 61, 0.5);
+  --suggestion-marker-deletion-border: rgba(174, 30, 66, 0.35);
+  --suggestion-marker-deletion-border-active: rgba(109, 18, 41, 0.5);
+  --suggestion-marker-deletion-background: rgba(229, 102, 134, 0.35);
+  --suggestion-marker-deletion-background-active: rgba(218, 37, 82, 0.5);
+  --suggestion-marker-deletion-stroke: rgba(87, 15, 33, 0.5);
+  --suggestion-marker-format-border: rgba(10, 160, 194, 0.4);
+  --suggestion-marker-format-border-active: rgba(10, 160, 194, 0.65);
+  --suggestion-widget-insertion-background: rgba(102, 229, 119, 0.05);
+  --suggestion-widget-insertion-background-active: rgba(37, 218, 61, 0.07);
+  --suggestion-widget-deletion-background: rgba(229, 102, 134, 0.05);
+  --suggestion-widget-deletion-background-active: rgba(196, 33, 74, 0.07);
+  --suggestion-widget-format-background: rgba(10, 160, 194, 0.09);
+  --suggestion-widget-format-background-active: rgba(10, 160, 194, 0.16);
+  --ck-color-comment-marker: #fef7a9;
+  --ck-color-comment-marker-active: #fdf05d;
+}
+*,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  max-width: 1519px;
+  min-width: fit-content;
+  margin: 0 auto;
+  scrollbar-color: #d9d9d9;
+  scrollbar-width: thin;
+}
+
+/* width */
+body > * ::-webkit-scrollbar {
+  width: 10px;
+}
+main {
+  scroll-behavior: smooth;
+  scroll-snap-type: mandatory;
+  scroll-padding-top: 100px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  width: 10px;
+  border: 1px solid #d9d9d9;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  width: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  width: 10px;
+}
+nav > div {
+  height: 100%;
+}
+.dark .ProseMirror ::selection {
+  background: #374151;
+}
+.ProseMirror-focused {
+  outline: none;
+}
+.filter-modal {
+  box-shadow: #666;
+  border-radius: 20px;
+  max-width: 100vw;
+}
+.suggestion {
+  background: var(--suggestion-marker-deletion-background);
+  border-bottom: 3px solid var(--suggestion-marker-deletion-border);
+  border-top: 3px solid var(--suggestion-marker-deletion-border);
+  text-decoration: line-through;
+  text-decoration-color: currentcolor;
+  text-decoration-thickness: auto;
+  text-decoration-color: var(--suggestion-marker-deletion-stroke);
+  text-decoration-thickness: 3px;
+  cursor: pointer;
+}
+.suggestion::selection {
+  background-color: var(--suggestion-marker-deletion-background-active);
+  border-color: var(--suggestion-marker-deletion-border-active);
+}
+.post {
+  background-color: var(--ck-color-comment-marker);
+  cursor: pointer;
+}
+.post::selection {
+  background-color: var(--ck-color-comment-marker-active);
+}
+
+.search {
+  background-color: rgb(232, 233, 137);
+}
+.textEditorContainer {
+  font-family: monlam;
+  min-height: 40vh;
+}
+button,
+::placeholder {
+  text-transform: capitalize;
+  font-size: 14px;
+}
+/* button:disabled {
+  opacity: 0.5;
+} */
+select,
+select:focus {
+  outline: transparent !important;
+  border: none !important;
+}
+.sortDiv:hover > .popup {
+  display: flex;
+  z-index: 10;
+  background-color: white;
+}
+.react-tabs__tab--selected {
+  font-weight: bold;
+}
