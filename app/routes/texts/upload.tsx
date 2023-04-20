@@ -18,8 +18,9 @@ import { FileUploader } from "react-drag-drop-files";
 import { Tabs } from "flowbite-react";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUserSession(request);
+  if (!user) return redirect("/");
   let textList = await findAllText();
-  if (user?.admin !== "true")
+  if (user.admin !== "true")
     textList = textList.filter((text) => text.userId == user.id);
   return { textList, user };
 };

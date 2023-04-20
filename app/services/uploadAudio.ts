@@ -5,9 +5,9 @@ import { Readable } from "stream";
 import { getUserSession } from "~/services/session.server";
 
 // Replace these values with your own
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
-const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
-const BUCKET_NAME = process.env.BUCKET_NAME;
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID_PRODUCTION;
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY_PRODUCTION;
+const BUCKET_NAME = process.env.BUCKET_NAME_PRODUCTION;
 
 // Set up the S3 client with your AWS credentials
 const s3 = new AWS.S3({

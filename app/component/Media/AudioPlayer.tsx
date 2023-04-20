@@ -23,7 +23,7 @@ const AudioPlayer = ({ src }) => {
   useEffect(() => {
     if (audio) {
       audio.addEventListener("timeupdate", handleTimeUpdate);
-      audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.addEventListener("durationchange", handleLoadedMetadata);
       audio.addEventListener("ended", handleEnd);
       return () => {
         audio.removeEventListener("timeupdate", handleTimeUpdate);
@@ -32,7 +32,8 @@ const AudioPlayer = ({ src }) => {
     }
   }, [audio]);
 
-  const handleTimeUpdate = () => {
+  const handleTimeUpdate = (e) => {
+    console.log(e);
     if (audio) {
       setCurrentTime(audio.currentTime);
     }

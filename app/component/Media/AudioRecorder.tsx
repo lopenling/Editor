@@ -11,7 +11,6 @@ const AudioRecorder = ({ setAudio }) => {
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
-  const loaderData = useLoaderData();
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   // const mimeType = "audio/wav";
   const getMicrophonePermission = async () => {

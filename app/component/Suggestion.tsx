@@ -284,23 +284,23 @@ export function SuggestionForm({ editor }) {
 
   return (
     <div className="p-2 bg-slate-50 shadow-md m-3">
-      <div className="flex justify-evenly">
-        <textarea
-          placeholder="what is suggestion?"
-          value={suggestionInput}
-          rows={1}
-          className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          onChange={(e) => setSuggestionInput(e.target.value)}
-        />
+      <textarea
+        placeholder="what is suggestion?"
+        value={suggestionInput}
+        rows={1}
+        className="block  w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        onChange={(e) => setSuggestionInput(e.target.value)}
+      />
+      <div className="flex justify-end mt-3">
         <button
-          className="bg-green-400 text-white px-3 py-2 text-xs font-medium text-center rounded"
+          className="bg-green-400 text-white px-2 py-2 text-xs font-medium text-center rounded mx-2 max-h-fit"
           disabled={addSuggestion.state !== "idle"}
           onClick={handleSuggestionSubmit}
         >
           submit
         </button>
         <button
-          className="bg-gray-200 text-black px-3 py-2 text-xs font-medium text-center rounded"
+          className="bg-gray-200 text-black px-2 py-2 text-xs font-medium text-center rounded mx-2"
           onClick={handleSuggestionCancel}
         >
           cancel
