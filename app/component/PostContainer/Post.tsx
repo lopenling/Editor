@@ -7,6 +7,8 @@ import ReplyForm from "./ReplyForm";
 import { useRecoilState } from "recoil";
 import { selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
+import AudioPlayer from "../Media/AudioPlayer";
+import copyToClipboard from "~/utility/copyToClipboard";
 type PostType = {
   id: string;
   creatorUser: any;
@@ -19,6 +21,7 @@ type PostType = {
   isSolved: boolean;
   isOptimistic: boolean;
   threadId: string;
+  audioUrl: string;
 };
 
 function Post({
@@ -33,6 +36,7 @@ function Post({
   isSolved,
   isOptimistic = false,
   threadId,
+  audioUrl,
 }: PostType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -46,7 +50,6 @@ function Post({
   const [selectedThreadId, setSelectedThreadId] =
     useRecoilState(selectedPostThread);
   const isSelected = selectedThreadId.id === threadId;
-
   let likedByMe = user
     ? likedBy.some((l) => l.username === user.username)
     : false;
@@ -109,6 +112,11 @@ function Post({
   if (deleteFetcher.data?.deleted?.id === id) {
     editor.commands.unsetPost();
   }
+  function handleShare() {
+    let url = window.location.href + "?thread=" + threadId;
+    copyToClipboard(url);
+    alert("url coppied on clipboard");
+  }
   return (
     <div
       className={`${deleteFetcher.submission && "hidden"}`}
@@ -158,16 +166,9 @@ function Post({
             <div className="w-full flex items-center justify-end font-light text-xs italic uppercase">
               {type}
             </div>
-            {postContent.includes(
-              "https://lopenling.s3.amazonaws.com/comments/audio/"
-            ) ? (
-              <audio controls preload="auto">
-                <source src={postContent}></source>
-              </audio>
-            ) : (
-              postContent
-            )}
+            {postContent}
           </div>
+          {audioUrl?.length > 0 && <AudioPlayer src={audioUrl} />}
           {isOptimistic ? (
             <div className="text-sm text-gray-300 font-sans">posting ...</div>
           ) : (
@@ -245,6 +246,7 @@ function Post({
                   <button
                     type="button"
                     className="text-sm font-medium leading-tigh "
+                    onClick={handleShare}
                   >
                     share
                   </button>

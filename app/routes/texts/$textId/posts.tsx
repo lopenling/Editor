@@ -6,6 +6,7 @@ import {
   Outlet,
   useLoaderData,
   useOutletContext,
+  useSearchParams,
 } from "@remix-run/react";
 import Posts from "~/component/PostContainer/Posts";
 import filterIcon from "~/assets/svg/icon_filter.svg";
@@ -14,15 +15,13 @@ import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
 import { Dropdown } from "flowbite-react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { openFilterState, showLatest } from "~/states";
+import { openFilterState, selectedPostThread, showLatest } from "~/states";
 import { findPostByPostId, findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer, json } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  // const selectedPost = postId ? await findPostByPostId(postId) : null;
-
   const textId = parseInt(params.textId);
 
   const CategoryData = await fetchCategoryData();
@@ -35,7 +34,16 @@ export const ErrorBoundary = ({ error }) => {
   return <div>{error.message}</div>;
 };
 
-export default function Post() {
+export default function PostContainer() {
+  let [searchParams, setSearchParams] = useSearchParams();
+  let setSelectedThreadId = useSetRecoilState(selectedPostThread);
+  useEffect(() => {
+    let SelectedThread = searchParams.get("thread");
+    if (SelectedThread) {
+      setSelectedThreadId({ id: SelectedThread });
+      setSearchParams("");
+    }
+  }, []);
   const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();

@@ -10,9 +10,11 @@ export const loader: LoaderFunction = () => {
 };
 import { createPost as createPostOnDB, deletePost } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
+import { uploadAudio } from "~/services/uploadAudio";
 
 export const action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
+  let file = formData.get("file");
   let Obj = Object.fromEntries(formData);
   const user = await getUserSession(request);
   const userData = await findUserByUsername(user.username);
@@ -26,13 +28,25 @@ export const action: ActionFunction = async ({ request }) => {
   let textId = parseInt(Obj.textId);
   if (request.method === "POST") {
     try {
+      let audioUrl;
+      if (file) {
+        try {
+          audioUrl = await uploadAudio(formData);
+        } catch (e) {
+          throw new Error(e.message);
+        }
+      } else {
+        audioUrl = "";
+      }
       const data = await createThread(
         user.username,
         Obj.topic,
         Obj.selectionSegment,
         Obj.body,
         parent_category_id,
-        textId
+        textId,
+        audioUrl,
+        Obj.threadId
       );
       if (data["topic_id"] && user) {
         const createPost = await createPostOnDB(
@@ -43,7 +57,8 @@ export const action: ActionFunction = async ({ request }) => {
           Obj.threadId,
           textId,
           Obj.body,
-          userData.id
+          userData.id,
+          audioUrl
         );
         return createPost;
       }

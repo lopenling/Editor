@@ -47,6 +47,7 @@ function Posts({ editor, posts }: PostPropsType) {
                 isSolved={post?.isSolved}
                 isOptimistic={false}
                 threadId={post?.thread_id}
+                audioUrl={post?.audioUrl}
               />
             );
           })}

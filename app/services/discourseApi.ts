@@ -89,20 +89,22 @@ class DiscourseApi {
     }
   }
   async addTopic(
+    threadId: string,
     username: string,
     category_id: number,
     topic_name: string | FormDataEntryValue,
     bodyContent: string,
-    textId: number
+    textId: number,
+    audioUrl: string
   ) {
     let auth_headers = this.authHeader();
-    let url = `${this.origin}/texts/${textId}`;
+    let url = `${this.origin}/texts/${textId}/posts?thread=${threadId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `
 <p>${bodyContentWithLink}</p>
 `;
-    if (bodyContent.includes("https://lopenling.s3.amazon")) {
-      post_text = `<audio controls><source src="${bodyContent}" type="audio/webm"></audio>`;
+    if (audioUrl !== "") {
+      post_text = `<p>${bodyContentWithLink}</p><audio controls><source src="${audioUrl}" type="audio/webm"></audio>`;
     }
 
     let new_Topic_data = {
@@ -213,7 +215,9 @@ export async function createThread(
   blockquoteArea: string,
   postContent: string,
   parentCategoryId: string,
-  textId: number
+  textId: number,
+  audioUrl: string | null,
+  threadId: string
 ) {
   if (!textTitle || !blockquoteArea || !postContent)
     throw new Error("failed to access Topic Id");
@@ -235,11 +239,13 @@ export async function createThread(
     categoryId = newCategory.category.id;
   }
   let topic = await api.addTopic(
+    threadId,
     userName,
     categoryId,
     blockquoteArea,
     postContent as string,
-    textId
+    textId,
+    audioUrl
   );
   return topic;
 }

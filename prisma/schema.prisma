@@ -14,6 +14,7 @@ model Post {
   topic_id       Int
   post_id        Int
   content        String
+  audioUrl       String?
   created_at     DateTime @default(now())
   creatorUser_id String
   text_id        Int

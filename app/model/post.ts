@@ -10,7 +10,8 @@ export async function createPost(
   thread_id: string,
   text_id: number,
   content: string,
-  creatorUser_id: string
+  creatorUser_id: string,
+  audioUrl: string
 ) {
   try {
     const createPost = await db.post.create({
@@ -23,6 +24,7 @@ export async function createPost(
         thread_id: thread_id,
         creatorUser_id: creatorUser_id,
         text_id: text_id,
+        audioUrl: audioUrl,
       },
     });
     return createPost;
