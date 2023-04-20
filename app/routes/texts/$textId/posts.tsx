@@ -41,6 +41,13 @@ export default function PostContainer() {
     let SelectedThread = searchParams.get("thread");
     if (SelectedThread) {
       setSelectedThreadId({ id: SelectedThread });
+      setTimeout(() => {
+        document.getElementById("p_" + SelectedThread)?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
+      }, 2000);
       setSearchParams("");
     }
   }, []);

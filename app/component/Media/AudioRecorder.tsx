@@ -74,10 +74,6 @@ const AudioRecorder = ({ setAudio }) => {
     };
   };
 
-  useEffect(() => {
-    getMicrophonePermission();
-  }, []);
-
   if (audioFetcher.data) setSelection({ ...selection, type: "" });
 
   return (
