@@ -23,7 +23,8 @@ function EditorSetting({
   };
   const changeFontSize = (value: number) => {
     setFontSize(value);
-    editor?.chain()?.selectAll()?.setFontSize(value.toString())?.run();
+    let editorref = document.querySelector(".editor");
+    if (editorref) editorref.setAttribute("style", `font-size:${value}px;`);
   };
 
   const FontSizeComponent = () => (

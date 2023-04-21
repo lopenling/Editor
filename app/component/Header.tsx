@@ -29,7 +29,7 @@ const LogoWithTextName = ({ textNameValue }: { textNameValue: string }) => (
     </Link>
     <h1
       onClick={() => window?.scrollTo(0, 0)}
-      style={{ top: -13 }}
+      style={{ top: -10 }}
       className="text-3xl ml-2 relative  font-bold text-gray-500"
     >
       {textNameValue}

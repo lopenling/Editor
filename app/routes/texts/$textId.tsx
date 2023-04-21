@@ -131,7 +131,6 @@ export default function () {
         Text,
         Bold,
         FontFamily,
-        FontSize,
         TextStyle,
         SearchAndReplace.configure({
           searchResultClass: "search",
