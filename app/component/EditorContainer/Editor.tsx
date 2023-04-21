@@ -168,22 +168,17 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
                 return true;
               }
             }}
-            tippyOptions={{
-              placement: "top",
-            }}
             editor={editor}
           >
-            <div className="flex flex-col bg-green-200">
-              <Button.Group
-                style={{ border: "1px solid gray", borderRadius: 10 }}
-              >
+            <div className="flex flex-col bg-green-200 rounded">
+              <Button.Group>
                 {!editor.isActive("suggestion") && !editor.isActive("post") ? (
                   <>
                     {selection.content.length > 1 && (
                       <Button
                         size="sm"
                         title="suggestion"
-                        color=""
+                        color="gray"
                         className={`${
                           openSuggestion
                             ? "bg-green-400 fill-white"
@@ -210,7 +205,7 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
                           <Button
                             size="sm"
                             title="comment"
-                            color=""
+                            color="gray"
                             className=" bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none "
                             onClick={() => handleBubbleClick("comment")}
                           >
@@ -232,7 +227,7 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
                           <Button
                             size="sm"
                             title="question"
-                            color=""
+                            color="gray"
                             className="bg-white text-green-400 hover:bg-green-200 hover:text-green-500 rounded-none "
                             onClick={() => handleBubbleClick("question")}
                           >
@@ -262,8 +257,8 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
                     <Button
                       size="sm"
                       title="delete"
-                      color=""
-                      className="bg-white hover:bg-red-200 hover:fill-red-500 rounded-none"
+                      color="gray"
+                      className="bg-white hover:bg-red-300 hover:fill-slate-500 "
                       onClick={() => handleDeleteMark()}
                     >
                       <svg
