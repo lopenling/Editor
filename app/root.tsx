@@ -23,6 +23,8 @@ import { theme } from "./states";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import Audiostyle from "react-h5-audio-player/lib/styles.css";
+import flagsmith from "flagsmith";
+import { FlagsmithProvider } from "flagsmith/react";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -126,8 +128,18 @@ function App() {
 }
 export default function AppContainer() {
   return (
-    <RecoilRoot>
-      <App />
-    </RecoilRoot>
+    <FlagsmithProvider
+      options={{
+        environmentID:
+          process.env.NODE_ENV == "production"
+            ? "HP2Vunc4bFV43VC4mxJq9h"
+            : "Sv9qxuVydSiwi6dNdKhstn",
+      }}
+      flagsmith={flagsmith}
+    >
+      <RecoilRoot>
+        <App />
+      </RecoilRoot>
+    </FlagsmithProvider>
   );
 }

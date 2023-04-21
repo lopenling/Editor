@@ -33,7 +33,6 @@ const AudioPlayer = ({ src }) => {
   }, [audio]);
 
   const handleTimeUpdate = (e) => {
-    console.log(e);
     if (audio) {
       setCurrentTime(audio.currentTime);
     }

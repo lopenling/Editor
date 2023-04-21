@@ -1,5 +1,5 @@
 import { useFetcher, useOutletContext } from "@remix-run/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Post from "./Post";
 import { selectedTextOnEditor } from "~/states";
 import { useRecoilState } from "recoil";
@@ -7,6 +7,8 @@ import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
 import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
+import { Button } from "../UI/Button";
+import { TextArea } from "../UI/TextArea";
 
 const PostForm = () => {
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
@@ -17,18 +19,35 @@ const PostForm = () => {
   const [body, setBody] = useState("");
   const { user }: { user: any } = useOutletContext();
   let isFormEmpty = body.length < 5;
+  useEffect(() => {
+    setBody("");
+    setAudio({ tempUrl: "", blob: null });
+    setError("");
+  }, [selection]);
   let isPosting =
     createPost.submission && createPost.submission.formData.get("body") !== "";
   const { editor }: { editor: Editor } = useOutletContext();
+  function validator() {
+    let lengthOfSelection = selection.end - selection?.start;
+    let errormessage = "";
+    if (audio.tempUrl !== "" && isFormEmpty) {
+      errormessage = "ERROR : describe the audio";
+    } else if (isFormEmpty) {
+      errormessage = "ERROR : write more than 5 character";
+    } else if (lengthOfSelection > 254) {
+      errormessage = "ERROR : selecting more than 255 letter not allowed";
+    } else if (body.length > 250) {
+      errormessage = "ERROR : content more than 255 letter not allowed";
+    } else {
+      errormessage = "";
+    }
+    return errormessage;
+  }
   function handleSubmit(e) {
     e.preventDefault();
-    let lengthOfSelection = selection.end - selection?.start;
-    if (isFormEmpty) {
-      setError("ERROR : write more than 5 character");
-      return null;
-    }
-    if (lengthOfSelection > 254) {
-      setError("ERROR : selecting more than 255 letter not allowed");
+    let errormessage = validator();
+    if (errormessage && errormessage !== "") {
+      setError(errormessage);
       return null;
     }
     let id = null;
@@ -87,26 +106,27 @@ const PostForm = () => {
   if (createPost.data?.error && !selection)
     return <div className="text-red-800">{createPost.data.error.message} </div>;
   if (selection.type === "") return null;
+
   return (
     <section className=" shadow rounded p-3">
-      <div className="inline-flex items-start justify-start">
-        <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-300 mb-3 capitalize">
+      <div className="flex items-start justify-between">
+        <div className="text-base font-medium leading-tight text-gray-900 dark:text-gray-300 mb-3 capitalize">
           {selection.type === "question" ? "ask question" : "new comment"}
-        </p>
+        </div>
+        <div className="font-bold text-gray-400 text-sm">{body?.length}</div>
       </div>
 
       {user ? (
         <div aria-label="Default tabs ">
           <createPost.Form className="flex flex-col gap-3">
             <>
-              <textarea
+              <TextArea
                 placeholder="what are your thoughts?"
                 autoFocus
                 name="body"
                 onChange={(e) => setBody(e.target.value)}
                 style={{ height: 108 }}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              ></textarea>
+              />
               {audio.tempUrl !== "" ? (
                 <>
                   <div className="w-full flex items-center gap-3 ">
@@ -129,32 +149,26 @@ const PostForm = () => {
                   </div>
                 </>
               ) : null}
+              {error && error !== "" && (
+                <div className="font-sm text-red-500">{error}</div>
+              )}
               <div className="flex justify-between items-center">
                 {audio.tempUrl === "" ? (
                   <AudioRecorder setAudio={setAudio} />
                 ) : (
                   <div />
                 )}
+
                 <div className="flex justify-end gap-2">
-                  <button
+                  <Button
                     type="reset"
                     onClick={() => {
                       setSelection({ ...selection, type: "" });
                       setAudio({ tempUrl: "", blob: null });
                     }}
-                    color=""
-                    className="bg-gray-200 text-black text-xs font-medium text-center rounded-lg p-2"
-                  >
-                    cancel
-                  </button>
-                  <button
-                    onClick={handleSubmit}
-                    color=""
-                    type="submit"
-                    className="bg-green-400 text-white text-xs font-medium text-center rounded-lg p-2"
-                  >
-                    post
-                  </button>
+                    label="cancel"
+                  />
+                  <Button onClick={handleSubmit} type="submit" label="post" />
                 </div>
               </div>
             </>

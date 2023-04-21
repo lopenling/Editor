@@ -1,12 +1,25 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import searchFullText from "~/utility/searchFullText";
+
+type locationType = {
+  start: number;
+  length: number;
+  text: string;
+  index: number;
+  searchString: string;
+} | null;
 export default function SearchString({ editor }: { editor: Editor }) {
   const data = useLoaderData();
-  const fullTextSearch = useFetcher();
   const [index, setIndex] = useState(1);
-  const [selectedSearch, setSelectedSearch] = useState([]);
-  const searchLocations = fullTextSearch.data;
+  const [selectedSearch, setSelectedSearch] = useState<locationType>(null);
+  const [searchString, setSearchString] = useState("");
+  const [searchState, setSearchState] = useState<null | "searching" | "done">(
+    null
+  );
+  const [searchLocations, setSearchLocation] = useState(null);
   function nextSearch() {
     if (
       index > -1 &&
@@ -34,46 +47,50 @@ export default function SearchString({ editor }: { editor: Editor }) {
       editor
         ?.chain()
         .focus()
-        .setTextSelection(selectedSearch?.start)
+        .setTextSelection(selectedSearch.start)
         .scrollIntoView()
         .run();
   }, [selectedSearch]);
-  let temporary = fullTextSearch?.submission?.formData.get(
-    "searchString"
-  ) as string;
-  if (temporary && fullTextSearch.type === "actionReload") {
-    editor.commands.setSearchTerm(temporary);
+  function handleSearch() {
+    setSearchState("searching");
+    let content = editor.getText();
+    let locations = searchFullText(content, searchString);
+    setSearchLocation(locations);
+    editor.commands.setSearchTerm(searchString);
+    setSearchState("done");
   }
+  function handleReset() {
+    editor.commands.setSearchTerm("");
+    setSearchString("");
+  }
+
   return (
     <div className="items-center flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border border-gray-300 bg-gray-50  ">
-      <fullTextSearch.Form
-        className="flex w-full"
-        method="post"
-        action="/api/full-text-search"
-      >
-        <input
-          name="searchString"
-          type="text"
-          placeholder="type here"
-          style={{ minWidth: 40 }}
-          className="h-full w-full border-none bg-transparent text-sm leading-tight text-gray-500 outline-0 focus:border-transparent focus:ring-0"
-        ></input>
+      <div className="flex w-full">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+          className="flex-1"
+        >
+          <input
+            name="searchString"
+            type="text"
+            placeholder="search"
+            value={searchString}
+            onChange={(e) => setSearchString(e.target.value)}
+            className="h-full w-full border-none bg-transparent text-sm leading-tight text-gray-500 outline-0 focus:border-transparent focus:ring-0"
+          ></input>
+        </form>
         <input name="textId" readOnly value={data.text.id} hidden />
         <button type="submit" hidden></button>
 
-        {fullTextSearch.type === "done" && (
+        {searchState === "done" && (
           <button
             type="reset"
             onClick={() => {
-              fullTextSearch.submit(
-                {
-                  searchString: "",
-                },
-                {
-                  method: "post",
-                  action: "/api/full-text-search",
-                }
-              );
+              handleReset();
               editor.commands.setSearchTerm(null);
             }}
           >
@@ -93,8 +110,8 @@ export default function SearchString({ editor }: { editor: Editor }) {
             </svg>
           </button>
         )}
-      </fullTextSearch.Form>
-      {fullTextSearch.state !== "idle" ? (
+      </div>
+      {searchState === "searching" ? (
         <div role="status">
           <svg
             aria-hidden="true"
@@ -120,12 +137,8 @@ export default function SearchString({ editor }: { editor: Editor }) {
           {searchLocations?.length ? searchLocations?.length : 0}
         </p>
       )}
-      <div className="inline-flex rounded-md shadow-sm" role="group">
-        <button
-          style={{ borderLeft: "1px solid lightgray", borderRadius: "inherit" }}
-          className="w-8"
-          onClick={prevSearch}
-        >
+      <div className="flex gap-2 rounded-md shadow-sm" role="group">
+        <div className="cursor-pointer" onClick={prevSearch}>
           <svg
             width="15"
             height="9"
@@ -141,12 +154,8 @@ export default function SearchString({ editor }: { editor: Editor }) {
               strokeLinejoin="round"
             />
           </svg>
-        </button>
-        <button
-          style={{ borderLeft: "1px solid lightgray" }}
-          className="w-8"
-          onClick={nextSearch}
-        >
+        </div>
+        <div className="cursor-pointer mr-3" onClick={nextSearch}>
           <svg
             width="15"
             height="9"
@@ -162,7 +171,7 @@ export default function SearchString({ editor }: { editor: Editor }) {
               strokeLinejoin="round"
             />
           </svg>
-        </button>
+        </div>
       </div>
     </div>
   );

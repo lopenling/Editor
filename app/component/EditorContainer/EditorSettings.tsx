@@ -1,7 +1,7 @@
 import { Editor } from "@tiptap/react";
 import SearchString from "./SearchString";
 import { DEFAULT_FONT_SIZE } from "~/constants";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 interface Props {
   editor: Editor | null;
   showFindText: boolean;
@@ -101,7 +101,12 @@ function EditorSetting({
         </div>
       )}
       {!showFindText && !showFontSize && (
-        <div className="hidden items-center gap-4 md:flex md:justify-between">
+        <div
+          style={{ top: 55 }}
+          className="hidden items-center gap-4 md:flex sticky p-3  bg-white z-20 md:justify-between
+          shadow
+          "
+        >
           <div style={{ maxHeight: 37, flex: 2.3 }}>
             <SearchString editor={editor} />
           </div>

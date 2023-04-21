@@ -1,5 +1,7 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useRef, useEffect, useState } from "react";
+import { TextArea } from "../UI/TextArea";
+import { Button } from "../UI/Button";
 
 type ReplyFormPropsType = {
   closeReply: () => void;
@@ -26,7 +28,7 @@ export default function ReplyForm({
     if (textareaRef.current) textareaRef.current.value = "";
   }
   return (
-    <div className="flex justify-between mt-3">
+    <div className="flex justify-between mt-1">
       <div
         style={{
           borderLeft: "4px solid #e5e7eb",
@@ -43,11 +45,10 @@ export default function ReplyForm({
         }}
       >
         <input hidden defaultValue={topicId} name="topicId" />
-        <textarea
+        <TextArea
           name="postString"
           required={true}
           placeholder="Write your reply here ..."
-          className="flex-1"
           style={{ maxHeight: 108 }}
           autoFocus
           id="textArea"
@@ -56,26 +57,18 @@ export default function ReplyForm({
           onChange={(e) => setTextArea(e.target.value)}
         />
         <div className="flex justify-end gap-2 mt-2">
-          <button
-            onClick={closeReply}
-            className="bg-gray-300 text-black px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none "
-            type="reset"
-          >
-            cancel
-          </button>
-          <button
-            className="bg-green-400 text-white  px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none "
+          <Button onClick={closeReply} type="reset" label="close" />
+          <Button
             type="submit"
             disabled={textArea === "" || postFetcher.state !== "idle"}
-          >
-            {postFetcher.state === "submitting" ? (
-              <div>submiting</div>
-            ) : postFetcher.state === "loading" ? (
-              <div>post created</div>
-            ) : (
-              <div>respond</div>
-            )}
-          </button>
+            label={
+              postFetcher.state === "submitting"
+                ? "submiting"
+                : postFetcher.state === "loading"
+                ? "post created"
+                : "respond"
+            }
+          />
         </div>
       </postFetcher.Form>
     </div>

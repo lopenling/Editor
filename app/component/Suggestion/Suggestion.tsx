@@ -1,42 +1,16 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  openSuggestionState,
-  selectedSuggestionThread,
-  selectedTextOnEditor,
-} from "~/states";
-import { useState } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
-
-import { v4 as uuidv4 } from "uuid";
-import { timeAgo } from "~/utility/getFormatedDate";
 import { Editor } from "@tiptap/react";
+import { useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
+import { timeAgo } from "~/utility/getFormatedDate";
 
-export default function Suggestion({ editor }: { editor: Editor | null }) {
-  const suggestionThread = useRecoilValue(selectedSuggestionThread);
-  const data = useLoaderData();
+type SuggestionProps = {
+  editor: Editor | null;
+  suggest: any;
+};
 
-  let list = data.suggestion.filter((l) => l.threadId === suggestionThread.id);
-
-  return (
-    <div className="p-2 bg-slate-50 shadow-md m-3">
-      <div className="flex flex-col  gap-2 ">
-        <h2 className="font-light">Suggestion</h2>
-        {list?.length > 0 &&
-          list
-            .sort((a, b) => b.likedBy.length - a.likedBy.length)
-            .map((suggest) => (
-              <EachSuggestion
-                editor={editor}
-                suggest={suggest}
-                key={suggest.id}
-              />
-            ))}
-      </div>
-    </div>
-  );
-}
-
-function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
+export default function Suggestion({ editor, suggest }: SuggestionProps) {
   const likeFetcher = useFetcher();
   const deleteFetcher = useFetcher();
   const data = useLoaderData();
@@ -228,83 +202,6 @@ function EachSuggestion({ suggest, editor }: { editor: Editor; suggest: any }) {
             Comment
           </button>
         </div>
-      </div>
-    </div>
-  );
-}
-export function SuggestionForm({ editor }) {
-  const data = useLoaderData();
-  let user = data.user;
-  const [suggestionInput, setSuggestionInput] = useState("");
-  const addSuggestion = useFetcher();
-  const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
-  const setOpenSuggestion = useSetRecoilState(openSuggestionState);
-  const handleSuggestionSubmit = () => {
-    const { state } = editor;
-    const { from, to } = state.selection;
-    const originalText = state.doc.textBetween(from, to, " ");
-    let id = null;
-
-    if (!editor.isActive("suggestion")) {
-      id = uuidv4();
-    } else {
-      id = editor.getAttributes("suggestion").id;
-    }
-    setSelectedSuggestion({
-      id: id,
-    });
-    let oldValue = originalText;
-    addSuggestion.submit(
-      {
-        oldValue,
-        textId: data.text.id,
-        newValue: suggestionInput,
-        userId: data.user.id,
-        threadId: id,
-      },
-      {
-        action: "/api/suggestion",
-        method: "post",
-      }
-    );
-    editor.commands.setSuggestion({
-      id: id,
-      original: originalText,
-    });
-    setSuggestionInput("");
-  };
-  const handleSuggestionCancel = () => {
-    setSelectedSuggestion({
-      id: null,
-    });
-    setOpenSuggestion(false);
-    // if (editor.isActive("suggestion")) editor.commands.unsetSuggestion();
-  };
-  if (!user) return <div className="text-red-600">You must login first !</div>;
-
-  return (
-    <div className="p-2 bg-slate-50 shadow-md m-3">
-      <textarea
-        placeholder="what is suggestion?"
-        value={suggestionInput}
-        rows={1}
-        className="block  w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        onChange={(e) => setSuggestionInput(e.target.value)}
-      />
-      <div className="flex justify-end mt-3">
-        <button
-          className="bg-green-400 text-white px-2 py-2 text-xs font-medium text-center rounded mx-2 max-h-fit"
-          disabled={addSuggestion.state !== "idle"}
-          onClick={handleSuggestionSubmit}
-        >
-          submit
-        </button>
-        <button
-          className="bg-gray-200 text-black px-2 py-2 text-xs font-medium text-center rounded mx-2"
-          onClick={handleSuggestionCancel}
-        >
-          cancel
-        </button>
       </div>
     </div>
   );

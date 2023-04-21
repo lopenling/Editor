@@ -3,7 +3,9 @@ import { useFetcher } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { filterDataState, openFilterState } from "~/states";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
-import Modal from "react-modal";
+import Datepicker from "react-tailwindcss-datepicker";
+import { Modal } from "flowbite-react";
+import { Button } from "../UI/Button";
 type FilterProps = {};
 
 export default function Filter({}: FilterProps) {
@@ -64,16 +66,17 @@ export default function Filter({}: FilterProps) {
   let isFetchingUser = searchUser.state === "loading";
   return (
     <Modal
-      isOpen={openFilter}
-      onRequestClose={() => setOpenFilter(false)}
-      shouldCloseOnOverlayClick={true}
+      show={openFilter}
+      onClose={() => setOpenFilter(false)}
+      dismissible={true}
+      size="md"
     >
-      <h3>{translation.filter}</h3>
+      <Modal.Header>{translation.filter}</Modal.Header>
       <div className="p-5">
         <div className="flex flex-col items-start justify-start space-y-4">
           {/* Type of post  */}
           <div className="flex flex-col items-start justify-start space-y-2">
-            <p className="text-sm font-medium leading-tight">Type</p>
+            <p className="text-sm font-semibold leading-tight">Type</p>
             <div className="flex flex-col items-start justify-start space-y-0.5">
               {[
                 { value: "all", label: "All" },
@@ -102,16 +105,11 @@ export default function Filter({}: FilterProps) {
           </div>
           {/* DateFilter */}
           <div className="flex w-full flex-col items-start justify-start space-y-2">
-            <p className="text-sm font-medium leading-tight ">Date</p>
-
-            <input
-              datepicker
-              type="date"
+            <p className="text-sm font-semibold leading-tight ">Date</p>
+            <Datepicker
               value={filterData.date}
               inputName="date"
               onChange={handleDateChange}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Select date"
             />
           </div>
           {/* UserFilter */}
@@ -239,9 +237,11 @@ export default function Filter({}: FilterProps) {
                 )}
             </div>
           </div>
+
+          {/* isSolved */}
           {filterData.type !== "comment" && (
             <div className="flex flex-col items-start justify-start space-y-2">
-              <p className="text-sm font-medium leading-tight ">Solved</p>
+              <p className="text-sm font-semibold leading-tight">Solved</p>
               <div className="flex flex-col items-start justify-start space-y-0.5">
                 {[
                   { value: "both", label: "both" },
@@ -271,11 +271,9 @@ export default function Filter({}: FilterProps) {
           )}
         </div>
 
-        <div className="flex w-full items-start justify-start gap-3 mt-2">
-          <button onClick={apply}>Apply filters</button>
-          <button onClick={reset} color="light" type="reset">
-            Reset
-          </button>
+        <div className="flex w-full items-start justify-end gap-3 mt-2">
+          <Button onClick={apply} label="Apply filters" type="submit" />
+          <Button onClick={reset} color="light" type="reset" label="reset" />
         </div>
       </div>
     </Modal>

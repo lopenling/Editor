@@ -19,7 +19,7 @@ import {
   selectedTextOnEditor,
   textName,
 } from "~/states";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
@@ -28,14 +28,18 @@ import HardBreak from "@tiptap/extension-hard-break";
 import Highlight from "@tiptap/extension-highlight";
 import TextStyle from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
-import { Suggestion } from "~/tiptap-extension/suggestion";
-import PostMark from "~/tiptap-extension/postMark";
-import SuggestionContainer, { SuggestionForm } from "~/component/Suggestion";
-import { FontSize } from "~/tiptap-extension/fontSize";
-import { SearchAndReplace } from "~/tiptap-extension/searchAndReplace";
+import { Suggestion } from "~/tiptap/tiptap-extension/suggestion";
+import PostMark from "~/tiptap/tiptap-extension/postMark";
+import SuggestionContainer from "~/component/Suggestion/SuggestionContainer";
+import { FontSize } from "~/tiptap/tiptap-extension/fontSize";
+import { SearchAndReplace } from "~/tiptap/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { motion } from "framer-motion";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
+import SuggestionForm from "~/component/Suggestion/SuggestionForm";
+import editorProps from "~/tiptap/events";
+import { useFlags } from "flagsmith/react";
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -157,33 +161,7 @@ export default function () {
       ],
       content: content,
       editable: true,
-      editorProps: {
-        handleDOMEvents: {
-          keydown: (v, event) => {
-            let charCode = String.fromCharCode(event.which).toLowerCase();
-            let copyPressed =
-              (event.ctrlKey || event.metaKey) && charCode === "c";
-            if (![37, 38, 39, 40].includes(event.keyCode) && !copyPressed) {
-              event.preventDefault();
-            }
-          },
-          textInput: (v, evt) => {
-            evt.preventDefault();
-          },
-          drop: (v, e) => {
-            e.preventDefault();
-          },
-          dragstart: (v, e) => {
-            e.preventDefault();
-          },
-        },
-        transformPastedText(text) {
-          return "";
-        },
-        attributes: {
-          inputmode: "none",
-        },
-      },
+      editorProps: editorProps,
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
@@ -198,13 +176,6 @@ export default function () {
         if (!editor.isActive("post")) postSelector({ id: null });
         // define the mark you want to check for
       },
-      onCreate: ({ editor }) => {
-        if (data.selectedPost) {
-          // let from = data.selectedPost.start;
-          // let to = data.selectedPost.end;
-          // editor?.chain().focus().setTextSelection({ from, to }).run();
-        }
-      },
       onUpdate: ({ editor }) => {
         let content = editor.getHTML();
         if (content.length > 2000) saveData(content);
@@ -212,6 +183,8 @@ export default function () {
     },
     [content]
   );
+  const flags = useFlags(["suggestionlocation"]);
+  const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   return (
     <motion.div
       key={useLocation().pathname}
@@ -220,15 +193,16 @@ export default function () {
       exit={{ x: "5%", opacity: 0 }}
     >
       <main
-        className="pt-5 container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
+        className="container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
         <EditorContainer content={content} editor={editor} />
         <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
           {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
-          {(openSuggestion || suggestionSelected?.id) && (
-            <SuggestionForm editor={editor} />
-          )}
+          {(openSuggestion || suggestionSelected?.id) &&
+            (!isSuggestionAtBubble || suggestionSelected?.id) && (
+              <SuggestionForm editor={editor} />
+            )}
           <Outlet context={{ user: data.user, editor, text: data.text }} />
         </div>
       </main>
