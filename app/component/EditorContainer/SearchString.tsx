@@ -62,6 +62,7 @@ export default function SearchString({ editor }: { editor: Editor }) {
   function handleReset() {
     editor.commands.setSearchTerm("");
     setSearchString("");
+    setSearchLocation(null);
   }
 
   return (
