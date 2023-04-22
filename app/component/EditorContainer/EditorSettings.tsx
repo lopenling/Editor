@@ -2,22 +2,16 @@ import { Editor } from "@tiptap/react";
 import SearchString from "./SearchString";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 import { useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { showFontSizeState, showSearchPanelState } from "~/states";
 interface Props {
   editor: Editor | null;
-  showFindText: boolean;
-  showFontSize: boolean;
-  setShowFindText: (value: boolean) => void;
-  setShowFontSize: (value: boolean) => void;
 }
 
-function EditorSetting({
-  editor,
-  showFindText,
-  showFontSize,
-  setShowFindText,
-  setShowFontSize,
-}: Props) {
+function EditorSetting({ editor }: Props) {
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
+  const [showFindText, setShowFindText] = useRecoilState(showSearchPanelState);
+  const [showFontSize, setShowFontSize] = useRecoilState(showFontSizeState);
   const handleFontChange = (e) => {
     changeFontSize(e.target.value);
   };

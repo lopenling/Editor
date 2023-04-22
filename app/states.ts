@@ -2,7 +2,7 @@ import { atom, selector } from "recoil";
 //theme
 export const theme = atom({
   key: "theme-tailwind",
-  default: "light",
+  default: false,
 });
 
 //textName
@@ -12,6 +12,17 @@ export const textName = atom({
   default: "",
 });
 
+//editorOptios
+
+export const showSearchPanelState = atom({
+  key: "showSearch",
+  default: false,
+});
+
+export const showFontSizeState = atom({
+  key: "showfontSize",
+  default: false,
+});
 //posts
 
 export const postslist = atom({

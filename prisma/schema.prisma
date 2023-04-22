@@ -43,26 +43,6 @@ model Text {
   userId     String?
 }
 
-model User {
-  id              String       @id @unique @default(uuid())
-  name            String
-  username        String       @unique
-  email           String       @unique
-  role            Role         @default(BASIC)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  isAdmin         Boolean
-  avatarUrl       String
-  likedPost       Post[]       @relation("likedPost")
-  likedReply      Reply[]      @relation("ReplylikedUser")
-  likedSuggestion Suggestion[] @relation("likedSuggestion")
-  Post            Post[]       @relation("creatorPost")
-  Suggestion      Suggestion[] @relation("suggestionCreator")
-  Text            Text[]
-
-  @@index([email, username])
-}
-
 model Suggestion {
   id         String    @id @unique @default(uuid())
   text       Text      @relation(fields: [textId], references: [id], onDelete: Cascade)
@@ -75,6 +55,35 @@ model Suggestion {
   likedBy    User[]    @relation("likedSuggestion")
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
+}
+
+model User {
+  id              String          @id @unique @default(uuid())
+  name            String
+  username        String          @unique
+  email           String          @unique
+  role            Role            @default(BASIC)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  isAdmin         Boolean
+  avatarUrl       String
+  likedPost       Post[]          @relation("likedPost")
+  likedReply      Reply[]         @relation("ReplylikedUser")
+  likedSuggestion Suggestion[]    @relation("likedSuggestion")
+  Post            Post[]          @relation("creatorPost")
+  Suggestion      Suggestion[]    @relation("suggestionCreator")
+  Text            Text[]
+  preference      UserPreference? @relation(fields: [preferenceId], references: [id])
+  preferenceId    Int             @unique
+
+  @@index([email, username])
+}
+
+model UserPreference {
+  id       Int    @id @default(autoincrement())
+  theme    String @default("light")
+  language String @default("en")
+  User     User?
 }
 
 enum Role {

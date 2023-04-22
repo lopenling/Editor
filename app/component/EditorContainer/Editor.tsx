@@ -10,6 +10,8 @@ import {
   openSuggestionState,
   selectedPostThread,
   selectedTextOnEditor,
+  showFontSizeState,
+  showSearchPanelState,
 } from "~/states";
 import { useFlags } from "flagsmith/react";
 import SuggestionForm from "../Suggestion/SuggestionForm";
@@ -23,9 +25,10 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   const data = useLoaderData();
+  const translation = uselitteraTranlation();
   const [showEditorSettings, setShowEditorSettings] = useState(false);
-  const [showFindText, setShowFindText] = useState(false);
-  const [showFontSize, setShowFontSize] = useState(false);
+  const setShowFindText = useSetRecoilState(showSearchPanelState);
+  const setShowFontSize = useSetRecoilState(showFontSizeState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
@@ -37,7 +40,6 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
       });
     setOpenSuggestion(false);
   };
-  const translation = uselitteraTranlation();
 
   function handleSuggestionClick() {
     setOpenSuggestion(!openSuggestion);
@@ -79,7 +81,7 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
       if (editorThread && postThread) {
         editorThread.scrollIntoView({
           behavior: "smooth",
-          block: "center",
+          block: "nearest",
           inline: "center",
         });
 
@@ -93,14 +95,8 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
   if (!editor) return null;
   return (
     <div className="flex flex-col gap-3">
-      <EditorSettings
-        editor={editor}
-        showFindText={showFindText}
-        showFontSize={showFontSize}
-        setShowFindText={setShowFindText}
-        setShowFontSize={setShowFontSize}
-      />
-      <div className="relative  flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll md:overflow-y-auto mb-4 px-4 lg:max-h-max">
+      <EditorSettings editor={editor} />
+      <div className="  flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll md:overflow-y-auto mb-4 px-4 lg:max-h-max">
         <div className="text-3xl font-bold  relative top-[-5px] text-light my-4   flex items-center justify-between  text-gray-900 dark:text-white">
           <h1>{data?.text?.name}</h1>
           <Button
@@ -286,7 +282,7 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
           </BubbleMenu>
         )}
         <div
-          className="absolute bottom-2 right-3 z-40 md:hidden"
+          className="absolute  right-3 z-40 md:hidden"
           onClick={() => setShowEditorSettings((prev) => !prev)}
         >
           {showEditorSettings && (
@@ -305,9 +301,9 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
                   <path
                     d="M14.75 14.75L10.25 10.25M11.75 6.5C11.75 7.18944 11.6142 7.87213 11.3504 8.50909C11.0865 9.14605 10.6998 9.7248 10.2123 10.2123C9.7248 10.6998 9.14605 11.0865 8.50909 11.3504C7.87213 11.6142 7.18944 11.75 6.5 11.75C5.81056 11.75 5.12787 11.6142 4.49091 11.3504C3.85395 11.0865 3.2752 10.6998 2.78769 10.2123C2.30018 9.7248 1.91347 9.14605 1.64963 8.50909C1.3858 7.87213 1.25 7.18944 1.25 6.5C1.25 5.10761 1.80312 3.77226 2.78769 2.78769C3.77226 1.80312 5.10761 1.25 6.5 1.25C7.89239 1.25 9.22774 1.80312 10.2123 2.78769C11.1969 3.77226 11.75 5.10761 11.75 6.5Z"
                     stroke="#6B7280"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
                 {translation.search}
@@ -319,13 +315,9 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
                 <svg
                   version="1.1"
                   id="Layer_1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
                   x="0px"
                   y="0px"
                   viewBox="0 0 115.77 122.88"
-                  style="enable-background:new 0 0 115.77 122.88"
-                  xml:space="preserve"
                 >
                   <style type="text/css"></style>
                   <g>
@@ -339,7 +331,6 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
               </button>
             </div>
           )}
-
           <svg
             width="56"
             height="56"

@@ -25,6 +25,7 @@ import { AnimatePresence } from "framer-motion";
 import Audiostyle from "react-h5-audio-player/lib/styles.css";
 import flagsmith from "flagsmith";
 import { FlagsmithProvider } from "flagsmith/react";
+import { findUserByUsername } from "./model/user";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -33,7 +34,9 @@ export const meta: MetaFunction = () => ({
   title: "Lopenling App",
 });
 export const loader: LoaderFunction = async ({ request }) => {
-  let user = await getUserSession(request);
+  let userSession = await getUserSession(request);
+  if (!userSession) return null;
+  let user = await findUserByUsername(userSession.username);
   return { user };
 };
 
@@ -93,14 +96,12 @@ function App() {
     !transition.location.state;
   let [themeSelected, setThemeSelected] = useRecoilState(theme);
   useEffect(() => {
-    // addingtohtml();
-    if (window) {
-      let oldSelection = window.localStorage.getItem("theme");
-      if (oldSelection !== themeSelected) setThemeSelected(oldSelection);
-    }
-  }, []);
+    let themeonDb = data.user.preference.theme;
+    console.log(themeonDb);
+    setThemeSelected(themeonDb === "light");
+  }, [data]);
   return (
-    <html className={themeSelected}>
+    <html class={themeSelected ? "light" : "dark"}>
       <head>
         <Meta />
         <link

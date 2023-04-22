@@ -21,6 +21,7 @@ export async function findUserByUsername(username: string) {
       },
       include: {
         likedPost: true,
+        preference: true,
       },
     });
     return user;
@@ -46,6 +47,12 @@ export async function createUserInDB(
         email,
         isAdmin,
         avatarUrl,
+        preference: {
+          create: {
+            theme: "light",
+            language: "en",
+          },
+        },
       },
     });
     return newUser;
