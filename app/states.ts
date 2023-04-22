@@ -2,7 +2,7 @@ import { atom, selector } from "recoil";
 //theme
 export const theme = atom({
   key: "theme-tailwind",
-  default: true,
+  default: false,
 });
 
 //textName
