@@ -35,7 +35,7 @@ export const meta: MetaFunction = () => ({
 });
 export const loader: LoaderFunction = async ({ request }) => {
   let userSession = await getUserSession(request);
-  if (!userSession) return null;
+  if (!userSession) return { userSession };
   let user = await findUserByUsername(userSession.username);
   return { user };
 };
@@ -96,12 +96,12 @@ function App() {
     !transition.location.state;
   let [themeSelected, setThemeSelected] = useRecoilState(theme);
   useEffect(() => {
-    let themeonDb = data.user.preference.theme;
+    let themeonDb = data.user?.preference.theme;
     console.log(themeonDb);
-    setThemeSelected(themeonDb === "light");
+    setThemeSelected(themeonDb === "dark");
   }, [data]);
   return (
-    <html class={themeSelected ? "light" : "dark"}>
+    <html class={themeSelected ? "dark" : "light"}>
       <head>
         <Meta />
         <link

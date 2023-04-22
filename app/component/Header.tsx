@@ -48,7 +48,7 @@ export default function Header({ user }: any) {
     setThemeSelected(!themeSelected);
     themeFetcher.submit(
       {
-        theme: themeSelected ? "dark" : "light",
+        theme: !themeSelected ? "dark" : "light",
       },
       {
         action: "/api/preference/theme",
@@ -73,7 +73,7 @@ export default function Header({ user }: any) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [redirectTo, textNameValue]);
-  let darkMode = !themeSelected;
+  let darkMode = themeSelected;
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-header sticky top-0 z-20 ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
