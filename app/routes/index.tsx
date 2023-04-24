@@ -8,10 +8,16 @@ import { Button, Card, Spinner, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Footer";
 import { json } from "@remix-run/node";
 import { searchTextWithName } from "~/model/text";
-import { useLocation, useLoaderData, useTransition } from "@remix-run/react";
+import {
+  useLocation,
+  useLoaderData,
+  useNavigation,
+  useOutletContext,
+} from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
-import SearchIcon from "~/assets/svg/icon_search.svg";
 import { motion } from "framer-motion";
+import Header from "~/component/Header";
+import { getUserSession } from "~/services/session.server";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");
   if (searchText === null) return null;
@@ -52,15 +58,14 @@ export const meta: MetaFunction = ({ data, params }) => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
-  const transition = useTransition();
+  const navigation = useNavigation();
   const translation: any = uselitteraTranlation();
   const [params] = useSearchParams();
   const list = data;
   const isLoading =
-    transition.submission?.formData.get("search") &&
-    transition.state !== "idle";
+    navigation.formData?.get("search") && navigation.state === "loading";
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
-
+  const user = useOutletContext();
   return (
     <motion.div
       key={useLocation().pathname}
@@ -68,6 +73,8 @@ export default function Index() {
       animate={{ x: "0%", opacity: 1 }}
       exit={{ x: "5%", opacity: 0 }}
     >
+      <Header user={user} editor={null} />
+
       <div className=" max-w-2xl mx-auto">
         <div
           className="inline-flex w-full items-center justify-center  px-3 md:px-1.5"

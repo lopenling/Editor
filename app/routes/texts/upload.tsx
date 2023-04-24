@@ -8,7 +8,7 @@ import {
   useActionData,
   useFetcher,
   useLoaderData,
-  useTransition,
+  useNavigation,
 } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { getUserSession } from "~/services/session.server";
@@ -44,10 +44,10 @@ export const action: ActionFunction = async ({ request }) => {
 export default function UploadText() {
   const formRef = useRef();
   const loaderData = useLoaderData();
-  const transition = useTransition();
+  const navigation = useNavigation();
   const [textContent, setTextContent] = useState("");
   const uploadId = useId();
-  if (transition.state !== "idle") {
+  if (navigation.state !== "idle") {
     formRef.current.reset();
   }
   const [file, setFile] = useState(null);
@@ -115,8 +115,7 @@ export default function UploadText() {
           type="submit"
           className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          {transition.state !== "idle" &&
-          transition.submission?.method === "POST"
+          {navigation.state !== "idle" && navigation.formMethod === "POST"
             ? " Text uploading"
             : "Upload"}
         </button>
@@ -150,7 +149,7 @@ function EachText({ text }: PropsType) {
   return (
     <div
       className={` py-1 px-2 relative bg-white rounded-lg border-slate-600 border-2
-      ${deleteFetcher.submission && " hidden"} dark:text-slate-700`}
+      ${deleteFetcher.formData && " hidden"} dark:text-slate-700`}
     >
       {text.name}
       <button

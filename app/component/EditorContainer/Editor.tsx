@@ -3,7 +3,7 @@ import { BubbleMenu, Editor, EditorContent } from "@tiptap/react";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import EditorSettings from "./EditorSettings";
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import { DEFAULT_FONT_SIZE } from "~/constants";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import {
@@ -19,9 +19,10 @@ import SuggestionForm from "../Suggestion/SuggestionForm";
 type EditorContainerProps = {
   content: string;
   editor: Editor | null;
+  isSaving: boolean;
 };
 
-function EditorContainer({ content, editor }: EditorContainerProps) {
+function EditorContainer({ content, editor, isSaving }: EditorContainerProps) {
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   const data = useLoaderData();
@@ -81,7 +82,7 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
       if (editorThread && postThread) {
         editorThread.scrollIntoView({
           behavior: "smooth",
-          block: "nearest",
+          block: "center",
           inline: "center",
         });
 
@@ -94,11 +95,14 @@ function EditorContainer({ content, editor }: EditorContainerProps) {
   }, [thread.id]);
   if (!editor) return null;
   return (
-    <div className="flex flex-col gap-3">
-      <EditorSettings editor={editor} />
-      <div className="  flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll md:overflow-y-auto mb-4 px-4 lg:max-h-max">
+    <div className="flex flex-col gap-3 mt-2" style={{ maxWidth: 701 }}>
+      {/* <EditorSettings editor={editor} /> */}
+      <div className="  flex-1 textEditorContainer max-h-[70vh] overflow-y-scroll mb-4 px-4 lg:max-h-max">
         <div className="text-3xl font-bold  relative top-[-5px] text-light my-4   flex items-center justify-between  text-gray-900 dark:text-white">
-          <h1>{data?.text?.name}</h1>
+          <h3 className="flex gap-2 text-2xl">
+            {data?.text?.name}
+            {isSaving && <Spinner size="sm" />}
+          </h3>
           <Button
             onClick={handleExport}
             size="xs"

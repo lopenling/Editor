@@ -2,12 +2,15 @@ import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
 import { Navbar, Avatar, Button, Select } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
+import { FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { textName, theme } from "~/states";
+import { Editor } from "@tiptap/react";
+import SearchString from "./EditorContainer/SearchString";
 
 const Logo = () => (
   <img
@@ -30,13 +33,17 @@ const LogoWithTextName = ({ textNameValue }: { textNameValue: string }) => (
     <h1
       onClick={() => window?.scrollTo(0, 0)}
       style={{ top: -10 }}
-      className="text-3xl ml-2 relative  font-bold text-gray-500"
+      className="text-3xl ml-2 relative  font-bold "
     >
       {textNameValue}
     </h1>
   </div>
 );
-export default function Header({ user }: any) {
+type HeaderProps = {
+  user: any;
+  editor: Editor | null;
+};
+export default function Header({ user, editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation = uselitteraTranlation();
@@ -71,9 +78,10 @@ export default function Header({ user }: any) {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.addEventListener("scroll", handleScroll);
   }, [redirectTo, textNameValue]);
   let darkMode = themeSelected;
+
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-header sticky top-0 z-20 ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
@@ -114,6 +122,8 @@ export default function Header({ user }: any) {
           <div className="flex items-center">
             <Translation />
           </div>
+          {editor && <SearchString editor={editor} />}
+
           {user ? (
             <>
               <button
@@ -300,6 +310,7 @@ export default function Header({ user }: any) {
             </div>
           )}
         </div>
+
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="mobile-menu-2"

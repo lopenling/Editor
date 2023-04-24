@@ -22,7 +22,7 @@ export default function Suggestion({ editor, suggest }: SuggestionProps) {
   let likedByMe = data.user
     ? suggest.likedBy.some((l) => l.username === data.user.username)
     : false;
-  let likeInFetcher = likeFetcher?.submission?.formData?.get("like");
+  let likeInFetcher = likeFetcher?.formData?.get("like");
 
   let likeCount = likeFetcher.data
     ? likeFetcher.data?.length
@@ -66,6 +66,7 @@ export default function Suggestion({ editor, suggest }: SuggestionProps) {
         .run();
     suggestionSelector({ id: null });
   }
+
   function deleteSuggestion(id) {
     let decision = confirm("do you want to delete the post");
     if (decision) {
@@ -82,10 +83,15 @@ export default function Suggestion({ editor, suggest }: SuggestionProps) {
       console.log("cancelled");
     }
   }
+  if (deleteFetcher.data) {
+    if (deleteFetcher.data?.remain?.length === 0) {
+      editor?.commands.unsetSuggestion();
+    }
+  }
   return (
     <div
       key={suggest.id}
-      className={`${deleteFetcher.submission && "hidden"} p-3`}
+      className={`${deleteFetcher.formData && "hidden"} p-3`}
     >
       <div className="flex justify-between mb-2">
         <div className="flex gap-3">

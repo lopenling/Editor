@@ -11,7 +11,7 @@ type locationType = {
   index: number;
   searchString: string;
 } | null;
-export default function SearchString({ editor }: { editor: Editor }) {
+export default function SearchString({ editor }: { editor: Editor | null }) {
   const data = useLoaderData();
   const [index, setIndex] = useState(1);
   const [selectedSearch, setSelectedSearch] = useState<locationType>(null);
@@ -52,12 +52,14 @@ export default function SearchString({ editor }: { editor: Editor }) {
         .run();
   }, [selectedSearch]);
   function handleSearch() {
-    setSearchState("searching");
-    let content = editor.getText();
-    let locations = searchFullText(content, searchString);
-    setSearchLocation(locations);
-    editor.commands.setSearchTerm(searchString);
-    setSearchState("done");
+    if (searchString.length > 0) {
+      setSearchState("searching");
+      let content = editor.getText();
+      let locations = searchFullText(content, searchString);
+      setSearchLocation(locations);
+      editor.commands.setSearchTerm(searchString);
+      setSearchState("done");
+    }
   }
   function handleReset() {
     editor.commands.setSearchTerm("");
@@ -66,11 +68,18 @@ export default function SearchString({ editor }: { editor: Editor }) {
   }
 
   return (
-    <div className="items-center flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border border-gray-300 bg-gray-50  ">
+    <div
+      className={`items-center  flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border   ${
+        searchLocations?.length === 0
+          ? "bg-red-100 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-gray-700 focus:border-red-500  w-full dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+          : "border-gray-300"
+      } `}
+    >
       <div className="flex w-full">
         <form
           onSubmit={(e) => {
             e.preventDefault();
+
             handleSearch();
           }}
           className="flex-1"
@@ -81,13 +90,13 @@ export default function SearchString({ editor }: { editor: Editor }) {
             placeholder="search"
             value={searchString}
             onChange={(e) => setSearchString(e.target.value)}
-            className="h-full w-full border-none bg-transparent text-sm leading-tight text-gray-500 outline-0 focus:border-transparent focus:ring-0"
+            className={` h-full w-full border-none bg-transparent text-sm leading-tight text-gray-500 outline-0 focus:border-transparent focus:ring-0`}
           ></input>
         </form>
         <input name="textId" readOnly value={data.text.id} hidden />
         <button type="submit" hidden></button>
 
-        {searchState === "done" && (
+        {searchString !== "" && (
           <button
             type="reset"
             onClick={() => {

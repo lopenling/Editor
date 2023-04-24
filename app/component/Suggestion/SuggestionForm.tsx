@@ -4,7 +4,7 @@ import { useSetRecoilState } from "recoil";
 import { openSuggestionState, selectedSuggestionThread } from "~/states";
 import { v4 as uuidv4 } from "uuid";
 import { Editor } from "@tiptap/react";
-import { TextArea } from "../UI/TextArea";
+import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
 
 type SuggestionFormProps = {

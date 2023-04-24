@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import { useFetcher, useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
-import { useDetectClickOutside } from "react-detect-click-outside";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import { useRecoilState } from "recoil";
@@ -53,7 +52,7 @@ function Post({
   let likedByMe = user
     ? likedBy.some((l) => l.username === user.username)
     : false;
-  let likeInFetcher = likeFetcher?.submission?.formData?.get("like");
+  let likeInFetcher = likeFetcher?.formData?.get("like");
   const handleSelectPost = useCallback(
     (id) => {
       setSelectedThreadId({
@@ -88,11 +87,6 @@ function Post({
     setReplyCount((p) => p + 1);
   };
 
-  const postref = useDetectClickOutside({
-    onTriggered: () => {
-      setSelectedThreadId({ id: null });
-    },
-  });
   function deletePost() {
     let decision = confirm("do you want to delete the post");
     if (decision) {
@@ -119,7 +113,7 @@ function Post({
   }
   return (
     <div
-      className={`${deleteFetcher.submission && "hidden"}`}
+      className={`${deleteFetcher.formData && "hidden"}`}
       id={`p_${threadId}`}
     >
       <div
@@ -137,9 +131,13 @@ function Post({
               src={creatorUser.avatarUrl}
               alt="Extra small avatar"
             ></img>
-            <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
+            <a
+              href={`https://lopenling.org/t/${topicId}`}
+              target="_blank"
+              className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200"
+            >
               {creatorUser.name}
-            </p>
+            </a>
             {isSolved && (
               <svg
                 width="14"
@@ -173,12 +171,12 @@ function Post({
             <div className="text-sm text-gray-300 font-sans">posting ...</div>
           ) : (
             <div className="flex w-full flex-1 items-center justify-between ">
-              <div className="flex h-full w-64 items-center justify-start space-x-4">
+              <div className="flex h-full w-64 items-center justify-start gap-4">
                 <button
-                  disabled={!user || !!likeFetcher.submission}
+                  disabled={!user || !!likeFetcher.formData}
                   className={`${
                     effect && "animate-wiggle"
-                  } flex cursor-pointer items-center justify-start space-x-1.5`}
+                  } flex cursor-pointer items-center justify-start gap-1 `}
                   onClick={handleLikeClick}
                   onAnimationEnd={() => setEffect(false)}
                 >
@@ -202,7 +200,7 @@ function Post({
                   </div>
                 </button>
                 {ReplyCount > 0 && (
-                  <div className="flex items-center justify-start space-x-1.5">
+                  <div className="flex items-center justify-start ">
                     <svg
                       width="16"
                       height="14"
@@ -221,16 +219,25 @@ function Post({
                       onClick={() => setShowReplies((prev) => !prev)}
                       className=" lowercase text-sm font-medium leading-tight text-gray-500 dark:text-gray-100"
                     >
-                      {showReplies && "Hide "}
-                      <span className="mr-1">
-                        {ReplyCount === 0 ? 0 : ReplyCount}
-                      </span>
-                      {ReplyCount > 1 ? translation.replies : translation.reply}
+                      {showReplies ? (
+                        <span className="ml-2">hide</span>
+                      ) : (
+                        <>
+                          <span className="mr-1 ml-1">{ReplyCount}</span>
+                          {ReplyCount > 1
+                            ? translation.replies
+                            : translation.reply}
+                        </>
+                      )}
                     </button>
                   </div>
                 )}
 
-                <div className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-blue-400">
+                <div
+                  onClick={handleShare}
+                  title="share"
+                  className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-blue-400"
+                >
                   <svg
                     width="16"
                     height="16"
@@ -242,18 +249,11 @@ function Post({
                       className="fill-inherit"
                     />
                   </svg>
-
-                  <button
-                    type="button"
-                    className="text-sm font-medium leading-tigh "
-                    onClick={handleShare}
-                  >
-                    share
-                  </button>
                 </div>
                 {user && user.username === creatorUser.username && (
                   <div
                     onClick={() => deletePost(id)}
+                    title="delete"
                     className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
                   >
                     <svg

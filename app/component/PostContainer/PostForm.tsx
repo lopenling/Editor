@@ -1,5 +1,5 @@
 import { useFetcher, useOutletContext } from "@remix-run/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Post from "./Post";
 import { selectedTextOnEditor } from "~/states";
 import { useRecoilState } from "recoil";
@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 import { Button } from "../UI/Button";
-import { TextArea } from "../UI/TextArea";
+import TextArea from "../UI/TextArea";
 
 const PostForm = () => {
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
@@ -24,8 +24,7 @@ const PostForm = () => {
     setAudio({ tempUrl: "", blob: null });
     setError("");
   }, [selection]);
-  let isPosting =
-    createPost.submission && createPost.submission.formData.get("body") !== "";
+  let isPosting = createPost.formData && createPost.formData.get("body") !== "";
   const { editor }: { editor: Editor } = useOutletContext();
   function validator() {
     let lengthOfSelection = selection.end - selection?.start;
@@ -92,13 +91,11 @@ const PostForm = () => {
         replyCount={0}
         id={"random"}
         isSolved={false}
-        postContent={createPost.submission.formData.get("body") as string}
-        topicId={null}
-        type={
-          createPost.submission.formData.get("type") as "question" | "comment"
-        }
+        postContent={createPost?.formData.get("body") as string}
+        topicId={0}
+        type={createPost.formData.get("type") as "question" | "comment"}
         isOptimistic={true}
-        threadId={null}
+        threadId={""}
       />
     );
   }

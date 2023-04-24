@@ -3,31 +3,31 @@ import PostForm from "~/component/PostContainer/PostForm";
 import Skeleton from "~/component/PostContainer/Skeleton";
 import {
   Await,
-  Outlet,
   useLoaderData,
   useOutletContext,
   useSearchParams,
 } from "@remix-run/react";
 import Posts from "~/component/PostContainer/Posts";
-import filterIcon from "~/assets/svg/icon_filter.svg";
-import sortIcon from "~/assets/svg/icon_sort.svg";
-import floatingSortIcon from "~/assets/svg/icon_floatingSortIcon.svg";
 import { Dropdown } from "flowbite-react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { openFilterState, selectedPostThread, showLatest } from "~/states";
-import { findPostByPostId, findPostByTextId } from "~/model/post";
-import { LoaderFunction, defer, json } from "@remix-run/node";
+import {
+  openFilterState,
+  selectedPostThread as selectedPostThreadState,
+  showLatest,
+} from "~/states";
+import { findPostByTextId } from "~/model/post";
+import { LoaderFunction, defer, json, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const textId = parseInt(params.textId);
+  const textId = params.textId && parseInt(params.textId);
 
   const CategoryData = await fetchCategoryData();
   const topicList = CategoryData.topic_list.topics;
+  if (textId === "" || !textId) return redirect("/");
   const posts = findPostByTextId(textId, topicList);
-
   return defer({ text: { id: textId }, posts });
 };
 export const ErrorBoundary = ({ error }) => {
@@ -36,7 +36,9 @@ export const ErrorBoundary = ({ error }) => {
 
 export default function PostContainer() {
   let [searchParams, setSearchParams] = useSearchParams();
-  let setSelectedThreadId = useSetRecoilState(selectedPostThread);
+  let [selectedPostThread, setSelectedThreadId] = useRecoilState(
+    selectedPostThreadState
+  );
   useEffect(() => {
     let SelectedThread = searchParams.get("thread");
     if (SelectedThread) {
@@ -47,14 +49,26 @@ export default function PostContainer() {
           block: "center",
           inline: "center",
         });
+        document.getElementById(SelectedThread?.toString())?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
       }, 2000);
+      let timer = setTimeout(() => {
+        setSelectedThreadId({ id: null });
+      }, 4000);
       setSearchParams("");
+      return () => {
+        if (timer && selectedPostThread.id) clearTimeout(timer);
+      };
     }
   }, []);
   const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
   const data = useLoaderData<typeof loader>();
+  let LoaderPost = data.posts;
   const { editor }: { editor: Editor } = useOutletContext();
   return (
     <div>
@@ -86,13 +100,13 @@ export default function PostContainer() {
           dismissOnClick={false}
         >
           <Dropdown.Item
-            className={isLatestPost && "bg-green-500 dark:bg-gray-500"}
+            className={isLatestPost ? "bg-green-500 dark:bg-gray-500" : ""}
             onClick={() => setIsLatestPost(true)}
           >
             Latest
           </Dropdown.Item>
           <Dropdown.Item
-            className={!isLatestPost && "bg-green-500 dark:bg-gray-500"}
+            className={!isLatestPost ? "bg-green-500 dark:bg-gray-500" : ""}
             onClick={() => setIsLatestPost(false)}
           >
             Earliest
@@ -145,7 +159,7 @@ export default function PostContainer() {
 
       {/* used differ at loader for post list to fetch posts as a promise */}
       <Suspense fallback={<Skeleton />}>
-        <Await resolve={data.posts}>
+        <Await resolve={LoaderPost}>
           {(posts) => {
             return <Posts posts={posts} editor={editor} />;
           }}

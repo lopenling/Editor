@@ -2,6 +2,10 @@ import { useFetcher } from "@remix-run/react";
 import { useState, useMemo, useEffect } from "react";
 import Reply from "./Reply";
 
+type replyType = {
+  isAproved: boolean;
+};
+
 type RepliesProps = {
   postId: string;
   topicId: number;
@@ -18,7 +22,7 @@ function Replies({
   replyCount,
   setReplyCount,
 }: RepliesProps) {
-  const [replies, setReplies] = useState([]);
+  const [replies, setReplies] = useState<replyType[]>([]);
   const [loading, setLoading] = useState(false);
   const postListFetcher = useFetcher();
   useEffect(() => {
@@ -39,15 +43,12 @@ function Replies({
 
   let postdata = useMemo(
     () =>
-      replies
-        ?.slice(1)
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        .sort((a, b) => {
-          if (a.isAproved === b.isAproved) {
-            return 0;
-          }
-          return a.isAproved ? -1 : 1;
-        }),
+      replies?.slice(1).sort((a, b) => {
+        if (a.isAproved === b.isAproved) {
+          return 0;
+        }
+        return a.isAproved ? -1 : 1;
+      }),
     [replies]
   );
   if (loading)

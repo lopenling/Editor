@@ -20,7 +20,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
     : false;
   const solved = replyList?.isAproved;
   let like_Count = replyList?.likedBy?.length || 0;
-  let likeInFetcher = replyLikeFetcher?.submission?.formData?.get("like");
+  let likeInFetcher = replyLikeFetcher?.formData?.get("like");
 
   if (likeInFetcher === "true") {
     likedByMe = true;
@@ -120,7 +120,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
       ></p>
       <div className="flex justify-between">
         <button
-          disabled={!!replyLikeFetcher.submission || !user}
+          disabled={!!replyLikeFetcher.formData || !user}
           onClick={handleLikeReply}
           className={`${
             effect && "animate-wiggle"

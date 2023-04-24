@@ -8,7 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useTransition,
+  useNavigation,
   useLocation,
 } from "@remix-run/react";
 import { Spinner } from "flowbite-react";
@@ -89,19 +89,18 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 function App() {
   const data = useLoaderData();
-  const transition = useTransition();
+  const navigation = useNavigation();
   let routeChanged =
-    transition.state === "loading" &&
-    transition.location.pathname.includes("/texts") &&
-    !transition.location.state;
+    navigation.state === "loading" &&
+    navigation.location.pathname.includes("/texts") &&
+    !navigation.location.state;
   let [themeSelected, setThemeSelected] = useRecoilState(theme);
   useEffect(() => {
     let themeonDb = data.user?.preference.theme;
-    console.log(themeonDb);
     setThemeSelected(themeonDb === "dark");
   }, [data]);
   return (
-    <html class={themeSelected ? "dark" : "light"}>
+    <html className={themeSelected ? "dark" : "light"}>
       <head>
         <Meta />
         <link
@@ -112,9 +111,8 @@ function App() {
       </head>
       <body className="dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={["en_US", "bo_TI"]}>
-          <Header user={data.user} />
           <AnimatePresence mode="wait" initial={false}>
-            {routeChanged ? <Loading /> : <Outlet />}
+            {routeChanged ? <Loading /> : <Outlet context={data.user} />}
           </AnimatePresence>
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />

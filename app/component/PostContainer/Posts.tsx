@@ -5,20 +5,36 @@ import Filter from "./Filter";
 import Post from "./Post";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { filteredPost as filteredValue, postslist } from "~/states";
+export type PostType = {
+  Reply: [];
+  audioUrl: string;
+  avatar: string;
+  content: string;
+  creatorUser_id: string;
+  id: string;
+  isSolved: boolean;
+  post_id: number;
+  replyCount: number;
+  textId: number;
+  thread_id: string;
+  topic_id: number;
+  type: "comment" | "question";
+  created_at: string;
+  likedBy: [];
+  creatorUser: any;
+};
 type PostPropsType = {
   editor: Editor | null;
-  posts: any;
+  posts: PostType[];
 };
 
 function Posts({ editor, posts }: PostPropsType) {
   const setPostList = useSetRecoilState(postslist);
 
-  if (!posts && !posts?.length) return null;
   useEffect(() => {
-    if (posts.length > 0) {
-      setPostList(posts);
-    }
+    setPostList(posts);
   }, [posts.length]);
+  if (!posts && !posts?.length) return null;
   const filteredPost = useRecoilValue(filteredValue);
 
   if (!editor) return null;
@@ -28,11 +44,12 @@ function Posts({ editor, posts }: PostPropsType) {
       <div
         className="scroll-container flex flex-col overflow-x-hidden overflow-y-scroll relative pr-2"
         style={{
-          height: "80vh",
+          height: "min-content",
+          maxHeight: "80vh",
         }}
       >
         {filteredPost?.length > 0 &&
-          filteredPost?.map((post) => {
+          filteredPost?.map((post: PostType) => {
             return (
               <Post
                 key={post.id}

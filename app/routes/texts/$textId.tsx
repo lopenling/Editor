@@ -39,6 +39,7 @@ import { findAllSuggestionByTextId } from "~/model/suggestion";
 import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
+import Header from "~/component/Header";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -46,7 +47,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
   const suggestion = await findAllSuggestionByTextId(textId);
-  const text = await findTextByTextId(textId, false);
+  const text = await findTextByTextId(textId, true);
   if (!textId) throw new Error("not valid textId");
 
   return json({ user, text: text, suggestion });
@@ -91,12 +92,13 @@ export default function () {
       </div>
     );
   const textFetcher = useFetcher();
-  useEffect(() => {
-    textNameSetter(data.text?.name);
-    if (textFetcher.type === "init")
-      textFetcher.load(`/api/text?textId=${data.text?.id}`);
-  }, []);
-  let content = textFetcher.data?.content.replace(/\n/g, "<br>") ?? "<p></p>";
+  // useEffect(() => {
+  //
+  //   if (textFetcher.type === "init")
+  //     textFetcher.load(`/api/text?textId=${data.text?.id}`);
+  // }, []);
+  // let content = textFetcher.data?.content.replace(/\n/g, "<br>") ?? "<p></p>";
+  let content = data.text.content.replace(/\n/g, "<br>") ?? "<p></p>";
   const [setSelection, setSelectionRange] =
     useRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
@@ -122,6 +124,7 @@ export default function () {
       id: id,
     });
   }
+  const isSaving = !!saveText.formData;
 
   let editor = useEditor(
     {
@@ -179,8 +182,11 @@ export default function () {
         let content = editor.getHTML();
         if (content.length > 2000) saveData(content);
       },
+      onCreate: () => {
+        textNameSetter(data.text?.name);
+      },
     },
-    [content]
+    []
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
@@ -191,12 +197,21 @@ export default function () {
       animate={{ x: "0%", opacity: 1 }}
       exit={{ x: "5%", opacity: 0 }}
     >
+      <Header user={data.user} editor={editor} />
+
       <main
         className="container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
-        <EditorContainer content={content} editor={editor} />
-        <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
+        <EditorContainer
+          content={content}
+          editor={editor}
+          isSaving={isSaving}
+        />
+        <div
+          className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]"
+          // style={{ minWidth: 388 }}
+        >
           {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected?.id) &&
             (!isSuggestionAtBubble || suggestionSelected?.id) && (

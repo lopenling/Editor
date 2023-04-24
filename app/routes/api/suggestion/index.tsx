@@ -3,6 +3,7 @@ import { json } from "react-router";
 import {
   createSuggestion,
   deleteSuggestion,
+  findAllSuggestionByTextId,
   getSuggestionWithThreadId,
 } from "~/model/suggestion";
 
@@ -34,8 +35,10 @@ export let action: ActionFunction = async ({ request }) => {
   if (request.method === "DELETE") {
     let id = Obj.id as string;
     let res = await deleteSuggestion(id);
+    let remainingdata = await findAllSuggestionByTextId(res.textId);
     return {
       deleted: res,
+      remain: remainingdata,
     };
   }
   return null;

@@ -130,7 +130,6 @@ export const Suggestion = (setter) =>
               if (!range) return false;
               const clickedNode = event.target;
               setter(clickedNode?.id);
-              console.log("suggestionMark");
 
               const [$start, $end] = [
                 doc.resolve(range.from),

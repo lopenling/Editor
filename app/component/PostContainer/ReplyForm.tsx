@@ -1,6 +1,6 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useRef, useEffect, useState } from "react";
-import { TextArea } from "../UI/TextArea";
+import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
 
 type ReplyFormPropsType = {
@@ -23,8 +23,8 @@ export default function ReplyForm({
       updateReplyCount();
       closeReply();
     }
-  }, [postFetcher.submission, loaderData.posts, topicId]);
-  if (postFetcher.submission) {
+  }, [postFetcher.formData, loaderData.posts, topicId]);
+  if (postFetcher.formData) {
     if (textareaRef.current) textareaRef.current.value = "";
   }
   return (
