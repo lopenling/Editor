@@ -1,13 +1,13 @@
 import { startTransition, Suspense, useEffect } from "react";
-import PostForm from "~/component/PostContainer/PostForm";
-import Skeleton from "~/component/PostContainer/Skeleton";
+import PostForm from "~/component/post/PostForm";
+import Skeleton from "~/component/post/Skeleton";
 import {
   Await,
   useLoaderData,
   useOutletContext,
   useSearchParams,
 } from "@remix-run/react";
-import Posts from "~/component/PostContainer/Posts";
+import Posts from "~/component/post/Posts";
 import { Dropdown } from "flowbite-react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";

@@ -1,5 +1,5 @@
 import { getUserSession } from "~/services/session.server";
-import { json, MetaFunction } from "@remix-run/node";
+import { json, MetaFunction, defer } from "@remix-run/node";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import {
   useLoaderData,
@@ -7,9 +7,11 @@ import {
   Link,
   Outlet,
   useLocation,
+  Await,
 } from "@remix-run/react";
-import { findTextByTextId } from "~/model/text";
-import EditorContainer from "~/component/EditorContainer/Editor";
+import { useEffect, Suspense } from "react";
+import { findTextByTextId, getTextContent } from "~/model/text";
+import EditorContainer from "~/component/editor/EditorContainer";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
 import {
@@ -19,7 +21,6 @@ import {
   selectedTextOnEditor,
   textName,
 } from "~/states";
-import { useEffect } from "react";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
@@ -30,16 +31,15 @@ import TextStyle from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
 import { Suggestion } from "~/tiptap/tiptap-extension/suggestion";
 import PostMark from "~/tiptap/tiptap-extension/postMark";
-import SuggestionContainer from "~/component/Suggestion/SuggestionContainer";
-import { FontSize } from "~/tiptap/tiptap-extension/fontSize";
+import SuggestionContainer from "~/component/suggestion/SuggestionContainer";
 import { SearchAndReplace } from "~/tiptap/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { motion } from "framer-motion";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
-import SuggestionForm from "~/component/Suggestion/SuggestionForm";
+import SuggestionForm from "~/component/suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
-import Header from "~/component/Header";
+import Header from "~/component/layout/Header";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -48,9 +48,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = parseInt(params.textId);
   const suggestion = await findAllSuggestionByTextId(textId);
   const text = await findTextByTextId(textId, true);
+  const textContent = getTextContent(textId);
   if (!textId) throw new Error("not valid textId");
 
-  return json({ user, text: text, suggestion });
+  return defer({ user, text: text, suggestion, textContent });
 };
 
 export function ErrorBoundary({ error }) {
@@ -91,20 +92,11 @@ export default function () {
         </Link>
       </div>
     );
-  const textFetcher = useFetcher();
-  // useEffect(() => {
-  //
-  //   if (textFetcher.type === "init")
-  //     textFetcher.load(`/api/text?textId=${data.text?.id}`);
-  // }, []);
-  // let content = textFetcher.data?.content.replace(/\n/g, "<br>") ?? "<p></p>";
-  let content = data.text.content.replace(/\n/g, "<br>") ?? "<p></p>";
-  const [setSelection, setSelectionRange] =
-    useRecoilState(selectedTextOnEditor);
+  const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );
-  const [postSelected, postSelector] = useRecoilState(selectedPostThread);
+  const postSelector = useSetRecoilState(selectedPostThread);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const saveText = useFetcher();
@@ -161,7 +153,6 @@ export default function () {
           },
         }),
       ],
-      content: content,
       editable: true,
       editorProps: editorProps,
       onSelectionUpdate: ({ editor }) => {
@@ -182,9 +173,6 @@ export default function () {
         let content = editor.getHTML();
         if (content.length > 2000) saveData(content);
       },
-      onCreate: () => {
-        textNameSetter(data.text?.name);
-      },
     },
     []
   );
@@ -203,11 +191,14 @@ export default function () {
         className="container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
-        <EditorContainer
-          content={content}
-          editor={editor}
-          isSaving={isSaving}
-        />
+        <Suspense fallback={"loading"}>
+          <Await
+            resolve={data.textContent}
+            errorElement={<p>Error fetching content!</p>}
+          >
+            <EditorContainer editor={editor} isSaving={isSaving} />
+          </Await>
+        </Suspense>
         <div
           className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]"
           // style={{ minWidth: 388 }}

@@ -62,6 +62,21 @@ export async function findTextByTextId(id: number, content: boolean = false) {
     return "cannot find text with error " + e.message;
   }
 }
+export async function getTextContent(id: number) {
+  try {
+    const text = await db.text.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        content: true,
+      },
+    });
+    return text;
+  } catch (e) {
+    return "cannot find text with error " + e.message;
+  }
+}
 
 //create text
 export async function createText(name: string, content: string, id: string) {

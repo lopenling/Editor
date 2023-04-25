@@ -70,7 +70,7 @@ export default function SearchString({ editor }: { editor: Editor | null }) {
     <div
       className={`items-center  flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border   ${
         searchLocations?.length === 0
-          ? "bg-red-100 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-gray-700 focus:border-red-500  w-full dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+          ? "bg-red-100 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
           : "border-gray-300"
       } `}
     >
@@ -95,7 +95,7 @@ export default function SearchString({ editor }: { editor: Editor | null }) {
         <input name="textId" readOnly value={data.text.id} hidden />
         <button type="submit" hidden></button>
 
-        {searchString !== "" && (
+        {(searchString !== "" || searchState === "done") && (
           <button
             type="reset"
             onClick={() => {

@@ -5,7 +5,7 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { Button, Card, Spinner, TextInput } from "flowbite-react";
-import FooterContainer from "~/component/Footer";
+import FooterContainer from "~/component/layout/Footer";
 import { json } from "@remix-run/node";
 import { searchTextWithName } from "~/model/text";
 import {
@@ -16,7 +16,7 @@ import {
 } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { motion } from "framer-motion";
-import Header from "~/component/Header";
+import Header from "~/component/layout/Header";
 import { getUserSession } from "~/services/session.server";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search");

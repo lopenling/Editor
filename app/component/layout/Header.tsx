@@ -10,7 +10,7 @@ import uselitteraTranlation, {
 import { useRecoilState, useRecoilValue } from "recoil";
 import { textName, theme } from "~/states";
 import { Editor } from "@tiptap/react";
-import SearchString from "./EditorContainer/SearchString";
+import SearchString from "../editor/SearchString";
 
 const Logo = () => (
   <img
