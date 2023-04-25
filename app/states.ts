@@ -29,6 +29,11 @@ export const postslist = atom({
   key: "postList",
   default: [],
 });
+//joyride
+export const openJoyride = atom({
+  key: "joyride",
+  default: false,
+});
 //threadSelection
 export const openSuggestionState = atom({
   key: "openSuggestion",

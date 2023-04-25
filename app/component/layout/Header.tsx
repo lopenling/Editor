@@ -8,7 +8,7 @@ import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { textName, theme } from "~/states";
+import { openJoyride, textName, theme } from "~/states";
 import { Editor } from "@tiptap/react";
 import SearchString from "../editor/SearchString";
 
@@ -81,9 +81,10 @@ export default function Header({ user, editor }: HeaderProps) {
     return () => window.addEventListener("scroll", handleScroll);
   }, [redirectTo, textNameValue]);
   let darkMode = themeSelected;
+  let [run, setRun] = useRecoilState(openJoyride);
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-header sticky top-0 z-20 ">
+    <nav className="header bg-white border-gray-200 dark:bg-gray-900 shadow-header sticky top-0 z-20 ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textNameValue={textNameValue} />
@@ -131,7 +132,7 @@ export default function Header({ user, editor }: HeaderProps) {
                 className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                 id="user-menu-button"
                 aria-expanded="false"
-                data-dropdown-toggle="user-dropdown"
+                data-dropdown-toggle="user-dropdown-bittun"
                 data-dropdown-placement="bottom"
               >
                 <span className="sr-only">Open user menu</span>
@@ -145,7 +146,7 @@ export default function Header({ user, editor }: HeaderProps) {
               </button>
               <div
                 className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                id="user-dropdown"
+                id="user-dropdown-bittun"
               >
                 <div className="px-4 py-3">
                   <span className="block text-sm text-gray-900 dark:text-white">
@@ -250,6 +251,9 @@ export default function Header({ user, editor }: HeaderProps) {
                       </svg>
                       Preferences
                     </a>
+                  </div>
+                  <div className="px-4 py-3" onClick={() => setRun(true)}>
+                    help
                   </div>
                   <Form
                     method="post"

@@ -109,7 +109,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
             onClick={handleExport}
             size="xs"
             color=""
-            className="bg-gray-200 text-gray-600"
+            className="export bg-gray-200 text-gray-600"
           >
             <svg
               width="20"

@@ -68,7 +68,7 @@ export default function SearchString({ editor }: { editor: Editor | null }) {
 
   return (
     <div
-      className={`items-center  flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border   ${
+      className={`searchForm items-center  flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border   ${
         searchLocations?.length === 0
           ? "bg-red-100 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
           : "border-gray-300"

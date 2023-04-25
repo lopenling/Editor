@@ -1,4 +1,4 @@
-import { startTransition, Suspense, useEffect } from "react";
+import { useState, Suspense, useEffect } from "react";
 import PostForm from "~/component/post/PostForm";
 import Skeleton from "~/component/post/Skeleton";
 import {
@@ -13,6 +13,7 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   openFilterState,
+  openJoyride,
   selectedPostThread as selectedPostThreadState,
   showLatest,
 } from "~/states";
@@ -20,6 +21,8 @@ import { findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer, json, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
+import Joyride, { CallBackProps, STATUS } from "react-joyride";
+import step from "~/steps";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId && parseInt(params.textId);
@@ -70,8 +73,36 @@ export default function PostContainer() {
   const data = useLoaderData<typeof loader>();
   let LoaderPost = data.posts;
   const { editor }: { editor: Editor } = useOutletContext();
+
+  let [run, setRun] = useRecoilState(openJoyride);
+  let [steps, setSteps] = useState(step);
+  const handleJoyrideCallback = (data: CallBackProps) => {
+    const { status, type } = data;
+    const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status)) {
+      setRun(false);
+    }
+  };
   return (
     <div>
+      {run && (
+        <Joyride
+          continuous
+          callback={handleJoyrideCallback}
+          hideCloseButton
+          steps={steps}
+          run={run}
+          showProgress
+          scrollToFirstStep={false}
+          showSkipButton
+          styles={{
+            options: {
+              zIndex: 10000,
+            },
+          }}
+        />
+      )}
       <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4">
         {/* sort button */}
         <Dropdown
@@ -89,7 +120,7 @@ export default function PostContainer() {
                   fill="#6B7280"
                 />
               </svg>
-              <span className="ml-2 text-sm font-medium leading-tight text-gray-500 dark:text-gray-50">
+              <span className="sort ml-2 text-sm font-medium leading-tight text-gray-500 dark:text-gray-50">
                 sort By
               </span>
             </>
@@ -116,7 +147,7 @@ export default function PostContainer() {
         <button
           id="filterButton"
           onClick={() => setOpenFilter((prev) => !prev)}
-          className="flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2"
+          className="filter flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2"
         >
           <svg
             width="16"
@@ -138,7 +169,7 @@ export default function PostContainer() {
         </button>
       </div>
       <div
-        className="fixed bottom-2 right-3 z-40 cursor-pointer md:hidden"
+        className="filter fixed bottom-2 right-3 z-40 cursor-pointer md:hidden"
         onClick={() => setOpenFilter((prev) => !prev)}
       >
         <svg
