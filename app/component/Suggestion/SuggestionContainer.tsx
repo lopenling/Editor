@@ -12,7 +12,7 @@ export default function Suggestions({ editor }: { editor: Editor | null }) {
   let list = data.suggestion.filter((l) => l.threadId === suggestionThread.id);
 
   return (
-    <div className="p-2 bg-slate-50 shadow-md ">
+    <div className="p-2 bg-slate-50 shadow-md mt-4  max-h-[70vh] overflow-y-auto">
       <div className="flex flex-col  gap-2 ">
         <h2 className="font-light">Suggestion</h2>
         {list?.length > 0 &&

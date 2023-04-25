@@ -103,7 +103,7 @@ export default function PostContainer() {
           }}
         />
       )}
-      <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4">
+      <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4 ">
         {/* sort button */}
         <Dropdown
           label={

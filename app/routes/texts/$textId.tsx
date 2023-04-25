@@ -40,6 +40,7 @@ import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
+import { db } from "~/db.server";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -205,10 +206,11 @@ export default function () {
         <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
           {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected?.id) &&
-            (!isSuggestionAtBubble || suggestionSelected?.id) && (
-              <SuggestionForm editor={editor} />
-            )}
-          <Outlet context={{ user: data.user, editor, text: data.text }} />
+          (!isSuggestionAtBubble || suggestionSelected?.id) ? (
+            <SuggestionForm editor={editor} />
+          ) : (
+            <Outlet context={{ user: data.user, editor, text: data.text }} />
+          )}
         </div>
       </main>
     </motion.div>

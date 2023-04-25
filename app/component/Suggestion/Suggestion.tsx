@@ -73,7 +73,7 @@ export default function Suggestion({
   const selection = useRecoilValue(selectedTextOnEditor);
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
   function replaceHandler(replace: string) {
-    if (allowReplace)
+    if (allowReplace) {
       editor
         .chain()
         .focus()
@@ -85,7 +85,8 @@ export default function Suggestion({
           replace
         )
         .run();
-    suggestionSelector({ id: null });
+      suggestionSelector({ id: null });
+    }
   }
 
   function deleteSuggestion(id) {
@@ -121,11 +122,12 @@ export default function Suggestion({
         action: "/api/suggestion/comment",
       }
     );
+    setCommentText("");
   }
   return (
     <div
       key={suggest.id}
-      className={`${deleteFetcher.formData && "hidden"} p-3`}
+      className={`${deleteFetcher.formData && "hidden"} p-3 `}
     >
       <div className="flex justify-between mb-2">
         <div className="flex gap-3">
@@ -270,8 +272,21 @@ export default function Suggestion({
               rows={1}
             />
             <div className="flex justify-end gap-2">
-              <Button label="comment" type="submit" onClick={postComment} />
-              <Button label="cancel" type="reset" />
+              <Button
+                label={
+                  postCommentFetcher.state === "submitting"
+                    ? "commenting"
+                    : "comment"
+                }
+                type="submit"
+                onClick={postComment}
+                disabled={!!postCommentFetcher.formData}
+              />
+              <Button
+                label="cancel"
+                type="reset"
+                onClick={() => setOpenComment(false)}
+              />
             </div>
             {suggest.SuggestionComment.length > 0 &&
               suggest.SuggestionComment.map((comment, index) => (
