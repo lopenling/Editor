@@ -202,10 +202,7 @@ export default function () {
             <EditorContainer editor={editor} isSaving={isSaving} />
           </Await>
         </Suspense>
-        <div
-          className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]"
-          // style={{ minWidth: 388 }}
-        >
+        <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
           {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected?.id) &&
             (!isSuggestionAtBubble || suggestionSelected?.id) && (

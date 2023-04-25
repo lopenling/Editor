@@ -9,6 +9,11 @@ export async function findAllSuggestionByTextId(textId: number) {
       include: {
         user: true,
         likedBy: true,
+        SuggestionComment: {
+          include: {
+            author: true,
+          },
+        },
       },
     });
     return data;
@@ -26,6 +31,7 @@ export async function getSuggestionWithThreadId(threadId) {
       include: {
         user: true,
         likedBy: true,
+        SuggestionComment: true,
       },
     });
     return data;

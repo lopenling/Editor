@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Editor } from "@tiptap/react";
 import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
+import Suggestion from "./Suggestion";
 
 type SuggestionFormProps = {
   editor: Editor | null;
@@ -59,10 +60,32 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     setOpenSuggestion(false);
     // if (editor.isActive("suggestion")) editor.commands.unsetSuggestion();
   };
+  let isPosting = addSuggestion.formData;
   if (!user) return <div className="text-red-600">You must login first !</div>;
-
+  if (isPosting)
+    return (
+      <div className="p-2 bg-slate-50 shadow-md ">
+        <div className="flex flex-col gap-2 ">
+          <Suggestion
+            editor={null}
+            optimistic={true}
+            suggest={{
+              created_at: Date.now(),
+              id: "",
+              likedBy: [],
+              newValue: addSuggestion.formData?.get("newValue") as string,
+              oldValue: addSuggestion.formData?.get("oldValue") as string,
+              textId: parseInt(addSuggestion.formData?.get("textId") as string),
+              threadId: addSuggestion.formData?.get("threadId") as string,
+              updated_at: "",
+              user: user,
+            }}
+          />
+        </div>
+      </div>
+    );
   return (
-    <div className="p-2 bg-slate-50 shadow-md m-3">
+    <div className="p-2 bg-slate-50 shadow-md mb-2">
       <TextArea
         placeholder="any suggestion?"
         value={suggestionInput}

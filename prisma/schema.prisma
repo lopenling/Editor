@@ -44,37 +44,48 @@ model Text {
 }
 
 model Suggestion {
-  id         String    @id @unique @default(uuid())
-  text       Text      @relation(fields: [textId], references: [id], onDelete: Cascade)
-  textId     Int
-  oldValue   String
-  newValue   String
-  user       User      @relation("suggestionCreator", fields: [userId], references: [id])
-  userId     String
-  threadId   String
-  likedBy    User[]    @relation("likedSuggestion")
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  id                String              @id @unique @default(uuid())
+  text              Text                @relation(fields: [textId], references: [id], onDelete: Cascade)
+  textId            Int
+  oldValue          String
+  newValue          String
+  user              User                @relation("suggestionCreator", fields: [userId], references: [id])
+  userId            String
+  threadId          String
+  likedBy           User[]              @relation("likedSuggestion")
+  created_at        DateTime            @default(now())
+  updated_at        DateTime?           @updatedAt
+  SuggestionComment SuggestionComment[]
+}
+
+model SuggestionComment {
+  id           Int        @id @default(autoincrement())
+  text         String
+  suggestion   Suggestion @relation(fields: [suggestionId], references: [id])
+  suggestionId String
+  author       User       @relation(fields: [userId], references: [id])
+  userId       String
 }
 
 model User {
-  id              String          @id @unique @default(uuid())
-  name            String
-  username        String          @unique
-  email           String          @unique
-  role            Role            @default(BASIC)
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  isAdmin         Boolean
-  avatarUrl       String
-  likedPost       Post[]          @relation("likedPost")
-  likedReply      Reply[]         @relation("ReplylikedUser")
-  likedSuggestion Suggestion[]    @relation("likedSuggestion")
-  Post            Post[]          @relation("creatorPost")
-  Suggestion      Suggestion[]    @relation("suggestionCreator")
-  Text            Text[]
-  preference      UserPreference? @relation(fields: [preferenceId], references: [id])
-  preferenceId    Int             @unique
+  id                String              @id @unique @default(uuid())
+  name              String
+  username          String              @unique
+  email             String              @unique
+  role              Role                @default(BASIC)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  isAdmin           Boolean
+  avatarUrl         String
+  likedPost         Post[]              @relation("likedPost")
+  likedReply        Reply[]             @relation("ReplylikedUser")
+  likedSuggestion   Suggestion[]        @relation("likedSuggestion")
+  Post              Post[]              @relation("creatorPost")
+  Suggestion        Suggestion[]        @relation("suggestionCreator")
+  Text              Text[]
+  preference        UserPreference?     @relation(fields: [preferenceId], references: [id])
+  preferenceId      Int                 @unique
+  SuggestionComment SuggestionComment[]
 
   @@index([email, username])
 }
