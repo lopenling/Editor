@@ -94,7 +94,7 @@ export default function PostContainer() {
           steps={steps}
           run={run}
           showProgress
-          scrollToFirstStep={false}
+          disableScrolling={true}
           showSkipButton
           styles={{
             options: {

@@ -173,6 +173,9 @@ export default function () {
         let content = editor.getHTML();
         if (content.length > 2000) saveData(content);
       },
+      onCreate: () => {
+        textNameSetter(data?.text?.name);
+      },
     },
     []
   );
