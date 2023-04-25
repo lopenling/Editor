@@ -5,8 +5,8 @@ import { selectedTextOnEditor } from "~/states";
 import { useRecoilState } from "recoil";
 import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
-import AudioRecorder from "../media/AudioRecorder";
-import AudioPlayer from "../media/AudioPlayer";
+import AudioRecorder from "../Media/AudioRecorder";
+import AudioPlayer from "../Media/AudioPlayer";
 import { Button } from "../UI/Button";
 import TextArea from "../UI/TextArea";
 

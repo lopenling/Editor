@@ -14,7 +14,7 @@ import {
   showSearchPanelState,
 } from "~/states";
 import { useFlags } from "flagsmith/react";
-import SuggestionForm from "../suggestion/SuggestionForm";
+import SuggestionForm from "../Suggestion/SuggestionForm";
 
 type EditorContainerProps = {
   editor: Editor | null;

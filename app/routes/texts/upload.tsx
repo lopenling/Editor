@@ -16,7 +16,7 @@ import { createText, deleteText, findAllText } from "~/model/text";
 import { useId } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { Tabs } from "flowbite-react";
-import Header from "~/component/layout/Header";
+import Header from "~/component/Layout/Header";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUserSession(request);
   if (!user) return redirect("/");

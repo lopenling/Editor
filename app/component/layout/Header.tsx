@@ -10,7 +10,7 @@ import uselitteraTranlation, {
 import { useRecoilState, useRecoilValue } from "recoil";
 import { openJoyride, textName, theme } from "~/states";
 import { Editor } from "@tiptap/react";
-import SearchString from "../editor/SearchString";
+import SearchString from "../Editor/SearchString";
 import { useDetectClickOutside } from "react-detect-click-outside";
 const Logo = () => (
   <img

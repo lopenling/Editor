@@ -11,7 +11,7 @@ import {
 } from "@remix-run/react";
 import { useEffect, Suspense } from "react";
 import { findTextByTextId, getTextContent } from "~/model/text";
-import EditorContainer from "~/component/editor/EditorContainer";
+import EditorContainer from "~/component/Editor/EditorContainer";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
 import {
@@ -31,15 +31,15 @@ import TextStyle from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
 import { Suggestion } from "~/tiptap/tiptap-extension/suggestion";
 import PostMark from "~/tiptap/tiptap-extension/postMark";
-import SuggestionContainer from "~/component/suggestion/SuggestionContainer";
+import SuggestionContainer from "~/component/Suggestion/SuggestionContainer";
 import { SearchAndReplace } from "~/tiptap/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
 import { motion } from "framer-motion";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
-import SuggestionForm from "~/component/suggestion/SuggestionForm";
+import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
-import Header from "~/component/layout/Header";
+import Header from "~/component/Layout/Header";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 

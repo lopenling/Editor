@@ -12,8 +12,8 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { Spinner } from "flowbite-react";
-import ErrorPage from "./component/layout/ErrorPage";
-import Header from "./component/layout/Header";
+import ErrorPage from "./component/Layout/ErrorPage";
+import Header from "./component/Layout/Header";
 import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";

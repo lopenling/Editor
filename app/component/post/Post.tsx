@@ -6,7 +6,7 @@ import ReplyForm from "./ReplyForm";
 import { useRecoilState } from "recoil";
 import { selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
-import AudioPlayer from "../media/AudioPlayer";
+import AudioPlayer from "../Media/AudioPlayer";
 import copyToClipboard from "~/utility/copyToClipboard";
 type PostType = {
   id: string;
