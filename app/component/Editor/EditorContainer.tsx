@@ -95,9 +95,8 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
       }
     }
   }, [thread.id]);
-  if (!editor) return null;
   return (
-    <div className="flex flex-col gap-3 mt-4" style={{ maxWidth: 701 }}>
+    <div className="flex flex-col gap-3 mt-4">
       {/* <EditorSettings editor={editor} /> */}
       <div className="  flex-1 textEditorContainer max-h-[70vh] overflow-y-auto mb-4 px-4 lg:max-h-max">
         <div className="text-3xl font-bold  relative top-[-5px] text-light my-4   flex items-center justify-between  text-gray-900 dark:text-white">

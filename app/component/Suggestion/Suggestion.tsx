@@ -210,13 +210,6 @@ export default function Suggestion({
                     className="fill-inherit"
                   />
                 </svg>
-
-                <button
-                  type="button"
-                  className="text-sm font-medium leading-tigh "
-                >
-                  share
-                </button>
               </div>
               {data.user && data.user.username === suggest.user.username && (
                 <div

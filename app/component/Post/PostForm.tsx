@@ -9,13 +9,14 @@ import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 import { Button } from "../UI/Button";
 import TextArea from "../UI/TextArea";
+import useFetcherWithPromise from "~/utility/useFetcher";
 
 const PostForm = () => {
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const [audio, setAudio] = useState({ tempUrl: "", blob: null });
   const [error, setError] = useState("");
   const data = useOutletContext();
-  const createPost = useFetcher();
+  const createPost = useFetcherWithPromise();
   const [body, setBody] = useState("");
   const { user }: { user: any } = useOutletContext();
   let isFormEmpty = body.length < 5;
@@ -42,7 +43,7 @@ const PostForm = () => {
     }
     return errormessage;
   }
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     let errormessage = validator();
     if (errormessage && errormessage !== "") {
@@ -71,20 +72,24 @@ const PostForm = () => {
     for (var key in item) {
       form_data.append(key, item[key]);
     }
-    if (selection)
-      createPost.submit(form_data, {
+    if (selection) {
+      let awaitdata = await createPost.submit(form_data, {
         method: "post",
         action: "/api/post",
         encType: "multipart/form-data",
       });
-    setSelection({ ...selection, type: "" });
-    editor.commands.setPost({
-      id,
-    });
+      if (!awaitdata?.message) {
+        setSelection({ ...selection, type: "" });
+        editor.commands.setPost({
+          id,
+        });
+      }
+    }
   }
   if (isPosting) {
     return (
       <Post
+        audioUrl=""
         creatorUser={user}
         time="now"
         likedBy={[]}
@@ -100,8 +105,6 @@ const PostForm = () => {
     );
   }
 
-  if (createPost.data?.error && !selection)
-    return <div className="text-red-800">{createPost.data.error.message} </div>;
   if (selection.type === "") return null;
 
   return (
@@ -148,6 +151,11 @@ const PostForm = () => {
               ) : null}
               {error && error !== "" && (
                 <div className="font-sm text-red-500">{error}</div>
+              )}
+              {createPost.data?.message && (
+                <div className="font-sm text-red-500">
+                  {createPost.data?.message}
+                </div>
               )}
               <div className="flex justify-between items-center">
                 {audio.tempUrl === "" ? (

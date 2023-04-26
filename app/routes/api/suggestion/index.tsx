@@ -22,15 +22,18 @@ export let action: ActionFunction = async ({ request }) => {
     const newValue = Obj.newValue as string;
     const userId = Obj.userId as string;
     const threadId = Obj.threadId as string;
-
-    let responce = await createSuggestion({
-      oldValue,
-      newValue,
-      textId,
-      userId,
-      threadId,
-    });
-    console.log(responce);
+    try {
+      let responce = await createSuggestion({
+        oldValue,
+        newValue,
+        textId,
+        userId,
+        threadId,
+      });
+      return { responce };
+    } catch (e) {
+      return { message: e };
+    }
   }
   if (request.method === "DELETE") {
     let id = Obj.id as string;

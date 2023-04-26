@@ -122,12 +122,12 @@ export default function Index() {
           </Form>
         </div>
         {isLoading && (
-          <div className="inline-flex h-screen w-full flex-col items-center justify-start space-y-3.5">
+          <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5">
             <Spinner />
           </div>
         )}
 
-        {list && (
+        {list && !isLoading && (
           <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">
             {list.length === 0 && (
               <div

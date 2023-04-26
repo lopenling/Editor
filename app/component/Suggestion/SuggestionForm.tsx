@@ -7,6 +7,7 @@ import { Editor } from "@tiptap/react";
 import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
 import Suggestion from "./Suggestion";
+import useFetcherWithPromise from "~/utility/useFetcher";
 
 type SuggestionFormProps = {
   editor: Editor | null;
@@ -16,10 +17,10 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
   const data = useLoaderData();
   let user = data.user;
   const [suggestionInput, setSuggestionInput] = useState("");
-  const addSuggestion = useFetcher();
+  const addSuggestion = useFetcherWithPromise();
   const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
   const setOpenSuggestion = useSetRecoilState(openSuggestionState);
-  const handleSuggestionSubmit = () => {
+  const handleSuggestionSubmit = async () => {
     const { state } = editor;
     const { from, to } = state.selection;
     const originalText = state.doc.textBetween(from, to, " ");
@@ -34,7 +35,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
       id: id,
     });
     let oldValue = originalText;
-    addSuggestion.submit(
+    let awaitdata = await addSuggestion.submit(
       {
         oldValue,
         textId: data.text.id,
@@ -47,18 +48,19 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
         method: "post",
       }
     );
-    editor.commands.setSuggestion({
-      id: id,
-      original: originalText,
-    });
-    setSuggestionInput("");
+    if (!awaitdata?.message) {
+      editor.commands.setSuggestion({
+        id: id,
+        original: originalText,
+      });
+      setSuggestionInput("");
+    }
   };
   const handleSuggestionCancel = () => {
     setSelectedSuggestion({
       id: null,
     });
     setOpenSuggestion(false);
-    // if (editor.isActive("suggestion")) editor.commands.unsetSuggestion();
   };
   let isPosting = addSuggestion.formData;
   if (!user) return <div className="text-red-600">You must login first !</div>;
@@ -86,6 +88,11 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     );
   return (
     <div className="p-2 bg-slate-50 shadow-md mb-2">
+      {addSuggestion.data?.message && (
+        <div className="font-sm text-red-500">
+          {addSuggestion.data?.message}
+        </div>
+      )}
       <TextArea
         placeholder="any suggestion?"
         value={suggestionInput}

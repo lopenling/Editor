@@ -50,21 +50,22 @@ export const action: ActionFunction = async ({ request }) => {
       );
       if (data["topic_id"] && user) {
         const createPost = await createPostOnDB(
-          Obj.type,
+          Obj.type as string,
           data["avatar_template"],
           data["topic_id"],
           data["id"],
-          Obj.threadId,
+          Obj.threadId as string,
           textId,
-          Obj.body,
+          Obj.body as string,
           userData.id,
-          audioUrl
+          audioUrl as string
         );
+
         return createPost;
       }
     } catch (error) {
       console.error("Failed to create question:", error);
-      throw error;
+      return { message: error };
     }
   }
   if (request.method === "DELETE") {

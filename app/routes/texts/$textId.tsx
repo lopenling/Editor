@@ -192,18 +192,21 @@ export default function () {
       <Header user={data.user} editor={editor} />
 
       <main
-        className="container relative lg:mx-auto flex w-full flex-col lg:gap-5 lg:flex-row   "
+        className="container relative lg:mx-auto flex w-full flex-col lg:gap-8 lg:flex-row   "
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
-        <Suspense fallback={"loading"}>
-          <Await
-            resolve={data.textContent}
-            errorElement={<p>Error fetching content!</p>}
-          >
-            <EditorContainer editor={editor} isSaving={isSaving} />
-          </Await>
-        </Suspense>
-        <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh]">
+        <div style={{ maxWidth: 750 }}>
+          <Suspense fallback={"loading"}>
+            <Await
+              resolve={data.textContent}
+              errorElement={<p>Error fetching content!</p>}
+            >
+              <EditorContainer editor={editor} isSaving={isSaving} />
+              <div />
+            </Await>
+          </Suspense>
+        </div>
+        <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh] mt-4">
           {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected?.id) &&
           (!isSuggestionAtBubble || suggestionSelected?.id) ? (
