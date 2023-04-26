@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
 import { timeAgo } from "~/utility/getFormatedDate";
+import { useDetectClickOutside } from "react-detect-click-outside";
 import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
 type SuggestType = {
@@ -38,8 +39,11 @@ export default function Suggestion({
     : false;
   const [effect, setEffect] = useState(false);
   const [openComment, setOpenComment] = useState(false);
+  const [openEditMenu, setOpenEditMenu] = useState(false);
   const [commentText, setCommentText] = useState("");
-
+  const ref = useDetectClickOutside({
+    onTriggered: () => setOpenEditMenu(false),
+  });
   let likedByMe = data.user
     ? suggest.likedBy.some((l) => l.username === data.user.username)
     : false;
@@ -129,8 +133,8 @@ export default function Suggestion({
       key={suggest.id}
       className={`${deleteFetcher.formData && "hidden"} p-3 `}
     >
-      <div className="flex justify-between mb-2">
-        <div className="flex gap-3">
+      <div className="relative flex justify-between mb-2">
+        <div className="  flex gap-3">
           <img
             className="w-6 h-6 rounded-full"
             src={suggest.user.avatarUrl}
@@ -139,10 +143,66 @@ export default function Suggestion({
           <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
             {suggest.user.name}
           </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            <time pubdate datetime="2022-06-23" title="June 23rd, 2022">
+              {time}
+            </time>
+          </p>
         </div>
-        <p className="flex-1 text-right text-sm leading-tight text-gray-500 dark:text-gray-200">
-          {time}
-        </p>
+        <button
+          id="dropdownComment4Button"
+          data-dropdown-toggle="dropdownComment4"
+          className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          type="button"
+          onClick={() => setOpenEditMenu((p) => !p)}
+        >
+          <svg
+            className="w-5 h-5"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+          </svg>
+        </button>
+
+        <div
+          ref={ref}
+          className={`${
+            openEditMenu ? "absolute" : "hidden"
+          } right-0 top-1.5 z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600`}
+        >
+          <ul
+            className="py-1 text-sm text-gray-700 dark:text-gray-200"
+            aria-labelledby="dropdownMenuIconHorizontalButton"
+          >
+            <li>
+              <a
+                href="#"
+                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                Edit
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                Remove
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                Report
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className=" w-full text-base leading-normal text-black mb-3">
         <span className="font-bold text-sm">Replace :</span>
