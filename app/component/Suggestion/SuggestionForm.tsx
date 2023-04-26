@@ -17,10 +17,15 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
   const data = useLoaderData();
   let user = data.user;
   const [suggestionInput, setSuggestionInput] = useState("");
+  const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
   const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
   const setOpenSuggestion = useSetRecoilState(openSuggestionState);
   const handleSuggestionSubmit = async () => {
+    if (suggestionInput === "") {
+      setError("suggestion cannot be empty");
+      return null;
+    }
     const { state } = editor;
     const { from, to } = state.selection;
     const originalText = state.doc.textBetween(from, to, " ");
@@ -53,6 +58,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
         id: id,
         original: originalText,
       });
+      setError(null);
       setSuggestionInput("");
     }
   };
@@ -99,6 +105,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
         rows={1}
         onChange={(e) => setSuggestionInput(e.target.value)}
       />
+      {error && <div className="text-red-400">{error}</div>}
       <div className="flex justify-end mt-3 gap-2">
         <Button
           disabled={addSuggestion.state !== "idle"}

@@ -33,7 +33,7 @@ function Posts({ editor, posts }: PostPropsType) {
 
   useEffect(() => {
     setPostList(posts);
-  }, [posts.length]);
+  }, [posts]);
   if (!posts && !posts?.length) return null;
   const filteredPost = useRecoilValue(filteredValue);
 

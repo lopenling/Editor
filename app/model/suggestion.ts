@@ -63,7 +63,7 @@ export async function createSuggestion({
   }
 }
 
-//update like
+//update
 
 export async function updateSuggestionLike(
   id: string,
@@ -115,7 +115,25 @@ export async function findSuggestionByUserLiked(id: string, userId: string) {
     throw new Error("could not find suggestion by userliked" + e.message);
   }
 }
-//delete post
+
+export async function updateSuggestionContent(id: string, newValue: string) {
+  try {
+    console.log(id);
+    let response = await db.suggestion.update({
+      where: {
+        id,
+      },
+      data: {
+        newValue,
+      },
+    });
+    return response;
+  } catch (e) {
+    throw new Error("update suggestion like error: " + e.message);
+  }
+}
+
+//delete suggestion
 export async function deleteSuggestion(id: string) {
   try {
     let data = await db.suggestion.delete({

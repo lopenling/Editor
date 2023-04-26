@@ -61,7 +61,7 @@ model Suggestion {
 model SuggestionComment {
   id           Int        @id @default(autoincrement())
   text         String
-  suggestion   Suggestion @relation(fields: [suggestionId], references: [id])
+  suggestion   Suggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
   suggestionId String
   author       User       @relation(fields: [userId], references: [id])
   userId       String

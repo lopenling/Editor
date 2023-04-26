@@ -50,7 +50,7 @@ function Post({
     useRecoilState(selectedPostThread);
   const isSelected = selectedThreadId.id === threadId;
   let likedByMe = user
-    ? likedBy.some((l) => l.username === user.username)
+    ? likedBy.some((l) => l.username == user.username)
     : false;
   let likeInFetcher = likeFetcher?.formData?.get("like");
   const handleSelectPost = useCallback(
@@ -64,11 +64,11 @@ function Post({
   let likeCount = likeFetcher.data ? likeFetcher.data?.length : likedBy.length;
   if (likeInFetcher === "true") {
     likedByMe = true;
-    if (likeFetcher.type === "actionSubmission") likeCount++;
+    if (likeFetcher.state === "submitting") likeCount++;
   }
   if (likeInFetcher === "false") {
     likedByMe = false;
-    if (likeFetcher.type === "actionSubmission") likeCount--;
+    if (likeFetcher.state === "submitting") likeCount--;
   }
   function handleLikeClick() {
     setEffect(true);

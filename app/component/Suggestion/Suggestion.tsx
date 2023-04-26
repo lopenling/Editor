@@ -20,7 +20,7 @@ type SuggestType = {
   SuggestionComment: [];
 };
 type SuggestionProps = {
-  editor: Editor | null;
+  editor: Editor;
   suggest: SuggestType;
   optimistic: boolean;
 };
@@ -32,15 +32,16 @@ export default function Suggestion({
 }: SuggestionProps) {
   const likeFetcher = useFetcher();
   const deleteFetcher = useFetcher();
+  const editFetcher = useFetcher();
   const data = useLoaderData();
   const user = data.user;
   let allowReplace = user
     ? user.admin === "true" || data.text.userId == user.id
     : false;
   const [effect, setEffect] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
-  const [commentText, setCommentText] = useState("");
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
@@ -54,13 +55,13 @@ export default function Suggestion({
     : suggest.likedBy.length;
   if (likeInFetcher === "true") {
     likedByMe = true;
-    if (likeFetcher.type === "actionSubmission") likeCount++;
+    if (likeFetcher.state === "submitting") likeCount++;
   }
   if (likeInFetcher === "false") {
     likedByMe = false;
-    if (likeFetcher.type === "actionSubmission") likeCount--;
+    if (likeFetcher.state === "submitting") likeCount--;
   }
-  const handleLike = (id) => {
+  const handleLike = (id: string) => {
     setEffect(true);
 
     likeFetcher.submit(
@@ -93,7 +94,7 @@ export default function Suggestion({
     }
   }
 
-  function deleteSuggestion(id) {
+  function deleteSuggestion(id: string) {
     let decision = confirm("do you want to delete the post");
     if (decision) {
       deleteFetcher.submit(
@@ -110,24 +111,11 @@ export default function Suggestion({
     }
   }
   if (deleteFetcher.data) {
-    if (deleteFetcher.data?.remain?.length === 0) {
+    if (deleteFetcher.data?.remain === 0) {
       editor?.commands.unsetSuggestion();
     }
   }
-  const postCommentFetcher = useFetcher();
-  function postComment() {
-    postCommentFetcher.submit(
-      {
-        id: suggest.id,
-        commentContent: commentText,
-      },
-      {
-        method: "POST",
-        action: "/api/suggestion/comment",
-      }
-    );
-    setCommentText("");
-  }
+
   return (
     <div
       key={suggest.id}
@@ -143,16 +131,10 @@ export default function Suggestion({
           <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
             {suggest.user.name}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            <time pubdate datetime="2022-06-23" title="June 23rd, 2022">
-              {time}
-            </time>
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{time}</p>
         </div>
         <button
-          id="dropdownComment4Button"
-          data-dropdown-toggle="dropdownComment4"
-          className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          className="inline-flex items-center text-sm font-medium text-center text-gray-400 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           type="button"
           onClick={() => setOpenEditMenu((p) => !p)}
         >
@@ -178,28 +160,27 @@ export default function Suggestion({
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
             <li>
-              <a
-                href="#"
-                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              <div
+                onClick={() => setOpenEdit(true)}
+                className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               >
                 Edit
-              </a>
+              </div>
             </li>
+            {data.user && data.user.username === suggest.user.username && (
+              <li>
+                <div
+                  onClick={() => deleteSuggestion(suggest.id)}
+                  className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Remove
+                </div>
+              </li>
+            )}
             <li>
-              <a
-                href="#"
-                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Remove
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
+              <div className="block py-2 cursor-pointer px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                 Report
-              </a>
+              </div>
             </li>
           </ul>
         </div>
@@ -215,14 +196,36 @@ export default function Suggestion({
           "{suggest.oldValue}"
         </span>
         <span className="font-bold text-sm"> with :</span>
-        <span
-          onClick={() => replaceHandler(suggest.newValue)}
-          className={`text-gray-500 dark:text-gray-100 ${
-            allowReplace && "cursor-pointer"
-          }`}
-        >
-          "{suggest.newValue}"
-        </span>
+        {openEdit ? (
+          <editFetcher.Form
+            className="flex gap-2"
+            action="/api/suggestion"
+            method="PATCH"
+            onSubmit={() => setOpenEdit(false)}
+          >
+            <input
+              name="newValue"
+              type="text"
+              className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              defaultValue={suggest.newValue}
+            />
+            <input name="id" type="text" value={suggest.id} hidden />
+            <Button
+              label={editFetcher.state === "submitting" ? "saving" : "confirm"}
+              type="submit"
+            />
+            <Button label="cancel" type="reset" />
+          </editFetcher.Form>
+        ) : (
+          <span
+            onClick={() => replaceHandler(suggest.newValue)}
+            className={`text-gray-500 dark:text-gray-100 ${
+              allowReplace && "cursor-pointer"
+            }`}
+          >
+            "{suggest.newValue}"
+          </span>
+        )}
       </div>
       <div className="flex justify-between">
         {optimistic ? (
@@ -255,42 +258,6 @@ export default function Suggestion({
                   {likeCount > 0 && likeCount}
                 </div>
               </button>
-              <div
-                onClick={() => console.log(true)}
-                className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-blue-400"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M13.0001 6C13.6092 6.00002 14.2039 5.8146 14.7051 5.4684C15.2064 5.1222 15.5903 4.63162 15.8059 4.06191C16.0215 3.49219 16.0586 2.87034 15.9122 2.27903C15.7658 1.68773 15.4429 1.15501 14.9864 0.7517C14.5299 0.348392 13.9614 0.0936137 13.3565 0.0212462C12.7517 -0.0511213 12.1392 0.062351 11.6004 0.346574C11.0616 0.630796 10.6221 1.0723 10.3404 1.61237C10.0586 2.15245 9.94792 2.7655 10.0231 3.37L5.08305 5.84C4.65928 5.43135 4.12465 5.15642 3.54574 5.04944C2.96684 4.94247 2.36926 5.00819 1.82744 5.2384C1.28561 5.46862 0.823499 5.85316 0.498659 6.34413C0.173819 6.8351 0.000610352 7.4108 0.000610352 7.9995C0.000610352 8.5882 0.173819 9.1639 0.498659 9.65487C0.823499 10.1458 1.28561 10.5304 1.82744 10.7606C2.36926 10.9908 2.96684 11.0565 3.54574 10.9496C4.12465 10.8426 4.65928 10.5676 5.08305 10.159L10.0231 12.629C9.93555 13.3312 10.0991 14.0418 10.4848 14.6351C10.8706 15.2284 11.4536 15.6663 12.1309 15.8713C12.8082 16.0763 13.5362 16.0353 14.1862 15.7555C14.8362 15.4757 15.3664 14.9751 15.683 14.3422C15.9996 13.7093 16.0823 12.9849 15.9165 12.2969C15.7506 11.6089 15.3469 11.0017 14.7767 10.5826C14.2065 10.1635 13.5065 9.9595 12.8004 10.0066C12.0943 10.0537 11.4276 10.3489 10.9181 10.84L5.97805 8.37C6.00832 8.12426 6.00832 7.87574 5.97805 7.63L10.9181 5.16C11.4561 5.68 12.1901 6 13.0001 6Z"
-                    className="fill-inherit"
-                  />
-                </svg>
-              </div>
-              {data.user && data.user.username === suggest.user.username && (
-                <div
-                  onClick={() => deleteSuggestion(suggest.id)}
-                  className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
-                >
-                  <svg
-                    width="14"
-                    height="16"
-                    viewBox="0 0 14 16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M6 0C5.81434 9.91486e-05 5.63237 0.0518831 5.47447 0.149552C5.31658 0.247222 5.18899 0.386919 5.106 0.553L4.382 2H1C0.734784 2 0.48043 2.10536 0.292893 2.29289C0.105357 2.48043 0 2.73478 0 3C0 3.26522 0.105357 3.51957 0.292893 3.70711C0.48043 3.89464 0.734784 4 1 4V14C1 14.5304 1.21071 15.0391 1.58579 15.4142C1.96086 15.7893 2.46957 16 3 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V4C13.2652 4 13.5196 3.89464 13.7071 3.70711C13.8946 3.51957 14 3.26522 14 3C14 2.73478 13.8946 2.48043 13.7071 2.29289C13.5196 2.10536 13.2652 2 13 2H9.618L8.894 0.553C8.81101 0.386919 8.68342 0.247222 8.52553 0.149552C8.36763 0.0518831 8.18566 9.91486e-05 8 0H6ZM4 6C4 5.73478 4.10536 5.48043 4.29289 5.29289C4.48043 5.10536 4.73478 5 5 5C5.26522 5 5.51957 5.10536 5.70711 5.29289C5.89464 5.48043 6 5.73478 6 6V12C6 12.2652 5.89464 12.5196 5.70711 12.7071C5.51957 12.8946 5.26522 13 5 13C4.73478 13 4.48043 12.8946 4.29289 12.7071C4.10536 12.5196 4 12.2652 4 12V6ZM9 5C8.73478 5 8.48043 5.10536 8.29289 5.29289C8.10536 5.48043 8 5.73478 8 6V12C8 12.2652 8.10536 12.5196 8.29289 12.7071C8.48043 12.8946 8.73478 13 9 13C9.26522 13 9.51957 12.8946 9.70711 12.7071C9.89464 12.5196 10 12.2652 10 12V6C10 5.73478 9.89464 5.48043 9.70711 5.29289C9.51957 5.10536 9.26522 5 9 5Z"
-                      fill="inherit"
-                    />
-                  </svg>
-                </div>
-              )}
             </div>
             <div
               onClick={() => setOpenComment((prev) => !prev)}
@@ -314,59 +281,85 @@ export default function Suggestion({
           </>
         )}
       </div>
-
       {openComment && (
-        <div className="flex justify-between pt-1 gap-2 bg-gray-100  rounded">
-          <div className="flex flex-col gap-2 flex-1 ">
-            <TextArea
-              onChange={(e) => setCommentText(e.target.value)}
-              placeholder="comment on suggestion"
-              value={commentText}
-              rows={1}
-            />
-            <div className="flex justify-end gap-2">
-              <Button
-                label={
-                  postCommentFetcher.state === "submitting"
-                    ? "commenting"
-                    : "comment"
-                }
-                type="submit"
-                onClick={postComment}
-                disabled={!!postCommentFetcher.formData}
-              />
-              <Button
-                label="cancel"
-                type="reset"
-                onClick={() => setOpenComment(false)}
-              />
-            </div>
-            {suggest.SuggestionComment.length > 0 &&
-              suggest.SuggestionComment.map((comment, index) => (
-                <div
-                  className="p-2 text-base  rounded-lg dark:bg-gray-700"
-                  key={comment.id}
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="flex items-center">
-                      <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-                        <img
-                          className="mr-2 w-6 h-6 rounded-full"
-                          src={comment.author.avatarUrl}
-                          alt="Jese Leos"
-                        />
-                        {comment.author.name}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    {comment.text}
+        <CommentSection
+          id={suggest.id}
+          setOpenComment={setOpenComment}
+          comments={suggest.SuggestionComment}
+        />
+      )}
+    </div>
+  );
+}
+type CommentProps = {
+  id: string;
+  setOpenComment: (value: boolean) => void;
+  comments: [];
+};
+function CommentSection({ id, setOpenComment, comments }: CommentProps) {
+  const [commentText, setCommentText] = useState("");
+  const postCommentFetcher = useFetcher();
+  function postComment() {
+    postCommentFetcher.submit(
+      {
+        id,
+        commentContent: commentText,
+      },
+      {
+        method: "POST",
+        action: "/api/suggestion/comment",
+      }
+    );
+    setCommentText("");
+  }
+  return (
+    <div className="flex justify-between pt-1 gap-2 bg-gray-100  rounded">
+      <div className="flex flex-col gap-2 flex-1 ">
+        <TextArea
+          onChange={(e) => setCommentText(e.target.value)}
+          placeholder="comment on suggestion"
+          value={commentText}
+          rows={1}
+        />
+        <div className="flex justify-end gap-2">
+          <Button
+            label={
+              postCommentFetcher.state === "submitting"
+                ? "commenting"
+                : "comment"
+            }
+            type="submit"
+            onClick={postComment}
+            disabled={!!postCommentFetcher.formData}
+          />
+          <Button
+            label="cancel"
+            type="reset"
+            onClick={() => setOpenComment(false)}
+          />
+        </div>
+        {comments.length > 0 &&
+          comments.map((comment, index) => (
+            <div
+              className="p-2 text-base  rounded-lg dark:bg-gray-700"
+              key={comment.id}
+            >
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center">
+                  <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                    <img
+                      className="mr-2 w-6 h-6 rounded-full"
+                      src={comment.author.avatarUrl}
+                      alt="author image"
+                    />
+                    {comment.author.name}
                   </p>
                 </div>
-              ))}
-          </div>
-        </div>
-      )}
+              </div>
+              <p className="text-gray-500 dark:text-gray-400">{comment.text}</p>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

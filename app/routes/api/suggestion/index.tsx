@@ -3,8 +3,9 @@ import { json } from "react-router";
 import {
   createSuggestion,
   deleteSuggestion,
-  findAllSuggestionByTextId,
+  findAllSuggestionBythreadId,
   getSuggestionWithThreadId,
+  updateSuggestionContent,
 } from "~/model/suggestion";
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -38,11 +39,17 @@ export let action: ActionFunction = async ({ request }) => {
   if (request.method === "DELETE") {
     let id = Obj.id as string;
     let res = await deleteSuggestion(id);
-    let remainingdata = await findAllSuggestionByTextId(res.textId);
+    let remainingdata = await getSuggestionWithThreadId(res.threadId);
     return {
       deleted: res,
-      remain: remainingdata,
+      remain: remainingdata?.length,
     };
+  }
+  if (request.method === "PATCH") {
+    let id = Obj.id as string;
+    let newValue = Obj.newValue as string;
+    let res = await updateSuggestionContent(id, newValue);
+    return res;
   }
   return null;
 };
