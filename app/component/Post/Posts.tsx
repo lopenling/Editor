@@ -1,5 +1,5 @@
 import { Editor } from "@tiptap/react";
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import Filter from "./Filter";
 import Post from "./Post";
@@ -73,4 +73,4 @@ function Posts({ editor, posts }: PostPropsType) {
   );
 }
 
-export default Posts;
+export default memo(Posts);

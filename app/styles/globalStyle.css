@@ -102,7 +102,6 @@ nav > div {
 }
 .textEditorContainer {
   font-family: "Monlam", serif;
-  min-height: 40vh;
   line-height: 1.5;
 }
 button,

@@ -4,7 +4,12 @@ export const theme = atom({
   key: "theme-tailwind",
   default: false,
 });
+//permission
 
+export const audioPermission = atom({
+  key: "audioPermission",
+  default: false,
+});
 //textName
 
 export const textName = atom({

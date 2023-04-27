@@ -1,4 +1,4 @@
-import { useState, useId, useEffect } from "react";
+import { useState, useId, useEffect, memo } from "react";
 import { useFetcher } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { filterDataState, openFilterState } from "~/states";
@@ -7,8 +7,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { Modal } from "flowbite-react";
 import { Button } from "../UI/Button";
 type FilterProps = {};
-
-export default function Filter({}: FilterProps) {
+function Filter({}: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);
   const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
   const [userInput, setUserInput] = useState("");
@@ -279,3 +278,5 @@ export default function Filter({}: FilterProps) {
     </Modal>
   );
 }
+
+export default memo(Filter);

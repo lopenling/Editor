@@ -48,7 +48,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
   const suggestion = await findAllSuggestionByTextId(textId);
-  const text = await findTextByTextId(textId, true);
+  const text = await findTextByTextId(textId, false);
   const textContent = getTextContent(textId);
   if (!textId) throw new Error("not valid textId");
 

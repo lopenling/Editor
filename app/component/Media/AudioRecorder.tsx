@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { useFetcher, useOutletContext, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useRecoilState } from "recoil";
-import { selectedTextOnEditor } from "~/states";
+import { audioPermission, selectedTextOnEditor } from "~/states";
 
 const AudioRecorder = ({ setAudio }) => {
   const audioFetcher = useFetcher();
-  const [permission, setPermission] = useState(false);
+  const [permission, setPermission] = useRecoilState(audioPermission);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
@@ -32,6 +32,7 @@ const AudioRecorder = ({ setAudio }) => {
   let localAudioChunks = [];
   const startRecording = async () => {
     setRecordingStatus("recording");
+    if (!permission) await getMicrophonePermission();
     //create new Media recorder instance using the stream
     const media = new MediaRecorder(stream);
     //set the MediaRecorder instance to the mediaRecorder ref

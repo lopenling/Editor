@@ -3,10 +3,10 @@ import { json } from "react-router";
 import {
   createSuggestion,
   deleteSuggestion,
-  findAllSuggestionBythreadId,
   getSuggestionWithThreadId,
   updateSuggestionContent,
 } from "~/model/suggestion";
+import { uploadAudio } from "~/services/uploadAudio";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const suggestionId =
@@ -23,6 +23,17 @@ export let action: ActionFunction = async ({ request }) => {
     const newValue = Obj.newValue as string;
     const userId = Obj.userId as string;
     const threadId = Obj.threadId as string;
+    const file = Obj.file;
+    let audioUrl = null;
+    if (file) {
+      try {
+        audioUrl = await uploadAudio(formData);
+      } catch (e) {
+        throw new Error(e.message);
+      }
+    } else {
+      audioUrl = "";
+    }
     try {
       let responce = await createSuggestion({
         oldValue,
@@ -30,6 +41,7 @@ export let action: ActionFunction = async ({ request }) => {
         textId,
         userId,
         threadId,
+        audioUrl,
       });
       return { responce };
     } catch (e) {

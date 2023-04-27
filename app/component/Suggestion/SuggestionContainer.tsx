@@ -1,11 +1,11 @@
 import { useRecoilValue } from "recoil";
 import { selectedSuggestionThread } from "~/states";
 import { useLoaderData } from "@remix-run/react";
-
+import { memo } from "react";
 import { Editor } from "@tiptap/react";
 import Suggestion from "./Suggestion";
 
-export default function Suggestions({ editor }: { editor: Editor | null }) {
+function Suggestions({ editor }: { editor: Editor | null }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
   const data = useLoaderData();
 
@@ -27,3 +27,5 @@ export default function Suggestions({ editor }: { editor: Editor | null }) {
     </div>
   );
 }
+
+export default memo(Suggestions);

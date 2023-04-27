@@ -131,13 +131,17 @@ export default function PostContainer() {
           dismissOnClick={false}
         >
           <Dropdown.Item
-            className={isLatestPost ? "bg-green-500 dark:bg-gray-500" : ""}
+            className={
+              isLatestPost ? "bg-green-300 dark:bg-gray-300 text-white " : ""
+            }
             onClick={() => setIsLatestPost(true)}
           >
             Latest
           </Dropdown.Item>
           <Dropdown.Item
-            className={!isLatestPost ? "bg-green-500 dark:bg-gray-500" : ""}
+            className={
+              !isLatestPost ? "bg-green-300 dark:bg-gray-300 text-white " : ""
+            }
             onClick={() => setIsLatestPost(false)}
           >
             Earliest

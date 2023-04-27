@@ -1,6 +1,6 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import searchFullText from "~/utility/searchFullText";
 import { FaSearch } from "react-icons/fa";
 type locationType = {
@@ -10,7 +10,7 @@ type locationType = {
   index: number;
   searchString: string;
 } | null;
-export default function SearchString({ editor }: { editor: Editor | null }) {
+function SearchString({ editor }: { editor: Editor | null }) {
   const data = useLoaderData();
   const [index, setIndex] = useState(1);
   const [selectedSearch, setSelectedSearch] = useState<locationType>(null);
@@ -171,3 +171,5 @@ export default function SearchString({ editor }: { editor: Editor | null }) {
     </div>
   );
 }
+
+export default memo(SearchString);

@@ -2,8 +2,7 @@ import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
 import { Navbar, Avatar, Button, Select } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
-import { FaSearch } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
@@ -43,7 +42,7 @@ type HeaderProps = {
   user: any;
   editor: Editor | null;
 };
-export default function Header({ user, editor }: HeaderProps) {
+function Header({ user, editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation = uselitteraTranlation();
@@ -370,3 +369,5 @@ export function Translation() {
     </div>
   );
 }
+
+export default memo(Header);

@@ -34,7 +34,7 @@ export const meta: MetaFunction = () => ({
 });
 export const loader: LoaderFunction = async ({ request }) => {
   let userSession = await getUserSession(request);
-  if (!userSession) return { userSession };
+  if (!userSession) return { user: null };
   let user = await findUserByUsername(userSession.username);
   return { user };
 };

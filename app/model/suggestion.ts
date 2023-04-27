@@ -46,6 +46,7 @@ export async function createSuggestion({
   textId,
   userId,
   threadId,
+  audioUrl,
 }) {
   try {
     let data = await db.suggestion.create({
@@ -55,6 +56,7 @@ export async function createSuggestion({
         textId: parseInt(textId),
         userId,
         threadId,
+        audioUrl,
       },
     });
     return data;
