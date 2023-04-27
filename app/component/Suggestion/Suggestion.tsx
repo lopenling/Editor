@@ -232,9 +232,11 @@ export default function Suggestion({
           </span>
         )}
       </div>
-      {suggest?.audioUrl && suggest.audioUrl !== "" && (
-        <AudioPlayer src={suggest?.audioUrl} />
-      )}
+      <div className="mb-2">
+        {suggest?.audioUrl && suggest.audioUrl !== "" && (
+          <AudioPlayer src={suggest?.audioUrl} />
+        )}
+      </div>
       <div className="flex justify-between">
         {optimistic ? (
           <div className="text-sm text-light ">saving</div>
@@ -269,7 +271,7 @@ export default function Suggestion({
             </div>
             <div
               onClick={() => setOpenComment((prev) => !prev)}
-              className={`flex items-start justify-start space-x-1.5 p-2 rounded-t-lg ${
+              className={`flex items-start justify-start space-x-1.5  rounded-t-lg ${
                 openComment && "bg-gray-100"
               }`}
             >
@@ -341,7 +343,7 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
         />
         {audio.tempUrl !== "" ? (
           <>
-            <div className="w-full flex items-center gap-3 mt-2">
+            <div className="w-full flex items-center gap-3 my-2">
               <AudioPlayer src={audio.tempUrl} />
               <div onClick={() => setAudio({ tempUrl: "", blob: null })}>
                 <svg

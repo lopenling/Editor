@@ -55,7 +55,8 @@
     "remix-utils": "^6.0.0",
     "tiptap-extension-font-size": "^1.2.0",
     "tiptap-extensions": "^1.35.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "wavesurfer.js": "^6.6.3"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.15.0",
