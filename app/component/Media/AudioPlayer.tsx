@@ -109,7 +109,7 @@ const AudioPlayer = ({ src }) => {
   );
 };
 
-function formatTime(seconds) {
+export function formatTime(seconds) {
   if (!seconds) return `00:00:00`;
   const date = new Date(seconds * 1000);
   const hh = date.getUTCHours().toString().padStart(2, "0");

@@ -3,7 +3,7 @@ import { useFetcher, useOutletContext, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useRecoilState } from "recoil";
 import { audioPermission, selectedTextOnEditor } from "~/states";
-
+import { formatTime } from "./AudioPlayer";
 const AudioRecorder = ({ setAudio }) => {
   const [permission, setPermission] = useRecoilState(audioPermission);
   const mediaRecorder = useRef(null);
@@ -22,18 +22,7 @@ const AudioRecorder = ({ setAudio }) => {
       clearInterval(intervalId);
     };
   }, [recordingStatus]);
-  useEffect(() => {
-    async function hasAudioPermission() {
-      if (!navigator.permissions || !navigator.permissions.query) {
-        return true; // Permissions API not supported
-      }
 
-      const permissionStatus = await navigator.permissions.query({
-        name: "push",
-      });
-      return permissionStatus.state === "granted";
-    }
-  }, []);
   // const mimeType = "audio/wav";
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -94,6 +83,7 @@ const AudioRecorder = ({ setAudio }) => {
       const audioBlob = new Blob(audioChunks);
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio({ blob: audioBlob, tempUrl: audioUrl });
+
       //creates a playable URL from the blob file.
       setAudioChunks([]);
     };
@@ -145,7 +135,7 @@ const AudioRecorder = ({ setAudio }) => {
                   className="fill-red-700"
                 />
               </svg>
-              <div>{timer} recording...</div>
+              <div>{formatTime(timer)} recording...</div>
               <button onClick={stopRecording} type="button">
                 <svg
                   width="20"

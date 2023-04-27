@@ -7,33 +7,32 @@ import {
   updateSuggestionContent,
 } from "~/model/suggestion";
 import { uploadAudio } from "~/services/uploadAudio";
-
+import type { ActionArgs, UploadHandler } from "@remix-run/node";
+import {
+  unstable_composeUploadHandlers as composeUploadHandlers,
+  unstable_createMemoryUploadHandler as createMemoryUploadHandler,
+  unstable_parseMultipartFormData as parseMultipartFormData,
+} from "@remix-run/node";
 export let loader: LoaderFunction = async ({ request }) => {
   const suggestionId =
     new URL(request.url).searchParams.get("suggestionId") ?? "";
   const suggestion = await getSuggestionWithThreadId(suggestionId);
   return json(suggestion);
 };
-export let action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  let Obj = Object.fromEntries(formData);
+export let action: ActionFunction = async ({ request }: ActionArgs) => {
   if (request.method === "POST") {
+    const uploadHandler: UploadHandler = composeUploadHandlers(
+      uploadAudio,
+      createMemoryUploadHandler()
+    );
+    const formData = await parseMultipartFormData(request, uploadHandler);
+    let Obj = Object.fromEntries(formData);
     const oldValue = Obj.oldValue as string;
     const textId = Obj.textId as string;
     const newValue = Obj.newValue as string;
     const userId = Obj.userId as string;
     const threadId = Obj.threadId as string;
-    const file = Obj.file;
-    let audioUrl = null;
-    if (file) {
-      try {
-        audioUrl = await uploadAudio(formData);
-      } catch (e) {
-        throw new Error(e.message);
-      }
-    } else {
-      audioUrl = "";
-    }
+    const filepath = Obj.file as string;
     try {
       let responce = await createSuggestion({
         oldValue,
@@ -41,7 +40,7 @@ export let action: ActionFunction = async ({ request }) => {
         textId,
         userId,
         threadId,
-        audioUrl,
+        audioUrl: filepath,
       });
       return { responce };
     } catch (e) {
@@ -49,6 +48,8 @@ export let action: ActionFunction = async ({ request }) => {
     }
   }
   if (request.method === "DELETE") {
+    let formData = await request.formData();
+    let Obj = Object.fromEntries(formData);
     let id = Obj.id as string;
     let res = await deleteSuggestion(id);
     let remainingdata = await getSuggestionWithThreadId(res.threadId);

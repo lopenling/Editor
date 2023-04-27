@@ -1,42 +1,45 @@
-import { json } from "@remix-run/node";
+import { UploadHandler, writeAsyncIterableToWritable } from "@remix-run/node";
 import * as AWS from "aws-sdk";
-import { S3 } from "aws-sdk";
-import { Readable } from "stream";
-import { getUserSession } from "~/services/session.server";
-
+import { PassThrough } from "stream";
 // Replace these values with your own
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID_PRODUCTION;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY_PRODUCTION;
-const BUCKET_NAME = process.env.BUCKET_NAME_PRODUCTION;
+const BUCKET_NAME = process.env.BUCKET_NAME_PRODUCTION ?? "";
 
 // Set up the S3 client with your AWS credentials
-const s3 = new AWS.S3({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
-});
 
-export let uploadAudio = async (formData) => {
-  const file = formData.get("file");
-
-  const name = file?._name;
-  if (!file) {
-    return json({ error: "No file found" }, { status: 400 });
-  }
-
-  const KEY_NAME = `comments/audio/${name}`;
-
-  const uploadParams: S3.Types.PutObjectRequest = {
-    Bucket: BUCKET_NAME,
-    Key: KEY_NAME,
-    Body: Readable.from(file.stream()),
+const uploadStream = ({ Key }: Pick<AWS.S3.Types.PutObjectRequest, "Key">) => {
+  const s3 = new AWS.S3({
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  });
+  const pass = new PassThrough();
+  const KEY_NAME = `comments/audio/${Key}`;
+  return {
+    writeStream: pass,
+    promise: s3
+      .upload({ Bucket: BUCKET_NAME, Key: KEY_NAME, Body: pass })
+      .on("httpUploadProgress", function (progress) {
+        console.log("Uploaded :: " + (progress.loaded * 100) / progress.total) +
+          "%";
+      })
+      .promise(),
   };
+};
 
-  try {
-    await s3.upload(uploadParams).promise();
-    let url = `https://lopenling.s3.amazonaws.com/${KEY_NAME}`;
+export async function uploadStreamToS3(data: any, filename: string) {
+  const stream = uploadStream({
+    Key: filename,
+  });
+  await writeAsyncIterableToWritable(data, stream.writeStream);
+  const file = await stream.promise;
+  return file.Location;
+}
 
-    return url;
-  } catch (error) {
-    throw new Error("Error uploading file");
+export const uploadAudio: UploadHandler = async ({ name, filename, data }) => {
+  if (name !== "file") {
+    return undefined;
   }
+  const uploadedFileLocation = await uploadStreamToS3(data, filename!);
+  return uploadedFileLocation;
 };
