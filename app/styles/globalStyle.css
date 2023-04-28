@@ -51,19 +51,26 @@ main {
   scroll-padding-top: 100px;
 }
 /* Track */
-::-webkit-scrollbar-track {
+*::-webkit-scrollbar {
   width: 10px;
-  border: 1px solid #d9d9d9;
 }
+*::-webkit-scrollbar-track {
+  border: 1px solid #d9d9d9;
+  width: 5px;
+  border-radius: 5px;
+}
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #d9d9d9;
-  width: 10px;
+  border-radius: 14px;
+  width: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   width: 10px;
+  background: #a1a1a1;
 }
 nav > div {
   height: 100%;

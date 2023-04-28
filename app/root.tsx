@@ -22,7 +22,6 @@ import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { theme } from "./states";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import Audiostyle from "react-h5-audio-player/lib/styles.css";
 import flagsmith from "flagsmith";
 import { FlagsmithProvider } from "flagsmith/react";
 import { findUserByUsername } from "./model/user";
@@ -48,7 +47,6 @@ export function links() {
     },
     { rel: "stylesheet", href: tailwindStyle, as: "style" },
     { rel: "stylesheet", href: globalStyle, as: "style" },
-    { rel: "stylesheet", href: Audiostyle, as: "style" },
   ];
 }
 
@@ -109,7 +107,7 @@ function App() {
         />
         <Links />
       </head>
-      <body className="dark:bg-gray-600 dark:text-white">
+      <body className="dark:bg-gray-600 dark:text-white  scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           <AnimatePresence mode="wait" initial={false}>
             {routeChanged ? <Loading /> : <Outlet context={data.user} />}

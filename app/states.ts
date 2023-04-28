@@ -48,13 +48,13 @@ export const openSuggestionState = atom({
 export const selectedSuggestionThread = atom({
   key: "selectedSuggestionThread",
   default: {
-    id: null,
+    id: "",
   },
 });
 export const selectedPostThread = atom({
   key: "selectedPostThread",
   default: {
-    id: null,
+    id: "",
   },
 });
 //share State
