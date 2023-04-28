@@ -161,20 +161,20 @@ function Filter({}: FilterProps) {
                   </svg>
                   <searchUser.Form
                     method="get"
-                    action="/api/search-user"
+                    action="/api/user/search"
                     className="flex w-full"
                   >
                     <input
                       type="text"
-                      name="username"
+                      name="filterUser"
                       value={userInput}
                       onChange={(e) => {
                         setUserInput(e.target.value);
                         searchUser.submit(
                           {
-                            username: e.target.value,
+                            filterUser: e.target.value,
                           },
-                          { method: "get", action: "/api/search-user" }
+                          { method: "get", action: "/api/user/search" }
                         );
                       }}
                       className="h-full flex-1 border-none border-transparent bg-transparent text-sm leading-none text-gray-900 outline-none focus:border-none focus:border-transparent focus:outline-none focus:ring-0"
@@ -203,9 +203,6 @@ function Filter({}: FilterProps) {
                 !isFetchingUser && (
                   <div className="flex w-full flex-col items-center justify-start space-y-3 rounded-lg border border-gray-200  p-4 shadow">
                     {searchUser.data?.map((user) => {
-                      let avatarUrl = (
-                        "http://lopenling.org" + user?.avatar
-                      ).replace("{size}", "30");
                       return (
                         <div
                           className="w-full cursor-pointer"
@@ -214,7 +211,7 @@ function Filter({}: FilterProps) {
                           <div className="inline-flex w-full items-center justify-start space-x-2 rounded-lg">
                             <img
                               className="w-6 h-6 rounded-full"
-                              src={avatarUrl}
+                              src={user?.avatarUrl}
                               alt="Extra small avatar"
                             ></img>
                             <div

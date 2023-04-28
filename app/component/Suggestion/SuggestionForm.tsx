@@ -7,7 +7,7 @@ import { Editor } from "@tiptap/react";
 import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
 import Suggestion from "./Suggestion";
-import useFetcherWithPromise from "~/utility/useFetcher";
+import useFetcherWithPromise from "~/utility/useFetcherPromise";
 import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 

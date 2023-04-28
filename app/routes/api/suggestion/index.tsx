@@ -6,7 +6,7 @@ import {
   getSuggestionWithThreadId,
   updateSuggestionContent,
 } from "~/model/suggestion";
-import { uploadAudio } from "~/services/uploadAudio";
+import { uploadAudio } from "~/services/uploadAudio.server";
 import type { ActionArgs, UploadHandler } from "@remix-run/node";
 import {
   unstable_composeUploadHandlers as composeUploadHandlers,

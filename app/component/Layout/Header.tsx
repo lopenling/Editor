@@ -57,7 +57,7 @@ function Header({ user, editor }: HeaderProps) {
         theme: !themeSelected ? "dark" : "light",
       },
       {
-        action: "/api/preference/theme",
+        action: "/api/user/preference/theme",
         method: "post",
       }
     );
@@ -89,9 +89,9 @@ function Header({ user, editor }: HeaderProps) {
         {TextNameOnHeader ? (
           <LogoWithTextName textNameValue={textNameValue} />
         ) : (
-          <Navbar.Brand to={"/"} as={NavLink} className="flex items-center">
+          <NavLink to={"/"} prefetch="intent" className="flex items-center">
             <Logo />
-          </Navbar.Brand>
+          </NavLink>
         )}
         <div id="searchTextForm"></div>
         <button

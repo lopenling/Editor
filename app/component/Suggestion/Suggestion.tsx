@@ -72,11 +72,10 @@ export default function Suggestion({
     likeFetcher.submit(
       {
         id,
-        _action: "likeSuggestion",
         userId: data.user.id,
         like: !likedByMe ? "true" : "false",
       },
-      { method: "post", action: "api/like" }
+      { method: "post", action: "api/suggestion/like" }
     );
   };
   let time = timeAgo(suggest.created_at);
@@ -164,23 +163,25 @@ export default function Suggestion({
             className="py-1 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
-            <li>
-              <div
-                onClick={() => setOpenEdit(true)}
-                className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Edit
-              </div>
-            </li>
             {data.user && data.user.username === suggest.user.username && (
-              <li>
-                <div
-                  onClick={() => deleteSuggestion(suggest.id)}
-                  className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Remove
-                </div>
-              </li>
+              <>
+                <li>
+                  <div
+                    onClick={() => setOpenEdit(true)}
+                    className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Edit
+                  </div>
+                </li>
+                <li>
+                  <div
+                    onClick={() => deleteSuggestion(suggest.id)}
+                    className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Remove
+                  </div>
+                </li>
+              </>
             )}
             <li>
               <div className="block py-2 cursor-pointer px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -219,7 +220,11 @@ export default function Suggestion({
               label={editFetcher.state === "submitting" ? "saving" : "confirm"}
               type="submit"
             />
-            <Button label="cancel" type="reset" />
+            <Button
+              label="cancel"
+              type="reset"
+              onClick={() => setOpenEdit(false)}
+            />
           </editFetcher.Form>
         ) : (
           <span
@@ -333,7 +338,7 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
     setAudio({ blob: null, tempUrl: "" });
   }
   return (
-    <div className="flex justify-between pt-1 gap-2 bg-gray-100  rounded">
+    <div className="flex justify-between pt-1 gap-2 bg-gray-100  rounded mt-2">
       <div className="flex flex-col gap-2 flex-1 ">
         <TextArea
           onChange={(e) => setCommentText(e.target.value)}

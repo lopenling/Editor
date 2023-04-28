@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from "uuid";
 import { MAX_CATEGORY_NAME_LENGTH } from "~/constants";
 import { findUserByUsername } from "~/model/user";
 class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
   username: string;
-  category: number;
+  category: string | undefined;
   categoryName: string;
+  origin: string | undefined;
   constructor(username: string = "") {
     if (!process.env.DISCOURSE_API_KEY || !process.env.DISCOURSE_SITE)
       throw new Error("asign api and url  in env");
@@ -103,7 +103,7 @@ class DiscourseApi {
     let post_text = `
 <p>${bodyContentWithLink}</p>
 `;
-    if (audioUrl !== "") {
+    if (audioUrl && audioUrl !== "") {
       post_text = `<p>${bodyContentWithLink}</p><audio controls><source src="${audioUrl}" type="audio/webm"></audio>`;
     }
 
@@ -179,7 +179,7 @@ class DiscourseApi {
       });
       return response.status;
     } catch (e) {
-      console.log(e);
+      throw new Error("cannot delete topic on discourse" + e);
     }
   }
   async uploadFile(formData: any) {
@@ -253,11 +253,11 @@ export async function createThread(
 function addLinktoQuestion(question: string, url: string) {
   return `<a href="${url}" target='_blank'>${question}</a>`;
 }
-// export async function deleteQuestion(userName: string, topicId: number) {
-//   const apiObj: DiscourseApi = new DiscourseApi(userName);
-//   const res = apiObj.deleteTopic(topicId, userName);
-//   return res;
-// }
+export async function deleteDiscourseTopic(userName: string, topicId: number) {
+  const apiObj: DiscourseApi = new DiscourseApi(userName);
+  const res = apiObj.deleteTopic(topicId);
+  return res;
+}
 
 export async function getposts(topicId: number) {
   const apiObj: DiscourseApi = new DiscourseApi();

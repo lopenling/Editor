@@ -194,7 +194,7 @@ export default function () {
         className="container relative lg:mx-auto flex w-full flex-col lg:gap-8 lg:flex-row   "
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
-        <div style={{ maxWidth: 750, flex: 1 }}>
+        <div className="max-w-[750px] flex-1 overflow-hidden">
           <Suspense
             fallback={
               <div className="flex justify-center h-[400px] w-full animate-pulse mt-4">

@@ -127,7 +127,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
             export
           </Button>
         </div>
-        <div className="sticky top-[110px] shadow-textEditor">
+        <div className="sticky top-[110px] shadow-textEditor pt-3">
           {!editor ? (
             <div className="flex justify-center h-[400px] w-full animate-pulse">
               <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>

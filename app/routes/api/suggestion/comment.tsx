@@ -2,7 +2,7 @@ import { ActionFunction } from "@remix-run/server-runtime";
 import { createCommentOnSuggestion } from "~/model/suggestionComment";
 import { getUserSession } from "~/services/session.server";
 
-import { uploadAudio } from "~/services/uploadAudio";
+import { uploadAudio } from "~/services/uploadAudio.server";
 import type { ActionArgs, UploadHandler } from "@remix-run/node";
 import {
   unstable_composeUploadHandlers as composeUploadHandlers,

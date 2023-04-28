@@ -21,7 +21,6 @@ async function getNonce() {
     nonce = session.get("sso_nonce");
   } else {
     nonce = randomString(32);
-    console.log(nonce);
     session.set("sso_nonce", nonce);
   }
   return nonce;

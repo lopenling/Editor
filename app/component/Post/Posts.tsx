@@ -54,6 +54,7 @@ function Posts({ editor, posts }: PostPropsType) {
               <Post
                 key={post.id}
                 id={post.id}
+                isOptimistic={false}
                 creatorUser={post.creatorUser}
                 time={timeAgo(post.created_at)!}
                 postContent={post.content}
@@ -62,7 +63,6 @@ function Posts({ editor, posts }: PostPropsType) {
                 type={post.type}
                 replyCount={post?.replyCount}
                 isSolved={post?.isSolved}
-                isOptimistic={false}
                 threadId={post?.thread_id}
                 audioUrl={post?.audioUrl}
               />

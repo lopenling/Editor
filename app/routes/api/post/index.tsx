@@ -3,14 +3,14 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/server-runtime";
-import { createThread } from "~/services/discourseApi";
+import { createThread, deleteDiscourseTopic } from "~/services/discourseApi";
 import { getUserSession } from "~/services/session.server";
 export const loader: LoaderFunction = () => {
   return redirect("/");
 };
 import { createPost as createPostOnDB, deletePost } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
-import { uploadAudio } from "~/services/uploadAudio";
+import { uploadAudio } from "~/services/uploadAudio.server";
 import {
   unstable_composeUploadHandlers as composeUploadHandlers,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
@@ -23,10 +23,10 @@ export const action: ActionFunction = async ({ request }) => {
     uploadAudio,
     createMemoryUploadHandler()
   );
+  const user = await getUserSession(request);
   if (request.method === "POST") {
     const formData = await parseMultipartFormData(request, uploadHandler);
     let Obj = Object.fromEntries(formData);
-    const user = await getUserSession(request);
     const userData = await findUserByUsername(user.username);
     let DiscourseUrl = process.env.DISCOURSE_SITE;
     let api = process.env.DISCOURSE_API_KEY;
@@ -75,6 +75,10 @@ export const action: ActionFunction = async ({ request }) => {
 
     let id = Obj.id as string;
     let res = await deletePost(id);
+    let deleteDiscourse = await deleteDiscourseTopic(
+      user.username,
+      res.topic_id
+    );
     return {
       deleted: res,
     };
