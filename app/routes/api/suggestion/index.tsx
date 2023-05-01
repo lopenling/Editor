@@ -46,23 +46,24 @@ export let action: ActionFunction = async ({ request }: ActionArgs) => {
     } catch (e) {
       return { message: e };
     }
-  }
-  if (request.method === "DELETE") {
+  } else {
     let formData = await request.formData();
     let Obj = Object.fromEntries(formData);
-    let id = Obj.id as string;
-    let res = await deleteSuggestion(id);
-    let remainingdata = await getSuggestionWithThreadId(res.threadId);
-    return {
-      deleted: res,
-      remain: remainingdata?.length,
-    };
-  }
-  if (request.method === "PATCH") {
-    let id = Obj.id as string;
-    let newValue = Obj.newValue as string;
-    let res = await updateSuggestionContent(id, newValue);
-    return res;
+    if (request.method === "DELETE") {
+      let id = Obj.id as string;
+      let res = await deleteSuggestion(id);
+      let remainingdata = await getSuggestionWithThreadId(res.threadId);
+      return {
+        deleted: res,
+        remain: remainingdata?.length,
+      };
+    }
+    if (request.method === "PATCH") {
+      let id = Obj.id as string;
+      let newValue = Obj.newValue as string;
+      let res = await updateSuggestionContent(id, newValue);
+      return res;
+    }
   }
   return null;
 };
