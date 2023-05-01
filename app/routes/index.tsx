@@ -19,17 +19,27 @@ import { motion } from "framer-motion";
 import Header from "~/component/Layout/Header";
 import { useState, useEffect } from "react";
 export let loader: LoaderFunction = async ({ request }) => {
-  const searchText = new URL(request.url).searchParams.get("s");
+  const searchText = new URL(request.url).searchParams.get("s")?.trim();
   let headers = {
     "Cache-Control": "max-age=60, s-maxage=60480",
   };
-  let textList = searchText ? await searchTextWithName(searchText) : null;
-  return json(
-    { textList, search: searchText },
-    {
-      headers,
-    }
-  );
+  if (searchText) {
+    let obj = await searchTextWithName(searchText);
+    let textList = Object.keys(obj).map((key) => ({
+      name: obj[key].name,
+      results: obj[key].results,
+      total: obj[key].total,
+      extra: obj[key].extra,
+      id: key,
+    }));
+    return json(
+      { textList, search: searchText },
+      {
+        headers,
+      }
+    );
+  }
+  return { textList: null, search: null };
 };
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -118,6 +128,7 @@ export default function Index() {
                 className="bg-green-400 text-white h-full"
                 color={"#1C64F2"}
                 size="lg"
+                disabled={searchInput.trim() === ""}
               >
                 {translation.searchText}
               </Button>
@@ -145,6 +156,7 @@ export default function Index() {
               </div>
             )}
             {list?.map((list: { id: number; name: string }) => {
+              let result = list?.results[0];
               return (
                 <Link
                   to={"/texts/" + list.id + "/posts"}
@@ -156,6 +168,17 @@ export default function Index() {
                     <h5 className="text-2xl  text-gray-700 dark:text-white">
                       {list.name}
                     </h5>
+                    <div className="flex justify-between">
+                      <div
+                        className="text-lg text-gray-400"
+                        dangerouslySetInnerHTML={{
+                          __html: highlightText(result[1], data.search),
+                        }}
+                      ></div>
+                      <div className="text-sm text-gray-400">
+                        {list.total} matches
+                      </div>
+                    </div>
                   </Card>
                 </Link>
               );
@@ -173,6 +196,13 @@ export default function Index() {
   );
 }
 
+function highlightText(str: string, searchTerm: string) {
+  const regex = new RegExp(searchTerm, "gi");
+  return str.replace(
+    regex,
+    `<span class='font-bold underline text-black'>${searchTerm}</span>`
+  );
+}
 const FeatureSection = () => (
   <section className="bg-gray-50 dark:bg-gray-700">
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center sm:py-16 lg:px-6">
