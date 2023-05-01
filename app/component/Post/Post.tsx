@@ -33,7 +33,7 @@ function Post({
   type,
   replyCount,
   isSolved,
-  isOptimistic = false,
+  isOptimistic,
   threadId,
   audioUrl,
 }: PostType) {
@@ -75,11 +75,10 @@ function Post({
     likeFetcher.submit(
       {
         id,
-        _action: "likePost",
         userId: user.id,
         like: !likedByMe ? "true" : "false",
       },
-      { method: "post", action: "api/like" }
+      { method: "post", action: "api/post/like" }
     );
   }
 
@@ -252,7 +251,7 @@ function Post({
                 </div>
                 {user && user.username === creatorUser.username && (
                   <div
-                    onClick={() => deletePost(id)}
+                    onClick={deletePost}
                     title="delete"
                     className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
                   >

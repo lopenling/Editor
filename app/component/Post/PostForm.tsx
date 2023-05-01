@@ -9,7 +9,7 @@ import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 import { Button } from "../UI/Button";
 import TextArea from "../UI/TextArea";
-import useFetcherWithPromise from "~/utility/useFetcher";
+import useFetcherWithPromise from "~/utility/useFetcherPromise";
 
 const PostForm = () => {
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);

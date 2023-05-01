@@ -4,7 +4,12 @@ export const theme = atom({
   key: "theme-tailwind",
   default: false,
 });
+//permission
 
+export const audioPermission = atom({
+  key: "audioPermission",
+  default: false,
+});
 //textName
 
 export const textName = atom({
@@ -43,13 +48,13 @@ export const openSuggestionState = atom({
 export const selectedSuggestionThread = atom({
   key: "selectedSuggestionThread",
   default: {
-    id: null,
+    id: "",
   },
 });
 export const selectedPostThread = atom({
   key: "selectedPostThread",
   default: {
-    id: null,
+    id: "",
   },
 });
 //share State

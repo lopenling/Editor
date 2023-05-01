@@ -26,44 +26,46 @@ import step from "~/steps";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId && parseInt(params.textId);
+  const threadId = new URL(request.url).searchParams.get("thread") ?? "";
 
   const CategoryData = await fetchCategoryData();
   const topicList = CategoryData.topic_list.topics;
   if (textId === "" || !textId) return redirect("/");
   const posts = findPostByTextId(textId, topicList);
-  return defer({ text: { id: textId }, posts });
+  return defer({ text: { id: textId }, posts, threadId });
 };
 export const ErrorBoundary = ({ error }) => {
   return <div>{error.message}</div>;
 };
 
 export default function PostContainer() {
-  let [searchParams, setSearchParams] = useSearchParams();
-  let [selectedPostThread, setSelectedThreadId] = useRecoilState(
+  let [params, setParams] = useSearchParams();
+  let [selectedPostThread, setSelectedThread] = useRecoilState(
     selectedPostThreadState
   );
   useEffect(() => {
-    let SelectedThread = searchParams.get("thread");
-    if (SelectedThread) {
-      setSelectedThreadId({ id: SelectedThread });
+    let selectedThread = data.threadId;
+    if (selectedThread && selectedThread !== "") {
       setTimeout(() => {
-        document.getElementById("p_" + SelectedThread)?.scrollIntoView({
+        document.getElementById("p_" + selectedThread)?.scrollIntoView({
           behavior: "smooth",
           block: "center",
           inline: "center",
         });
-        document.getElementById(SelectedThread?.toString())?.scrollIntoView({
+        document.getElementById(selectedThread)?.scrollIntoView({
           behavior: "smooth",
           block: "center",
           inline: "center",
         });
       }, 2000);
+      setParams("", { preventScrollReset: true });
       let timer = setTimeout(() => {
-        setSelectedThreadId({ id: null });
-      }, 4000);
-      setSearchParams("");
+        setSelectedThread({ id: selectedThread });
+      }, 1000);
       return () => {
-        if (timer && selectedPostThread.id) clearTimeout(timer);
+        if (timer && selectedPostThread.id) {
+          clearTimeout(timer);
+        }
       };
     }
   }, []);
@@ -71,13 +73,12 @@ export default function PostContainer() {
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
   const data = useLoaderData<typeof loader>();
-  let LoaderPost = data.posts;
+
   const { editor }: { editor: Editor } = useOutletContext();
 
   let [run, setRun] = useRecoilState(openJoyride);
-  let [steps, setSteps] = useState(step);
   const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status, type } = data;
+    const { status } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
     if (finishedStatuses.includes(status)) {
@@ -91,7 +92,7 @@ export default function PostContainer() {
           continuous
           callback={handleJoyrideCallback}
           hideCloseButton
-          steps={steps}
+          steps={step}
           run={run}
           showProgress
           disableScrolling={true}
@@ -131,13 +132,17 @@ export default function PostContainer() {
           dismissOnClick={false}
         >
           <Dropdown.Item
-            className={isLatestPost ? "bg-green-500 dark:bg-gray-500" : ""}
+            className={
+              isLatestPost ? "bg-green-300 dark:bg-gray-300 text-white " : ""
+            }
             onClick={() => setIsLatestPost(true)}
           >
             Latest
           </Dropdown.Item>
           <Dropdown.Item
-            className={!isLatestPost ? "bg-green-500 dark:bg-gray-500" : ""}
+            className={
+              !isLatestPost ? "bg-green-300 dark:bg-gray-300 text-white " : ""
+            }
             onClick={() => setIsLatestPost(false)}
           >
             Earliest
@@ -190,7 +195,7 @@ export default function PostContainer() {
 
       {/* used differ at loader for post list to fetch posts as a promise */}
       <Suspense fallback={<Skeleton />}>
-        <Await resolve={LoaderPost}>
+        <Await resolve={data.posts}>
           {(posts) => {
             return <Posts posts={posts} editor={editor} />;
           }}

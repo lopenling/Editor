@@ -2,16 +2,27 @@ import { useState, useRef, useEffect } from "react";
 import { useFetcher, useOutletContext, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useRecoilState } from "recoil";
-import { selectedTextOnEditor } from "~/states";
-
+import { audioPermission, selectedTextOnEditor } from "~/states";
+import { formatTime } from "./AudioPlayer";
 const AudioRecorder = ({ setAudio }) => {
-  const audioFetcher = useFetcher();
-  const [permission, setPermission] = useState(false);
+  const [permission, setPermission] = useRecoilState(audioPermission);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
-  const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
+  const [timer, setTimer] = useState(0);
+  useEffect(() => {
+    let intervalId;
+    if (recordingStatus === "recording") {
+      intervalId = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [recordingStatus]);
+
   // const mimeType = "audio/wav";
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -20,10 +31,10 @@ const AudioRecorder = ({ setAudio }) => {
           audio: true,
           video: false,
         });
-        setPermission(true);
-        setStream(streamData);
+        return streamData;
       } catch (err) {
         alert(err.message);
+        return false;
       }
     } else {
       alert("The MediaRecorder API is not supported in your browser.");
@@ -31,19 +42,23 @@ const AudioRecorder = ({ setAudio }) => {
   };
   let localAudioChunks = [];
   const startRecording = async () => {
-    setRecordingStatus("recording");
-    //create new Media recorder instance using the stream
-    const media = new MediaRecorder(stream);
-    //set the MediaRecorder instance to the mediaRecorder ref
-    mediaRecorder.current = media;
-    //invokes the start method to start the recording process
-    mediaRecorder.current.start();
-    mediaRecorder.current.ondataavailable = (event) => {
-      if (typeof event.data === "undefined") return;
-      if (event.data.size === 0) return;
-      localAudioChunks.push(event.data);
-    };
-    setAudioChunks(localAudioChunks);
+    let stream = await getMicrophonePermission();
+    if (stream) {
+      setRecordingStatus("recording");
+
+      //create new Media recorder instance using the stream
+      const media = new MediaRecorder(stream);
+      //set the MediaRecorder instance to the mediaRecorder ref
+      mediaRecorder.current = media;
+      //invokes the start method to start the recording process
+      mediaRecorder.current.start();
+      mediaRecorder.current.ondataavailable = (event) => {
+        if (typeof event.data === "undefined") return;
+        if (event.data.size === 0) return;
+        localAudioChunks.push(event.data);
+      };
+      setAudioChunks(localAudioChunks);
+    }
   };
   const pauseRecording = async () => {
     setRecordingStatus("paused");
@@ -68,26 +83,16 @@ const AudioRecorder = ({ setAudio }) => {
       const audioBlob = new Blob(audioChunks);
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio({ blob: audioBlob, tempUrl: audioUrl });
+
       //creates a playable URL from the blob file.
       setAudioChunks([]);
     };
   };
 
-  if (audioFetcher.data) setSelection({ ...selection, type: "" });
-
   return (
     <div className="flex justify-center items-center gap-3 flex-col">
       <div className="audio-controls">
-        {!permission ? (
-          <button
-            onClick={getMicrophonePermission}
-            type="button"
-            className="bg-red-300"
-          >
-            Get Microphone
-          </button>
-        ) : null}
-        {permission && recordingStatus === "inactive" ? (
+        {recordingStatus === "inactive" ? (
           <button
             onClick={startRecording}
             type="button"
@@ -130,7 +135,7 @@ const AudioRecorder = ({ setAudio }) => {
                   className="fill-red-700"
                 />
               </svg>
-              <div>recording...</div>
+              <div>{formatTime(timer)} recording...</div>
               <button onClick={stopRecording} type="button">
                 <svg
                   width="20"
@@ -151,13 +156,6 @@ const AudioRecorder = ({ setAudio }) => {
           </>
         ) : null}
       </div>
-      {audioFetcher.error && (
-        <div className="text-red-500">{audioFetcher.error}</div>
-      )}
-      {audioFetcher.data && (
-        <div className="text-green-500">{audioFetcher.data?.data?.url}</div>
-      )}
-      {}
     </div>
   );
 };

@@ -5,13 +5,15 @@ import { db } from "~/db.server";
 export async function createCommentOnSuggestion(
   text: string,
   suggestionId: string,
-  userId: string
+  userId: string,
+  audioUrl: string
 ) {
   const comment = await db.suggestionComment.create({
     data: {
       text,
       suggestionId,
       userId,
+      audioUrl,
     },
   });
   return comment;

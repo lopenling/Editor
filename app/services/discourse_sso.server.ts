@@ -21,16 +21,15 @@ async function getNonce() {
     nonce = session.get("sso_nonce");
   } else {
     nonce = randomString(32);
-    console.log(nonce);
     session.set("sso_nonce", nonce);
   }
   return nonce;
 }
 
-export let redirectDiscourse = async function () {
+export let redirectDiscourse = async function (sso_redirect: string) {
   let url = process.env.DISCOURSE_SSO_LOGIN_URL;
   let nonce = await getNonce();
-  let return_url = process.env.DISCOURSE_SSO_REDIRECT;
+  let return_url = sso_redirect;
   let payload = `nonce=${nonce}&return_sso_url=${return_url}`;
   let payloadBase64 = btoa(payload);
   var encoder = new TextEncoder();

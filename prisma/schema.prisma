@@ -56,11 +56,13 @@ model Suggestion {
   created_at        DateTime            @default(now())
   updated_at        DateTime?           @updatedAt
   SuggestionComment SuggestionComment[]
+  audioUrl          String?
 }
 
 model SuggestionComment {
   id           Int        @id @default(autoincrement())
   text         String
+  audioUrl     String?
   suggestion   Suggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
   suggestionId String
   author       User       @relation(fields: [userId], references: [id])

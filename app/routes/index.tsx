@@ -17,27 +17,19 @@ import {
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { motion } from "framer-motion";
 import Header from "~/component/Layout/Header";
-import { getUserSession } from "~/services/session.server";
+import { useState, useEffect } from "react";
 export let loader: LoaderFunction = async ({ request }) => {
-  const searchText = new URL(request.url).searchParams.get("search");
-  if (searchText === null) return null;
-  if (searchText === "") return json([]);
+  const searchText = new URL(request.url).searchParams.get("s");
   let headers = {
     "Cache-Control": "max-age=60, s-maxage=60480",
   };
-  let textList = await searchTextWithName(searchText);
-  try {
-    return json(textList, {
+  let textList = searchText ? await searchTextWithName(searchText) : null;
+  return json(
+    { textList, search: searchText },
+    {
       headers,
-    });
-  } catch (e) {
-    return json(
-      { message: e.message },
-      {
-        status: 400,
-      }
-    );
-  }
+    }
+  );
 };
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -46,7 +38,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   };
 }
 
-export const meta: MetaFunction = ({ data, params }) => {
+export const meta: MetaFunction = ({ data }) => {
   return {
     viewport: "width=device-width,initial-scale=1",
     description: "annotation of text and discussion on budhist text",
@@ -61,11 +53,21 @@ export default function Index() {
   const navigation = useNavigation();
   const translation: any = uselitteraTranlation();
   const [params] = useSearchParams();
-  const list = data;
+  const [searchInput, setSearchInput] = useState("");
+  useEffect(() => {
+    let p = params.get("s");
+    if (!p) {
+      setSearchInput("");
+    } else {
+      setSearchInput(p);
+    }
+  }, [params]);
+  const list = data.textList;
   const isLoading =
-    navigation.formData?.get("search") && navigation.state === "loading";
+    navigation.formData?.get("s") && navigation.state === "loading";
   if (list?.message) return <div className="text-red-400">{list?.message}</div>;
   const user = useOutletContext();
+
   return (
     <motion.div
       key={useLocation().pathname}
@@ -85,9 +87,10 @@ export default function Index() {
           <Form method="get" className="w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
               <TextInput
-                name="search"
+                name="s"
                 placeholder={translation.searchText}
-                defaultValue={params.get("search")}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 type="search"
                 required
                 style={{ height: "100%" }}

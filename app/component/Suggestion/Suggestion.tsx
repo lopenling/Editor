@@ -7,6 +7,10 @@ import { timeAgo } from "~/utility/getFormatedDate";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
+import AudioRecorder from "../Media/AudioRecorder";
+import AudioPlayer from "../Media/AudioPlayer";
+import { v4 as uuidv4 } from "uuid";
+
 type SuggestType = {
   created_at: Date;
   id: string;
@@ -42,6 +46,7 @@ export default function Suggestion({
   const [openEdit, setOpenEdit] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
+
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
@@ -67,11 +72,10 @@ export default function Suggestion({
     likeFetcher.submit(
       {
         id,
-        _action: "likeSuggestion",
         userId: data.user.id,
         like: !likedByMe ? "true" : "false",
       },
-      { method: "post", action: "api/like" }
+      { method: "post", action: "api/suggestion/like" }
     );
   };
   let time = timeAgo(suggest.created_at);
@@ -159,23 +163,25 @@ export default function Suggestion({
             className="py-1 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
-            <li>
-              <div
-                onClick={() => setOpenEdit(true)}
-                className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Edit
-              </div>
-            </li>
             {data.user && data.user.username === suggest.user.username && (
-              <li>
-                <div
-                  onClick={() => deleteSuggestion(suggest.id)}
-                  className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Remove
-                </div>
-              </li>
+              <>
+                <li>
+                  <div
+                    onClick={() => setOpenEdit(true)}
+                    className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Edit
+                  </div>
+                </li>
+                <li>
+                  <div
+                    onClick={() => deleteSuggestion(suggest.id)}
+                    className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Remove
+                  </div>
+                </li>
+              </>
             )}
             <li>
               <div className="block py-2 cursor-pointer px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -214,7 +220,11 @@ export default function Suggestion({
               label={editFetcher.state === "submitting" ? "saving" : "confirm"}
               type="submit"
             />
-            <Button label="cancel" type="reset" />
+            <Button
+              label="cancel"
+              type="reset"
+              onClick={() => setOpenEdit(false)}
+            />
           </editFetcher.Form>
         ) : (
           <span
@@ -225,6 +235,11 @@ export default function Suggestion({
           >
             "{suggest.newValue}"
           </span>
+        )}
+      </div>
+      <div className="mb-2">
+        {suggest?.audioUrl && suggest.audioUrl !== "" && (
+          <AudioPlayer src={suggest?.audioUrl} />
         )}
       </div>
       <div className="flex justify-between">
@@ -261,7 +276,7 @@ export default function Suggestion({
             </div>
             <div
               onClick={() => setOpenComment((prev) => !prev)}
-              className={`flex items-start justify-start space-x-1.5 p-2 rounded-t-lg ${
+              className={`flex items-start justify-start space-x-1.5  rounded-t-lg ${
                 openComment && "bg-gray-100"
               }`}
             >
@@ -298,22 +313,32 @@ type CommentProps = {
 };
 function CommentSection({ id, setOpenComment, comments }: CommentProps) {
   const [commentText, setCommentText] = useState("");
+  const [audio, setAudio] = useState({ tempUrl: "", blob: null });
+  const data = useLoaderData();
   const postCommentFetcher = useFetcher();
   function postComment() {
-    postCommentFetcher.submit(
-      {
-        id,
-        commentContent: commentText,
-      },
-      {
-        method: "POST",
-        action: "/api/suggestion/comment",
-      }
-    );
+    let item = {
+      id,
+      commentContent: commentText,
+    };
+    let blob = audio.blob;
+    var form_data = new FormData();
+    if (blob) {
+      form_data.append("file", blob, `text-${data?.text?.id}-${uuidv4()}.wav`);
+    }
+    for (var key in item) {
+      form_data.append(key, item[key]);
+    }
+    postCommentFetcher.submit(form_data, {
+      method: "POST",
+      action: "/api/suggestion/comment",
+      encType: "multipart/form-data",
+    });
     setCommentText("");
+    setAudio({ blob: null, tempUrl: "" });
   }
   return (
-    <div className="flex justify-between pt-1 gap-2 bg-gray-100  rounded">
+    <div className="flex justify-between pt-1 gap-2 bg-gray-100  rounded mt-2">
       <div className="flex flex-col gap-2 flex-1 ">
         <TextArea
           onChange={(e) => setCommentText(e.target.value)}
@@ -321,22 +346,51 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
           value={commentText}
           rows={1}
         />
-        <div className="flex justify-end gap-2">
-          <Button
-            label={
-              postCommentFetcher.state === "submitting"
-                ? "commenting"
-                : "comment"
-            }
-            type="submit"
-            onClick={postComment}
-            disabled={!!postCommentFetcher.formData}
-          />
-          <Button
-            label="cancel"
-            type="reset"
-            onClick={() => setOpenComment(false)}
-          />
+        {audio.tempUrl !== "" ? (
+          <>
+            <div className="w-full flex items-center gap-3 my-2">
+              <AudioPlayer src={audio.tempUrl} />
+              <div onClick={() => setAudio({ tempUrl: "", blob: null })}>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M9 2C8.81434 2.0001 8.63237 2.05188 8.47447 2.14955C8.31658 2.24722 8.18899 2.38692 8.106 2.553L7.382 4H4C3.73478 4 3.48043 4.10536 3.29289 4.29289C3.10536 4.48043 3 4.73478 3 5C3 5.26522 3.10536 5.51957 3.29289 5.70711C3.48043 5.89464 3.73478 6 4 6V16C4 16.5304 4.21071 17.0391 4.58579 17.4142C4.96086 17.7893 5.46957 18 6 18H14C14.5304 18 15.0391 17.7893 15.4142 17.4142C15.7893 17.0391 16 16.5304 16 16V6C16.2652 6 16.5196 5.89464 16.7071 5.70711C16.8946 5.51957 17 5.26522 17 5C17 4.73478 16.8946 4.48043 16.7071 4.29289C16.5196 4.10536 16.2652 4 16 4H12.618L11.894 2.553C11.811 2.38692 11.6834 2.24722 11.5255 2.14955C11.3676 2.05188 11.1857 2.0001 11 2H9ZM7 8C7 7.73478 7.10536 7.48043 7.29289 7.29289C7.48043 7.10536 7.73478 7 8 7C8.26522 7 8.51957 7.10536 8.70711 7.29289C8.89464 7.48043 9 7.73478 9 8V14C9 14.2652 8.89464 14.5196 8.70711 14.7071C8.51957 14.8946 8.26522 15 8 15C7.73478 15 7.48043 14.8946 7.29289 14.7071C7.10536 14.5196 7 14.2652 7 14V8ZM12 7C11.7348 7 11.4804 7.10536 11.2929 7.29289C11.1054 7.48043 11 7.73478 11 8V14C11 14.2652 11.1054 14.5196 11.2929 14.7071C11.4804 14.8946 11.7348 15 12 15C12.2652 15 12.5196 14.8946 12.7071 14.7071C12.8946 14.5196 13 14.2652 13 14V8C13 7.73478 12.8946 7.48043 12.7071 7.29289C12.5196 7.10536 12.2652 7 12 7Z"
+                    className="fill-gray-200"
+                  />
+                </svg>
+              </div>
+            </div>
+          </>
+        ) : null}
+        <div className="flex justify-between">
+          {audio.tempUrl === "" ? (
+            <AudioRecorder setAudio={setAudio} />
+          ) : (
+            <div />
+          )}
+          <div className="flex justify-end gap-2">
+            <Button
+              label={
+                postCommentFetcher.state === "submitting"
+                  ? "commenting"
+                  : "comment"
+              }
+              type="submit"
+              onClick={postComment}
+              disabled={!!postCommentFetcher.formData}
+            />
+            <Button
+              label="cancel"
+              type="reset"
+              onClick={() => setOpenComment(false)}
+            />
+          </div>
         </div>
         {comments.length > 0 &&
           comments.map((comment, index) => (
@@ -356,6 +410,9 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
                   </p>
                 </div>
               </div>
+              {comment?.audioUrl && comment.audioUrl !== "" && (
+                <AudioPlayer src={comment?.audioUrl} />
+              )}
               <p className="text-gray-500 dark:text-gray-400">{comment.text}</p>
             </div>
           ))}

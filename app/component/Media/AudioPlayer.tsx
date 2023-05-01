@@ -23,7 +23,7 @@ const AudioPlayer = ({ src }) => {
   useEffect(() => {
     if (audio) {
       audio.addEventListener("timeupdate", handleTimeUpdate);
-      audio.addEventListener("durationchange", handleLoadedMetadata);
+      audio.addEventListener("durationchange", handleLoadedMetadata, false);
       audio.addEventListener("ended", handleEnd);
       return () => {
         audio.removeEventListener("timeupdate", handleTimeUpdate);
@@ -39,11 +39,42 @@ const AudioPlayer = ({ src }) => {
   };
 
   const handleLoadedMetadata = () => {
-    if (audio) {
-      setDuration(audio.duration);
+    if (audio.duration != Infinity) {
+      var duration = audio.duration;
+
+      setDuration(duration);
+    }
+  };
+  const [isDragging, setIsDragging] = useState(false);
+  const handleProgressMouseDown = (e) => {
+    audio.pause();
+    setIsPlaying(false);
+    setIsDragging(true);
+    updateCurrentTime(e);
+  };
+  const updateCurrentTime = (e) => {
+    const progressBar = document.getElementById("progress-bar");
+    const rect = progressBar.getBoundingClientRect();
+    const newCurrentTime =
+      audio.duration * ((e.clientX - rect.left) / rect.width);
+    if (newCurrentTime !== Infinity) {
+      audio.currentTime = newCurrentTime;
+      setCurrentTime(newCurrentTime);
+      setIsDragging(false);
+    }
+  };
+  const handleProgressMouseMove = (e) => {
+    if (isDragging) {
+      updateCurrentTime(e);
     }
   };
 
+  const handleProgressMouseUp = (e) => {
+    if (isDragging) {
+      setIsDragging(false);
+      updateCurrentTime(e);
+    }
+  };
   return (
     <div className="flex items-center w-full">
       <button
@@ -54,7 +85,14 @@ const AudioPlayer = ({ src }) => {
         {isPlaying ? <FaPause /> : <FaPlay />}
       </button>
       <div className="flex-1 ml-4">
-        <div className="h-2 bg-gray-200 rounded-full">
+        <div
+          className="h-2 bg-gray-200 rounded-full"
+          id="progress-bar"
+          onMouseDown={handleProgressMouseDown}
+          onMouseMove={handleProgressMouseMove}
+          onMouseUp={handleProgressMouseUp}
+          onMouseLeave={handleProgressMouseUp}
+        >
           <div
             className={classNames("h-full bg-blue-500 rounded-full", {
               "w-full": currentTime === duration,
@@ -71,12 +109,13 @@ const AudioPlayer = ({ src }) => {
   );
 };
 
-const formatTime = (time) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60)
-    .toString()
-    .padStart(2, "0");
-  return `${minutes}:${seconds}`;
-};
+export function formatTime(seconds) {
+  if (!seconds) return `00:00:00`;
+  const date = new Date(seconds * 1000);
+  const hh = date.getUTCHours().toString().padStart(2, "0");
+  const mm = date.getUTCMinutes().toString().padStart(2, "0");
+  const ss = date.getUTCSeconds().toString().padStart(2, "0");
+  return `${hh}:${mm}:${ss}`;
+}
 
 export default AudioPlayer;

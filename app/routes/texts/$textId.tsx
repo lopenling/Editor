@@ -48,7 +48,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const textId = parseInt(params.textId);
   const suggestion = await findAllSuggestionByTextId(textId);
-  const text = await findTextByTextId(textId, true);
+  const text = await findTextByTextId(textId, false);
   const textContent = getTextContent(textId);
   if (!textId) throw new Error("not valid textId");
 
@@ -84,15 +84,6 @@ export default function () {
   const data = useLoaderData();
   const textNameSetter = useSetRecoilState(textName);
 
-  if (data.text === null)
-    return (
-      <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
-        <p>text not available</p>
-        <Link className="text-blue-600 underline" to="/">
-          go back
-        </Link>
-      </div>
-    );
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
@@ -101,24 +92,23 @@ export default function () {
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const saveText = useFetcher();
-  const saveData = (content) => {
+  const saveData = (content: string) => {
     saveText.submit(
       { content, id: data.text?.id },
       { method: "post", action: "/api/text" }
     );
   };
-  function suggestionSetter(id) {
+  function suggestionSetter(id: string) {
     suggestionSelector({
       id: id,
     });
   }
-  function postSetter(id) {
+  function postSetter(id: string) {
     postSelector({
       id: id,
     });
   }
   const isSaving = !!saveText.formData;
-
   let editor = useEditor(
     {
       extensions: [
@@ -182,6 +172,15 @@ export default function () {
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
+  if (data.text === null)
+    return (
+      <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
+        <p>text not available</p>
+        <Link className="text-blue-600 underline" to="/">
+          go back
+        </Link>
+      </div>
+    );
   return (
     <motion.div
       key={useLocation().pathname}
@@ -195,8 +194,14 @@ export default function () {
         className="container relative lg:mx-auto flex w-full flex-col lg:gap-8 lg:flex-row   "
         style={{ maxWidth: MAX_WIDTH_PAGE }}
       >
-        <div style={{ maxWidth: 750 }}>
-          <Suspense fallback={"loading"}>
+        <div className="max-w-[750px] flex-1 overflow-hidden">
+          <Suspense
+            fallback={
+              <div className="flex justify-center h-[400px] w-full animate-pulse mt-4">
+                <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>
+              </div>
+            }
+          >
             <Await
               resolve={data.textContent}
               errorElement={<p>Error fetching content!</p>}

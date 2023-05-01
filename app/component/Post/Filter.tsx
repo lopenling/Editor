@@ -1,4 +1,4 @@
-import { useState, useId, useEffect } from "react";
+import { useState, useId, useEffect, memo } from "react";
 import { useFetcher } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { filterDataState, openFilterState } from "~/states";
@@ -7,8 +7,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { Modal } from "flowbite-react";
 import { Button } from "../UI/Button";
 type FilterProps = {};
-
-export default function Filter({}: FilterProps) {
+function Filter({}: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);
   const [openFilter, setOpenFilter] = useRecoilState(openFilterState);
   const [userInput, setUserInput] = useState("");
@@ -162,20 +161,20 @@ export default function Filter({}: FilterProps) {
                   </svg>
                   <searchUser.Form
                     method="get"
-                    action="/api/search-user"
+                    action="/api/user/search"
                     className="flex w-full"
                   >
                     <input
                       type="text"
-                      name="username"
+                      name="filterUser"
                       value={userInput}
                       onChange={(e) => {
                         setUserInput(e.target.value);
                         searchUser.submit(
                           {
-                            username: e.target.value,
+                            filterUser: e.target.value,
                           },
-                          { method: "get", action: "/api/search-user" }
+                          { method: "get", action: "/api/user/search" }
                         );
                       }}
                       className="h-full flex-1 border-none border-transparent bg-transparent text-sm leading-none text-gray-900 outline-none focus:border-none focus:border-transparent focus:outline-none focus:ring-0"
@@ -204,9 +203,6 @@ export default function Filter({}: FilterProps) {
                 !isFetchingUser && (
                   <div className="flex w-full flex-col items-center justify-start space-y-3 rounded-lg border border-gray-200  p-4 shadow">
                     {searchUser.data?.map((user) => {
-                      let avatarUrl = (
-                        "http://lopenling.org" + user?.avatar
-                      ).replace("{size}", "30");
                       return (
                         <div
                           className="w-full cursor-pointer"
@@ -215,7 +211,7 @@ export default function Filter({}: FilterProps) {
                           <div className="inline-flex w-full items-center justify-start space-x-2 rounded-lg">
                             <img
                               className="w-6 h-6 rounded-full"
-                              src={avatarUrl}
+                              src={user?.avatarUrl}
                               alt="Extra small avatar"
                             ></img>
                             <div
@@ -279,3 +275,5 @@ export default function Filter({}: FilterProps) {
     </Modal>
   );
 }
+
+export default memo(Filter);

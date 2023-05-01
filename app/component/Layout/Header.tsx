@@ -2,8 +2,7 @@ import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
 import { Navbar, Avatar, Button, Select } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
-import { FaSearch } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
@@ -43,7 +42,7 @@ type HeaderProps = {
   user: any;
   editor: Editor | null;
 };
-export default function Header({ user, editor }: HeaderProps) {
+function Header({ user, editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation = uselitteraTranlation();
@@ -58,7 +57,7 @@ export default function Header({ user, editor }: HeaderProps) {
         theme: !themeSelected ? "dark" : "light",
       },
       {
-        action: "/api/preference/theme",
+        action: "/api/user/preference/theme",
         method: "post",
       }
     );
@@ -90,9 +89,9 @@ export default function Header({ user, editor }: HeaderProps) {
         {TextNameOnHeader ? (
           <LogoWithTextName textNameValue={textNameValue} />
         ) : (
-          <Navbar.Brand to={"/"} as={NavLink} className="flex items-center">
+          <NavLink to={"/"} prefetch="intent" className="flex items-center">
             <Logo />
-          </Navbar.Brand>
+          </NavLink>
         )}
         <div id="searchTextForm"></div>
         <button
@@ -370,3 +369,5 @@ export function Translation() {
     </div>
   );
 }
+
+export default memo(Header);

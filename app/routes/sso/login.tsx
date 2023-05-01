@@ -94,7 +94,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   });
 };
 
-export let action: ActionFunction = async ({ request }) => {
+export let action: ActionFunction = async ({ request, context }) => {
   const user = await getUserSession(request);
   const body = await request.formData();
   let { redirectTo, _action, ...values } = Object.fromEntries(body);

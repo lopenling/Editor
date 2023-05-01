@@ -1,5 +1,5 @@
 import { Editor } from "@tiptap/react";
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import Filter from "./Filter";
 import Post from "./Post";
@@ -54,6 +54,7 @@ function Posts({ editor, posts }: PostPropsType) {
               <Post
                 key={post.id}
                 id={post.id}
+                isOptimistic={false}
                 creatorUser={post.creatorUser}
                 time={timeAgo(post.created_at)!}
                 postContent={post.content}
@@ -62,7 +63,6 @@ function Posts({ editor, posts }: PostPropsType) {
                 type={post.type}
                 replyCount={post?.replyCount}
                 isSolved={post?.isSolved}
-                isOptimistic={false}
                 threadId={post?.thread_id}
                 audioUrl={post?.audioUrl}
               />
@@ -73,4 +73,4 @@ function Posts({ editor, posts }: PostPropsType) {
   );
 }
 
-export default Posts;
+export default memo(Posts);
