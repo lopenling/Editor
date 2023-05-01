@@ -9,11 +9,8 @@ import {
   ScrollRestoration,
   useLoaderData,
   useNavigation,
-  useLocation,
 } from "@remix-run/react";
-import { Spinner } from "flowbite-react";
 import ErrorPage from "./component/Layout/ErrorPage";
-import Header from "./component/Layout/Header";
 import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
@@ -25,6 +22,7 @@ import { AnimatePresence } from "framer-motion";
 import flagsmith from "flagsmith";
 import { FlagsmithProvider } from "flagsmith/react";
 import { findUserByUsername } from "./model/user";
+import Loader from "./component/UI/Loader";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
@@ -48,14 +46,6 @@ export function links() {
     { rel: "stylesheet", href: tailwindStyle, as: "style" },
     { rel: "stylesheet", href: globalStyle, as: "style" },
   ];
-}
-
-function Loading() {
-  return (
-    <div className="mt-10 flex justify-center items-center">
-      <Spinner size="xl" aria-label="Center-aligned spinner example" />
-    </div>
-  );
 }
 
 export function CatchBoundary() {
@@ -110,7 +100,16 @@ function App() {
       <body className="dark:bg-gray-600 dark:text-white  scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           <AnimatePresence mode="wait" initial={false}>
-            {routeChanged ? <Loading /> : <Outlet context={data.user} />}
+            {routeChanged ? (
+              <div
+                style={{ height: "100vh" }}
+                className="w-full flex justify-center items-center"
+              >
+                <Loader />
+              </div>
+            ) : (
+              <Outlet context={data.user} />
+            )}
           </AnimatePresence>
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />

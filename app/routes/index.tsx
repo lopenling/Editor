@@ -4,7 +4,7 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { Button, Card, Spinner, TextInput } from "flowbite-react";
+import { Button, Card, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Layout/Footer";
 import { json } from "@remix-run/node";
 import { searchTextWithName } from "~/model/text";
@@ -18,6 +18,7 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { motion } from "framer-motion";
 import Header from "~/component/Layout/Header";
 import { useState, useEffect } from "react";
+import Loader from "~/component/UI/Loader";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("s")?.trim();
   let headers = {
@@ -136,9 +137,9 @@ export default function Index() {
           </Form>
         </div>
         {isLoading && (
-          <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5">
-            <Spinner />
-          </div>
+          <center>
+            <Loader />
+          </center>
         )}
 
         {list && !isLoading && (
