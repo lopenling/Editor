@@ -63,17 +63,27 @@ export async function searchTextWithName(
         "\n"
       );
       let content = textWithNewlines.replace(/(<([^>]+)>)/gi, "");
-      for (let m of content.matchAll(new RegExp(search_term, "g"))) {
+      let title = text.name;
+      let contentMatch = content.matchAll(new RegExp(search_term, "g"));
+      let titleMatch = title.matchAll(new RegExp(search_term, "g"));
+      for (let m of titleMatch)
         if (!results[text.id]) {
           results[text.id] = {
-            name: "",
+            name: text.name,
             results: [],
             total: 0,
             extra: false,
           };
         }
-        results[text?.id]["name"] = text?.name;
-
+      for (let m of contentMatch) {
+        if (!results[text.id]) {
+          results[text.id] = {
+            name: text.name,
+            results: [],
+            total: 0,
+            extra: false,
+          };
+        }
         if (
           max_results == 0 ||
           (max_results > 0 && results[text.id]["total"] < max_results)

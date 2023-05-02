@@ -157,6 +157,7 @@ export default function Index() {
             )}
             {list?.map((list: { id: number; name: string }) => {
               let result = list?.results[0];
+
               return (
                 <Link
                   to={"/text/" + list.id + "/posts"}
@@ -169,12 +170,14 @@ export default function Index() {
                       {list.name}
                     </h5>
                     <div className="flex justify-between">
-                      <div
-                        className="text-lg text-gray-400"
-                        dangerouslySetInnerHTML={{
-                          __html: highlightText(result[1], data.search),
-                        }}
-                      ></div>
+                      {result && (
+                        <div
+                          className="text-lg text-gray-400"
+                          dangerouslySetInnerHTML={{
+                            __html: highlightText(result[1], data.search),
+                          }}
+                        ></div>
+                      )}
                       <div className="text-sm text-gray-400">
                         {list.total} matches
                       </div>
