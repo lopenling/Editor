@@ -24,7 +24,7 @@ type SuggestType = {
   SuggestionComment: [];
 };
 type SuggestionProps = {
-  editor: Editor;
+  editor: Editor | null;
   suggest: SuggestType;
   optimistic: boolean;
 };

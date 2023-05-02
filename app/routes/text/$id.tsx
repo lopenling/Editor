@@ -209,7 +209,7 @@ export default function () {
             </Await>
           </Suspense>
         </div>
-        <div className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh] mt-4">
+        <aside className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh] mt-4">
           {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected?.id) &&
           (!isSuggestionAtBubble || suggestionSelected?.id) ? (
@@ -217,7 +217,7 @@ export default function () {
           ) : (
             <Outlet context={{ user: data.user, editor, text: data.text }} />
           )}
-        </div>
+        </aside>
       </main>
     </motion.div>
   );

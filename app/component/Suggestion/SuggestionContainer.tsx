@@ -19,13 +19,15 @@ function Suggestions({ editor }: { editor: Editor | null }) {
         <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
           Suggestion
         </h2>
-        {suggestionFetcher.state !== "idle" && <div>loading</div>}
-        {list?.length > 0 &&
+        {suggestionFetcher.state === "loading" ? (
+          <div>loading</div>
+        ) : (
           list
             .sort((a, b) => b.likedBy.length - a.likedBy.length)
             .map((suggest) => (
               <Suggestion editor={editor} suggest={suggest} key={suggest.id} />
-            ))}
+            ))
+        )}
       </div>
     </div>
   );

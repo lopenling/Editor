@@ -10,6 +10,7 @@ import AudioPlayer from "../Media/AudioPlayer";
 import { Button } from "../UI/Button";
 import TextArea from "../UI/TextArea";
 import useFetcherWithPromise from "~/utility/useFetcherPromise";
+import LogInMessage from "../UI/MustLoggedIn";
 
 const PostForm = () => {
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
@@ -180,7 +181,7 @@ const PostForm = () => {
           </createPost.Form>
         </div>
       ) : (
-        <div className="text-red-600">You must login first !</div>
+        <LogInMessage />
       )}
     </section>
   );

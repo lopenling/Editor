@@ -10,6 +10,7 @@ import Suggestion from "./Suggestion";
 import useFetcherWithPromise from "~/utility/useFetcherPromise";
 import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
+import LogInMessage from "../UI/MustLoggedIn";
 
 type SuggestionFormProps = {
   editor: Editor | null;
@@ -82,7 +83,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     setOpenSuggestion(false);
   };
   let isPosting = addSuggestion.formData;
-  if (!user) return <div className="text-red-600">You must login first !</div>;
+  if (!user) return <LogInMessage />;
   if (isPosting)
     return (
       <div className="p-2 bg-slate-50 shadow-md ">
