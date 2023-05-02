@@ -15,7 +15,7 @@ import {
 } from "~/states";
 import { useFlags } from "flagsmith/react";
 import SuggestionForm from "../Suggestion/SuggestionForm";
-
+import { isMobile } from "react-device-detect";
 type EditorContainerProps = {
   editor: Editor | null;
   isSaving: boolean;
@@ -170,6 +170,10 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
               }
             }}
             editor={editor}
+            tippyOptions={{
+              appendTo: "parent",
+              placement: isMobile ? "bottom" : "top",
+            }}
           >
             <div className="flex flex-col bg-green-200 rounded">
               <Button.Group>
