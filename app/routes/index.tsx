@@ -129,7 +129,6 @@ export default function Index() {
                 className="bg-green-400 text-white h-full"
                 color={"#1C64F2"}
                 size="lg"
-                disabled={searchInput.trim() === ""}
               >
                 {translation.searchText}
               </Button>
@@ -160,7 +159,7 @@ export default function Index() {
               let result = list?.results[0];
               return (
                 <Link
-                  to={"/texts/" + list.id + "/posts"}
+                  to={"/text/" + list.id + "/posts"}
                   key={"id" + list.id}
                   className="container w-full"
                   prefetch="intent"

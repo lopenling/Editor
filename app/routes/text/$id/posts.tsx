@@ -13,7 +13,6 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   openFilterState,
-  openJoyride,
   selectedPostThread as selectedPostThreadState,
   showLatest,
 } from "~/states";
@@ -21,11 +20,9 @@ import { findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer, json, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
-import Joyride, { CallBackProps, STATUS } from "react-joyride";
-import step from "~/steps";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const textId = params.textId && parseInt(params.textId);
+  const textId = params.id && parseInt(params.id);
   const threadId = new URL(request.url).searchParams.get("thread") ?? "";
 
   const CategoryData = await fetchCategoryData();
@@ -76,34 +73,8 @@ export default function PostContainer() {
 
   const { editor }: { editor: Editor } = useOutletContext();
 
-  let [run, setRun] = useRecoilState(openJoyride);
-  const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status } = data;
-    const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
-
-    if (finishedStatuses.includes(status)) {
-      setRun(false);
-    }
-  };
   return (
     <div>
-      {run && (
-        <Joyride
-          continuous
-          callback={handleJoyrideCallback}
-          hideCloseButton
-          steps={step}
-          run={run}
-          showProgress
-          disableScrolling={true}
-          showSkipButton
-          styles={{
-            options: {
-              zIndex: 10000,
-            },
-          }}
-        />
-      )}
       <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4 ">
         {/* sort button */}
         <Dropdown

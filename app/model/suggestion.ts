@@ -22,7 +22,7 @@ export async function findAllSuggestionByTextId(textId: number) {
   }
 }
 
-export async function getSuggestionWithThreadId(threadId) {
+export async function getSuggestionWithThreadId(threadId: string) {
   try {
     let data = await db.suggestion.findMany({
       where: {

@@ -30,6 +30,24 @@ export async function findUserByUsername(username: string) {
   }
 }
 
+export async function findUserByEmail(email: string) {
+  if (!email) return null;
+  try {
+    let user = await db.user.findUnique({
+      where: {
+        email,
+      },
+      include: {
+        likedPost: true,
+        preference: true,
+      },
+    });
+    return user;
+  } catch (e) {
+    return e;
+  }
+}
+
 // create new User
 
 export async function createUserInDB(

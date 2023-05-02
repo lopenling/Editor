@@ -40,19 +40,17 @@ import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
-import { db } from "~/db.server";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
-  const textId = parseInt(params.textId);
-  const suggestion = await findAllSuggestionByTextId(textId);
-  const text = await findTextByTextId(textId, false);
-  const textContent = getTextContent(textId);
-  if (!textId) throw new Error("not valid textId");
+  const text_id = parseInt(params.id);
+  const text = await findTextByTextId(text_id, false);
+  const textContent = getTextContent(text_id);
+  if (!text_id) throw new Error("not valid textId");
 
-  return defer({ user, text: text, suggestion, textContent });
+  return defer({ user, text: text, textContent });
 };
 
 export function ErrorBoundary({ error }) {

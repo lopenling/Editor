@@ -5,9 +5,7 @@ import {
 } from "@remix-run/server-runtime";
 import { createThread, deleteDiscourseTopic } from "~/services/discourseApi";
 import { getUserSession } from "~/services/session.server";
-export const loader: LoaderFunction = () => {
-  return redirect("/");
-};
+
 import { createPost as createPostOnDB, deletePost } from "~/model/post";
 import { findUserByUsername } from "~/model/user";
 import { uploadAudio } from "~/services/uploadAudio.server";

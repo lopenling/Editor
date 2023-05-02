@@ -47,9 +47,9 @@ export let loader: LoaderFunction = async ({ request }) => {
       }
       let userData = null;
       let id = 0;
-      let isUserInDatabase = await findUserByUsername(username);
-      console.log(isUserInDatabase);
-      if (isUserInDatabase === null) {
+      let isUserPresent = await findUserByUsername(username);
+      console.log(isUserPresent);
+      if (isUserPresent === null) {
         let isAdmin = admin === "true" ? true : false;
         userData = await createUserInDB(
           username,
@@ -62,8 +62,8 @@ export let loader: LoaderFunction = async ({ request }) => {
       } else {
         if (email) {
           try {
-            let findUserInDatabase = await findUserByUsername(username);
-            id = findUserInDatabase.id;
+            let userDB = await findUserByUsername(username);
+            id = userDB.id;
           } catch (e) {
             throw new Error("User not available in Database");
           }
