@@ -14,13 +14,23 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const replyListPromise = findReplyByPostId(post.id);
   let [postsData, replyList] = await Promise.all([data, replyListPromise]);
   posts = postsData.post_stream?.posts;
-  posts = combineArrays(posts, replyList);
-  return json({ posts, replyList });
+  posts = combineArrays(replyList, posts)
+    .slice(1)
+    .sort((a, b) => {
+      if (a.isAproved === b.isAproved) {
+        return 0;
+      }
+      return a.isAproved ? -1 : 1;
+    });
+  return json({
+    posts,
+    replyList,
+  });
 };
 
 function combineArrays(array1: [], array2: []) {
-  return array1.reduce((acc, val) => {
-    const matchingObject = array2.find((obj) => obj.id == val.id);
+  return array2.reduce((acc, val) => {
+    const matchingObject = array1.find((obj) => val.id == obj.id);
     if (matchingObject) {
       acc.push({ ...val, ...matchingObject });
     } else {

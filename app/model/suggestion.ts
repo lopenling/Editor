@@ -15,6 +15,11 @@ export async function findAllSuggestionByTextId(textId: number) {
           },
         },
       },
+      orderBy: {
+        likedBy: {
+          _count: "desc",
+        },
+      },
     });
     return data;
   } catch (e) {
@@ -31,7 +36,16 @@ export async function getSuggestionWithThreadId(threadId: string) {
       include: {
         user: true,
         likedBy: true,
-        SuggestionComment: true,
+        SuggestionComment: {
+          include: {
+            author: true,
+          },
+        },
+      },
+      orderBy: {
+        likedBy: {
+          _count: "desc",
+        },
       },
     });
     return data;
@@ -134,7 +148,15 @@ export async function updateSuggestionContent(id: string, newValue: string) {
     throw new Error("update suggestion like error: " + e.message);
   }
 }
+// export async function findSuggestionWithMostLikes() {
+//   try {
+//     await db.suggestion.findFirst({
+//       where: {
 
+//       }
+//     })
+//   }
+// }
 //delete suggestion
 export async function deleteSuggestion(id: string) {
   try {

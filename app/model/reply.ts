@@ -58,6 +58,9 @@ export async function findReplyByPostId(post_id: string) {
       include: {
         likedBy: true,
       },
+      orderBy: {
+        isAproved: "asc",
+      },
     });
     return res;
   } catch (e) {

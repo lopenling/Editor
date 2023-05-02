@@ -5,5 +5,5 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let id = params.id;
   let suggestion = await getSuggestionWithThreadId(id);
 
-  return suggestion;
+  return { suggestion, mostLiked: "hello" };
 };

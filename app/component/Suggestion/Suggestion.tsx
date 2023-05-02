@@ -1,6 +1,6 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
 import { timeAgo } from "~/utility/getFormatedDate";
@@ -10,6 +10,7 @@ import { Button } from "../UI/Button";
 import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 import { v4 as uuidv4 } from "uuid";
+import useFetcherWithPromise from "~/utility/useFetcherPromise";
 
 type SuggestType = {
   created_at: Date;
@@ -38,15 +39,10 @@ export default function Suggestion({
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
   const data = useLoaderData();
-  const user = data.user;
-  let allowReplace = user
-    ? user.admin === "true" || data.text.userId == user.id
-    : false;
   const [effect, setEffect] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
-
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
@@ -54,6 +50,7 @@ export default function Suggestion({
     ? suggest.likedBy.some((l) => l.username === data.user.username)
     : false;
   let likeInFetcher = likeFetcher?.formData?.get("like");
+  const selection = useRecoilValue(selectedTextOnEditor);
 
   let likeCount = likeFetcher.data
     ? likeFetcher.data?.length
@@ -66,7 +63,7 @@ export default function Suggestion({
     likedByMe = false;
     if (likeFetcher.state === "submitting") likeCount--;
   }
-  const handleLike = (id: string) => {
+  const handleLike = async (id: string) => {
     setEffect(true);
 
     likeFetcher.submit(
@@ -79,23 +76,20 @@ export default function Suggestion({
     );
   };
   let time = timeAgo(suggest.created_at);
-  const selection = useRecoilValue(selectedTextOnEditor);
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
   function replaceHandler(replace: string) {
-    if (allowReplace) {
-      editor
-        .chain()
-        .focus()
-        .insertContentAt(
-          {
-            from: selection.start,
-            to: selection.end,
-          },
-          replace
-        )
-        .run();
-      suggestionSelector({ id: null });
-    }
+    editor
+      .chain()
+      .focus()
+      .insertContentAt(
+        {
+          from: selection.start,
+          to: selection.end,
+        },
+        replace
+      )
+      .run();
+    suggestionSelector({ id: null });
   }
 
   function deleteSuggestion(id: string) {
@@ -195,9 +189,7 @@ export default function Suggestion({
         <span className="font-bold text-sm">Replace :</span>
         <span
           onClick={() => replaceHandler(suggest.oldValue)}
-          className={`text-gray-500 dark:text-gray-100 ${
-            allowReplace && "cursor-pointer"
-          }`}
+          className={`text-gray-500 dark:text-gray-100`}
         >
           "{suggest.oldValue}"
         </span>
@@ -229,9 +221,7 @@ export default function Suggestion({
         ) : (
           <span
             onClick={() => replaceHandler(suggest.newValue)}
-            className={`text-gray-500 dark:text-gray-100 ${
-              allowReplace && "cursor-pointer"
-            }`}
+            className={`text-gray-500 dark:text-gray-100 `}
           >
             "{suggest.newValue}"
           </span>
@@ -316,6 +306,7 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
   const [audio, setAudio] = useState({ tempUrl: "", blob: null });
   const data = useLoaderData();
   const postCommentFetcher = useFetcher();
+
   function postComment() {
     let item = {
       id,
@@ -396,22 +387,22 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
           comments.map((comment, index) => (
             <div
               className="p-2 text-base  rounded-lg dark:bg-gray-700"
-              key={comment.id}
+              key={comment?.id}
             >
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center">
                   <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                     <img
                       className="mr-2 w-6 h-6 rounded-full"
-                      src={comment.author.avatarUrl}
+                      src={comment.author?.avatarUrl}
                       alt="author image"
                     />
-                    {comment.author.name}
+                    {comment.author?.name}
                   </p>
                 </div>
               </div>
-              {comment?.audioUrl && comment.audioUrl !== "" && (
-                <AudioPlayer src={comment?.audioUrl} />
+              {comment.audioUrl && comment.audioUrl !== "" && (
+                <AudioPlayer src={comment.audioUrl} />
               )}
               <p className="text-gray-500 dark:text-gray-400">{comment.text}</p>
             </div>

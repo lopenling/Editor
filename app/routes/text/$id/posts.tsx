@@ -24,10 +24,10 @@ import { Editor } from "@tiptap/react";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.id && parseInt(params.id);
   const threadId = new URL(request.url).searchParams.get("thread") ?? "";
+  if (textId === "" || !textId) return redirect("/");
 
   const CategoryData = await fetchCategoryData();
   const topicList = CategoryData.topic_list.topics;
-  if (textId === "" || !textId) return redirect("/");
   const posts = findPostByTextId(textId, topicList);
   return defer({ text: { id: textId }, posts, threadId });
 };

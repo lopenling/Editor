@@ -1,6 +1,4 @@
 import { ActionFunction, json } from "@remix-run/server-runtime";
-import { findPostByUserLiked, updatePostLike } from "~/model/post";
-import { createReply, findReply, updateReply } from "~/model/reply";
 import {
   findSuggestionByUserLiked,
   updateSuggestionLike,
@@ -18,7 +16,7 @@ export const action: ActionFunction = async ({ request }) => {
       userId,
       likedUsers === null
     );
-    return response.likedBy;
+    return json({ likedBy: [...response.likedBy] });
   } catch (e) {
     console.log(e);
   }

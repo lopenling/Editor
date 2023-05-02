@@ -47,10 +47,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const text_id = parseInt(params.id);
   const text = await findTextByTextId(text_id, false);
+  const suggestions = await findAllSuggestionByTextId(text_id);
+
   const textContent = getTextContent(text_id);
   if (!text_id) throw new Error("not valid textId");
 
-  return defer({ user, text: text, textContent });
+  return defer({ user, text: text, textContent, suggestions });
 };
 
 export function ErrorBoundary({ error }) {

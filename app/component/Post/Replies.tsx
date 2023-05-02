@@ -41,16 +41,7 @@ function Replies({
     }
   }, [replyCount, postListFetcher.data]);
 
-  let postdata = useMemo(
-    () =>
-      replies?.slice(1).sort((a, b) => {
-        if (a.isAproved === b.isAproved) {
-          return 0;
-        }
-        return a.isAproved ? -1 : 1;
-      }),
-    [replies]
-  );
+  let postdata = useMemo(() => replies, [replies]);
   if (loading)
     return (
       <div className="flex my-2 justify-center items-center">
