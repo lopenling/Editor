@@ -75,7 +75,10 @@ export default function PostContainer() {
 
   return (
     <>
-      <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4 ">
+      <div
+        className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4 "
+        style={{ minWidth: 370 }}
+      >
         {/* sort button */}
         <Dropdown
           label={

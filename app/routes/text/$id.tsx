@@ -9,7 +9,7 @@ import {
   useLocation,
   Await,
 } from "@remix-run/react";
-import { useEffect, Suspense } from "react";
+import { useEffect, Suspense, useState, useRef } from "react";
 import { findTextByTextId, getTextContent } from "~/model/text";
 import EditorContainer from "~/component/Editor/EditorContainer";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -40,6 +40,7 @@ import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
+import { isMobile } from "react-device-detect";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -97,6 +98,7 @@ export default function () {
       { method: "post", action: "/api/text" }
     );
   };
+  const [selectedThread, postSelector] = useRecoilState(selectedPostThread);
   function suggestionSetter(id: string) {
     suggestionSelector({
       id: id,
@@ -107,6 +109,12 @@ export default function () {
       id: id,
     });
   }
+  const closesidebar = () => {
+    setOpenSuggestion(false);
+    suggestionSelector({ id: "" });
+    postSelector({ id: "" });
+  };
+
   const isSaving = !!saveText.formData;
   let editor = useEditor(
     {
@@ -170,8 +178,8 @@ export default function () {
     []
   );
   const flags = useFlags(["suggestionlocation"]);
-  const [selectedThreadId, postSelector] = useRecoilState(selectedPostThread);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
+  const sidebarBtnRef = useRef();
   if (data.text === null)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
@@ -181,48 +189,73 @@ export default function () {
         </Link>
       </div>
     );
-  const showAside =
-    openSuggestion || suggestionSelected?.id || selectedThreadId?.id;
-  console.log(showAside);
+  useEffect(() => {
+    if (suggestionSelected.id || openSuggestion || selectedThread.id) {
+      if (isMobile) sidebarBtnRef.current?.click();
+    }
+  }, [suggestionSelected?.id, openSuggestion, selectedThread.id]);
+
   return (
     <>
       <Header user={data.user} editor={editor} />
 
-      <main
-        className="relative sm:mr-64 grid md:grid-cols-3 gap-6 "
-        style={{ maxWidth: 1185, marginInline: "auto" }}
+      <div
+        className="flex mx-auto relative "
+        style={{ paddingTop: 78, maxWidth: MAX_WIDTH_PAGE }}
       >
-        <div className=" h-full col-span-2 pt-4">
-          <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-            <div className="flex-1 my-auto">
-              <Suspense
-                fallback={
-                  <div className="flex justify-center h-[400px] w-full animate-pulse ">
-                    <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>
-                  </div>
-                }
-              >
-                <Await
-                  resolve={data.textContent}
-                  errorElement={<p>Error fetching content!</p>}
-                >
-                  <EditorContainer editor={editor} isSaving={isSaving} />
-                  <div />
-                </Await>
-              </Suspense>
-            </div>
-          </div>
-        </div>
-        <div className="col-span-1 bg-green-200  ">
-          <aside
-            id="logo-sidebar"
-            className={`sticky ${
-              showAside
-                ? "xs:fixed translate-x-0 xs:w-1/2"
-                : "translate-x-full "
-            }  top-0 left-0 z-40 w-full  h-screen pt-20 transition-transform sm:translate-x-0  bg-white border-r pr-3 border-gray-200 dark:bg-gray-800 dark:border-gray-700`}
-            aria-label="Sidebar"
+        <div className="sm:w-full md:w-4/6 px-4  ">
+          <button
+            className="hidden bg-gray-800  text-white px-3 py-1 rounded-sm"
+            ref={sidebarBtnRef}
+            aria-hidden="true"
+            data-drawer-target="logo-sidebar"
+            data-drawer-toggle="logo-sidebar"
           >
+            <svg
+              className="w-6 h-6"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clipRule="evenodd"
+                fillRule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+              ></path>
+            </svg>
+          </button>
+          <Suspense
+            fallback={
+              <div className="flex justify-center h-[400px] w-full animate-pulse ">
+                <div className="flex w-full h-full  dark:bg-gray-700"></div>
+              </div>
+            }
+          >
+            <Await
+              resolve={data.textContent}
+              errorElement={<p>Error fetching content!</p>}
+            >
+              <EditorContainer editor={editor} isSaving={isSaving} />
+              <div />
+            </Await>
+          </Suspense>
+        </div>
+        <aside
+          id="logo-sidebar"
+          className="fixed sm:hidden top-0 left-0 z-40 w-full h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+          aria-label="Sidebar"
+          aria-hidden="true"
+        >
+          <button
+            className="md:hidden bg-gray-800  text-white px-3 py-1 rounded-sm"
+            onClick={closesidebar}
+            data-drawer-target="logo-sidebar"
+            data-drawer-toggle="logo-sidebar"
+          >
+            close
+          </button>
+          <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
             {(openSuggestion || suggestionSelected?.id) &&
             (!isSuggestionAtBubble || suggestionSelected?.id) ? (
@@ -230,9 +263,22 @@ export default function () {
             ) : (
               <Outlet context={{ user: data.user, editor, text: data.text }} />
             )}
-          </aside>
-        </div>
-      </main>
+          </div>
+        </aside>
+        {/* Sidebar */}
+        <aside
+          className={`hidden md:block sticky top-0 bg-white max-h-screen w-max px-4 py-6 `}
+          style={{ width: "35%" }}
+        >
+          {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
+          {(openSuggestion || suggestionSelected?.id) &&
+          (!isSuggestionAtBubble || suggestionSelected?.id) ? (
+            <SuggestionForm editor={editor} />
+          ) : (
+            <Outlet context={{ user: data.user, editor, text: data.text }} />
+          )}
+        </aside>
+      </div>
     </>
   );
 }

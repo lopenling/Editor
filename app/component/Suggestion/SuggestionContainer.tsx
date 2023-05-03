@@ -4,7 +4,6 @@ import { useFetcher, useLoaderData } from "@remix-run/react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
 import Suggestion from "./Suggestion";
-
 function Suggestions({ editor }: { editor: Editor | null }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
   let data = useLoaderData();
@@ -36,7 +35,10 @@ function Suggestions({ editor }: { editor: Editor | null }) {
     }
   }, [list[0]?.id]);
   return (
-    <div className="p-2 bg-slate-50 shadow-md mt-4  max-h-[70vh] overflow-y-auto">
+    <div
+      className="p-2 bg-slate-50 shadow-md mt-4 max-h-[70vh] overflow-y-auto"
+      style={{ minWidth: 370 }}
+    >
       <div className="flex flex-col  gap-2 ">
         <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
           Suggestion
