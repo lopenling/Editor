@@ -79,8 +79,7 @@ function App() {
   const navigation = useNavigation();
   let routeChanged =
     navigation.state === "loading" &&
-    navigation.location.pathname.includes("/texts") &&
-    !navigation.location.state;
+    navigation.location?.pathname.includes("/text");
   let [themeSelected, setThemeSelected] = useRecoilState(theme);
 
   useEffect(() => {

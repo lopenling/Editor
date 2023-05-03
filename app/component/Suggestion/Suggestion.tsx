@@ -51,9 +51,8 @@ export default function Suggestion({
     : false;
   let likeInFetcher = likeFetcher?.formData?.get("like");
   const selection = useRecoilValue(selectedTextOnEditor);
-
   let likeCount = likeFetcher.data
-    ? likeFetcher.data?.length
+    ? likeFetcher.data?.likedBy.length
     : suggest.likedBy.length;
   if (likeInFetcher === "true") {
     likedByMe = true;

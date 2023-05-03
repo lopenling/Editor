@@ -18,7 +18,7 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { motion } from "framer-motion";
 import Header from "~/component/Layout/Header";
 import { useState, useEffect } from "react";
-import Loader from "~/component/UI/Loader";
+import Skeleton from "~/component/UI/Skeleton";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("s")?.trim();
   let headers = {
@@ -135,59 +135,57 @@ export default function Index() {
             </div>
           </Form>
         </div>
-        {isLoading && (
-          <center>
-            <Loader />
-          </center>
-        )}
+        <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">
+          {isLoading && <Skeleton height={125} number={3} />}
 
-        {list && !isLoading && (
-          <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">
-            {list.length === 0 && (
-              <div
-                className="text-gray-300 text-xl font-extrabold capitalize"
-                style={{
-                  fontSize: 20,
-                  fontFamily: "Inter",
-                  lineHeight: "150%",
-                }}
-              >
-                No result found
-              </div>
-            )}
-            {list?.map((list: { id: number; name: string }) => {
-              let result = list?.results[0];
-
-              return (
-                <Link
-                  to={"/text/" + list.id + "/posts"}
-                  key={"id" + list.id}
-                  className="container w-full"
-                  prefetch="intent"
+          {list && !isLoading && (
+            <>
+              {list.length === 0 && (
+                <div
+                  className="text-gray-300 text-xl font-extrabold capitalize"
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "Inter",
+                    lineHeight: "150%",
+                  }}
                 >
-                  <Card className="dark:bg-gray-500">
-                    <h5 className="text-2xl  text-gray-700 dark:text-white">
-                      {list.name}
-                    </h5>
-                    <div className="flex justify-between">
-                      {result && (
-                        <div
-                          className="text-lg text-gray-400"
-                          dangerouslySetInnerHTML={{
-                            __html: highlightText(result[1], data.search),
-                          }}
-                        ></div>
-                      )}
-                      <div className="text-sm text-gray-400">
-                        {list.total} matches
+                  No result found
+                </div>
+              )}
+              {list?.map((list: { id: number; name: string }) => {
+                let result = list?.results[0];
+
+                return (
+                  <Link
+                    to={"/text/" + list.id + "/posts"}
+                    key={"id" + list.id}
+                    className="container w-full"
+                    prefetch="intent"
+                  >
+                    <Card className="dark:bg-gray-500">
+                      <h5 className="text-2xl  text-gray-700 dark:text-white">
+                        {list.name}
+                      </h5>
+                      <div className="flex justify-between">
+                        {result && (
+                          <div
+                            className="text-lg text-gray-400"
+                            dangerouslySetInnerHTML={{
+                              __html: highlightText(result[1], data.search),
+                            }}
+                          ></div>
+                        )}
+                        <div className="text-sm text-gray-400">
+                          {list.total} matches
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </Link>
-              );
-            })}
-          </div>
-        )}
+                    </Card>
+                  </Link>
+                );
+              })}
+            </>
+          )}
+        </div>
       </div>
       {!list && !isLoading && (
         <>

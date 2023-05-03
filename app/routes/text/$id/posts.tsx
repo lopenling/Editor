@@ -1,6 +1,6 @@
 import { useState, Suspense, useEffect } from "react";
 import PostForm from "~/component/Post/PostForm";
-import Skeleton from "~/component/Post/Skeleton";
+import Skeleton from "~/component/UI/Skeleton";
 import {
   Await,
   useLoaderData,
@@ -165,7 +165,7 @@ export default function PostContainer() {
       <PostForm />
 
       {/* used differ at loader for post list to fetch posts as a promise */}
-      <Suspense fallback={<Skeleton />}>
+      <Suspense fallback={<Skeleton number={4} height={80} />}>
         <Await resolve={data.posts}>
           {(posts) => {
             return <Posts posts={posts} editor={editor} />;
