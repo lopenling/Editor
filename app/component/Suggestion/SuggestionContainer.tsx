@@ -13,7 +13,7 @@ function Suggestions({ editor }: { editor: Editor | null }) {
   });
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
   const selection = useRecoilValue(selectedTextOnEditor);
-  const replaceRef = useRef(list[0].id);
+  const replaceRef = useRef(list[0]?.id);
 
   function replaceHandler(replace: string) {
     editor
@@ -31,10 +31,10 @@ function Suggestions({ editor }: { editor: Editor | null }) {
   }
 
   useEffect(() => {
-    if (replaceRef.current !== list[0].id) {
+    if (list[0] && replaceRef.current !== list[0].id) {
       replaceHandler(list[0].newValue);
     }
-  }, [list[0].id]);
+  }, [list[0]?.id]);
   return (
     <div className="p-2 bg-slate-50 shadow-md mt-4  max-h-[70vh] overflow-y-auto">
       <div className="flex flex-col  gap-2 ">

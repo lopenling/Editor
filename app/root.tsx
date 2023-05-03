@@ -23,6 +23,7 @@ import flagsmith from "flagsmith";
 import { FlagsmithProvider } from "flagsmith/react";
 import { findUserByUsername } from "./model/user";
 import Loader from "./component/UI/Loader";
+import { GlobalLoading } from "./component/UI/globalLoader";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
@@ -111,6 +112,7 @@ function App() {
             )}
           </AnimatePresence>
         </LitteraProvider>
+        <GlobalLoading />
         <ScrollRestoration getKey={(location) => location.pathname} />
         <LiveReload />
 

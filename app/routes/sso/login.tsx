@@ -11,7 +11,6 @@ import {
   login,
 } from "~/services/session.server";
 import { createUserInDB, findUserByUsername } from "~/model/user";
-import { logout } from "~/services/discourseApi";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -48,7 +47,6 @@ export let loader: LoaderFunction = async ({ request }) => {
       let userData = null;
       let id = 0;
       let isUserPresent = await findUserByUsername(username);
-      console.log(isUserPresent);
       if (isUserPresent === null) {
         let isAdmin = admin === "true" ? true : false;
         userData = await createUserInDB(

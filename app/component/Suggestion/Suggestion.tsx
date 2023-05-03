@@ -290,6 +290,7 @@ export default function Suggestion({
           id={suggest.id}
           setOpenComment={setOpenComment}
           comments={suggest.SuggestionComment}
+          type={likedByMe ? "support" : "reject"}
         />
       )}
     </div>
@@ -299,8 +300,9 @@ type CommentProps = {
   id: string;
   setOpenComment: (value: boolean) => void;
   comments: [];
+  type: "support" | "reject" | null;
 };
-function CommentSection({ id, setOpenComment, comments }: CommentProps) {
+function CommentSection({ id, setOpenComment, comments, type }: CommentProps) {
   const [commentText, setCommentText] = useState("");
   const [audio, setAudio] = useState({ tempUrl: "", blob: null });
   const data = useLoaderData();
@@ -310,6 +312,7 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
     let item = {
       id,
       commentContent: commentText,
+      type: type,
     };
     let blob = audio.blob;
     var form_data = new FormData();
@@ -383,29 +386,43 @@ function CommentSection({ id, setOpenComment, comments }: CommentProps) {
           </div>
         </div>
         {comments.length > 0 &&
-          comments.map((comment, index) => (
-            <div
-              className="p-2 text-base  rounded-lg dark:bg-gray-700"
-              key={comment?.id}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center">
-                  <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-                    <img
-                      className="mr-2 w-6 h-6 rounded-full"
-                      src={comment.author?.avatarUrl}
-                      alt="author image"
-                    />
-                    {comment.author?.name}
-                  </p>
+          comments.map((comment, index) => {
+            let color =
+              comment.type === "support"
+                ? "bg-green-100"
+                : comment.type === "reject"
+                ? "bg-red-100"
+                : null;
+            let time = timeAgo(comment.createdAt);
+            return (
+              <div
+                className={`p-2 text-base  rounded-lg dark:bg-gray-700 ${color}`}
+                key={comment?.id}
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center">
+                    <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                      <img
+                        className="mr-2 w-6 h-6 rounded-full"
+                        src={comment.author?.avatarUrl}
+                        alt="author image"
+                      />
+                      {comment.author?.name}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {time}
+                    </p>
+                  </div>
                 </div>
+                {comment.audioUrl && comment.audioUrl !== "" && (
+                  <AudioPlayer src={comment.audioUrl} />
+                )}
+                <p className="text-gray-500 dark:text-gray-400">
+                  {comment.text}
+                </p>
               </div>
-              {comment.audioUrl && comment.audioUrl !== "" && (
-                <AudioPlayer src={comment.audioUrl} />
-              )}
-              <p className="text-gray-500 dark:text-gray-400">{comment.text}</p>
-            </div>
-          ))}
+            );
+          })}
       </div>
     </div>
   );

@@ -6,7 +6,8 @@ export async function createCommentOnSuggestion(
   text: string,
   suggestionId: string,
   userId: string,
-  audioUrl: string
+  audioUrl: string,
+  type: "support" | "reject" | null
 ) {
   const comment = await db.suggestionComment.create({
     data: {
@@ -14,6 +15,7 @@ export async function createCommentOnSuggestion(
       suggestionId,
       userId,
       audioUrl,
+      type,
     },
   });
   return comment;

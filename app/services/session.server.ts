@@ -32,9 +32,11 @@ export async function getUserSession(request: Request) {
 export async function destroyUserSession(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
   let external_id = session.get("user").external_id;
-  await logout(external_id);
-  session.set("user", null);
-  return await destroySession(session, { sameSite: "lax" });
+  let discourse = await logout(external_id);
+  if (discourse?.status === 200) {
+    return await destroySession(session, { sameSite: "lax" });
+  }
+  return null;
 }
 
 export async function login(request: Request, next: any, redirectTo: string) {

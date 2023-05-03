@@ -168,7 +168,7 @@ function Header({ user, editor }: HeaderProps) {
                   >
                     <NavLink
                       preventScrollReset
-                      to="/texts/upload"
+                      to="/text/upload"
                       prefetch="render"
                       className="flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
@@ -301,7 +301,6 @@ function Header({ user, editor }: HeaderProps) {
                 </button>
               </loginFetcher.Form>
               <Button
-                // gradientDuoTone="tealToLime"
                 className=" text-green-400 border-2 border-green-300"
                 color=""
                 id="signup"

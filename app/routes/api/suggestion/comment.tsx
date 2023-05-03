@@ -21,11 +21,13 @@ export let action: ActionFunction = async ({ request }: ActionArgs) => {
     let comment = Obj.commentContent as string;
     let id = Obj.id as string;
     let audioUrl = Obj.file as string;
+    let type = Obj.type as "support" | "reject" | null;
     let createComment = await createCommentOnSuggestion(
       comment,
       id,
       user.id,
-      audioUrl
+      audioUrl,
+      type
     );
     return createComment;
   }
