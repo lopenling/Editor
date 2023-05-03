@@ -88,7 +88,6 @@ export default function () {
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );
-  const postSelector = useSetRecoilState(selectedPostThread);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const saveText = useFetcher();
@@ -171,6 +170,7 @@ export default function () {
     []
   );
   const flags = useFlags(["suggestionlocation"]);
+  const [selectedThreadId, postSelector] = useRecoilState(selectedPostThread);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   if (data.text === null)
     return (
@@ -181,46 +181,58 @@ export default function () {
         </Link>
       </div>
     );
+  const showAside =
+    openSuggestion || suggestionSelected?.id || selectedThreadId?.id;
+  console.log(showAside);
   return (
-    <motion.div
-      key={useLocation().pathname}
-      initial={{ x: "5%", opacity: 0 }}
-      animate={{ x: "0%", opacity: 1 }}
-      exit={{ x: "5%", opacity: 0 }}
-    >
+    <>
       <Header user={data.user} editor={editor} />
 
       <main
-        className="container relative lg:mx-auto flex w-full flex-col lg:gap-8 lg:flex-row   "
-        style={{ maxWidth: MAX_WIDTH_PAGE }}
+        className="relative sm:mr-64 grid md:grid-cols-3 gap-6 "
+        style={{ maxWidth: 1185, marginInline: "auto" }}
       >
-        <div className="max-w-[750px] flex-1 overflow-hidden">
-          <Suspense
-            fallback={
-              <div className="flex justify-center h-[400px] w-full animate-pulse mt-4">
-                <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>
-              </div>
-            }
-          >
-            <Await
-              resolve={data.textContent}
-              errorElement={<p>Error fetching content!</p>}
-            >
-              <EditorContainer editor={editor} isSaving={isSaving} />
-              <div />
-            </Await>
-          </Suspense>
+        <div className=" h-full col-span-2 pt-4">
+          <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+            <div className="flex-1 my-auto">
+              <Suspense
+                fallback={
+                  <div className="flex justify-center h-[400px] w-full animate-pulse ">
+                    <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>
+                  </div>
+                }
+              >
+                <Await
+                  resolve={data.textContent}
+                  errorElement={<p>Error fetching content!</p>}
+                >
+                  <EditorContainer editor={editor} isSaving={isSaving} />
+                  <div />
+                </Await>
+              </Suspense>
+            </div>
+          </div>
         </div>
-        <aside className=" sticky top-[78px] sm:w-full lg:w-1/3 max-h-[80vh] mt-4">
-          {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
-          {(openSuggestion || suggestionSelected?.id) &&
-          (!isSuggestionAtBubble || suggestionSelected?.id) ? (
-            <SuggestionForm editor={editor} />
-          ) : (
-            <Outlet context={{ user: data.user, editor, text: data.text }} />
-          )}
-        </aside>
+        <div className="col-span-1 bg-green-200  ">
+          <aside
+            id="logo-sidebar"
+            className={`sticky ${
+              showAside
+                ? "xs:fixed translate-x-0 xs:w-1/2"
+                : "translate-x-full "
+            }  top-0 left-0 z-40 w-full  h-screen pt-20 transition-transform sm:translate-x-0  bg-white border-r pr-3 border-gray-200 dark:bg-gray-800 dark:border-gray-700`}
+            aria-label="Sidebar"
+          >
+            {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
+            {(openSuggestion || suggestionSelected?.id) &&
+            (!isSuggestionAtBubble || suggestionSelected?.id) ? (
+              <SuggestionForm editor={editor} />
+            ) : (
+              <Outlet context={{ user: data.user, editor, text: data.text }} />
+            )}
+          </aside>
+        </div>
       </main>
-    </motion.div>
+    </>
   );
 }

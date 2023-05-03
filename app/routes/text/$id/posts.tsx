@@ -74,7 +74,7 @@ export default function PostContainer() {
   const { editor }: { editor: Editor } = useOutletContext();
 
   return (
-    <div>
+    <>
       <div className="hidden w-full items-center justify-end md:inline-flex gap-2 mb-4 ">
         {/* sort button */}
         <Dropdown
@@ -172,6 +172,6 @@ export default function PostContainer() {
           }}
         </Await>
       </Suspense>
-    </div>
+    </>
   );
 }

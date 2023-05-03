@@ -97,7 +97,7 @@ function App() {
         />
         <Links />
       </head>
-      <body className="dark:bg-gray-600 dark:text-white  scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
+      <body className="relative dark:bg-gray-600 dark:text-white  scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           <AnimatePresence mode="wait" initial={false}>
             {routeChanged ? (

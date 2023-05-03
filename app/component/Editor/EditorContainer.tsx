@@ -96,9 +96,8 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
     }
   }, [thread.id]);
   return (
-    <div className="flex flex-col gap-3 mt-4">
-      {/* <EditorSettings editor={editor} /> */}
-      <div className="  flex-1 textEditorContainer max-h-[70vh] overflow-hidden mb-4 px-4 lg:max-h-max">
+    <div className="flex gap-3 ">
+      <div className="  flex-1 textEditorContainer  mb-4 px-4 lg:max-h-max">
         <div className="text-3xl font-bold  relative top-[-5px] text-light my-4   flex items-center justify-between  text-gray-900 dark:text-white">
           <h3 className="textname flex gap-2 text-2xl">
             {data?.text?.name}
@@ -127,7 +126,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
             export
           </Button>
         </div>
-        <div className="sticky top-[110px] shadow-textEditor pt-3">
+        <div className="sticky top-[110px] shadow-textEditor pt-3 overflow-y-auto md:overflow-hidden">
           {!editor ? (
             <div className="flex justify-center h-[400px] w-full animate-pulse">
               <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>

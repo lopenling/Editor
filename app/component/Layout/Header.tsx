@@ -65,13 +65,11 @@ function Header({ user, editor }: HeaderProps) {
   useEffect(() => {
     let timeout;
 
-    const handleScroll = () => {
+    const handleScroll = (e) => {
       if (timeout) clearTimeout(timeout);
-
       timeout = setTimeout(() => {
         const shouldShowTextName =
-          window.scrollY > 10 && redirectTo.includes("texts");
-
+          window.scrollY > 10 && redirectTo.includes("text");
         setTextNameOnHeader(shouldShowTextName);
       }, 10);
     };
@@ -83,7 +81,7 @@ function Header({ user, editor }: HeaderProps) {
   let [showMenu, setShowMenu] = useState(false);
   const ref = useDetectClickOutside({ onTriggered: () => setShowMenu(false) });
   return (
-    <nav className="header bg-white border-gray-200 dark:bg-gray-900 shadow-header sticky top-0 z-20 ">
+    <nav className="header fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-gray-900 shadow-header ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textNameValue={textNameValue} />
