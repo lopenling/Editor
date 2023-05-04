@@ -219,13 +219,13 @@ export default function () {
           className={`w-1/3 md:h-screen p-2 overflow-y-auto bg-gray-100 `}
           style={{ minWidth: 400 }}
         >
-          {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected?.id) &&
           (!isSuggestionAtBubble || suggestionSelected?.id) ? (
             <SuggestionForm editor={editor} />
           ) : (
             <Outlet context={{ user: data.user, editor, text: data.text }} />
           )}
+          {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
         </div>
       </div>
     </div>

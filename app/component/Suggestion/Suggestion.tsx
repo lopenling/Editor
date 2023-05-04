@@ -72,12 +72,13 @@ export default function Suggestion({
         id,
         userId: data.user.id,
         like: !likedByMe ? "true" : "false",
+        threadId: suggest.threadId,
       },
       { method: "post", action: "api/suggestion/like" }
     );
     setTimeout(() => {
-      replacer(res?.highestLike[0]?.newValue);
-    }, 2000);
+      replacer(res?.highestLiked.newValue);
+    }, 100);
   };
   let time = timeAgo(suggest.created_at);
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);

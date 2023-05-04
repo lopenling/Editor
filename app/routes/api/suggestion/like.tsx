@@ -8,17 +8,21 @@ import {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   let Obj = Object.fromEntries(formData);
-  let threadId = Obj.id as string;
+  let id = Obj.id as string;
   let userId = Obj.userId as string;
-  const likedUsers = await findSuggestionByUserLiked(threadId, userId);
+  let threadId = Obj.threadId as string;
+
+  const likedUsers = await findSuggestionByUserLiked(id, userId);
   try {
-    let response = await updateSuggestionLike(
-      threadId,
-      userId,
-      likedUsers === null
-    );
-    let highestLiked = await findSuggestionWithMostLikes(threadId);
-    return json({ ...response, ...highestLiked });
+    let update = await updateSuggestionLike(id, userId, likedUsers === null);
+    if (update) {
+      let highestLiked = await findSuggestionWithMostLikes(threadId);
+      return {
+        highestLiked: highestLiked[0],
+        likedBy: update,
+      };
+    }
+    return true;
   } catch (e) {
     console.log(e);
   }

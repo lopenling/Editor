@@ -15,11 +15,7 @@ export async function findAllSuggestionByTextId(textId: number) {
           },
         },
       },
-      orderBy: {
-        likedBy: {
-          _count: "desc",
-        },
-      },
+      orderBy: [{ created_at: "desc" }, { likedBy: { _count: "desc" } }],
     });
     return data;
   } catch (e) {
@@ -42,11 +38,7 @@ export async function getSuggestionWithThreadId(threadId: string) {
           },
         },
       },
-      orderBy: {
-        likedBy: {
-          _count: "desc",
-        },
-      },
+      orderBy: [{ created_at: "asc" }, { likedBy: { _count: "desc" } }],
     });
     return data;
   } catch (e) {
@@ -152,16 +144,21 @@ export async function findSuggestionWithMostLikes(id: string) {
   try {
     const mostLikedSuggestion = await db.suggestion.findMany({
       where: {
-        id,
+        threadId: id,
       },
-      orderBy: {
-        likedBy: {
-          _count: "desc",
+      orderBy: [
+        {
+          likedBy: {
+            _count: "desc",
+          },
         },
-      },
-      take: 1, // limit to the top suggestion with the most likes
+        {
+          created_at: "desc",
+        },
+      ],
+      take: 1,
     });
-    return { highestLike: mostLikedSuggestion };
+    return mostLikedSuggestion;
   } catch (e) {
     console.warn(e);
   }

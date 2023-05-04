@@ -158,11 +158,13 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
               Export
             </li>
             <li className="cursor-pointer flex items-center gap-2 py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-              font{" "}
+              Font Size{" "}
               <input
                 type="number"
+                min={10}
                 value={fontSize}
                 size={2}
+                max={40}
                 style={{ border: 0, padding: 0 }}
                 onChange={handleFontSizeChange}
               />
