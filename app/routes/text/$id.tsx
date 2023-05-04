@@ -194,10 +194,10 @@ export default function () {
     <div className="min-h-screen h-screen flex flex-col">
       <Header user={data.user} editor={editor} />
 
-      <div className="flex gap-3 flex-col md:flex-row overflow-y-hidden max-w-6xl mx-auto pt-16 h-full ">
+      <div className="flex gap-3 flex-col md:flex-row overflow-y-hidden  max-w-6xl mx-auto pt-16 h-full ">
         <div
           id="textEditorContainer"
-          className=" bg-white overflow-y-auto h-full w-full p-2 "
+          className=" bg-white overflow-y-auto h-full w-full p-2 md:flex-1"
         >
           <Suspense
             fallback={
@@ -215,8 +215,9 @@ export default function () {
             </Await>
           </Suspense>
         </div>
-        <aside
-          className={`w-1/3 md:h-screen  sm:w-32 p-2 overflow-y-auto bg-gray-100 `}
+        <div
+          className={`w-1/3 md:h-screen p-2 overflow-y-auto bg-gray-100 `}
+          style={{ minWidth: 400 }}
         >
           {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
           {(openSuggestion || suggestionSelected?.id) &&
@@ -225,7 +226,7 @@ export default function () {
           ) : (
             <Outlet context={{ user: data.user, editor, text: data.text }} />
           )}
-        </aside>
+        </div>
       </div>
     </div>
   );
