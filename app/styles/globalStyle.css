@@ -92,6 +92,7 @@ nav > div {
 .suggestion {
   color: blue;
   cursor: pointer;
+  text-decoration: dotted 2px underline red;
 }
 .suggestion::selection {
   font-weight: 700;
@@ -107,7 +108,7 @@ nav > div {
 .search {
   background-color: rgb(232, 233, 137);
 }
-.textEditorContainer {
+#textEditorContainer {
   font-family: "Monlam", serif;
   line-height: 1.5;
 }

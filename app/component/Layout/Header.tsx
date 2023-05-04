@@ -30,7 +30,11 @@ const LogoWithTextName = ({ textNameValue }: { textNameValue: string }) => (
       />
     </Link>
     <h1
-      onClick={() => window?.scrollTo(0, 0)}
+      onClick={() => {
+        let editorElement = document.getElementById("textEditorContainer");
+
+        editorElement?.scrollTo(0, 0);
+      }}
       style={{ top: -10 }}
       className="text-3xl ml-2 relative  font-bold "
     >
@@ -65,17 +69,18 @@ function Header({ user, editor }: HeaderProps) {
   useEffect(() => {
     let timeout;
 
+    let editorElement = document.getElementById("textEditorContainer");
     const handleScroll = (e) => {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
         const shouldShowTextName =
-          window.scrollY > 10 && redirectTo.includes("text");
+          editorElement?.scrollTop > 10 && redirectTo.includes("text");
         setTextNameOnHeader(shouldShowTextName);
       }, 10);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.addEventListener("scroll", handleScroll);
+    editorElement?.addEventListener("scroll", handleScroll);
+    return () => editorElement?.addEventListener("scroll", handleScroll);
   }, [redirectTo, textNameValue]);
   let darkMode = themeSelected;
   let [showMenu, setShowMenu] = useState(false);

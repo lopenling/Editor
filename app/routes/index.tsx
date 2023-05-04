@@ -89,12 +89,7 @@ export default function Index() {
       <Header user={user} editor={null} />
 
       <div className=" max-w-2xl mx-auto">
-        <div
-          className="inline-flex w-full items-center justify-center  px-3 md:px-1.5"
-          style={{
-            paddingBlock: !isLoading && !list ? "7rem" : 30,
-          }}
-        >
+        <div className="inline-flex w-full items-center justify-center  px-3 md:px-1.5 pt-24  ">
           <Form method="get" className="w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
               <TextInput
@@ -166,7 +161,7 @@ export default function Index() {
                       <h5 className="text-2xl  text-gray-700 dark:text-white">
                         {list.name}
                       </h5>
-                      <div className="flex justify-between">
+                      <div className="flex flex-wrap justify-between">
                         {result && (
                           <div
                             className="text-lg text-gray-400"

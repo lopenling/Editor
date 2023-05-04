@@ -6,18 +6,21 @@ function Loader() {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
-        const newProgress = prevProgress + 1;
-        if (newProgress === 100) {
-          clearInterval(interval);
+        if (prevProgress < 98) {
+          const newProgress = prevProgress + 1;
+          if (newProgress === 100) {
+            clearInterval(interval);
+          }
+          return newProgress;
         }
-        return newProgress;
+        return prevProgress;
       });
     }, 50);
 
     return () => clearInterval(interval);
   }, []);
 
-  const width = Math.log10(progress + 1) * 20;
+  const width = (progress / 100) * 100;
 
   return (
     <div className="bg-gray-200 rounded-full w-64">

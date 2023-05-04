@@ -148,15 +148,24 @@ export async function updateSuggestionContent(id: string, newValue: string) {
     throw new Error("update suggestion like error: " + e.message);
   }
 }
-// export async function findSuggestionWithMostLikes() {
-//   try {
-//     await db.suggestion.findFirst({
-//       where: {
-
-//       }
-//     })
-//   }
-// }
+export async function findSuggestionWithMostLikes(id: string) {
+  try {
+    const mostLikedSuggestion = await db.suggestion.findMany({
+      where: {
+        id,
+      },
+      orderBy: {
+        likedBy: {
+          _count: "desc",
+        },
+      },
+      take: 1, // limit to the top suggestion with the most likes
+    });
+    return { highestLike: mostLikedSuggestion };
+  } catch (e) {
+    console.warn(e);
+  }
+}
 //delete suggestion
 export async function deleteSuggestion(id: string) {
   try {

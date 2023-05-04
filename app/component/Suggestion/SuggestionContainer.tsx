@@ -1,4 +1,4 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
@@ -10,7 +10,9 @@ function Suggestions({ editor }: { editor: Editor | null }) {
   let list = data.suggestions.filter((sug) => {
     return sug.threadId === suggestionThread.id;
   });
-  const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
+  const [suggestionSelector, setSuggestionThread] = useRecoilState(
+    selectedSuggestionThread
+  );
   const selection = useRecoilValue(selectedTextOnEditor);
   const replaceRef = useRef(list[0]?.id);
 
@@ -26,14 +28,13 @@ function Suggestions({ editor }: { editor: Editor | null }) {
         replace
       )
       .run();
-    suggestionSelector({ id: null });
+    setSuggestionThread({ id: "" });
   }
 
-  useEffect(() => {
-    if (list[0] && replaceRef.current !== list[0].id) {
-      replaceHandler(list[0].newValue);
-    }
-  }, [list[0]?.id]);
+  const replacer = (char: string) => {
+    replaceHandler(char);
+  };
+
   return (
     <div
       className="p-2 bg-slate-50 shadow-md mt-4 max-h-[70vh] overflow-y-auto"
@@ -49,6 +50,7 @@ function Suggestions({ editor }: { editor: Editor | null }) {
             editor={editor}
             suggest={suggest}
             key={suggest.id}
+            replacer={replacer}
           />
         ))}
       </div>

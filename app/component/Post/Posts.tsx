@@ -42,7 +42,7 @@ function Posts({ editor, posts }: PostPropsType) {
     <>
       <Filter />
       <div
-        className="scroll-container flex flex-col overflow-x-hidden overflow-y-scroll relative pr-2"
+        className=" flex flex-col relative pr-2"
         style={{
           height: "min-content",
           maxHeight: "80vh",

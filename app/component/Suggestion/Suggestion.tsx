@@ -28,14 +28,16 @@ type SuggestionProps = {
   editor: Editor | null;
   suggest: SuggestType;
   optimistic: boolean;
+  replacer: () => void;
 };
 
 export default function Suggestion({
   editor,
   suggest,
   optimistic = false,
+  replacer,
 }: SuggestionProps) {
-  const likeFetcher = useFetcher();
+  const likeFetcher = useFetcherWithPromise();
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
   const data = useLoaderData();
@@ -65,7 +67,7 @@ export default function Suggestion({
   const handleLike = async (id: string) => {
     setEffect(true);
 
-    likeFetcher.submit(
+    const res = await likeFetcher.submit(
       {
         id,
         userId: data.user.id,
@@ -73,6 +75,9 @@ export default function Suggestion({
       },
       { method: "post", action: "api/suggestion/like" }
     );
+    setTimeout(() => {
+      replacer(res?.highestLike[0]?.newValue);
+    }, 2000);
   };
   let time = timeAgo(suggest.created_at);
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
