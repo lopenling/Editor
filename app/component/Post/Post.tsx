@@ -110,6 +110,7 @@ function Post({
     copyToClipboard(url);
     alert("url coppied on clipboard");
   }
+  let content = postContent.replace(/\n/g, "<br>");
   return (
     <div
       className={`${deleteFetcher.formData && "hidden"}`}
@@ -163,7 +164,7 @@ function Post({
             <div className="w-full flex items-center justify-end font-light text-xs italic uppercase">
               {type}
             </div>
-            {postContent}
+            <p dangerouslySetInnerHTML={{ __html: content }} />
           </div>
           {audioUrl?.length > 0 && <AudioPlayer src={audioUrl} />}
           {isOptimistic ? (

@@ -109,7 +109,7 @@ const PostForm = () => {
   if (selection.type === "") return null;
 
   return (
-    <section className=" shadow rounded p-3">
+    <section className=" shadow rounded p-3 mb-3">
       <div className="flex items-start justify-between">
         <div className="text-base font-medium leading-tight text-gray-900 dark:text-gray-300 mb-3 capitalize">
           {selection.type === "question" ? "ask question" : "new comment"}

@@ -89,7 +89,7 @@ model User {
   Suggestion        Suggestion[]        @relation("suggestionCreator")
   Text              Text[]
   preference        UserPreference?     @relation(fields: [preferenceId], references: [id])
-  preferenceId      Int                 @unique
+  preferenceId      Int?                @unique
   SuggestionComment SuggestionComment[]
 
   @@index([email, username])

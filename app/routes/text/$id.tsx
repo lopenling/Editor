@@ -34,13 +34,11 @@ import PostMark from "~/tiptap/tiptap-extension/postMark";
 import SuggestionContainer from "~/component/Suggestion/SuggestionContainer";
 import { SearchAndReplace } from "~/tiptap/tiptap-extension/searchAndReplace";
 import { MAX_WIDTH_PAGE } from "~/constants";
-import { motion } from "framer-motion";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
 import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
-import SplitPane, { Pane } from "split-pane-react";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -109,11 +107,6 @@ export default function () {
       id: id,
     });
   }
-  const closesidebar = () => {
-    setOpenSuggestion(false);
-    suggestionSelector({ id: "" });
-    postSelector({ id: "" });
-  };
 
   const isSaving = !!saveText.formData;
   let editor = useEditor(
@@ -179,7 +172,6 @@ export default function () {
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
-  const sidebarBtnRef = useRef();
   if (data.text === null)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
@@ -216,8 +208,8 @@ export default function () {
           </Suspense>
         </div>
         <div
-          className={`w-1/3 md:h-screen p-2 overflow-y-auto bg-gray-100 `}
-          style={{ minWidth: 400 }}
+          className={`w-1/3 md:h-screen p-2 overflow-y-auto bg-white `}
+          style={{ minWidth: 350 }}
         >
           {(openSuggestion || suggestionSelected?.id) &&
           (!isSuggestionAtBubble || suggestionSelected?.id) ? (
