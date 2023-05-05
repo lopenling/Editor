@@ -147,7 +147,6 @@ select:focus {
   transition: 0.25s;
 }
 .split {
-  overflow-x: hidden;
 }
 
 .split > div {

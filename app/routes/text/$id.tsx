@@ -191,6 +191,8 @@ export default function () {
       <Header user={data.user} editor={editor} />
       <div className="flex-1 flex max-w-6xl mx-auto pt-16">
         <Split
+          minSize={350}
+          maxSize={750}
           className="split flex-1"
           direction={isMobile ? "vertical" : "horizontal"}
           sizes={!isMobile ? [60, 40] : [50, 50]}
@@ -219,7 +221,7 @@ export default function () {
             </Suspense>
           </div>
           <div
-            className={`md:h-screen p-3 overflow-y-auto bg-white sticky top-0`}
+            className={`md:h-screen p-3 overflow-y-auto w-full bg-white sticky top-0`}
           >
             {(openSuggestion || suggestionSelected?.id) &&
             (!isSuggestionAtBubble || suggestionSelected?.id) ? (
