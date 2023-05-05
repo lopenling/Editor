@@ -31,6 +31,24 @@ netlify init
 
 ## Development
 
+set Env 
+
+- DATABASE_URL
+- DISCOURSE_SSO_REDIRECT
+- DISCOURSE_SSO_LOGIN_URL
+- DISCOURSE_SSO_SIGNUP_URL
+
+- ORIGIN_LOCATION
+- DISCOURSE_SITE
+- DISCOURSE_API_KEY=
+- DISCOURSE_SYSTEM_USER=
+- DISCOURSE_QA_TOPIC_ID=
+- DISCOURSE_QA_CATEGORY_ID=
+
+- BUCKET_NAME_PRODUCTION 
+- AWS_ACCESS_KEY_ID_PRODUCTION
+- AWS_SECRET_ACCESS_KEY_PRODUCTION
+
 The Remix dev server starts your app in development mode, rebuilding assets on file changes. To start the Remix dev server:
 
 ```sh
