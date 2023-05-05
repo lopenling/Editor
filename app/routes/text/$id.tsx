@@ -39,7 +39,8 @@ import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
 import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
-
+import Split from "react-split";
+import { isMobile } from "react-device-detect";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -181,44 +182,54 @@ export default function () {
         </Link>
       </div>
     );
-
+  const [textHeight, setTextHeight] = useState(90);
+  useEffect(() => {
+    if (isMobile) setTextHeight(40);
+  }, [isMobile]);
   return (
-    <div className="min-h-screen h-screen flex flex-col">
+    <div className=" flex flex-col h-screen">
       <Header user={data.user} editor={editor} />
-
-      <div className="flex gap-3 flex-col md:flex-row overflow-y-hidden  max-w-6xl mx-auto pt-16 h-full ">
-        <div
-          id="textEditorContainer"
-          className=" bg-white overflow-y-auto h-full w-full p-2 md:flex-1"
+      <div className="flex-1 flex max-w-6xl mx-auto pt-16">
+        <Split
+          className="split flex-1"
+          direction={isMobile ? "vertical" : "horizontal"}
+          sizes={!isMobile ? [60, 40] : [50, 50]}
         >
-          <Suspense
-            fallback={
-              <div className="flex justify-center h-[400px] w-full animate-pulse ">
-                <div className="flex w-full h-full  dark:bg-gray-700"></div>
-              </div>
-            }
+          <div
+            style={{
+              maxHeight: `${textHeight}vh`,
+              overflowY: "scroll",
+            }}
+            id="textEditorContainer"
           >
-            <Await
-              resolve={data.textContent}
-              errorElement={<p>Error fetching content!</p>}
+            <Suspense
+              fallback={
+                <div className="flex justify-center h-[400px] w-full animate-pulse ">
+                  <div className="flex w-full h-full  dark:bg-gray-700"></div>
+                </div>
+              }
             >
-              <EditorContainer editor={editor} isSaving={isSaving} />
-              <div />
-            </Await>
-          </Suspense>
-        </div>
-        <div
-          className={`w-1/3 md:h-screen p-2 overflow-y-auto bg-white `}
-          style={{ minWidth: 350 }}
-        >
-          {(openSuggestion || suggestionSelected?.id) &&
-          (!isSuggestionAtBubble || suggestionSelected?.id) ? (
-            <SuggestionForm editor={editor} />
-          ) : (
-            <Outlet context={{ user: data.user, editor, text: data.text }} />
-          )}
-          {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
-        </div>
+              <Await
+                resolve={data.textContent}
+                errorElement={<p>Error fetching content!</p>}
+              >
+                <EditorContainer editor={editor} isSaving={isSaving} />
+                <div />
+              </Await>
+            </Suspense>
+          </div>
+          <div
+            className={`md:h-screen p-3 overflow-y-auto bg-white sticky top-0`}
+          >
+            {(openSuggestion || suggestionSelected?.id) &&
+            (!isSuggestionAtBubble || suggestionSelected?.id) ? (
+              <SuggestionForm editor={editor} />
+            ) : (
+              <Outlet context={{ user: data.user, editor, text: data.text }} />
+            )}
+            {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
+          </div>
+        </Split>
       </div>
     </div>
   );

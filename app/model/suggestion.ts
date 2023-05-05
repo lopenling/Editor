@@ -15,7 +15,7 @@ export async function findAllSuggestionByTextId(textId: number) {
           },
         },
       },
-      orderBy: [{ created_at: "desc" }, { likedBy: { _count: "desc" } }],
+      orderBy: [{ likedBy: { _count: "desc" } }, { created_at: "desc" }],
     });
     return data;
   } catch (e) {

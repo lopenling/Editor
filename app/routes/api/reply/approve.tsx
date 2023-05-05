@@ -1,16 +1,13 @@
 import { ActionFunction } from "@remix-run/server-runtime";
-import { findAproved, updateIsAproved } from "~/model/reply";
+import { updateIsAproved } from "~/model/reply";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   let replyId = formData.get("id") as string;
+  let isSolved = formData.get("isSolved") === "false";
+
   try {
-    let reply = await findAproved(replyId);
-    if (!reply?.isAproved) {
-      await updateIsAproved(replyId, true);
-    } else {
-      await updateIsAproved(replyId, false);
-    }
+    await updateIsAproved(replyId, isSolved);
   } catch (e) {
     throw new Error("error on approving reply");
   }

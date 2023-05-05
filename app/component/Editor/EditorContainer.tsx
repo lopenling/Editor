@@ -106,7 +106,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
     if (editorref) editorref.setAttribute("style", `font-size:${value}px;`);
   };
   return (
-    <div className="h-40  shadow-sm  mb-4  ">
+    <div className="  shadow-sm  mb-4  ">
       <div className="text-3xl  font-bold relative  top-[-5px] text-light my-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
         <h3 className="textname flex gap-2 text-2xl">
           {data?.text?.name}

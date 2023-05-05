@@ -48,6 +48,7 @@
     "react-howler": "^5.2.0",
     "react-modal": "^3.16.1",
     "react-spinners": "^0.13.8",
+    "react-split": "^2.0.14",
     "react-tailwindcss-datepicker": "^1.4.2",
     "recoil": "^0.7.7",
     "remix-utils": "^6.0.0",

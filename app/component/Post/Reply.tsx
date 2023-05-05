@@ -69,10 +69,12 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
     "{size}",
     "30"
   );
+
   function handleAproved() {
     approvedFetcher.submit(
       {
         id: reply?.id,
+        isSolved: replyList?.isAproved ?? false,
       },
       {
         method: "post",
