@@ -72,7 +72,6 @@ export default function PostContainer() {
   const data = useLoaderData<typeof loader>();
 
   const { editor }: { editor: Editor } = useOutletContext();
-
   return (
     <>
       <div className=" w-full items-center justify-end inline-flex gap-2 mb-4 ">

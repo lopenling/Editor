@@ -183,19 +183,26 @@ export default function () {
       </div>
     );
   const [textHeight, setTextHeight] = useState(90);
+  const [SplitDirection, setSplitDirection] = useState("horizontal");
+  const [Size, setSize] = useState([60, 40]);
   useEffect(() => {
-    if (isMobile) setTextHeight(40);
+    if (isMobile) {
+      setTextHeight(40);
+      setSplitDirection("vertical");
+      setSize([50, 50]);
+    }
   }, [isMobile]);
+  console.log(isMobile, SplitDirection);
   return (
     <div className=" flex flex-col h-screen">
       <Header user={data.user} editor={editor} />
-      <div className="flex-1 flex max-w-6xl mx-auto pt-16">
+      <div className="flex-1  flex max-w-6xl mx-auto pt-16">
         <Split
-          minSize={350}
+          minSize={!isMobile ? 350 : 100}
           maxSize={750}
-          className="split flex-1"
-          direction={isMobile ? "vertical" : "horizontal"}
-          sizes={!isMobile ? [60, 40] : [50, 50]}
+          className="split flex-1 flex flex-col md:flex-row"
+          direction={!isMobile ? "horizontal" : "vertical"}
+          sizes={Size}
         >
           <div
             style={{
@@ -221,7 +228,7 @@ export default function () {
             </Suspense>
           </div>
           <div
-            className={`md:h-screen p-3 overflow-y-auto w-full bg-white sticky top-0`}
+            className={`md:h-screen p-3 overflow-y-auto w-full bg-white md:sticky md:top-0`}
           >
             {(openSuggestion || suggestionSelected?.id) &&
             (!isSuggestionAtBubble || suggestionSelected?.id) ? (

@@ -107,25 +107,17 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
   };
   return (
     <div className=" relative shadow-sm  mb-4  ">
-      <div className="sticky bg-white z-10 shadow-sm text-3xl  font-bold top-[-5px] text-light py-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
+      <div className=" bg-white z-10 shadow-sm text-3xl  font-bold  text-light py-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
         <h3 className="textname flex gap-2 text-2xl">
           {data?.text?.name}
           {isSaving && <Spinner size="sm" />}
         </h3>
         <button
-          className="inline-flex items-center text-sm font-medium text-center text-gray-400 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          className="inline-flex p-1 items-center text-sm font-medium text-center text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           type="button"
           onClick={() => setOpenEditMenu((p) => !p)}
         >
-          <svg
-            className="w-5 h-5"
-            aria-hidden="true"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
-          </svg>
+          options
         </button>
         <div
           ref={ref}

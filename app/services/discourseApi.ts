@@ -98,7 +98,7 @@ class DiscourseApi {
     audioUrl: string
   ) {
     let auth_headers = this.authHeader();
-    let url = `${this.origin}/texts/${textId}/posts?thread=${threadId}`;
+    let url = `${this.origin}/text/${textId}/posts?thread=${threadId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `
 <p>${bodyContentWithLink}</p>
