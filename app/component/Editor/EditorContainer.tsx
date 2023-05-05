@@ -106,8 +106,8 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
     if (editorref) editorref.setAttribute("style", `font-size:${value}px;`);
   };
   return (
-    <div className="  shadow-sm  mb-4  ">
-      <div className="text-3xl  font-bold relative  top-[-5px] text-light my-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
+    <div className=" relative shadow-sm  mb-4  ">
+      <div className="sticky bg-white z-10 shadow-sm text-3xl  font-bold top-[-5px] text-light py-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
         <h3 className="textname flex gap-2 text-2xl">
           {data?.text?.name}
           {isSaving && <Spinner size="sm" />}
@@ -138,8 +138,8 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
             <li
-              onClick={() => handleExport}
-              className=" cursor-pointer flex py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              onClick={handleExport}
+              className=" cursor-pointer flex py-2 px-4 items-center hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               <svg
                 width="20"
