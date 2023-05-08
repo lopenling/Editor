@@ -163,7 +163,7 @@ export default function () {
       },
       onUpdate: ({ editor }) => {
         let content = editor.getHTML();
-        if (content.length > 2000) saveData(content);
+        if (content.length > 2000 && data.user) saveData(content);
       },
       onCreate: () => {
         textNameSetter(data?.text?.name);
@@ -192,7 +192,6 @@ export default function () {
       setSize([50, 50]);
     }
   }, [isMobile]);
-  console.log(isMobile, SplitDirection);
   return (
     <div className=" flex flex-col h-screen">
       <Header user={data.user} editor={editor} />
@@ -228,7 +227,7 @@ export default function () {
             </Suspense>
           </div>
           <div
-            className={`md:h-screen p-3 overflow-y-auto w-full bg-white md:sticky md:top-0`}
+            className={`md:h-screen p-3 overflow-y-auto w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
           >
             {(openSuggestion || suggestionSelected?.id) &&
             (!isSuggestionAtBubble || suggestionSelected?.id) ? (

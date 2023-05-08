@@ -107,13 +107,13 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
   };
   return (
     <div className=" relative shadow-sm  mb-4  ">
-      <div className=" bg-white z-10 shadow-sm text-3xl  font-bold  text-light py-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
+      <div className=" bg-white dark:bg-gray-700 z-10 shadow-sm text-3xl  font-bold  text-light py-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
         <h3 className="textname flex gap-2 text-2xl">
           {data?.text?.name}
           {isSaving && <Spinner size="sm" />}
         </h3>
         <button
-          className="inline-flex p-1 items-center text-sm font-medium text-center text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          className="inline-flex  p-1 items-center text-sm font-medium text-center text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600 dark:text-white"
           type="button"
           onClick={() => setOpenEditMenu((p) => !p)}
         >

@@ -83,8 +83,15 @@ function Header({ user, editor }: HeaderProps) {
     return () => editorElement?.addEventListener("scroll", handleScroll);
   }, [redirectTo, textNameValue]);
   let darkMode = themeSelected;
-  let [showMenu, setShowMenu] = useState(false);
-  const ref = useDetectClickOutside({ onTriggered: () => setShowMenu(false) });
+  let [showUserMenu, setShowUserMenu] = useState(false);
+  let [showHeaderMenu, setShowHeaderMenu] = useState(false);
+
+  const ref = useDetectClickOutside({
+    onTriggered: () => setShowUserMenu(false),
+  });
+  const headermenuref = useDetectClickOutside({
+    onTriggered: () => setShowHeaderMenu(false),
+  });
   return (
     <nav className="header fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-gray-900 shadow-header ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
@@ -97,10 +104,9 @@ function Header({ user, editor }: HeaderProps) {
         )}
         <div id="searchTextForm"></div>
         <button
-          data-collapse-toggle="mobile-menu-2"
+          onClick={() => setShowHeaderMenu(true)}
           type="button"
           className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="mobile-menu-2"
           aria-expanded="false"
         >
           <span className="sr-only">Open main menu</span>
@@ -119,8 +125,10 @@ function Header({ user, editor }: HeaderProps) {
           </svg>
         </button>
         <div
-          className="flex items-center justify-end gap-2 md:order-2 hidden w-full md:flex md:w-auto"
-          id="mobile-menu-2"
+          ref={headermenuref}
+          className={`${
+            !showHeaderMenu && "hidden"
+          } md:flex items-center justify-end gap-2 md:order-2 w-full md:w-auto`}
         >
           <div className="flex items-center">
             <Translation />
@@ -133,7 +141,7 @@ function Header({ user, editor }: HeaderProps) {
                 type="button"
                 className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                 id="user-menu-button"
-                onClick={() => setShowMenu((prev) => !prev)}
+                onClick={() => setShowUserMenu((prev) => !prev)}
               >
                 <span className="sr-only">Open user menu</span>
                 <Avatar
@@ -144,7 +152,7 @@ function Header({ user, editor }: HeaderProps) {
                   title={user?.name}
                 />
               </button>
-              {showMenu && (
+              {showUserMenu && (
                 <div
                   ref={ref}
                   style={{ top: 50 }}
@@ -315,11 +323,6 @@ function Header({ user, editor }: HeaderProps) {
             </div>
           )}
         </div>
-
-        <div
-          className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-          id="mobile-menu-2"
-        ></div>
       </div>
     </nav>
   );

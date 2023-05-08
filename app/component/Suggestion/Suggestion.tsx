@@ -83,18 +83,20 @@ export default function Suggestion({
   let time = timeAgo(suggest.created_at);
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
   function replaceHandler(replace: string) {
-    editor
-      .chain()
-      .focus()
-      .insertContentAt(
-        {
-          from: selection.start,
-          to: selection.end,
-        },
-        replace
-      )
-      .run();
-    suggestionSelector({ id: null });
+    if (data.user) {
+      editor
+        .chain()
+        .focus()
+        .insertContentAt(
+          {
+            from: selection.start,
+            to: selection.end,
+          },
+          replace
+        )
+        .run();
+      suggestionSelector({ id: null });
+    }
   }
 
   function deleteSuggestion(id: string) {

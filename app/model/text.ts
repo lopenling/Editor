@@ -28,20 +28,15 @@ export async function searchTextWithName(
   try {
     const textList = await db.text.findMany({
       where: {
-        OR: [
-          {
-            name: {
-              contains: search_term,
-              mode: "insensitive",
-            },
-          },
-          {
-            content: {
-              contains: search_term,
-              mode: "insensitive",
-            },
-          },
-        ],
+        name: {
+          contains: search_term,
+          mode: "insensitive",
+        },
+
+        content: {
+          contains: search_term,
+          mode: "insensitive",
+        },
       },
       select: {
         content,
