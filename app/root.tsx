@@ -7,6 +7,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useFetcher,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
@@ -88,6 +89,7 @@ function App() {
     let themeonDb = data.user?.preference.theme;
     setThemeSelected(themeonDb === "dark");
   }, [data]);
+
   return (
     <html className={themeSelected ? "dark" : "light"}>
       <head>

@@ -266,7 +266,7 @@ function Header({ user, editor }: HeaderProps) {
 
                     <Form
                       method="post"
-                      action="/sso/login"
+                      action="/auth/login"
                       className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
                       <input
@@ -293,7 +293,7 @@ function Header({ user, editor }: HeaderProps) {
               <loginFetcher.Form
                 method="post"
                 id="login"
-                action="/sso/login"
+                action="/auth/login"
                 className="flex items-center"
               >
                 <input

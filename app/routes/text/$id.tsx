@@ -41,6 +41,10 @@ import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
 import Split from "react-split";
 import { isMobile } from "react-device-detect";
+import PusherJs from "pusher-js";
+import usePusherPresence from "~/component/hooks/usePusherPresence";
+import OnlineUsers from "~/component/UI/OnlineUserList";
+import useFetcherWithPromise from "~/utility/useFetcherPromise";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -83,6 +87,9 @@ export interface CommentInstance {
 export default function () {
   const data = useLoaderData();
   const textNameSetter = useSetRecoilState(textName);
+  const { onlineCount, onlineMembers } = usePusherPresence(
+    `presence-text_${data.text.id}`
+  );
 
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
@@ -90,12 +97,25 @@ export default function () {
   );
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
-  const saveText = useFetcher();
-  const saveData = (content: string) => {
-    saveText.submit(
+  const saveText = useFetcherWithPromise();
+  const updateFetcher = useFetcher();
+  const saveData = async (content: string) => {
+    let success = await saveText.submit(
       { content, id: data.text?.id },
       { method: "post", action: "/api/text" }
     );
+    if (success?.id) {
+      updateFetcher.submit(
+        {
+          channelName: "presence-text_" + data.text.id,
+          message: "update",
+        },
+        {
+          action: "/api/pusher/updatepost",
+          method: "post",
+        }
+      );
+    }
   };
   const [selectedThread, postSelector] = useRecoilState(selectedPostThread);
   function suggestionSetter(id: string) {
@@ -183,25 +203,23 @@ export default function () {
       </div>
     );
   const [textHeight, setTextHeight] = useState(90);
-  const [SplitDirection, setSplitDirection] = useState("horizontal");
-  const [Size, setSize] = useState([60, 40]);
   useEffect(() => {
     if (isMobile) {
       setTextHeight(40);
-      setSplitDirection("vertical");
-      setSize([50, 50]);
     }
   }, [isMobile]);
+
   return (
     <div className=" flex flex-col h-screen">
       <Header user={data.user} editor={editor} />
+      <OnlineUsers onlineMembers={onlineMembers} count={onlineCount} />
       <div className="flex-1  flex max-w-6xl mx-auto pt-16">
         <Split
           minSize={!isMobile ? 350 : 100}
           maxSize={750}
           className="split flex-1 flex flex-col md:flex-row"
           direction={!isMobile ? "horizontal" : "vertical"}
-          sizes={Size}
+          sizes={!isMobile ? [70, 30] : [50, 50]}
         >
           <div
             style={{

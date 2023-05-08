@@ -11,7 +11,6 @@ import {
   login,
 } from "~/services/session.server";
 import { createUserInDB, findUserByUsername } from "~/model/user";
-
 export let loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
 

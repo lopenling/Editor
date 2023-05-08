@@ -44,6 +44,7 @@ const PostForm = () => {
     }
     return errormessage;
   }
+
   async function handleSubmit(e) {
     e.preventDefault();
     let errormessage = validator();

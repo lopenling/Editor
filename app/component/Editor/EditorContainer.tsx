@@ -80,7 +80,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
   });
   useEffect(() => {
     editor?.commands.setContent(AsyncData.content);
-  }, [editor]);
+  }, [editor, AsyncData?.content]);
   let thread = useRecoilValue(selectedPostThread);
   useEffect(() => {
     if (thread?.id) {

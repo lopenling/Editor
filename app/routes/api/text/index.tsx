@@ -16,7 +16,10 @@ export let action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
   const content = data.get("content") as string;
   const id = data.get("id") as string;
-
-  const res = await updateText(parseInt(id), content);
-  return null;
+  try {
+    const res = await updateText(parseInt(id), content);
+    return res;
+  } catch (e) {
+    return false;
+  }
 };

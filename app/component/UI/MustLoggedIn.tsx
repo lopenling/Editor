@@ -31,7 +31,7 @@ export default function LogInMessage() {
       <loginFetcher.Form
         method="post"
         id="login"
-        action="/sso/login"
+        action="/auth/login"
         className="flex items-center ml-3 text-sm font-normal"
       >
         <input type="hidden" name="redirectTo" defaultValue={redirectTo} />

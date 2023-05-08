@@ -3,6 +3,7 @@ import { useEffect, memo } from "react";
 import { timeAgo } from "~/utility/getFormatedDate";
 import Filter from "./Filter";
 import Post from "./Post";
+import { useLoaderData, useFetcher } from "@remix-run/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { filteredPost as filteredValue, postslist } from "~/states";
 export type PostType = {
@@ -33,7 +34,7 @@ function Posts({ editor, posts }: PostPropsType) {
 
   useEffect(() => {
     setPostList(posts);
-  }, [posts]);
+  }, [posts.length]);
   if (!posts && !posts?.length) return null;
   const filteredPost = useRecoilValue(filteredValue);
 
