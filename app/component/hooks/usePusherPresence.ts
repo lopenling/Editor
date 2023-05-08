@@ -15,12 +15,12 @@ const usePusherPresence = (channelName, id, cluster) => {
     const channel = pusher.subscribe(channelName);
 
     const handleSubscriptionSucceeded = () => {
-      setOnlineCount(channel.members.count);
       setOnlineMembers(Object.entries(channel.members.members));
     };
 
     const handleMemberAdded = (member) => {
-      setOnlineCount(channel.members.count);
+      setOnlineMembers(Object.entries(channel.members.members));
+
       Store.addNotification({
         title: "Welcome!",
         message: member.info.username + " join",
@@ -37,7 +37,8 @@ const usePusherPresence = (channelName, id, cluster) => {
     };
 
     const handleMemberRemoved = (member) => {
-      setOnlineCount(channel.members.count);
+      setOnlineMembers(Object.entries(channel.members.members));
+
       let userLeft = member.info.username;
       Store.addNotification({
         title: "Bye Bye!",

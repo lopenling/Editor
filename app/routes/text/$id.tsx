@@ -208,7 +208,7 @@ export default function () {
   return (
     <div className=" flex flex-col h-screen">
       <Header user={data.user} editor={editor} />
-      <OnlineUsers onlineMembers={onlineMembers} count={onlineCount} />
+      <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div className="flex-1  flex max-w-6xl mx-auto pt-16">
         <Split
           minSize={!isMobile ? 350 : 100}

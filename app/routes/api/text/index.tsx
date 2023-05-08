@@ -1,17 +1,12 @@
 import { LoaderFunction, ActionFunction } from "@remix-run/server-runtime";
 import { json } from "react-router";
-import { findTextByTextId, updateText, updateText } from "~/model/text";
+import { findTextByTextId, updateText } from "~/model/text";
 import pusher from "~/services/pusher.server";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const textId = new URL(request.url).searchParams.get("textId") ?? "";
   const text = await findTextByTextId(parseInt(textId), true);
-  return json(text, {
-    // headers: {
-    //   "cache-control":
-    //     "public, max-age=6000, s-maxage=604800, stale-while-revalidate=31540000000",
-    // },
-  });
+  return json(text);
 };
 export let action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
