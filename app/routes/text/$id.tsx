@@ -89,15 +89,7 @@ export interface CommentInstance {
   uuid?: string;
   comments?: any[];
 }
-export const action: ActionFunction = async ({ request }) => {
-  let formData = await request.formData();
-  let channel_name = formData.get("channel_name");
-  let message = formData.get("message");
-  await pusher.trigger(channel_name, "update-app", {
-    message,
-  });
-  return null;
-};
+
 export default function () {
   const data = useLoaderData();
   const textNameSetter = useSetRecoilState(textName);
@@ -120,17 +112,6 @@ export default function () {
       { content, id: data.text?.id },
       { method: "post", action: "/api/text" }
     );
-    if (success?.id) {
-      updateFetcher.submit(
-        {
-          channel_name: "presence-text_" + data.text.id,
-          message: "update",
-        },
-        {
-          method: "post",
-        }
-      );
-    }
   };
   const [selectedThread, postSelector] = useRecoilState(selectedPostThread);
   function suggestionSetter(id: string) {
