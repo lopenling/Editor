@@ -56,7 +56,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const textContent = getTextContent(text_id);
   if (!text_id) throw new Error("not valid textId");
 
-  return defer({ user, text: text, textContent, suggestions });
+  return defer({
+    user,
+    text: text,
+    textContent,
+    suggestions,
+    pusher_env: { key: process.env.key, cluster: process.env.cluster },
+  });
 };
 
 export function ErrorBoundary({ error }) {
@@ -88,7 +94,9 @@ export default function () {
   const data = useLoaderData();
   const textNameSetter = useSetRecoilState(textName);
   const { onlineCount, onlineMembers } = usePusherPresence(
-    `presence-text_${data.text.id}`
+    `presence-text_${data.text.id}`,
+    data.pusher_env.key,
+    data.pusher_env.cluster
   );
 
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);

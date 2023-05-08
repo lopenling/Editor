@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import { useRevalidator } from "@remix-run/react";
 
-const usePusherPresence = (channelName) => {
+const usePusherPresence = (channelName, id, cluster) => {
   const [onlineCount, setOnlineCount] = useState(0);
   const [onlineMembers, setOnlineMembers] = useState([]);
   const revalidator = useRevalidator();
   useEffect(() => {
-    const pusher = new Pusher("73a826d61d515863db4c", {
-      cluster: "ap2",
+    const pusher = new Pusher(id, {
+      cluster,
       authEndpoint: "/auth/pusher", // Replace with your server's auth endpoint
     });
 
