@@ -1,6 +1,6 @@
 import { getUserSession } from "~/services/session.server";
 import { json, MetaFunction, defer } from "@remix-run/node";
-import type { LoaderFunction } from "@remix-run/server-runtime";
+import type { LoaderFunction, ActionFunction } from "@remix-run/server-runtime";
 import {
   useLoaderData,
   useFetcher,
@@ -41,10 +41,10 @@ import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
 import Split from "react-split";
 import { isMobile } from "react-device-detect";
-import PusherJs from "pusher-js";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
 import OnlineUsers from "~/component/UI/OnlineUserList";
 import useFetcherWithPromise from "~/utility/useFetcherPromise";
+import pusher from "~/services/pusher.server";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -89,7 +89,15 @@ export interface CommentInstance {
   uuid?: string;
   comments?: any[];
 }
-
+export const action: ActionFunction = async ({ request }) => {
+  let formData = await request.formData();
+  let channel_name = formData.get("channel_name");
+  let message = formData.get("message");
+  await pusher.trigger(channel_name, "update-app", {
+    message,
+  });
+  return null;
+};
 export default function () {
   const data = useLoaderData();
   const textNameSetter = useSetRecoilState(textName);
@@ -115,11 +123,10 @@ export default function () {
     if (success?.id) {
       updateFetcher.submit(
         {
-          channelName: "presence-text_" + data.text.id,
+          channel_name: "presence-text_" + data.text.id,
           message: "update",
         },
         {
-          action: "/api/pusher/updatepost",
           method: "post",
         }
       );

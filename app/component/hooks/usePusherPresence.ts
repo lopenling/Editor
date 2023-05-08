@@ -11,7 +11,6 @@ const usePusherPresence = (channelName, id, cluster) => {
       cluster,
       authEndpoint: "/auth/pusher", // Replace with your server's auth endpoint
     });
-
     const channel = pusher.subscribe(channelName);
 
     const handleSubscriptionSucceeded = () => {
