@@ -49,6 +49,7 @@
     "react-drag-drop-files": "^2.3.9",
     "react-howler": "^5.2.0",
     "react-modal": "^3.16.1",
+    "react-notifications-component": "^4.0.1",
     "react-spinners": "^0.13.8",
     "react-split": "^2.0.14",
     "react-tailwindcss-datepicker": "^1.4.2",

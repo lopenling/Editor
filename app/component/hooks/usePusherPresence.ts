@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import { useRevalidator } from "@remix-run/react";
+import { Store } from "react-notifications-component";
 
 const usePusherPresence = (channelName, id, cluster) => {
   const [onlineCount, setOnlineCount] = useState(0);
@@ -18,14 +19,39 @@ const usePusherPresence = (channelName, id, cluster) => {
       setOnlineMembers(Object.entries(channel.members.members));
     };
 
-    const handleMemberAdded = () => {
+    const handleMemberAdded = (member) => {
       setOnlineCount(channel.members.count);
-      setOnlineMembers(Object.entries(channel.members.members));
+      Store.addNotification({
+        title: "Welcome!",
+        message: member.info.username + " join",
+        type: "success",
+        insert: "top",
+        container: "bottom-left",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true,
+        },
+      });
     };
 
-    const handleMemberRemoved = () => {
+    const handleMemberRemoved = (member) => {
       setOnlineCount(channel.members.count);
-      setOnlineMembers(Object.entries(channel.members.members));
+      let userLeft = member.info.username;
+      Store.addNotification({
+        title: "Bye Bye!",
+        message: userLeft + " went offline",
+        type: "info",
+        insert: "bottom",
+        container: "bottom-left",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true,
+        },
+      });
     };
     const handleUpdate = () => {
       revalidator.revalidate();

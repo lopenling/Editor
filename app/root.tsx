@@ -25,7 +25,7 @@ import { FlagsmithProvider } from "flagsmith/react";
 import { findUserByUsername } from "./model/user";
 import Loader from "./component/UI/Loader";
 import { GlobalLoading } from "./component/UI/globalLoader";
-
+import notificationStyle from "react-notifications-component/dist/theme.css";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
@@ -48,6 +48,7 @@ export function links() {
     },
     { rel: "stylesheet", href: tailwindStyle, as: "style" },
     { rel: "stylesheet", href: globalStyle, as: "style" },
+    { rel: "stylesheet", href: notificationStyle, as: "style" },
   ];
 }
 
