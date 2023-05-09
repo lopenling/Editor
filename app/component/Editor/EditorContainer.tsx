@@ -60,13 +60,8 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
     }
   }
   function handleExport() {
-    const __html = editor.getHTML();
+    const text = editor?.getText();
     const element = document.createElement("a");
-    const textWithNewlines = __html.replace(
-      /<br\s*\/?\s*(class\s*=\s*['"]\S*['"])?\s*>/gi,
-      "\n"
-    );
-    let text = textWithNewlines.replace(/(<([^>]+)>)/gi, "");
     const file = new Blob([text], {
       type: "text/plain",
     });
@@ -105,6 +100,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
     let editorref = document.querySelector(".editor");
     if (editorref) editorref.setAttribute("style", `font-size:${value}px;`);
   };
+
   return (
     <div className=" relative shadow-sm  mb-4  ">
       <div className=" bg-white dark:bg-gray-700 z-10 shadow-sm text-3xl  font-bold  text-light py-2 px-2  flex items-center justify-between  text-gray-900 dark:text-white">

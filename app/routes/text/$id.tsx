@@ -44,8 +44,8 @@ import { isMobile } from "react-device-detect";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
 import OnlineUsers from "~/component/UI/OnlineUserList";
 import useFetcherWithPromise from "~/utility/useFetcherPromise";
-import pusher from "~/services/pusher.server";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+import DiffMatchPatch from "diff-match-patch";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
@@ -89,11 +89,10 @@ export interface CommentInstance {
   uuid?: string;
   comments?: any[];
 }
-
 export default function () {
   const data = useLoaderData();
-  const textNameSetter = useSetRecoilState(textName);
-  const { onlineCount, onlineMembers } = usePusherPresence(
+  const setTextName = useSetRecoilState(textName);
+  const { onlineMembers } = usePusherPresence(
     `presence-text_${data.text.id}`,
     data.pusher_env.key,
     data.pusher_env.cluster
@@ -107,9 +106,9 @@ export default function () {
     useRecoilState(openSuggestionState);
   const saveText = useFetcherWithPromise();
   const updateFetcher = useFetcher();
-  const saveData = async (content: string) => {
+  const saveData = async (patch: string) => {
     let success = await saveText.submit(
-      { content, id: data.text?.id },
+      { id: data.text?.id, patch },
       { method: "post", action: "/api/text" }
     );
   };
@@ -173,16 +172,21 @@ export default function () {
           content: editor?.state.doc.textBetween(from, to, ""),
         });
         setOpenSuggestion(false);
-        if (!editor.isActive("suggestion")) suggestionSelector({ id: null });
-        if (!editor.isActive("post")) postSelector({ id: null });
-        // define the mark you want to check for
+        if (!editor.isActive("suggestion")) suggestionSelector({ id: "" });
+        if (!editor.isActive("post")) postSelector({ id: "" });
       },
-      onUpdate: ({ editor }) => {
-        let content = editor.getHTML();
-        if (content.length > 2000 && data.user) saveData(content);
+      onUpdate: async ({ editor }) => {
+        const dmp = new DiffMatchPatch();
+        let oldText = await data.textContent;
+        let newContent = editor.getHTML();
+        let oldContent = oldText.content;
+        const changes = dmp.diff_main(oldContent, newContent);
+        const patch = dmp.patch_make(changes);
+        let query = dmp.patch_toText(patch);
+        if (newContent.length > 2000 && data.user) saveData(query);
       },
       onCreate: () => {
-        textNameSetter(data?.text?.name);
+        setTextName(data?.text?.name);
       },
     },
     []

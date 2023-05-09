@@ -4,7 +4,6 @@ import { useRevalidator } from "@remix-run/react";
 import { Store } from "react-notifications-component";
 
 const usePusherPresence = (channelName, id, cluster) => {
-  const [onlineCount, setOnlineCount] = useState(0);
   const [onlineMembers, setOnlineMembers] = useState([]);
   const revalidator = useRevalidator();
   useEffect(() => {
@@ -20,7 +19,7 @@ const usePusherPresence = (channelName, id, cluster) => {
 
     const handleMemberAdded = (member) => {
       setOnlineMembers(Object.entries(channel.members.members));
-
+      console.log("added");
       Store.addNotification({
         title: "Welcome!",
         message: member.info.username + " join",
@@ -68,7 +67,7 @@ const usePusherPresence = (channelName, id, cluster) => {
     };
   }, [channelName]);
 
-  return { onlineCount, onlineMembers };
+  return { onlineMembers };
 };
 
 export default usePusherPresence;
