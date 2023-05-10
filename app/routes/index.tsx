@@ -31,7 +31,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       results: obj[key].results,
       total: obj[key].total,
       extra: obj[key].extra,
-      id: key,
+      id: obj[key].id,
     }));
     return json(
       { textList, search: searchText },
@@ -73,12 +73,12 @@ export default function Index() {
       setSearchInput(p);
     }
   }, [params]);
-  const list = data.textList;
+  const lists = data.textList;
   const isLoading =
     navigation.formData?.get("s") && navigation.state === "loading";
-  if (list?.message) return <div className="text-red-400">{list?.message}</div>;
+  if (lists?.message)
+    return <div className="text-red-400">{lists?.message}</div>;
   const user = useOutletContext();
-
   return (
     <motion.div
       key={useLocation().pathname}
@@ -133,9 +133,9 @@ export default function Index() {
         <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">
           {isLoading && <Skeleton height={125} number={3} />}
 
-          {list && !isLoading && (
+          {lists && !isLoading && (
             <>
-              {list.length === 0 && (
+              {lists.length === 0 && (
                 <div
                   className="text-gray-300 text-xl font-extrabold capitalize"
                   style={{
@@ -147,42 +147,55 @@ export default function Index() {
                   No result found
                 </div>
               )}
-              {list?.map((list: { id: number; name: string }) => {
-                let result = list?.results[0];
-
-                return (
-                  <Link
-                    to={"/text/" + list.id + "/posts"}
-                    key={"id" + list.id}
-                    className="container w-full"
-                    prefetch="intent"
-                  >
-                    <Card className="dark:bg-gray-500">
-                      <h5 className="text-2xl  text-gray-700 dark:text-white">
-                        {list.name}
-                      </h5>
-                      <div className="flex flex-wrap justify-between">
-                        {result && (
-                          <div
-                            className="text-lg text-gray-400"
-                            dangerouslySetInnerHTML={{
-                              __html: highlightText(result[1], data.search),
-                            }}
-                          ></div>
-                        )}
-                        <div className="text-sm text-gray-400">
-                          {list.total} matches
+              {lists?.map(
+                (
+                  list: {
+                    id: number;
+                    extra: boolean;
+                    total: number;
+                    results: [];
+                    name: string;
+                  },
+                  index: number
+                ) => {
+                  let result = list.results[0];
+                  return (
+                    <Link
+                      to={"/text/" + list.id + "/posts"}
+                      key={"id" + index}
+                      className="container w-full"
+                      prefetch="intent"
+                    >
+                      <Card className="dark:bg-gray-500">
+                        <h5
+                          className="text-2xl  text-gray-700 dark:text-white"
+                          dangerouslySetInnerHTML={{
+                            __html: highlightText(list.name, data.search),
+                          }}
+                        ></h5>
+                        <div className="flex flex-wrap justify-between">
+                          {result && (
+                            <div
+                              className="text-lg text-gray-400"
+                              dangerouslySetInnerHTML={{
+                                __html: highlightText(result[1], data.search),
+                              }}
+                            ></div>
+                          )}
+                          <div className="text-sm text-gray-400">
+                            {list.total} matches
+                          </div>
                         </div>
-                      </div>
-                    </Card>
-                  </Link>
-                );
-              })}
+                      </Card>
+                    </Link>
+                  );
+                }
+              )}
             </>
           )}
         </div>
       </div>
-      {!list && !isLoading && (
+      {!lists && !isLoading && (
         <>
           <FeatureSection />
           <FooterContainer />

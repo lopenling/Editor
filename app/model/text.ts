@@ -22,7 +22,9 @@ export async function findAllText(id = true, name = true, content = false) {
 export async function searchTextWithName(search_term = "") {
   try {
     const textList = await db.text.findMany();
-    return fullSearch(textList, search_term);
+    let result = fullSearch(textList, search_term);
+
+    return result;
   } catch (e) {
     throw new Error("error finding text with name" + e.message);
   }

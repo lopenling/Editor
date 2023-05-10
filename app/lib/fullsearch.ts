@@ -1,79 +1,85 @@
 export const fullSearch = (textList, search_term) => {
-  let results = {};
+  const results = [];
   const extract_length = 60;
   const left = parseInt((extract_length - search_term.length) / 2);
   const delimiters = "།་ ";
-  let delimiter_regex = new RegExp(`[${delimiters}]`, "g");
+  const delimiter_regex = new RegExp(`[${delimiters}]`, "g");
   const max_results = 0;
+
   for (let text of textList) {
-    // let text = item;
+    let id = text.id;
     const content_length = text.content.length;
     const textWithNewlines = text.content.replace(
       /<br\s*\/?\s*(class\s*=\s*['"]\S*['"])?\s*>/gi,
       "\n"
     );
-    let content = textWithNewlines.replace(/(<([^>]+)>)/gi, "");
-    let title = text.name;
-    let contentMatch = content.matchAll(new RegExp(search_term, "g"));
-    let titleMatch = title.matchAll(new RegExp(search_term, "g"));
-    for (let m of titleMatch)
-      if (!results[text.id]) {
-        results[text.id] = {
-          name: text.name,
-          results: [],
-          total: 0,
-          extra: false,
-        };
-      }
-    for (let m of contentMatch) {
-      if (!results[text.id]) {
-        results[text.id] = {
-          name: text.name,
-          results: [],
-          total: 0,
-          extra: false,
-        };
-      }
-      if (
-        max_results == 0 ||
-        (max_results > 0 && results[text.id]["total"] < max_results)
-      ) {
-        let start = m.index - left;
-        if (start < 0) {
-          start = 0;
-        }
-        let end = start + extract_length;
-        if (end > content_length) {
-          end = content_length;
-        }
-        let extract = content.substring(start, end);
-        let delimter_matches = Array.from(
-          extract.matchAll(delimiter_regex),
-          (m) => m.index
-        );
+    const content = textWithNewlines.replace(/(<([^>]+)>)/gi, "");
+    const contentMatch = Array.from(
+      content.matchAll(new RegExp(search_term, "g"))
+    );
+    const titleMatch = Array.from(
+      text.name.matchAll(new RegExp(search_term, "g"))
+    );
 
-        if (delimter_matches.length > 0) {
-          const first_match = delimter_matches[0];
-          start += first_match;
+    if (titleMatch.length > 0 || contentMatch.length > 0) {
+      const result = {
+        id: 0,
+        name: text.name,
+        results: [],
+        total: 0,
+        extra: false,
+      };
+
+      for (let m of contentMatch) {
+        if (
+          max_results === 0 ||
+          (max_results > 0 && result.total < max_results)
+        ) {
+          let start = m.index - left;
+
+          if (start < 0) {
+            start = 0;
+          }
+          let end = start + extract_length;
+          if (end > content_length) {
+            end = content_length;
+          }
+          let extract = content.substring(start, end);
+          const delimiterMatches = Array.from(
+            extract.matchAll(delimiter_regex),
+            (m) => m.index
+          );
+
+          if (delimiterMatches.length > 0) {
+            const firstMatch = delimiterMatches[0];
+            start += firstMatch;
+          }
+
+          if (delimiterMatches.length > 1) {
+            const lastMatch = delimiterMatches[delimiterMatches.length - 1];
+            end = start + lastMatch - delimiterMatches[0];
+          } else {
+            end = extract.length;
+          }
+
+          extract = extract.substring(0, end);
+          result.results.push([m.index, extract]);
+          result.total += 1;
+          result.id = text.id;
         }
 
-        if (delimter_matches.length > 1) {
-          const last_match = delimter_matches[delimter_matches.length - 1];
-          end = start + last_match - delimter_matches[0];
-        } else {
-          end = extract.length;
+        if (result.total === max_results) {
+          result.extra = true;
+          break;
         }
-
-        extract = extract.substring(0, end);
-        results[text.id]["results"].push([m.index, extract]);
-        results[text.id]["total"] += 1;
       }
 
-      if (results[text.id]["total"] == max_results) {
-        results[text.id]["extra"] = true;
-        break;
-      }
+      results.push(result);
     }
   }
+  // Sort the array by the 'total' property in descending order
+
+  results.sort((a, b) => b.total - a.total);
+  console.log(results);
   return results;
 };

@@ -42,7 +42,9 @@ import DiffMatchPatch from "diff-match-patch";
 import { redis } from "~/services/redis.server";
 export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
+
   const text_id = parseInt(params.id);
+  console.log(text_id);
   if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, true);
   const suggestions = await findAllSuggestionByTextId(text_id);
