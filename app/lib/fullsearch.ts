@@ -23,7 +23,7 @@ export const fullSearch = (textList, search_term) => {
 
     if (titleMatch.length > 0 || contentMatch.length > 0) {
       const result = {
-        id: 0,
+        id: text.id,
         name: text.name,
         results: [],
         total: 0,
