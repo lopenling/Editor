@@ -207,10 +207,7 @@ export default function Index() {
 
 function highlightText(str: string, searchTerm: string) {
   const regex = new RegExp(searchTerm, "gi");
-  return str.replace(
-    regex,
-    `<span class='font-bold underline text-black'>${searchTerm}</span>`
-  );
+  return str.replace(regex, `<span class='font-bold '>${searchTerm}</span>`);
 }
 const FeatureSection = () => (
   <section className="bg-gray-50 dark:bg-gray-700">
