@@ -1,10 +1,5 @@
 import { ActionFunction, json } from "@remix-run/server-runtime";
 import { findPostByUserLiked, updatePostLike } from "~/model/post";
-import { createReply, findReply, updateReply } from "~/model/reply";
-import {
-  findSuggestionByUserLiked,
-  updateSuggestionLike,
-} from "~/model/suggestion";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();

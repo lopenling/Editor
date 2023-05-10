@@ -3,14 +3,14 @@ import { Editor } from "@tiptap/react";
 import { useState, useEffect, useRef } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
-import { timeAgo } from "~/utility/getFormatedDate";
+import { timeAgo } from "~/lib/getFormatedDate";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import TextArea from "../UI/TextArea";
 import { Button } from "../UI/Button";
 import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 import { v4 as uuidv4 } from "uuid";
-import useFetcherWithPromise from "~/utility/useFetcherPromise";
+import useFetcherWithPromise from "~/lib/useFetcherPromise";
 
 type SuggestType = {
   created_at: Date;

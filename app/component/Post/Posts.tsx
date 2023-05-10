@@ -1,6 +1,6 @@
 import { Editor } from "@tiptap/react";
 import { useEffect, memo } from "react";
-import { timeAgo } from "~/utility/getFormatedDate";
+import { timeAgo } from "~/lib/getFormatedDate";
 import Filter from "./Filter";
 import Post from "./Post";
 import { useLoaderData, useFetcher } from "@remix-run/react";
@@ -31,10 +31,9 @@ type PostPropsType = {
 
 function Posts({ editor, posts }: PostPropsType) {
   const setPostList = useSetRecoilState(postslist);
-
   useEffect(() => {
     setPostList(posts);
-  }, [posts.length]);
+  }, [posts]);
   if (!posts && !posts?.length) return null;
   const filteredPost = useRecoilValue(filteredValue);
 

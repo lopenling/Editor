@@ -7,7 +7,6 @@ import { createThread, deleteDiscourseTopic } from "~/services/discourseApi";
 import { getUserSession } from "~/services/session.server";
 
 import { createPost as createPostOnDB, deletePost } from "~/model/post";
-import { findUserByUsername } from "~/model/user";
 import { uploadAudio } from "~/services/uploadAudio.server";
 import {
   unstable_composeUploadHandlers as composeUploadHandlers,
@@ -16,7 +15,7 @@ import {
 } from "@remix-run/node";
 import type { ActionArgs, UploadHandler } from "@remix-run/node";
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }: ActionArgs) => {
   const uploadHandler: UploadHandler = composeUploadHandlers(
     uploadAudio,
     createMemoryUploadHandler()
@@ -25,7 +24,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (request.method === "POST") {
     const formData = await parseMultipartFormData(request, uploadHandler);
     let Obj = Object.fromEntries(formData);
-    const userData = await findUserByUsername(user.username);
     let DiscourseUrl = process.env.DISCOURSE_SITE;
     let api = process.env.DISCOURSE_API_KEY;
     let parent_category_id = process.env.DISCOURSE_QA_CATEGORY_ID;
@@ -39,13 +37,13 @@ export const action: ActionFunction = async ({ request }) => {
     try {
       const data = await createThread(
         user.username,
-        Obj.topic,
-        Obj.selectionSegment,
-        Obj.body,
+        Obj.topic as string,
+        Obj.selectionSegment as string,
+        Obj.body as string,
         parent_category_id,
         textId,
         audioUrl,
-        Obj.threadId
+        Obj.threadId as string
       );
       if (data["topic_id"] && user) {
         const createPost = await createPostOnDB(
@@ -56,7 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
           Obj.threadId as string,
           textId,
           Obj.body as string,
-          userData.id,
+          user.id,
           audioUrl
         );
 

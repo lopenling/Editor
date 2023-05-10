@@ -36,7 +36,7 @@ function Replies({
     let data = postListFetcher.data;
     if (data) {
       setReplies(data.posts);
-      setReplyCount(data.posts.length - 1);
+      setReplyCount(data.posts.length);
       setLoading(false);
     }
   }, [replyCount, postListFetcher.data]);
@@ -76,9 +76,6 @@ function Replies({
             reply={reply}
             isCreator={isCreator}
             postId={postId}
-            replyList={postListFetcher.data?.replyList.find(
-              (l) => l.id == reply.id
-            )}
             type={type}
           />
         );

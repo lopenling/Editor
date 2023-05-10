@@ -20,17 +20,20 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 type EditorContainerProps = {
   editor: Editor | null;
   isSaving: boolean;
+  content: string;
 };
 
-function EditorContainer({ editor, isSaving }: EditorContainerProps) {
+function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
   const flags = useFlags(["suggestionlocation"]);
-  const AsyncData = useAsyncValue();
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   const data = useLoaderData();
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [fontSize, setFontSize] = useState(
     isMobile ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
   );
+  useEffect(() => {
+    editor?.commands.setContent(content);
+  }, [content]);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
@@ -73,9 +76,6 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
-  useEffect(() => {
-    editor?.commands.setContent(AsyncData.content);
-  }, [editor, AsyncData?.content]);
   let thread = useRecoilValue(selectedPostThread);
   useEffect(() => {
     if (thread?.id) {

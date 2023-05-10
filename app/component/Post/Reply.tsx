@@ -1,25 +1,24 @@
 import { useOutletContext } from "@remix-run/react";
 import { useFetcher } from "@remix-run/react/dist/components";
-import { timeAgo } from "~/utility/getFormatedDate";
+import { timeAgo } from "~/lib/getFormatedDate";
 import { useState } from "react";
 type ReplyPropType = {
   reply: any;
   isCreator: boolean;
   postId: string;
-  replyList: any;
   type: "question" | "comment";
 };
 
-function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
+function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
   const replyLikeFetcher = useFetcher();
   const approvedFetcher = useFetcher();
   const [effect, setEffect] = useState(false);
   const { user }: { user: any } = useOutletContext();
   let likedByMe = user
-    ? replyList?.likedBy?.some((d) => d.username == user.username)
+    ? reply?.likedBy?.some((d) => d.username == user.username)
     : false;
-  const solved = replyList?.isAproved;
-  let like_Count = replyList?.likedBy?.length || 0;
+  const solved = reply?.isAproved;
+  let like_Count = reply?.likedBy?.length || 0;
   let likeInFetcher = replyLikeFetcher?.formData?.get("like");
 
   if (likeInFetcher === "true") {
@@ -74,7 +73,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
     approvedFetcher.submit(
       {
         id: reply?.id,
-        isSolved: replyList?.isAproved ?? false,
+        isSolved: reply?.isAproved ?? false,
       },
       {
         method: "post",
@@ -90,7 +89,7 @@ function Reply({ reply, isCreator, postId, replyList, type }: ReplyPropType) {
         likedBy: user?.id,
         id: reply?.id,
         like: !likedByMe ? "true" : "false",
-        create: !!replyList ? "update" : "create",
+        create: !!reply ? "update" : "create",
       },
       {
         method: "post",

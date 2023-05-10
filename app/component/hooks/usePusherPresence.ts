@@ -54,6 +54,7 @@ const usePusherPresence = (channelName, id, cluster) => {
       });
     };
     const handleUpdate = () => {
+      console.log("updated loader");
       revalidator.revalidate();
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);

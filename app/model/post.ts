@@ -86,7 +86,7 @@ export async function findPostByTextId(textId: number, topicList = []) {
 
         return {
           ...post,
-          replyCount: replies?.posts_count,
+          replyCount: replies?.posts_count - 1, //-1 because the parent post is included here
           isSolved,
         };
       })
@@ -96,14 +96,7 @@ export async function findPostByTextId(textId: number, topicList = []) {
     console.log(e.message);
   }
 }
-export async function findPostByPostId(id: string) {
-  let post = await db.post.findFirst({
-    where: {
-      id,
-    },
-  });
-  return post;
-}
+
 export async function findPostByUserLiked(id: string, userId: string) {
   try {
     let f = await db.post.findFirst({

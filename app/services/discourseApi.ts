@@ -1,5 +1,5 @@
 import { MAX_CATEGORY_NAME_LENGTH } from "~/constants";
-import { findUserByUsername } from "~/model/user";
+import { isUserPresent } from "~/model/user";
 class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
@@ -113,15 +113,13 @@ class DiscourseApi {
       raw: post_text,
     };
     let queryParams = new URLSearchParams(new_Topic_data).toString();
-    let userPromise = findUserByUsername(username);
-    const responsePromise = fetch(
+    const response = await fetch(
       `${this.DiscourseUrl}/posts.json?${queryParams}`,
       {
         method: "POST",
         headers: auth_headers,
       }
     );
-    let [user, response] = await Promise.all([userPromise, responsePromise]);
     let data = await response.json();
     if (data?.errors) {
       throw new Error(

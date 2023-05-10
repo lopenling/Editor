@@ -3,6 +3,7 @@ import { json } from "react-router";
 import { findTextByTextId, updateText } from "~/model/text";
 import pusher from "~/services/pusher.server";
 import DiffMatchPatch from "diff-match-patch";
+import { redis } from "~/services/redis.server";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const textId = new URL(request.url).searchParams.get("textId") ?? "";
@@ -10,24 +11,26 @@ export let loader: LoaderFunction = async ({ request }) => {
   return json(text);
 };
 export let action: ActionFunction = async ({ request }) => {
-  const dmp = new DiffMatchPatch();
   const data = await request.formData();
+  const dmp = new DiffMatchPatch();
   const patchString = data.get("patch") as string;
   const patch = dmp.patch_fromText(patchString);
   const id = data.get("id") as string;
-  const textContent = await findTextByTextId(parseInt(id), true);
-  const content = textContent?.content;
+  let content = await redis.get("text_" + id);
+  if (!content) {
+    let text = await findTextByTextId(parseInt(id), true);
+    content = text?.content;
+  }
   const [newText, result] = dmp.patch_apply(patch, content);
   try {
     if (result.every((element) => element === true)) {
       const res = await updateText(parseInt(id), newText);
-      if (res) {
+      if (res.id) {
         let channelId = "presence-text_" + id;
-        await pusher.trigger(channelId, "update-app", {
+        pusher.trigger(channelId, "update-app", {
           message: "ok",
         });
       }
-
       return res;
     }
     return null;

@@ -9,15 +9,26 @@ export async function getAllUser() {
     return e;
   }
 }
+export async function isUserPresent(username: string) {
+  const user = await db.user.findUnique({
+    where: {
+      username,
+    },
+    include: {
+      likedPost: true,
+      preference: true,
+    },
+  });
 
-// find user in database
+  return user;
+}
 
-export async function findUserByUsername(username: string) {
-  if (!username) return null;
+export async function getUser(id: string) {
+  if (!id) return null;
   try {
     let user = await db.user.findUnique({
       where: {
-        username,
+        id,
       },
       include: {
         likedPost: true,
@@ -29,26 +40,6 @@ export async function findUserByUsername(username: string) {
     return e;
   }
 }
-
-export async function findUserByEmail(email: string) {
-  if (!email) return null;
-  try {
-    let user = await db.user.findUnique({
-      where: {
-        email,
-      },
-      include: {
-        likedPost: true,
-        preference: true,
-      },
-    });
-    return user;
-  } catch (e) {
-    return e;
-  }
-}
-
-// create new User
 
 export async function createUserInDB(
   username: string,

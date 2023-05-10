@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useState, useEffect, memo } from "react";
-import searchFullText from "~/utility/searchFullText";
+import searchFullText from "~/lib/searchFullText";
 import { FaSearch } from "react-icons/fa";
 type locationType = {
   start: number;

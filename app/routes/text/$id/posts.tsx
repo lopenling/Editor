@@ -1,4 +1,4 @@
-import { useState, Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import PostForm from "~/component/Post/PostForm";
 import Skeleton from "~/component/UI/Skeleton";
 import {
@@ -26,8 +26,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const threadId = new URL(request.url).searchParams.get("thread") ?? "";
   if (textId === "" || !textId) return redirect("/");
 
-  const CategoryData = await fetchCategoryData();
-  const topicList = CategoryData.topic_list.topics;
+  const Categories = await fetchCategoryData();
+  const topicList = Categories.topic_list.topics;
   const posts = findPostByTextId(textId, topicList);
   return defer({ text: { id: textId }, posts, threadId });
 };
@@ -36,7 +36,7 @@ export const ErrorBoundary = ({ error }) => {
 };
 
 export default function PostContainer() {
-  let [params, setParams] = useSearchParams();
+  let [, setParams] = useSearchParams();
   let [selectedPostThread, setSelectedThread] = useRecoilState(
     selectedPostThreadState
   );

@@ -14,6 +14,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const replyListPromise = findReplyByPostId(post.id);
   let [postsData, replyList] = await Promise.all([data, replyListPromise]);
   posts = postsData.post_stream?.posts;
+  // console.log(posts);
   posts = combineArrays(replyList, posts)
     .slice(1)
     .sort((a, b) => {
@@ -22,12 +23,11 @@ export const loader: LoaderFunction = async ({ params, request }) => {
       }
       return a.isAproved ? -1 : 1;
     });
+  console.log(posts);
   return json({
     posts,
-    replyList,
   });
 };
-
 function combineArrays(array1: [], array2: []) {
   return array2.reduce((acc, val) => {
     const matchingObject = array1.find((obj) => val.id == obj.id);

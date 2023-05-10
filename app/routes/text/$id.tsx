@@ -1,16 +1,9 @@
 import { getUserSession } from "~/services/session.server";
-import { json, MetaFunction, defer } from "@remix-run/node";
-import type { LoaderFunction, ActionFunction } from "@remix-run/server-runtime";
-import {
-  useLoaderData,
-  useFetcher,
-  Link,
-  Outlet,
-  useLocation,
-  Await,
-} from "@remix-run/react";
-import { useEffect, Suspense, useState, useRef } from "react";
-import { findTextByTextId, getTextContent } from "~/model/text";
+import { json, MetaFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/server-runtime";
+import { useLoaderData, useFetcher, Link, Outlet } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { findTextByTextId } from "~/model/text";
 import EditorContainer from "~/component/Editor/EditorContainer";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
@@ -33,7 +26,6 @@ import { Suggestion } from "~/tiptap/tiptap-extension/suggestion";
 import PostMark from "~/tiptap/tiptap-extension/postMark";
 import SuggestionContainer from "~/component/Suggestion/SuggestionContainer";
 import { SearchAndReplace } from "~/tiptap/tiptap-extension/searchAndReplace";
-import { MAX_WIDTH_PAGE } from "~/constants";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
 import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
@@ -43,23 +35,21 @@ import Split from "react-split";
 import { isMobile } from "react-device-detect";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
 import OnlineUsers from "~/component/UI/OnlineUserList";
-import useFetcherWithPromise from "~/utility/useFetcherPromise";
+import useFetcherWithPromise from "~/lib/useFetcherPromise";
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
-
+import { redis } from "~/services/redis.server";
 export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
   const text_id = parseInt(params.id);
-  const text = await findTextByTextId(text_id, false);
-  const suggestions = await findAllSuggestionByTextId(text_id);
-
-  const textContent = getTextContent(text_id);
   if (!text_id) throw new Error("not valid textId");
-
-  return defer({
+  const text = await findTextByTextId(text_id, true);
+  const suggestions = await findAllSuggestionByTextId(text_id);
+  await redis.set("text_" + text_id, text.content);
+  return json({
     user,
-    text: text,
-    textContent,
+    text,
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
   });
@@ -89,6 +79,7 @@ export interface CommentInstance {
   uuid?: string;
   comments?: any[];
 }
+
 export default function () {
   const data = useLoaderData();
   const setTextName = useSetRecoilState(textName);
@@ -123,7 +114,6 @@ export default function () {
       id: id,
     });
   }
-
   const isSaving = !!saveText.formData;
   let editor = useEditor(
     {
@@ -134,6 +124,16 @@ export default function () {
         Bold,
         FontFamily,
         TextStyle,
+        // Collaboration.configure({
+        //   document: ydoc,
+        // }),
+        // CollaborationCursor.configure({
+        //   provider,
+        //   user: {
+        //     name: data.user.username,
+        //     color: "#f783ac",
+        //   },
+        // }),
         SearchAndReplace.configure({
           searchResultClass: "search",
           caseSensitive: false,
@@ -177,13 +177,14 @@ export default function () {
       },
       onUpdate: async ({ editor }) => {
         const dmp = new DiffMatchPatch();
-        let oldText = await data.textContent;
+        let oldContent = data.text.content;
         let newContent = editor.getHTML();
-        let oldContent = oldText.content;
-        const changes = dmp.diff_main(oldContent, newContent);
-        const patch = dmp.patch_make(changes);
-        let query = dmp.patch_toText(patch);
-        if (newContent.length > 2000 && data.user) saveData(query);
+        if (oldContent !== newContent) {
+          const changes = dmp.diff_main(oldContent, newContent);
+          const patch = dmp.patch_make(changes);
+          let query = dmp.patch_toText(patch);
+          if (newContent.length > 2000 && data.user) saveData(query);
+        }
       },
       onCreate: () => {
         setTextName(data?.text?.name);
@@ -228,21 +229,17 @@ export default function () {
             }}
             id="textEditorContainer"
           >
-            <Suspense
-              fallback={
-                <div className="flex justify-center h-[400px] w-full animate-pulse ">
-                  <div className="flex w-full h-full  dark:bg-gray-700"></div>
-                </div>
-              }
-            >
-              <Await
-                resolve={data.textContent}
-                errorElement={<p>Error fetching content!</p>}
-              >
-                <EditorContainer editor={editor} isSaving={isSaving} />
-                <div />
-              </Await>
-            </Suspense>
+            {editor ? (
+              <EditorContainer
+                editor={editor}
+                isSaving={isSaving}
+                content={data.text.content}
+              />
+            ) : (
+              <div className="flex justify-center h-[400px] w-full animate-pulse ">
+                <div className="flex w-full h-full  dark:bg-gray-700"></div>
+              </div>
+            )}
           </div>
           <div
             className={`md:h-screen p-3 overflow-y-auto w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}

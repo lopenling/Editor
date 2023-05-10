@@ -18,11 +18,11 @@ import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
 import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { theme } from "./states";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import flagsmith from "flagsmith";
 import { FlagsmithProvider } from "flagsmith/react";
-import { findUserByUsername } from "./model/user";
+import { getUser } from "./model/user";
 import Loader from "./component/UI/Loader";
 import { GlobalLoading } from "./component/UI/globalLoader";
 import notificationStyle from "react-notifications-component/dist/theme.css";
@@ -35,7 +35,7 @@ export const meta: MetaFunction = () => ({
 export const loader: LoaderFunction = async ({ request }) => {
   let userSession = await getUserSession(request);
   if (!userSession) return { user: null };
-  let user = await findUserByUsername(userSession.username);
+  let user = await getUser(userSession.id);
   return { user };
 };
 
