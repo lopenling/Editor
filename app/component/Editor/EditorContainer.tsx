@@ -87,7 +87,11 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
           block: "center",
           inline: "nearest",
         });
-
+        postThread.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest",
+        });
         setTimeout(() => {
           window.getSelection().selectAllChildren(editorThread);
         }, 100);

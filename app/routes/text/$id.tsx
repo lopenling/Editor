@@ -44,7 +44,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
 
   const text_id = parseInt(params.id);
-  console.log(text_id);
   if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, true);
   const suggestions = await findAllSuggestionByTextId(text_id);
@@ -98,9 +97,8 @@ export default function () {
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const saveText = useFetcherWithPromise();
-  const updateFetcher = useFetcher();
   const saveData = async (patch: string) => {
-    let success = await saveText.submit(
+    await saveText.submit(
       { id: data.text?.id, patch },
       { method: "post", action: "/api/text" }
     );
@@ -126,16 +124,6 @@ export default function () {
         Bold,
         FontFamily,
         TextStyle,
-        // Collaboration.configure({
-        //   document: ydoc,
-        // }),
-        // CollaborationCursor.configure({
-        //   provider,
-        //   user: {
-        //     name: data.user.username,
-        //     color: "#f783ac",
-        //   },
-        // }),
         SearchAndReplace.configure({
           searchResultClass: "search",
           caseSensitive: false,
