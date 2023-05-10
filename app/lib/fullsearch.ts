@@ -3,10 +3,10 @@ export const fullSearch = (textList, search_term) => {
   const extract_length = 60;
   const left = parseInt((extract_length - search_term.length) / 2);
   const delimiters = "།་ ";
-
   let delimiter_regex = new RegExp(`[${delimiters}]`, "g");
   const max_results = 0;
   for (let text of textList) {
+    // let text = item;
     const content_length = text.content.length;
     const textWithNewlines = text.content.replace(
       /<br\s*\/?\s*(class\s*=\s*['"]\S*['"])?\s*>/gi,

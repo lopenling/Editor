@@ -109,15 +109,15 @@ function Post({
   let content = postContent.replace(/\n/g, "<br>");
   return (
     <div
-      className={`${deleteFetcher.formData && "hidden"}`}
+      className={`${deleteFetcher.formData && "hidden"} `}
       id={`p_${threadId}`}
     >
       <div
-        className={` md:py-3 md:px-1  transition-all ${
+        className={`p-3 transition-all ${
           isSelected
             ? "bg-yellow-50 dark:bg-gray-700 dark:rounded-sm"
             : "bg-transparent"
-        }`}
+        } `}
         onClick={() => handleSelectPost(threadId)}
       >
         <div className="inline-flex w-full items-center justify-start">

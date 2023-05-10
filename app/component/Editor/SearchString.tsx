@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useState, useEffect, memo } from "react";
-import searchFullText from "~/lib/searchFullText";
+import searchText from "~/lib/searchSingleText";
 import { FaSearch } from "react-icons/fa";
 type locationType = {
   start: number;
@@ -54,7 +54,7 @@ function SearchString({ editor }: { editor: Editor | null }) {
     if (searchString.length > 0) {
       setSearchState("searching");
       let content = editor.getText();
-      let locations = searchFullText(content, searchString);
+      let locations = searchText(content, searchString);
       setSearchLocation(locations);
       editor.commands.setSearchTerm(searchString);
       setSearchState("done");

@@ -2,7 +2,6 @@
 
 import { db } from "~/db.server";
 import { fullSearch } from "~/lib/fullsearch";
-
 // get all text
 
 export async function findAllText(id = true, name = true, content = false) {
@@ -20,31 +19,9 @@ export async function findAllText(id = true, name = true, content = false) {
     throw new Error("fetching text error" + e.message);
   }
 }
-export async function searchTextWithName(
-  search_term = "",
-  id = true,
-  name = true,
-  content = true
-) {
+export async function searchTextWithName(search_term = "") {
   try {
-    const textList = await db.text.findMany({
-      where: {
-        name: {
-          contains: search_term,
-          mode: "insensitive",
-        },
-
-        content: {
-          contains: search_term,
-          mode: "insensitive",
-        },
-      },
-      select: {
-        content,
-        id,
-        name,
-      },
-    });
+    const textList = await db.text.findMany();
     return fullSearch(textList, search_term);
   } catch (e) {
     throw new Error("error finding text with name" + e.message);

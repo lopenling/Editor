@@ -1,27 +1,26 @@
-import { ActionFunction, json } from "@remix-run/server-runtime";
-import { findPostByUserLiked, updatePostLike } from "~/model/post";
-import { createReply, findReply, updateReply } from "~/model/reply";
+import { ActionFunction, ActionArgs } from "@remix-run/server-runtime";
 import {
-  findSuggestionByUserLiked,
-  updateSuggestionLike,
-} from "~/model/suggestion";
+  createReply,
+  findReply,
+  isReplyPresent,
+  updateLikeReply,
+} from "~/model/reply";
+import { getUserSession } from "~/services/session.server";
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
+  const user = await getUserSession(request);
   let Obj = Object.fromEntries(formData);
 
   let post_id = Obj.post_id as string;
-  let likedBy = Obj.likedBy as string;
   let id = Obj.id as string;
-  let create = Obj.create as string;
   //check if user already like it
-  if (create === "create") {
-    await createReply(id, post_id, likedBy);
-  }
-  if (create === "update") {
-    const alreadyLiked = await findReply(id, likedBy);
-    const actionPromise = updateReply(id, likedBy, !alreadyLiked);
-    await actionPromise;
+  let replyExist = await isReplyPresent(id);
+  if (!replyExist) {
+    await createReply(id, post_id, user.id);
+  } else {
+    const alreadyLiked = await findReply(id, user.id);
+    await updateLikeReply(id, user.id, !alreadyLiked);
   }
   return { success: true };
 };

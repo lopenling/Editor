@@ -220,7 +220,7 @@ export default function () {
           maxSize={750}
           className="split flex-1 flex flex-col md:flex-row"
           direction={!isMobile ? "horizontal" : "vertical"}
-          sizes={!isMobile ? [70, 30] : [50, 50]}
+          sizes={!isMobile ? [65, 35] : [50, 50]}
         >
           <div
             style={{

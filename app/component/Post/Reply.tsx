@@ -86,10 +86,8 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
     replyLikeFetcher.submit(
       {
         post_id: postId,
-        likedBy: user?.id,
         id: reply?.id,
         like: !likedByMe ? "true" : "false",
-        create: !!reply ? "update" : "create",
       },
       {
         method: "post",

@@ -67,8 +67,40 @@ export async function findReplyByPostId(post_id: string) {
     throw new Error("finding reply by postId error" + e.message);
   }
 }
+export async function findAproved(id: string) {
+  try {
+    let res = await db.reply.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        isAproved: true,
+      },
+    });
+    return res;
+  } catch (e) {
+    throw new Error("error finding aproved in reply" + e.message);
+  }
+}
+export async function isReplyPresent(replyId: string): Promise<boolean> {
+  try {
+    const reply = await db.reply.findUnique({
+      where: {
+        id: replyId,
+      },
+    });
 
-export async function updateReply(id: string, likedBy: string, put: boolean) {
+    return !!reply; // Returns true if reply exists, false otherwise
+  } catch (error) {
+    throw new Error(`Error checking reply presence: ${error.message}`);
+  }
+}
+//update isAproved
+export async function updateLikeReply(
+  id: string,
+  likedBy: string,
+  put: boolean
+) {
   try {
     await db.reply.update({
       where: {
@@ -92,25 +124,6 @@ export async function updateReply(id: string, likedBy: string, put: boolean) {
     throw new Error("couldnot update reply error" + e.message);
   }
 }
-
-export async function findAproved(id: string) {
-  try {
-    let res = await db.reply.findFirst({
-      where: {
-        id,
-      },
-      select: {
-        isAproved: true,
-      },
-    });
-    return res;
-  } catch (e) {
-    throw new Error("error finding aproved in reply" + e.message);
-  }
-}
-
-//update isAproved
-
 export async function updateIsAproved(id: string, isAproved: boolean) {
   try {
     let res = await db.reply.update({
