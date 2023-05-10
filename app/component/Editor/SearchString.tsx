@@ -78,7 +78,6 @@ function SearchString({ editor }: { editor: Editor | null }) {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-
             handleSearch();
           }}
           className="flex-1"
@@ -95,7 +94,7 @@ function SearchString({ editor }: { editor: Editor | null }) {
         <input name="textId" readOnly value={data.text.id} hidden />
         <button type="submit" hidden></button>
 
-        {(searchString !== "" || searchState === "done") && (
+        {searchState === "done" && searchString && searchString !== "" && (
           <button
             type="reset"
             onClick={() => {
