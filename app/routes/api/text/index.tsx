@@ -23,17 +23,17 @@ export let action: ActionFunction = async ({ request }) => {
   }
   const [newText, result] = dmp.patch_apply(patch, content);
   try {
-    if (result.every((element) => element === true)) {
-      const res = await updateText(parseInt(id), newText);
-      if (res.id) {
-        let channelId = "presence-text_" + id;
-        pusher.trigger(channelId, "update-app", {
-          message: "ok",
-        });
-      }
-      return res;
+    // if (result.every((element) => element === true)) {
+    const res = await updateText(parseInt(id), newText);
+    if (res.id) {
+      let channelId = "presence-text_" + id;
+      await pusher.trigger(channelId, "update-app", {
+        message: "ok",
+      });
     }
-    return null;
+    console.log(res);
+    return res;
+    // }
   } catch (e) {
     return false;
   }

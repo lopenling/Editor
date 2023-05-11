@@ -3,7 +3,7 @@ import Pusher from "pusher-js";
 import { useRevalidator } from "@remix-run/react";
 import { Store } from "react-notifications-component";
 
-const usePusherPresence = (channelName, id, cluster) => {
+const usePusherPresence = (channelName, id, cluster, mutate) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
   const revalidator = useRevalidator();
   useEffect(() => {
@@ -55,6 +55,7 @@ const usePusherPresence = (channelName, id, cluster) => {
     };
     const handleUpdate = () => {
       console.log("updated loader");
+      mutate();
       revalidator.revalidate();
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);

@@ -86,17 +86,19 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function () {
   const data = useLoaderData();
   const setTextName = useSetRecoilState(textName);
-  const { onlineMembers } = usePusherPresence(
-    `presence-text_${data.text.id}`,
-    data.pusher_env.key,
-    data.pusher_env.cluster
-  );
+
   const {
     isLoading,
     data: swrData,
     error,
     mutate,
   } = useSWR(`/api/text?textId=${data.text.id}`, fetcher);
+  const { onlineMembers } = usePusherPresence(
+    `presence-text_${data.text.id}`,
+    data.pusher_env.key,
+    data.pusher_env.cluster,
+    mutate
+  );
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
@@ -105,7 +107,7 @@ export default function () {
     useRecoilState(openSuggestionState);
   const saveText = useFetcherWithPromise();
   const saveData = async (patch: string) => {
-    await saveText.submit(
+    let datas = await saveText.submit(
       { id: data.text?.id, patch },
       { method: "post", action: "/api/text" }
     );
@@ -182,14 +184,13 @@ export default function () {
           const patch = dmp.patch_make(changes);
           let query = dmp.patch_toText(patch);
           if (newContent.length > 2000 && data.user) saveData(query);
-          mutate();
         }
       },
       onCreate: () => {
         setTextName(data?.text?.name);
       },
     },
-    [isLoading]
+    [isLoading, swrData?.content]
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
