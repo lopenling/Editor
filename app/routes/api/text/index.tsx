@@ -16,24 +16,20 @@ export let action: ActionFunction = async ({ request }) => {
   const patchString = data.get("patch") as string;
   const patch = dmp.patch_fromText(patchString);
   const id = data.get("id") as string;
-  let content = await redis.get("text_" + id);
-  if (!content) {
-    let text = await findTextByTextId(parseInt(id), true);
-    content = text?.content;
-  }
-  const [newText, result] = dmp.patch_apply(patch, content);
+  let text = await findTextByTextId(parseInt(id), true);
+  const [newText, result] = dmp.patch_apply(patch, text.content);
   try {
-    // if (result.every((element) => element === true)) {
-    const res = await updateText(parseInt(id), newText);
-    if (res.id) {
-      let channelId = "presence-text_" + id;
-      await pusher.trigger(channelId, "update-app", {
-        message: "ok",
-      });
+    if (result.every((element) => element === true)) {
+      const res = await updateText(parseInt(id), newText);
+      if (res.id) {
+        let channelId = "presence-text_" + id;
+        await pusher.trigger(channelId, "update-app", {
+          message: "ok",
+        });
+      }
+      return res;
     }
-    console.log(res);
-    return res;
-    // }
+    return null;
   } catch (e) {
     return false;
   }

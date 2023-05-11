@@ -40,7 +40,6 @@ import useSWR from "swr";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
-import { redis } from "~/services/redis.server";
 export const loader: LoaderFunction = async ({ request, params }) => {
   let user = await getUserSession(request);
 
@@ -190,7 +189,7 @@ export default function () {
         setTextName(data?.text?.name);
       },
     },
-    [isLoading, swrData?.content]
+    [isLoading, swrData]
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
