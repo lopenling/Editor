@@ -1,4 +1,4 @@
-import { db } from "~/db.server";
+import { db } from "~/services/db.server";
 
 // update theme data
 export const updateTheme = async (userId: string, theme: string) => {

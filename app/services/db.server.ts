@@ -17,6 +17,7 @@ if (process.env.NODE_ENV === "production") {
     global.__db__ = new PrismaClient();
   }
   db = global.__db__;
+
   db.$connect();
 }
 

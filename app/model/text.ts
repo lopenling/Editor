@@ -1,6 +1,6 @@
 // find text by textId
 
-import { db } from "~/db.server";
+import { db } from "~/services/db.server";
 import { fullSearch } from "~/lib/fullsearch";
 // get all text
 

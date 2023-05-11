@@ -36,6 +36,7 @@ import { isMobile } from "react-device-detect";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
 import OnlineUsers from "~/component/UI/OnlineUserList";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
+import useSWR from "swr";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
@@ -45,9 +46,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
-  const text = await findTextByTextId(text_id, true);
+  const text = await findTextByTextId(text_id, false);
   const suggestions = await findAllSuggestionByTextId(text_id);
-  await redis.set("text_" + text_id, text.content);
+  // await redis.set("text_" + text_id, text.content);
   return json({
     user,
     text,
@@ -80,6 +81,7 @@ export interface CommentInstance {
   uuid?: string;
   comments?: any[];
 }
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function () {
   const data = useLoaderData();
@@ -89,7 +91,12 @@ export default function () {
     data.pusher_env.key,
     data.pusher_env.cluster
   );
-
+  const {
+    isLoading,
+    data: swrData,
+    error,
+    mutate,
+  } = useSWR(`/api/text?textId=${data.text.id}`, fetcher);
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
@@ -150,6 +157,7 @@ export default function () {
           },
         }),
       ],
+      content: swrData?.content,
       editable: true,
       editorProps: editorProps,
       onSelectionUpdate: ({ editor }) => {
@@ -167,20 +175,21 @@ export default function () {
       },
       onUpdate: async ({ editor }) => {
         const dmp = new DiffMatchPatch();
-        let oldContent = data.text.content;
+        let oldContent = swrData?.content;
         let newContent = editor.getHTML();
         if (oldContent !== newContent) {
           const changes = dmp.diff_main(oldContent, newContent);
           const patch = dmp.patch_make(changes);
           let query = dmp.patch_toText(patch);
           if (newContent.length > 2000 && data.user) saveData(query);
+          mutate();
         }
       },
       onCreate: () => {
         setTextName(data?.text?.name);
       },
     },
-    []
+    [isLoading]
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
@@ -204,7 +213,7 @@ export default function () {
     <div className=" flex flex-col h-screen">
       <Header user={data.user} editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
-      <div className="flex-1  flex max-w-6xl mx-auto pt-16">
+      <div className="flex-1  flex max-w-6xl w-full mx-auto pt-16">
         <Split
           minSize={!isMobile ? 350 : 100}
           maxSize={750}
@@ -219,12 +228,9 @@ export default function () {
             }}
             id="textEditorContainer"
           >
-            {editor ? (
-              <EditorContainer
-                editor={editor}
-                isSaving={isSaving}
-                content={data.text.content}
-              />
+            {error && <div>{error}</div>}
+            {editor || !isLoading ? (
+              <EditorContainer editor={editor} isSaving={isSaving} />
             ) : (
               <div className="flex justify-center h-[400px] w-full animate-pulse ">
                 <div className="flex w-full h-full  dark:bg-gray-700"></div>

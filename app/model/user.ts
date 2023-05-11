@@ -1,4 +1,4 @@
-import { db } from "~/db.server";
+import { db } from "~/services/db.server";
 
 //find all user
 export async function getAllUser() {

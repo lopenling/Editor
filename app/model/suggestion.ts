@@ -1,4 +1,4 @@
-import { db } from "~/db.server";
+import { db } from "~/services/db.server";
 
 export async function findAllSuggestionByTextId(textId: number) {
   try {

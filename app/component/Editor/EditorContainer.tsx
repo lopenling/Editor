@@ -10,8 +10,6 @@ import {
   openSuggestionState,
   selectedPostThread,
   selectedTextOnEditor,
-  showFontSizeState,
-  showSearchPanelState,
 } from "~/states";
 import { useFlags } from "flagsmith/react";
 import SuggestionForm from "../Suggestion/SuggestionForm";
@@ -20,10 +18,8 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 type EditorContainerProps = {
   editor: Editor | null;
   isSaving: boolean;
-  content: string;
 };
-
-function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
+function EditorContainer({ editor, isSaving }: EditorContainerProps) {
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   const data = useLoaderData();
@@ -31,9 +27,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
   const [fontSize, setFontSize] = useState(
     isMobile ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
   );
-  useEffect(() => {
-    editor?.commands.setContent(content);
-  }, [content]);
+
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);

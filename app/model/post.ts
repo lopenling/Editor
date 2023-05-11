@@ -1,6 +1,6 @@
 // create post
 
-import { db } from "~/db.server";
+import { db } from "~/services/db.server";
 
 export async function createPost(
   type: string,

@@ -1,6 +1,6 @@
 //create reply
 
-import { db } from "~/db.server";
+import { db } from "~/services/db.server";
 
 export async function createReply(
   id: string,
