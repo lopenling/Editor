@@ -19,7 +19,6 @@ const usePusherPresence = (channelName, id, cluster, mutate) => {
 
     const handleMemberAdded = (member) => {
       setOnlineMembers(Object.entries(channel.members.members));
-      console.log("added");
       Store.addNotification({
         title: "Welcome!",
         message: member.info.username + " join",
@@ -53,10 +52,11 @@ const usePusherPresence = (channelName, id, cluster, mutate) => {
         },
       });
     };
-    const handleUpdate = () => {
-      console.log("updated loader");
-      mutate();
-      revalidator.revalidate();
+    const handleUpdate = (e) => {
+      if (channel.members.me.id !== e.user) {
+        revalidator.revalidate();
+        mutate();
+      }
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
     channel.bind("pusher:member_added", handleMemberAdded);

@@ -47,7 +47,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, false);
   const suggestions = await findAllSuggestionByTextId(text_id);
-  // await redis.set("text_" + text_id, text.content);
   return json({
     user,
     text,
@@ -91,7 +90,12 @@ export default function () {
     data: swrData,
     error,
     mutate,
-  } = useSWR(`/api/text?textId=${data.text.id}`, fetcher);
+  } = useSWR(`/api/text?textId=${data.text.id}`, fetcher, {
+    revalidateIfStale: true,
+    revalidateOnMount: true,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  });
   const { onlineMembers } = usePusherPresence(
     `presence-text_${data.text.id}`,
     data.pusher_env.key,
@@ -106,7 +110,7 @@ export default function () {
     useRecoilState(openSuggestionState);
   const saveText = useFetcherWithPromise();
   const saveData = async (patch: string) => {
-    let datas = await saveText.submit(
+    await saveText.submit(
       { id: data.text?.id, patch },
       { method: "post", action: "/api/text" }
     );
@@ -189,7 +193,7 @@ export default function () {
         setTextName(data?.text?.name);
       },
     },
-    [isLoading, swrData]
+    [isLoading, swrData?.content]
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;

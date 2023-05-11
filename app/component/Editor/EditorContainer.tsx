@@ -312,9 +312,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
                     />
                   </svg>
                 </Button>
-              ) : (
-                <div />
-              )}
+              ) : null}
             </Button.Group>
             {openSuggestion && isSuggestionAtBubble && (
               <SuggestionForm editor={editor} />

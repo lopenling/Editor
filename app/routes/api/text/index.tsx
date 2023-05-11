@@ -4,6 +4,7 @@ import { findTextByTextId, updateText } from "~/model/text";
 import pusher from "~/services/pusher.server";
 import DiffMatchPatch from "diff-match-patch";
 import { redis } from "~/services/redis.server";
+import { getUserSession } from "~/services/session.server";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const textId = new URL(request.url).searchParams.get("textId") ?? "";
@@ -12,6 +13,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 export let action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
+  const user = await getUserSession(request);
   const dmp = new DiffMatchPatch();
   const patchString = data.get("patch") as string;
   const patch = dmp.patch_fromText(patchString);
@@ -23,9 +25,7 @@ export let action: ActionFunction = async ({ request }) => {
       const res = await updateText(parseInt(id), newText);
       if (res.id) {
         let channelId = "presence-text_" + id;
-        await pusher.trigger(channelId, "update-app", {
-          message: "ok",
-        });
+        await pusher.trigger(channelId, "update-app", { user: user.id });
       }
       return res;
     }
