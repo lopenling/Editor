@@ -1,10 +1,9 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
-import { useEffect } from "react";
 import { Editor } from "@tiptap/react";
-import { useRevalidator } from "@remix-run/react";
 
 import Suggestion from "./Suggestion";
+import markAction from "~/tiptap/markAction";
 function Suggestions({
   editor,
   suggestions,
@@ -13,35 +12,16 @@ function Suggestions({
   suggestions: any;
 }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
-  const revalidator = useRevalidator();
 
   let list = suggestions.filter((sug) => {
     return sug.threadId === suggestionThread.id;
   });
-  useEffect(() => {
-    return () => revalidator.revalidate();
-  }, []);
   const [suggestionSelector, setSuggestionThread] = useRecoilState(
     selectedSuggestionThread
   );
   const selection = useRecoilValue(selectedTextOnEditor);
-  function replaceHandler(replace: string) {
-    editor
-      .chain()
-      .focus()
-      .insertContentAt(
-        {
-          from: selection.start,
-          to: selection.end,
-        },
-        replace
-      )
-      .run();
-    setSuggestionThread({ id: "" });
-  }
-
-  const replacer = (char: string) => {
-    replaceHandler(char);
+  const replacer = (char: string, id: string) => {
+    markAction(editor, id, "update", char);
   };
 
   return (

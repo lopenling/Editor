@@ -142,7 +142,7 @@ export default function () {
           },
         }),
       ],
-
+      content: data.text.content,
       editable: true,
       editorProps: editorProps,
       onSelectionUpdate: ({ editor }) => {
@@ -160,7 +160,7 @@ export default function () {
       },
       onUpdate: async ({ editor }) => {
         const dmp = new DiffMatchPatch();
-        let oldContent = swrData?.content;
+        let oldContent = swrData.content;
         let newContent = editor.getHTML();
         if (oldContent !== newContent) {
           const changes = dmp.diff_main(oldContent, newContent);
@@ -176,15 +176,12 @@ export default function () {
     isLoading,
     data: swrData,
     error,
-    mutate,
     isValidating,
+    mutate,
   } = useSWR(`/api/text?textId=${data.text.id}`, fetcher, {
-    revalidateIfStale: true,
-    revalidateOnMount: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
     onSuccess: async (item) => {
-      setTextName(data?.text?.name);
+      setTextName(item.name);
+      console.log("updated", item.content);
       editor?.commands.setContent(item.content);
     },
   });
@@ -196,11 +193,7 @@ export default function () {
       fetch("/api/text", {
         method: "POST",
         body: formData,
-      }),
-      {
-        rollbackOnError: true,
-        revalidate: true,
-      }
+      })
     );
   };
 

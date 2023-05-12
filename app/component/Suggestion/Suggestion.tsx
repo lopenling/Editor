@@ -11,6 +11,7 @@ import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 import { v4 as uuidv4 } from "uuid";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
+import markAction from "~/tiptap/markAction";
 
 type SuggestType = {
   created_at: Date;
@@ -28,7 +29,7 @@ type SuggestionProps = {
   editor: Editor | null;
   suggest: SuggestType;
   optimistic: boolean;
-  replacer: (char: string) => void;
+  replacer: (char: string, id: string) => void;
 };
 
 export default function Suggestion({
@@ -77,27 +78,14 @@ export default function Suggestion({
       { method: "post", action: "api/suggestion/like" }
     );
     setTimeout(() => {
-      replacer(res?.highestLiked.newValue);
+      replacer(res?.highestLiked.newValue, suggest.threadId);
     }, 100);
   };
   let time = timeAgo(suggest.created_at);
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
-  function replaceHandler(replace: string) {
-    if (data.user) {
-      editor
-        .chain()
-        .focus()
-        .insertContentAt(
-          {
-            from: selection.start,
-            to: selection.end,
-          },
-          replace
-        )
-        .run();
-      suggestionSelector({ id: null });
-    }
-  }
+  const replaceHandler = (char: string) => {
+    markAction(editor, suggest.threadId, "update", char);
+  };
 
   function deleteSuggestion(id: string) {
     let decision = confirm("do you want to delete the post");
