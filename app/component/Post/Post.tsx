@@ -8,6 +8,8 @@ import { selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
 import AudioPlayer from "../Media/AudioPlayer";
 import copyToClipboard from "~/lib/copyToClipboard";
+import useFetcherWithPromise from "~/lib/useFetcherPromise";
+import selectMark from "~/tiptap/selectMark";
 type PostType = {
   id: string;
   creatorUser: any;
@@ -42,7 +44,7 @@ function Post({
   const [effect, setEffect] = useState(false);
   const [ReplyCount, setReplyCount] = useState(replyCount);
   const likeFetcher = useFetcher();
-  const deleteFetcher = useFetcher();
+  const deleteFetcher = useFetcherWithPromise();
   const { editor }: { editor: Editor } = useOutletContext();
   const translation = uselitteraTranlation();
   const { user }: { user: any } = useOutletContext();
@@ -82,10 +84,10 @@ function Post({
     );
   }
 
-  function deletePost() {
+  async function deletePost() {
     let decision = confirm("do you want to delete the post");
     if (decision) {
-      deleteFetcher.submit(
+      let res = await deleteFetcher.submit(
         {
           id,
         },
@@ -94,12 +96,12 @@ function Post({
           method: "delete",
         }
       );
+      if (res?.deleted?.thread_id) {
+        selectMark(editor, threadId, "delete");
+      }
     } else {
       console.log("cancelled");
     }
-  }
-  if (deleteFetcher.data?.deleted?.id === id) {
-    editor.commands.unsetPost();
   }
   function handleShare() {
     let url = window.location.href + "?thread=" + threadId;

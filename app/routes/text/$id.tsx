@@ -85,45 +85,13 @@ export default function () {
   const data = useLoaderData();
   const setTextName = useSetRecoilState(textName);
 
-  const {
-    isLoading,
-    data: swrData,
-    error,
-    mutate,
-  } = useSWR(`/api/text?textId=${data.text.id}`, fetcher, {
-    revalidateIfStale: true,
-    revalidateOnMount: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-    onSuccess: () => setTextName(data?.text?.name),
-  });
-  const { onlineMembers } = usePusherPresence(
-    `presence-text_${data.text.id}`,
-    data.pusher_env.key,
-    data.pusher_env.cluster,
-    mutate
-  );
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
-  const saveData = async (patch: string) => {
-    const formData = new FormData();
-    formData.append("id", data.text?.id);
-    formData.append("patch", JSON.stringify(patch));
-    await mutate(
-      fetch("/api/text", {
-        method: "POST",
-        body: formData,
-      }),
-      {
-        rollbackOnError: true,
-        revalidate: true,
-      }
-    );
-  };
+
   const [selectedThread, postSelector] = useRecoilState(selectedPostThread);
   function suggestionSetter(id: string) {
     suggestionSelector({
@@ -170,7 +138,7 @@ export default function () {
           },
         }),
       ],
-      content: swrData?.content,
+
       editable: true,
       editorProps: editorProps,
       onSelectionUpdate: ({ editor }) => {
@@ -198,7 +166,45 @@ export default function () {
         }
       },
     },
-    [isLoading, swrData?.content]
+    []
+  );
+  const {
+    isLoading,
+    data: swrData,
+    error,
+    mutate,
+    isValidating,
+  } = useSWR(`/api/text?textId=${data.text.id}`, fetcher, {
+    revalidateIfStale: true,
+    revalidateOnMount: true,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    onSuccess: (item) => {
+      setTextName(data?.text?.name);
+      editor?.commands.setContent(item.content);
+    },
+  });
+  const saveData = async (patch: string) => {
+    const formData = new FormData();
+    formData.append("id", data.text?.id);
+    formData.append("patch", JSON.stringify(patch));
+    await mutate(
+      fetch("/api/text", {
+        method: "POST",
+        body: formData,
+      }),
+      {
+        rollbackOnError: true,
+        revalidate: true,
+      }
+    );
+  };
+
+  const { onlineMembers } = usePusherPresence(
+    `presence-text_${data.text.id}`,
+    data.pusher_env.key,
+    data.pusher_env.cluster,
+    mutate
   );
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
@@ -239,7 +245,7 @@ export default function () {
           >
             {error && <div>{error}</div>}
             {editor || !isLoading ? (
-              <EditorContainer editor={editor} isSaving={isLoading} />
+              <EditorContainer editor={editor} isSaving={isValidating} />
             ) : (
               <div className="flex justify-center h-[400px] w-full animate-pulse ">
                 <div className="flex w-full h-full  dark:bg-gray-700"></div>
