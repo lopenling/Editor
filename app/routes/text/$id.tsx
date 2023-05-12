@@ -181,9 +181,12 @@ export default function () {
   } = useSWR(`/api/text?textId=${data.text.id}`, fetcher, {
     onSuccess: async (item) => {
       setTextName(item.name);
-      console.log("updated", item.content);
       editor?.commands.setContent(item.content);
     },
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnMount: true,
+    revalidateOnReconnect: false,
   });
   const saveData = async (patch: string) => {
     const formData = new FormData();

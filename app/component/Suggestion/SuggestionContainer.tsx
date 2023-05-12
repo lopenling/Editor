@@ -3,7 +3,6 @@ import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
 import { Editor } from "@tiptap/react";
 
 import Suggestion from "./Suggestion";
-import markAction from "~/tiptap/markAction";
 function Suggestions({
   editor,
   suggestions,
@@ -16,14 +15,6 @@ function Suggestions({
   let list = suggestions.filter((sug) => {
     return sug.threadId === suggestionThread.id;
   });
-  const [suggestionSelector, setSuggestionThread] = useRecoilState(
-    selectedSuggestionThread
-  );
-  const selection = useRecoilValue(selectedTextOnEditor);
-  const replacer = (char: string, id: string) => {
-    markAction(editor, id, "update", char);
-  };
-
   return (
     <div
       className="p-2 bg-slate-50 shadow-md mt-4 max-h-[70vh] overflow-y-auto"
@@ -39,7 +30,6 @@ function Suggestions({
             editor={editor}
             suggest={suggest}
             key={suggest.id}
-            replacer={replacer}
           />
         ))}
       </div>

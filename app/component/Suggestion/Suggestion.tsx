@@ -11,7 +11,7 @@ import AudioRecorder from "../Media/AudioRecorder";
 import AudioPlayer from "../Media/AudioPlayer";
 import { v4 as uuidv4 } from "uuid";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
-import markAction from "~/tiptap/markAction";
+import { replaceMarkContent } from "~/tiptap/markAction";
 
 type SuggestType = {
   created_at: Date;
@@ -29,14 +29,12 @@ type SuggestionProps = {
   editor: Editor | null;
   suggest: SuggestType;
   optimistic: boolean;
-  replacer: (char: string, id: string) => void;
 };
 
 export default function Suggestion({
   editor,
   suggest,
   optimistic = false,
-  replacer,
 }: SuggestionProps) {
   const likeFetcher = useFetcherWithPromise();
   const deleteFetcher = useFetcher();
@@ -52,6 +50,7 @@ export default function Suggestion({
   let likedByMe = data.user
     ? suggest.likedBy.some((l) => l.username === data.user.username)
     : false;
+
   let likeInFetcher = likeFetcher?.formData?.get("like");
   const selection = useRecoilValue(selectedTextOnEditor);
   let likeCount = likeFetcher.data
@@ -77,15 +76,12 @@ export default function Suggestion({
       },
       { method: "post", action: "api/suggestion/like" }
     );
+    console.log(res);
     setTimeout(() => {
-      replacer(res?.highestLiked.newValue, suggest.threadId);
+      replaceMarkContent(editor, suggest.threadId, res?.highestLiked.newValue);
     }, 100);
   };
   let time = timeAgo(suggest.created_at);
-  const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
-  const replaceHandler = (char: string) => {
-    markAction(editor, suggest.threadId, "update", char);
-  };
 
   function deleteSuggestion(id: string) {
     let decision = confirm("do you want to delete the post");
@@ -183,7 +179,9 @@ export default function Suggestion({
       <div className=" w-full text-base leading-normal text-black mb-3">
         <span className="font-bold text-sm">Replace :</span>
         <span
-          onClick={() => replaceHandler(suggest.oldValue)}
+          onClick={() =>
+            replaceMarkContent(editor, suggest.threadId, suggest.oldValue)
+          }
           className={`text-gray-500 dark:text-gray-100`}
         >
           "{suggest.oldValue}"
@@ -215,7 +213,9 @@ export default function Suggestion({
           </editFetcher.Form>
         ) : (
           <span
-            onClick={() => replaceHandler(suggest.newValue)}
+            onClick={() =>
+              replaceMarkContent(editor, suggest.threadId, suggest.newValue)
+            }
             className={`text-gray-500 dark:text-gray-100 `}
           >
             "{suggest.newValue}"

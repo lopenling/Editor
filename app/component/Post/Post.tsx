@@ -9,7 +9,7 @@ import { Editor } from "@tiptap/react";
 import AudioPlayer from "../Media/AudioPlayer";
 import copyToClipboard from "~/lib/copyToClipboard";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
-import selectMark from "~/tiptap/markAction";
+import { removeMark } from "~/tiptap/markAction";
 type PostType = {
   id: string;
   creatorUser: any;
@@ -97,7 +97,7 @@ function Post({
         }
       );
       if (res?.deleted?.thread_id) {
-        selectMark(editor, threadId, "delete");
+        removeMark(editor, threadId);
       }
     } else {
       console.log("cancelled");
