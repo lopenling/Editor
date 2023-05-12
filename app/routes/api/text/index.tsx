@@ -16,7 +16,7 @@ export let action: ActionFunction = async ({ request }) => {
   const user = await getUserSession(request);
   const dmp = new DiffMatchPatch();
   const patchString = data.get("patch") as string;
-  const patch = dmp.patch_fromText(patchString);
+  const patch = dmp.patch_fromText(JSON.parse(patchString));
   const id = data.get("id") as string;
   let text = await findTextByTextId(parseInt(id), true);
   const [newText, result] = dmp.patch_apply(patch, text.content);

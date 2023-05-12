@@ -95,6 +95,7 @@ export default function () {
     revalidateOnMount: true,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
+    onSuccess: () => setTextName(data?.text?.name),
   });
   const { onlineMembers } = usePusherPresence(
     `presence-text_${data.text.id}`,
@@ -108,11 +109,19 @@ export default function () {
   );
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
-  const saveText = useFetcherWithPromise();
   const saveData = async (patch: string) => {
-    await saveText.submit(
-      { id: data.text?.id, patch },
-      { method: "post", action: "/api/text" }
+    const formData = new FormData();
+    formData.append("id", data.text?.id);
+    formData.append("patch", JSON.stringify(patch));
+    await mutate(
+      fetch("/api/text", {
+        method: "POST",
+        body: formData,
+      }),
+      {
+        rollbackOnError: true,
+        revalidate: true,
+      }
     );
   };
   const [selectedThread, postSelector] = useRecoilState(selectedPostThread);
@@ -126,7 +135,6 @@ export default function () {
       id: id,
     });
   }
-  const isSaving = !!saveText.formData;
   let editor = useEditor(
     {
       extensions: [
@@ -189,9 +197,6 @@ export default function () {
           if (newContent.length > 2000 && data.user) saveData(query);
         }
       },
-      onCreate: () => {
-        setTextName(data?.text?.name);
-      },
     },
     [isLoading, swrData?.content]
   );
@@ -234,7 +239,7 @@ export default function () {
           >
             {error && <div>{error}</div>}
             {editor || !isLoading ? (
-              <EditorContainer editor={editor} isSaving={isSaving} />
+              <EditorContainer editor={editor} isSaving={isLoading} />
             ) : (
               <div className="flex justify-center h-[400px] w-full animate-pulse ">
                 <div className="flex w-full h-full  dark:bg-gray-700"></div>

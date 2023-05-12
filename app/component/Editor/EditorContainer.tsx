@@ -168,7 +168,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
       ) : (
         <EditorContent
           editor={editor}
-          className="editor"
+          className="editor transition-all"
           style={{
             fontSize: isMobile ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE,
           }}
