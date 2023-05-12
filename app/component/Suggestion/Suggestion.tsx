@@ -28,7 +28,7 @@ type SuggestionProps = {
   editor: Editor | null;
   suggest: SuggestType;
   optimistic: boolean;
-  replacer: () => void;
+  replacer: (char: string) => void;
 };
 
 export default function Suggestion({

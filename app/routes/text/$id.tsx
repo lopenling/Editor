@@ -1,8 +1,14 @@
 import { getUserSession } from "~/services/session.server";
-import { json, MetaFunction } from "@remix-run/node";
+import { defer, MetaFunction } from "@remix-run/node";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import { useLoaderData, useFetcher, Link, Outlet } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import {
+  useLoaderData,
+  useFetcher,
+  Link,
+  Outlet,
+  Await,
+} from "@remix-run/react";
+import { Suspense, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
 import EditorContainer from "~/component/Editor/EditorContainer";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -35,7 +41,6 @@ import Split from "react-split";
 import { isMobile } from "react-device-detect";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
 import OnlineUsers from "~/component/UI/OnlineUserList";
-import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import useSWR from "swr";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -46,8 +51,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, false);
-  const suggestions = await findAllSuggestionByTextId(text_id);
-  return json({
+  const suggestions = findAllSuggestionByTextId(text_id);
+  return defer({
     user,
     text,
     suggestions,
@@ -84,7 +89,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function () {
   const data = useLoaderData();
   const setTextName = useSetRecoilState(textName);
-
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
@@ -179,7 +183,7 @@ export default function () {
     revalidateOnMount: true,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
-    onSuccess: (item) => {
+    onSuccess: async (item) => {
       setTextName(data?.text?.name);
       editor?.commands.setContent(item.content);
     },
@@ -244,12 +248,16 @@ export default function () {
             id="textEditorContainer"
           >
             {error && <div>{error}</div>}
-            {editor || !isLoading ? (
-              <EditorContainer editor={editor} isSaving={isValidating} />
-            ) : (
-              <div className="flex justify-center h-[400px] w-full animate-pulse ">
-                <div className="flex w-full h-full  dark:bg-gray-700"></div>
+            {isLoading && (
+              <div className="flex justify-center h-full w-full animate-pulse bg-gray-200 dark:bg-gray-700">
+                <div className="flex-1 w-full h-full  "></div>
               </div>
+            )}
+            {editor && (
+              <EditorContainer
+                editor={editor}
+                isSaving={isValidating || isLoading}
+              />
             )}
           </div>
           <div
@@ -261,7 +269,15 @@ export default function () {
             ) : (
               <Outlet context={{ user: data.user, editor, text: data.text }} />
             )}
-            {suggestionSelected?.id && <SuggestionContainer editor={editor} />}
+            {suggestionSelected?.id ? (
+              <Suspense fallback={"loading"}>
+                <Await resolve={data.suggestions}>
+                  {(data) => (
+                    <SuggestionContainer editor={editor} suggestions={data} />
+                  )}
+                </Await>
+              </Suspense>
+            ) : null}
           </div>
         </Split>
       </div>

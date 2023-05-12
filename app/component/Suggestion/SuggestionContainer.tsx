@@ -1,21 +1,30 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
-import { useFetcher, useLoaderData } from "@remix-run/react";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Editor } from "@tiptap/react";
+import { useRevalidator } from "@remix-run/react";
+
 import Suggestion from "./Suggestion";
-function Suggestions({ editor }: { editor: Editor | null }) {
+function Suggestions({
+  editor,
+  suggestions,
+}: {
+  editor: Editor | null;
+  suggestions: any;
+}) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
-  let data = useLoaderData();
-  let list = data.suggestions.filter((sug) => {
+  const revalidator = useRevalidator();
+
+  let list = suggestions.filter((sug) => {
     return sug.threadId === suggestionThread.id;
   });
+  useEffect(() => {
+    return () => revalidator.revalidate();
+  }, []);
   const [suggestionSelector, setSuggestionThread] = useRecoilState(
     selectedSuggestionThread
   );
   const selection = useRecoilValue(selectedTextOnEditor);
-  const replaceRef = useRef(list[0]?.id);
-
   function replaceHandler(replace: string) {
     editor
       .chain()
@@ -58,4 +67,4 @@ function Suggestions({ editor }: { editor: Editor | null }) {
   );
 }
 
-export default memo(Suggestions);
+export default Suggestions;

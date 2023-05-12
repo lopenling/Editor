@@ -9,7 +9,7 @@ import { Editor } from "@tiptap/react";
 import AudioPlayer from "../Media/AudioPlayer";
 import copyToClipboard from "~/lib/copyToClipboard";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
-import selectMark from "~/tiptap/selectMark";
+import selectMark from "~/tiptap/markAction";
 type PostType = {
   id: string;
   creatorUser: any;

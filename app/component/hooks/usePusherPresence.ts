@@ -54,8 +54,8 @@ const usePusherPresence = (channelName, id, cluster, mutate) => {
     };
     const handleUpdate = (e) => {
       if (channel.members.me.id !== e.user) {
-        revalidator.revalidate();
         mutate();
+        revalidator.revalidate();
       }
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);

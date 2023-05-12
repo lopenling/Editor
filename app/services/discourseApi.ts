@@ -46,7 +46,6 @@ class DiscourseApi {
     if (topicId) {
       const res = await fetch(`${this.DiscourseUrl}/t/${topicId}/posts.json`);
       if (res.status !== 200) {
-        console.log(res.statusText);
         return {};
       }
       const data = await res.json();

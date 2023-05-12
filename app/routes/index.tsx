@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 import Header from "~/component/Layout/Header";
 import { useState, useEffect } from "react";
 import Skeleton from "~/component/UI/Skeleton";
+import HighlightedString from "~/component/UI/HighlightString";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("s")?.trim();
   let headers = {
@@ -167,20 +168,20 @@ export default function Index() {
                       prefetch="intent"
                     >
                       <Card className="dark:bg-gray-500">
-                        <h5
-                          className="text-2xl  text-gray-700 dark:text-white"
-                          dangerouslySetInnerHTML={{
-                            __html: highlightText(list.name, data.search),
-                          }}
-                        ></h5>
+                        <div className="text-2xl">
+                          <HighlightedString
+                            string={list.name}
+                            highlightClass={"font-bold"}
+                            searchTerm={data.search}
+                          />
+                        </div>
                         <div className="flex flex-wrap justify-between">
                           {result && (
-                            <div
-                              className="text-lg text-gray-400"
-                              dangerouslySetInnerHTML={{
-                                __html: highlightText(result[1], data.search),
-                              }}
-                            ></div>
+                            <HighlightedString
+                              string={result[1]}
+                              highlightClass={"font-bold"}
+                              searchTerm={data.search}
+                            />
                           )}
                           <div className="text-sm text-gray-400">
                             {list.total} matches
@@ -205,10 +206,6 @@ export default function Index() {
   );
 }
 
-function highlightText(str: string, searchTerm: string) {
-  const regex = new RegExp(searchTerm, "gi");
-  return str.replace(regex, `<span class='font-bold '>${searchTerm}</span>`);
-}
 const FeatureSection = () => (
   <section className="bg-gray-50 dark:bg-gray-700">
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center sm:py-16 lg:px-6">
