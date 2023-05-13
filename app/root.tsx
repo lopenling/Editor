@@ -17,7 +17,7 @@ import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
 import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
-import { theme } from "./states";
+import { UserState, theme } from "./states";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import flagsmith from "flagsmith";
@@ -84,15 +84,13 @@ function App() {
   let routeChanged =
     navigation.state === "loading" &&
     navigation.location?.pathname.includes("/text");
-  let [themeSelected, setThemeSelected] = useRecoilState(theme);
-
+  let [user, setUser] = useRecoilState(UserState);
   useEffect(() => {
-    let themeonDb = data.user?.preference.theme;
-    setThemeSelected(themeonDb === "dark");
+    setUser(data.user);
   }, [data]);
 
   return (
-    <html className={themeSelected ? "dark" : "light"}>
+    <html className={data.user?.preference?.theme || "light"}>
       <head>
         <Meta />
         <link
@@ -112,7 +110,7 @@ function App() {
                 <Loader />
               </div>
             ) : (
-              <Outlet context={data.user} />
+              <Outlet />
             )}
           </AnimatePresence>
         </LitteraProvider>

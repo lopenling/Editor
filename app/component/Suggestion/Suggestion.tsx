@@ -2,7 +2,11 @@ import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useState, useEffect, useRef } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
+import {
+  UserState,
+  selectedSuggestionThread,
+  selectedTextOnEditor,
+} from "~/states";
 import { timeAgo } from "~/lib/getFormatedDate";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import TextArea from "../UI/TextArea";
@@ -40,6 +44,7 @@ export default function Suggestion({
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
   const data = useLoaderData();
+  const user = useRecoilValue(UserState);
   const [effect, setEffect] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openComment, setOpenComment] = useState(false);
@@ -47,12 +52,11 @@ export default function Suggestion({
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
-  let likedByMe = data.user
-    ? suggest.likedBy.some((l) => l.username === data.user.username)
+  let likedByMe = user
+    ? suggest.likedBy.some((l) => l.username === user.username)
     : false;
 
   let likeInFetcher = likeFetcher?.formData?.get("like");
-  const selection = useRecoilValue(selectedTextOnEditor);
   let likeCount = likeFetcher.data
     ? likeFetcher.data?.likedBy.length
     : suggest.likedBy.length;

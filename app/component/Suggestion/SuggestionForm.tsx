@@ -1,7 +1,11 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { openSuggestionState, selectedSuggestionThread } from "~/states";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  UserState,
+  openSuggestionState,
+  selectedSuggestionThread,
+} from "~/states";
 import { v4 as uuidv4 } from "uuid";
 import { Editor } from "@tiptap/react";
 import TextArea from "../UI/TextArea";
@@ -18,7 +22,7 @@ type SuggestionFormProps = {
 
 export default function SuggestionForm({ editor }: SuggestionFormProps) {
   const data = useLoaderData();
-  let user = data.user;
+  let user = useRecoilValue(UserState);
   const [suggestionInput, setSuggestionInput] = useState("");
   const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
@@ -47,7 +51,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
       oldValue: originalText,
       textId: data.text.id,
       newValue: suggestionInput,
-      userId: data.user.id,
+      userId: user.id,
       threadId: id,
     };
     let blob = audio.blob;
@@ -86,7 +90,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
   if (!user) return <LogInMessage />;
   if (isPosting)
     return (
-      <div className="p-2 bg-slate-50 shadow-md ">
+      <div className="p-2 bg-slate-50 dark:bg-gray-700 shadow-md ">
         <div className="flex flex-col gap-2 ">
           <Suggestion
             editor={null}
@@ -107,7 +111,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
       </div>
     );
   return (
-    <div className="p-2 bg-slate-50 shadow-md mb-2">
+    <div className="p-2 bg-slate-50 dark:bg-gray-700 shadow-md mb-2">
       {addSuggestion.data?.message && (
         <div className="font-sm text-red-500">
           {addSuggestion.data?.message}

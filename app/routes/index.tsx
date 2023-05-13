@@ -20,6 +20,8 @@ import Header from "~/component/Layout/Header";
 import { useState, useEffect } from "react";
 import Skeleton from "~/component/UI/Skeleton";
 import HighlightedString from "~/component/UI/HighlightString";
+import { getUserSession } from "~/services/session.server";
+import { getUser } from "~/model/user";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("s")?.trim();
   let headers = {
@@ -66,6 +68,7 @@ export default function Index() {
   const translation: any = uselitteraTranlation();
   const [params] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
+
   useEffect(() => {
     let p = params.get("s");
     if (!p) {
@@ -79,7 +82,6 @@ export default function Index() {
     navigation.formData?.get("s") && navigation.state === "loading";
   if (lists?.message)
     return <div className="text-red-400">{lists?.message}</div>;
-  const user = useOutletContext();
   return (
     <motion.div
       key={useLocation().pathname}
@@ -87,7 +89,7 @@ export default function Index() {
       animate={{ x: "0%", opacity: 1 }}
       exit={{ x: "5%", opacity: 0 }}
     >
-      <Header user={user} editor={null} />
+      <Header editor={null} />
 
       <div className=" max-w-2xl mx-auto">
         <div className="inline-flex w-full items-center justify-center  px-3 md:px-1.5 pt-24  ">

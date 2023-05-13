@@ -7,6 +7,7 @@ import { Button, Spinner } from "flowbite-react";
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from "~/constants";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import {
+  UserState,
   openSuggestionState,
   selectedPostThread,
   selectedTextOnEditor,
@@ -23,6 +24,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
   const flags = useFlags(["suggestionlocation"]);
   const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   const data = useLoaderData();
+  const user = useRecoilValue(UserState);
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [fontSize, setFontSize] = useState(
     isMobile ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
@@ -289,7 +291,7 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
                     )}
                 </>
               ) : data?.user?.admin === "true" ||
-                data.text.userId == data.user?.id ? (
+                data.text.userId == user?.id ? (
                 <Button
                   size="sm"
                   title="delete"

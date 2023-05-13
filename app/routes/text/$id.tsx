@@ -11,7 +11,7 @@ import {
 import { Suspense, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
 import EditorContainer from "~/component/Editor/EditorContainer";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
 import {
   openSuggestionState,
@@ -19,6 +19,7 @@ import {
   selectedSuggestionThread,
   selectedTextOnEditor,
   textName,
+  UserState,
 } from "~/states";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
@@ -46,14 +47,11 @@ import useSWR from "swr";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
 export const loader: LoaderFunction = async ({ request, params }) => {
-  let user = await getUserSession(request);
-
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, false);
   const suggestions = findAllSuggestionByTextId(text_id);
   return defer({
-    user,
     text,
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
@@ -90,6 +88,7 @@ export default function () {
   const data = useLoaderData();
   const setTextName = useSetRecoilState(textName);
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
+  const user = useRecoilValue(UserState);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );
@@ -166,7 +165,7 @@ export default function () {
           const changes = dmp.diff_main(oldContent, newContent);
           const patch = dmp.patch_make(changes);
           let query = dmp.patch_toText(patch);
-          if (newContent.length > 2000 && data.user) saveData(query);
+          if (newContent.length > 2000 && user) saveData(query);
         }
       },
     },
@@ -226,7 +225,7 @@ export default function () {
 
   return (
     <div className=" flex flex-col h-screen">
-      <Header user={data.user} editor={editor} />
+      <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div className="flex-1  flex max-w-6xl w-full mx-auto pt-16">
         <Split
@@ -263,7 +262,7 @@ export default function () {
             (!isSuggestionAtBubble || suggestionSelected?.id) ? (
               <SuggestionForm editor={editor} />
             ) : (
-              <Outlet context={{ user: data.user, editor, text: data.text }} />
+              <Outlet context={{ user: user, editor, text: data.text }} />
             )}
             {suggestionSelected?.id ? (
               <Suspense fallback={"loading"}>

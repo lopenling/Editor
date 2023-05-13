@@ -17,7 +17,7 @@ import {
   showLatest,
 } from "~/states";
 import { findPostByTextId } from "~/model/post";
-import { LoaderFunction, defer, json, redirect } from "@remix-run/node";
+import { LoaderFunction, defer, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 

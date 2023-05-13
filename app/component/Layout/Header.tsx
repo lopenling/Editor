@@ -7,7 +7,7 @@ import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { textName, theme } from "~/states";
+import { UserState, textName, theme } from "~/states";
 import { Editor } from "@tiptap/react";
 import SearchString from "../Editor/SearchString";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -43,22 +43,21 @@ const LogoWithTextName = ({ textNameValue }: { textNameValue: string }) => (
   </div>
 );
 type HeaderProps = {
-  user: any;
   editor: Editor | null;
 };
-function Header({ user, editor }: HeaderProps) {
+function Header({ editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation = uselitteraTranlation();
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
   const textNameValue = useRecoilValue(textName);
-  const [themeSelected, setThemeSelected] = useRecoilState(theme);
+  let [user, setUser] = useRecoilState(UserState);
+
   const changeTheme = () => {
-    setThemeSelected(!themeSelected);
     themeFetcher.submit(
       {
-        theme: !themeSelected ? "dark" : "light",
+        theme: user?.preference?.theme !== "dark" ? "dark" : "light",
       },
       {
         action: "/api/user/preference/theme",
@@ -66,6 +65,7 @@ function Header({ user, editor }: HeaderProps) {
       }
     );
   };
+
   useEffect(() => {
     let timeout;
 
@@ -82,7 +82,7 @@ function Header({ user, editor }: HeaderProps) {
     editorElement?.addEventListener("scroll", handleScroll);
     return () => editorElement?.addEventListener("scroll", handleScroll);
   }, [redirectTo, textNameValue]);
-  let darkMode = themeSelected;
+  let darkMode = user?.preference?.theme === "dark";
   let [showUserMenu, setShowUserMenu] = useState(false);
   let [showHeaderMenu, setShowHeaderMenu] = useState(false);
 

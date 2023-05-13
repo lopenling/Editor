@@ -17,6 +17,8 @@ import { useId } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { Tabs } from "flowbite-react";
 import Header from "~/component/Layout/Header";
+import { useRecoilValue } from "recoil";
+import { UserState } from "~/states";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUserSession(request);
   if (!user) return redirect("/");
@@ -44,7 +46,8 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function UploadText() {
   const formRef = useRef();
-  const loaderData = useLoaderData();
+  const data = useLoaderData();
+  const user = useRecoilValue(UserState);
   const navigation = useNavigation();
   const [textContent, setTextContent] = useState("");
   const uploadId = useId();
@@ -67,68 +70,66 @@ export default function UploadText() {
     });
   }
   const fileTypes = ["TXT"];
-  if (!loaderData.user) return <div>login first</div>;
+  if (!user) return <div>login first</div>;
   return (
     <>
       {" "}
-      <Header user={loaderData.user} editor={null} />
-      <div className="mx-10 my-4 ">
-        <Form method="post" ref={formRef} className="max-w-2xl m-auto">
-          <div className="mb-6">
-            <label
-              htmlFor={uploadId + "textName"}
-              className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Text name
-            </label>
-            <input
-              type="text"
-              id={uploadId + "textName"}
-              name="text-name"
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-              placeholder="title"
-              required
-            />
-          </div>
-
-          <Tabs.Group aria-label="Default tabs" style="default">
-            <Tabs.Item title="Type text">
-              <div className="mb-6">
-                <label
-                  htmlFor={uploadId + "textContent"}
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Text Content
-                </label>
-                <textarea
-                  id={uploadId + "textContent"}
-                  name="text-content"
-                  rows={4}
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  placeholder="Content"
-                  value={textContent}
-                  onChange={(e) => setTextContent(e.target.value)}
-                ></textarea>
-              </div>
-            </Tabs.Item>
-            <Tabs.Item title="Upload Txt">
-              <FileUploader handleChange={handleChange} types={fileTypes} />
-            </Tabs.Item>
-          </Tabs.Group>
-          <button
-            type="submit"
-            className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      <Header editor={null} />
+      <Form method="post" ref={formRef} className="max-w-2xl m-auto pt-20">
+        <div className="mb-6">
+          <label
+            htmlFor={uploadId + "textName"}
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
           >
-            {navigation.state !== "idle" && navigation.formMethod === "POST"
-              ? " Text uploading"
-              : "Upload"}
-          </button>
-        </Form>
-        <div className="flex flex-col space-y-3 w-max mx-auto text-lg">
-          {loaderData.textList.map((text: { id: number; name: string }) => (
-            <EachText text={text} key={text.id} />
-          ))}
+            Text name
+          </label>
+          <input
+            type="text"
+            id={uploadId + "textName"}
+            name="text-name"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            placeholder="title"
+            required
+          />
         </div>
+
+        <Tabs.Group aria-label="Default tabs" style="default">
+          <Tabs.Item title="Type text">
+            <div className="mb-6">
+              <label
+                htmlFor={uploadId + "textContent"}
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Text Content
+              </label>
+              <textarea
+                id={uploadId + "textContent"}
+                name="text-content"
+                rows={4}
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder="Content"
+                value={textContent}
+                onChange={(e) => setTextContent(e.target.value)}
+              ></textarea>
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Upload Txt">
+            <FileUploader handleChange={handleChange} types={fileTypes} />
+          </Tabs.Item>
+        </Tabs.Group>
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          {navigation.state !== "idle" && navigation.formMethod === "POST"
+            ? " Text uploading"
+            : "Upload"}
+        </button>
+      </Form>
+      <div className="flex flex-col space-y-3 w-max mx-auto text-lg">
+        {data.textList.map((text: { id: number; name: string }) => (
+          <EachText text={text} key={text.id} />
+        ))}
       </div>
     </>
   );
