@@ -1,5 +1,12 @@
-import { forwardRef } from "react";
-const TextArea = (props, ref) => {
+import React, { forwardRef, ForwardRefRenderFunction } from "react";
+
+interface TextAreaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+const TextArea: ForwardRefRenderFunction<HTMLTextAreaElement, TextAreaProps> = (
+  props,
+  ref
+) => {
   return (
     <textarea
       ref={ref}
@@ -9,4 +16,4 @@ const TextArea = (props, ref) => {
   );
 };
 
-export default forwardRef(TextArea);
+export default forwardRef<HTMLTextAreaElement, TextAreaProps>(TextArea);

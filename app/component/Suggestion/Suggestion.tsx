@@ -1,12 +1,8 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
-import { useState, useEffect, useRef } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  UserState,
-  selectedSuggestionThread,
-  selectedTextOnEditor,
-} from "~/states";
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { UserState } from "~/states";
 import { timeAgo } from "~/lib/getFormatedDate";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import TextArea from "../UI/TextArea";
@@ -16,22 +12,12 @@ import AudioPlayer from "../Media/AudioPlayer";
 import { v4 as uuidv4 } from "uuid";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { replaceMarkContent } from "~/tiptap/markAction";
+import { SuggestionCommentType, SuggestionType } from "~/model/type";
+import Comment from "./Comment";
 
-type SuggestType = {
-  created_at: Date;
-  id: string;
-  likedBy: [];
-  newValue: string;
-  oldValue: string;
-  textId: number;
-  threadId: string;
-  updated_at: Date;
-  user: any;
-  SuggestionComment: [];
-};
 type SuggestionProps = {
   editor: Editor | null;
-  suggest: SuggestType;
+  suggest: SuggestionType;
   optimistic: boolean;
 };
 
@@ -43,7 +29,6 @@ export default function Suggestion({
   const likeFetcher = useFetcherWithPromise();
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
-  const data = useLoaderData();
   const user = useRecoilValue(UserState);
   const [effect, setEffect] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -52,13 +37,14 @@ export default function Suggestion({
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
+  if (!user) return null;
   let likedByMe = user
-    ? suggest.likedBy.some((l) => l.username === user.username)
+    ? suggest.likedBy.some((l) => l?.username === user.username)
     : false;
 
   let likeInFetcher = likeFetcher?.formData?.get("like");
   let likeCount = likeFetcher.data
-    ? likeFetcher.data?.likedBy.length
+    ? likeFetcher.data?.likedBy.likedBy.length
     : suggest.likedBy.length;
   if (likeInFetcher === "true") {
     likedByMe = true;
@@ -74,7 +60,7 @@ export default function Suggestion({
     const res = await likeFetcher.submit(
       {
         id,
-        userId: data.user.id,
+        userId: user.id,
         like: !likedByMe ? "true" : "false",
         threadId: suggest.threadId,
       },
@@ -152,7 +138,7 @@ export default function Suggestion({
             className="py-1 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
-            {data.user && data.user.username === suggest.user.username && (
+            {user && user.username === suggest.user.username && (
               <>
                 <li>
                   <div
@@ -385,44 +371,7 @@ function CommentSection({ id, setOpenComment, comments, type }: CommentProps) {
             />
           </div>
         </div>
-        {comments.length > 0 &&
-          comments.map((comment, index) => {
-            let color =
-              comment.type === "support"
-                ? "bg-green-100"
-                : comment.type === "reject"
-                ? "bg-red-100"
-                : null;
-            let time = timeAgo(comment.createdAt);
-            return (
-              <div
-                className={`p-2 text-base  rounded-lg dark:bg-gray-700 ${color}`}
-                key={comment?.id}
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-                      <img
-                        className="mr-2 w-6 h-6 rounded-full"
-                        src={comment.author?.avatarUrl}
-                        alt="author image"
-                      />
-                      {comment.author?.name}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {time}
-                    </p>
-                  </div>
-                </div>
-                {comment.audioUrl && comment.audioUrl !== "" && (
-                  <AudioPlayer src={comment.audioUrl} />
-                )}
-                <p className="text-gray-500 dark:text-gray-400">
-                  {comment.text}
-                </p>
-              </div>
-            );
-          })}
+        <Comment comments={comments} />
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ import AudioPlayer from "../Media/AudioPlayer";
 import LogInMessage from "../UI/MustLoggedIn";
 
 type SuggestionFormProps = {
-  editor: Editor | null;
+  editor: Editor;
 };
 
 export default function SuggestionForm({ editor }: SuggestionFormProps) {
@@ -51,7 +51,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
       oldValue: originalText,
       textId: data.text.id,
       newValue: suggestionInput,
-      userId: user.id,
+      userId: user?.id,
       threadId: id,
     };
     let blob = audio.blob;
@@ -82,7 +82,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
   };
   const handleSuggestionCancel = () => {
     setSelectedSuggestion({
-      id: null,
+      id: "",
     });
     setOpenSuggestion(false);
   };
@@ -96,15 +96,19 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
             editor={null}
             optimistic={true}
             suggest={{
-              created_at: Date.now(),
+              created_at: new Date(),
               id: "",
               likedBy: [],
               newValue: addSuggestion.formData?.get("newValue") as string,
               oldValue: addSuggestion.formData?.get("oldValue") as string,
               textId: parseInt(addSuggestion.formData?.get("textId") as string),
               threadId: addSuggestion.formData?.get("threadId") as string,
-              updated_at: "",
+              updatedAt: new Date(),
               user: user,
+              suggestionComments: [],
+              userId: "",
+              text: data.text.id,
+              audioUrl: "",
             }}
           />
         </div>

@@ -1,4 +1,5 @@
 import { atom, selector } from "recoil";
+import { PostType, UserType } from "./model/type";
 //theme
 export const theme = atom({
   key: "theme-tailwind",
@@ -30,7 +31,7 @@ export const showFontSizeState = atom({
 });
 //posts
 
-export const postslist = atom({
+export const postslist = atom<PostType[]>({
   key: "postList",
   default: [],
 });
@@ -83,7 +84,7 @@ export const filteredPost = selector({
   key: "FilteredPost",
   get: ({ get }) => {
     const filter = get(filterDataState);
-    let posts = [...get(postslist)];
+    let posts: PostType[] = [...get(postslist)];
     const isLatest = get(showLatest);
 
     if (filter.type && filter.type !== "all")
@@ -92,7 +93,7 @@ export const filteredPost = selector({
       });
     if (filter.user?.length)
       posts = posts.filter((l) => {
-        return filter.user?.includes(l.creatorUser.username);
+        return filter.user?.includes(l?.creatorUser?.username);
       });
     if (filter.date?.startDate)
       posts = posts.filter((l) => {
@@ -108,10 +109,6 @@ export const filteredPost = selector({
         return l.isSolved === (filter.solved === "solved");
       });
     if (posts.length > 0) {
-      // posts = posts.sort((a, b) => {
-      //   if (isLatest) return new Date(b.created_at) - new Date(a.created_at);
-      //   else return new Date(a.created_at) - new Date(b.created_at);
-      // });
       posts.sort(function (a, b) {
         let c: Date = new Date(a.created_at);
         let d: Date = new Date(b.created_at);
@@ -134,7 +131,7 @@ export const selectedTextOnEditor = atom({
 });
 
 //user
-export const UserState = atom({
+export const UserState = atom<UserType>({
   key: "userState",
   default: null,
 });

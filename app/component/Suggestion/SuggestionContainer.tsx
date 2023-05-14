@@ -3,12 +3,13 @@ import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
 import { Editor } from "@tiptap/react";
 
 import Suggestion from "./Suggestion";
+import { SuggestionType } from "~/model/type";
 function Suggestions({
   editor,
   suggestions,
 }: {
   editor: Editor | null;
-  suggestions: any;
+  suggestions: SuggestionType[];
 }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
 

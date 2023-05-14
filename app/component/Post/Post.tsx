@@ -10,7 +10,7 @@ import AudioPlayer from "../Media/AudioPlayer";
 import copyToClipboard from "~/lib/copyToClipboard";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { removeMark } from "~/tiptap/markAction";
-type PostType = {
+type PostPropType = {
   id: string;
   creatorUser: any;
   time: string;
@@ -38,7 +38,7 @@ function Post({
   isOptimistic,
   threadId,
   audioUrl,
-}: PostType) {
+}: PostPropType) {
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [effect, setEffect] = useState(false);
