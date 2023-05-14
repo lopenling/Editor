@@ -4,12 +4,12 @@ export type UserType = {
   username: string;
   email: string;
   role: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
   isAdmin: boolean;
   avatarUrl: string;
   likedPost: PostType[];
-  likedReply: Reply[];
+  likedReply: ReplyType[];
   likedSuggestion: SuggestionType[];
   posts: PostType[];
   suggestions: SuggestionType[];
@@ -35,7 +35,7 @@ export interface SuggestionType {
   threadId: string;
   likedBy: UserType[];
   created_at: Date;
-  updatedAt?: Date;
+  updated_at?: Date;
   suggestionComments: SuggestionCommentType[];
   audioUrl?: string;
 }
@@ -46,8 +46,8 @@ export interface SuggestionCommentType {
   suggestion: SuggestionType;
   suggestionId: string;
   author: UserType;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
   userId: string;
   type?: string;
 }
@@ -59,20 +59,29 @@ export interface PostType {
   postId: number;
   content: string;
   audioUrl?: string;
-  createdAt: Date;
+  created_at: Date;
   creatorUserId: string;
   textId: number;
   threadId: string;
   creatorUser: UserType;
   text: Text;
-  replies: Reply[];
+  replies: ReplyType[];
   likedBy: UserType[];
 }
 
-export interface Reply {
+export interface ReplyType {
   id: string;
-  isApproved?: boolean;
+  is_approved?: boolean;
   postId: string;
   parentPost: PostType;
   likedBy: UserType[];
+}
+export interface FilterType {
+  type: "all" | "comment" | "question";
+  date: {
+    startDate: Date | null;
+    endDate: Date | null;
+  };
+  user: string[];
+  solved: "both" | "solved";
 }

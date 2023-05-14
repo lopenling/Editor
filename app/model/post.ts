@@ -7,8 +7,8 @@ export async function createPost(
   avatar: string,
   topic_id: number,
   post_id: number,
-  thread_id: string,
-  text_id: number,
+  threadId: string,
+  textId: number,
   content: string,
   creatorUser_id: string,
   audioUrl: string
@@ -21,9 +21,9 @@ export async function createPost(
         topic_id: topic_id,
         post_id: post_id,
         content: content,
-        thread_id: thread_id,
+        threadId,
         creatorUser_id: creatorUser_id,
-        text_id: text_id,
+        textId: textId,
         audioUrl: audioUrl,
       },
     });
@@ -74,7 +74,7 @@ export async function findPostByTextId(textId: number, topicList = []) {
         Reply: true,
       },
       where: {
-        text_id: textId,
+        textId: textId,
       },
     });
     const postWithReply = await Promise.all(

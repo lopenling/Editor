@@ -1,5 +1,5 @@
 import { atom, selector } from "recoil";
-import { PostType, UserType } from "./model/type";
+import { FilterType, PostType, UserType } from "./model/type";
 //theme
 export const theme = atom({
   key: "theme-tailwind",
@@ -29,13 +29,6 @@ export const showFontSizeState = atom({
   key: "showfontSize",
   default: false,
 });
-//posts
-
-export const postslist = atom<PostType[]>({
-  key: "postList",
-  default: [],
-});
-
 //threadSelection
 export const openSuggestionState = atom({
   key: "openSuggestion",
@@ -66,11 +59,11 @@ export const openFilterState = atom({
   key: "openFilter", // unique ID (with respect to other atoms/selectors)
   default: false, // default value (aka initial value)
 });
-export const showLatest = atom({
+export const showLatest = atom<boolean>({
   key: "latestFilter",
   default: true,
 });
-export const filterDataState = atom({
+export const filterDataState = atom<FilterType>({
   key: "filterData",
   default: {
     type: "all",
@@ -80,44 +73,6 @@ export const filterDataState = atom({
   },
 });
 
-export const filteredPost = selector({
-  key: "FilteredPost",
-  get: ({ get }) => {
-    const filter = get(filterDataState);
-    let posts: PostType[] = [...get(postslist)];
-    const isLatest = get(showLatest);
-
-    if (filter.type && filter.type !== "all")
-      posts = posts.filter((l) => {
-        return l.type === filter.type;
-      });
-    if (filter.user?.length)
-      posts = posts.filter((l) => {
-        return filter.user?.includes(l?.creatorUser?.username);
-      });
-    if (filter.date?.startDate)
-      posts = posts.filter((l) => {
-        return (
-          new Date(l.created_at).getTime() >
-            new Date(filter.date.startDate).getTime() &&
-          new Date(l.created_at).getTime() <
-            new Date(filter.date.endDate).getTime()
-        );
-      });
-    if (filter.solved && filter.solved !== "both")
-      posts = posts.filter((l) => {
-        return l.isSolved === (filter.solved === "solved");
-      });
-    if (posts.length > 0) {
-      posts.sort(function (a, b) {
-        let c: Date = new Date(a.created_at);
-        let d: Date = new Date(b.created_at);
-        return !isLatest ? c - d : d - c;
-      });
-    }
-    return posts;
-  },
-});
 //text selection
 
 export const selectedTextOnEditor = atom({

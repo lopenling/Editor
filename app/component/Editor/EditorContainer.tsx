@@ -12,7 +12,6 @@ import {
   selectedPostThread,
   selectedTextOnEditor,
 } from "~/states";
-import { useFlags } from "flagsmith/react";
 import SuggestionForm from "../Suggestion/SuggestionForm";
 import { isMobile } from "react-device-detect";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -21,8 +20,6 @@ type EditorContainerProps = {
   isSaving: boolean;
 };
 function EditorContainer({ editor, isSaving }: EditorContainerProps) {
-  const flags = useFlags(["suggestionlocation"]);
-  const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   const data = useLoaderData();
   const user = useRecoilValue(UserState);
   const [openEditMenu, setOpenEditMenu] = useState(false);
@@ -316,9 +313,6 @@ function EditorContainer({ editor, isSaving }: EditorContainerProps) {
                 </Button>
               ) : null}
             </Button.Group>
-            {openSuggestion && isSuggestionAtBubble && (
-              <SuggestionForm editor={editor} />
-            )}
           </div>
         </BubbleMenu>
       )}

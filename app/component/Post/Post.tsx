@@ -3,22 +3,23 @@ import { useFetcher, useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
-import { useRecoilState } from "recoil";
-import { selectedPostThread } from "~/states";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { UserState, selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
 import AudioPlayer from "../Media/AudioPlayer";
 import copyToClipboard from "~/lib/copyToClipboard";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { removeMark } from "~/tiptap/markAction";
+import { PostType, UserType } from "~/model/type";
 type PostPropType = {
   id: string;
-  creatorUser: any;
+  creatorUser: UserType;
   time: string;
   postContent: string;
-  likedBy: any;
+  likedBy: UserType[];
   topicId: number;
   type: "question" | "comment";
-  replyCount: any;
+  replyCount: number;
   isSolved: boolean;
   isOptimistic: boolean;
   threadId: string;
@@ -47,18 +48,18 @@ function Post({
   const deleteFetcher = useFetcherWithPromise();
   const { editor }: { editor: Editor } = useOutletContext();
   const translation = uselitteraTranlation();
-  const { user }: { user: any } = useOutletContext();
+  const user = useRecoilValue(UserState);
   const [selectedThreadId, setSelectedThreadId] =
     useRecoilState(selectedPostThread);
   const isSelected = selectedThreadId.id === threadId;
   let likedByMe = user
-    ? likedBy.some((l) => l.username == user.username)
+    ? likedBy.some((l) => l && l.username === user.username)
     : false;
   let likeInFetcher = likeFetcher?.formData?.get("like");
   const handleSelectPost = useCallback(
-    (id) => {
+    (id: string) => {
       setSelectedThreadId({
-        id: id,
+        id,
       });
     },
     [threadId]
@@ -74,20 +75,24 @@ function Post({
   }
   function handleLikeClick() {
     setEffect(true);
-    likeFetcher.submit(
-      {
-        id,
-        userId: user.id,
-        like: !likedByMe ? "true" : "false",
-      },
-      { method: "post", action: "api/post/like" }
-    );
+    if (user) {
+      likeFetcher.submit(
+        {
+          id,
+          userId: user.id,
+          like: !likedByMe ? "true" : "false",
+        },
+        { method: "post", action: "api/post/like" }
+      );
+    }
   }
-
-  async function deletePost() {
+  interface DeleteResponse {
+    deleted: PostType;
+  }
+  async function deletePost(): Promise<void> {
     let decision = confirm("do you want to delete the post");
     if (decision) {
-      let res = await deleteFetcher.submit(
+      let res: DeleteResponse | undefined = await deleteFetcher.submit(
         {
           id,
         },
@@ -96,8 +101,11 @@ function Post({
           method: "delete",
         }
       );
-      if (res?.deleted?.thread_id) {
-        removeMark(editor, threadId);
+      if (typeof res !== "undefined" && "deleted" in res) {
+        const { deleted } = res as DeleteResponse;
+        if (deleted.threadId) {
+          removeMark(editor, deleted.threadId);
+        }
       }
     } else {
       console.log("cancelled");

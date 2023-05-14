@@ -36,7 +36,6 @@ import { SearchAndReplace } from "~/tiptap/tiptap-extension/searchAndReplace";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
 import SuggestionForm from "~/component/Suggestion/SuggestionForm";
 import editorProps from "~/tiptap/events";
-import { useFlags } from "flagsmith/react";
 import Header from "~/component/Layout/Header";
 import Split from "react-split";
 import { isMobile } from "react-device-detect";
@@ -205,8 +204,6 @@ export default function () {
     data.pusher_env.cluster,
     mutate
   );
-  const flags = useFlags(["suggestionlocation"]);
-  const isSuggestionAtBubble = flags.suggestionlocation.enabled;
   if (data.text === null)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
@@ -259,7 +256,7 @@ export default function () {
             className={`md:h-screen p-3 overflow-y-auto w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
           >
             {(openSuggestion || suggestionSelected?.id) &&
-            (!isSuggestionAtBubble || suggestionSelected?.id) ? (
+            suggestionSelected?.id ? (
               <SuggestionForm editor={editor} />
             ) : (
               <Outlet context={{ user: user, editor, text: data.text }} />

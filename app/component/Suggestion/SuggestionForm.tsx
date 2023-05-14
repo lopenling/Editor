@@ -17,7 +17,7 @@ import AudioPlayer from "../Media/AudioPlayer";
 import LogInMessage from "../UI/MustLoggedIn";
 
 type SuggestionFormProps = {
-  editor: Editor;
+  editor: Editor | null;
 };
 
 export default function SuggestionForm({ editor }: SuggestionFormProps) {

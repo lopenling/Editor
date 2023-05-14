@@ -16,12 +16,10 @@ import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
-import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
-import { UserState, theme } from "./states";
+import { RecoilRoot, useSetRecoilState } from "recoil";
+import { UserState } from "./states";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import flagsmith from "flagsmith";
-import { FlagsmithProvider } from "flagsmith/react";
 import { getUser } from "./model/user";
 import Loader from "./component/UI/Loader";
 import { GlobalLoading } from "./component/UI/globalLoader";
@@ -84,7 +82,7 @@ function App() {
   let routeChanged =
     navigation.state === "loading" &&
     navigation.location?.pathname.includes("/text");
-  let [user, setUser] = useRecoilState(UserState);
+  let setUser = useSetRecoilState(UserState);
   useEffect(() => {
     setUser(data.user);
   }, [data]);
@@ -127,18 +125,8 @@ function App() {
 }
 export default function AppContainer() {
   return (
-    <FlagsmithProvider
-      options={{
-        environmentID:
-          process.env.NODE_ENV == "production"
-            ? "HP2Vunc4bFV43VC4mxJq9h"
-            : "Sv9qxuVydSiwi6dNdKhstn",
-      }}
-      flagsmith={flagsmith}
-    >
-      <RecoilRoot>
-        <App />
-      </RecoilRoot>
-    </FlagsmithProvider>
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
   );
 }

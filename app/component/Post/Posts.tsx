@@ -1,13 +1,13 @@
 import { Editor } from "@tiptap/react";
-import { useEffect, memo } from "react";
+import { memo } from "react";
 import { timeAgo } from "~/lib/getFormatedDate";
 import Filter from "./Filter";
 import Post from "./Post";
-import { useLoaderData, useFetcher } from "@remix-run/react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { filteredPost as filteredValue, postslist } from "~/states";
+import { useRecoilValue } from "recoil";
+import { filterDataState, showLatest } from "~/states";
+import { FilterType, ReplyType, UserType } from "~/model/type";
 export type PostType = {
-  Reply: [];
+  Reply: ReplyType[];
   audioUrl: string;
   avatar: string;
   content: string;
@@ -17,12 +17,12 @@ export type PostType = {
   post_id: number;
   replyCount: number;
   textId: number;
-  thread_id: string;
+  threadId: string;
   topic_id: number;
   type: "comment" | "question";
   created_at: string;
   likedBy: [];
-  creatorUser: any;
+  creatorUser: UserType;
 };
 type PostPropsType = {
   editor: Editor | null;
@@ -30,14 +30,11 @@ type PostPropsType = {
 };
 
 function Posts({ editor, posts }: PostPropsType) {
-  const setPostList = useSetRecoilState(postslist);
-  useEffect(() => {
-    setPostList(posts);
-  }, [posts]);
-  if (!posts && !posts?.length) return null;
-  const filteredPost = useRecoilValue(filteredValue);
-
+  if (!posts || posts?.length < 1) return null;
   if (!editor) return null;
+  let filters = useRecoilValue(filterDataState);
+  let isLatest = useRecoilValue(showLatest);
+  let lists = applyFilter(posts, filters, isLatest);
   return (
     <>
       <Filter />
@@ -48,8 +45,8 @@ function Posts({ editor, posts }: PostPropsType) {
           maxHeight: "80vh",
         }}
       >
-        {filteredPost?.length > 0 &&
-          filteredPost?.map((post: PostType) => {
+        {lists?.length > 0 &&
+          lists?.map((post: PostType) => {
             return (
               <Post
                 key={post.id}
@@ -63,7 +60,7 @@ function Posts({ editor, posts }: PostPropsType) {
                 type={post.type}
                 replyCount={post?.replyCount}
                 isSolved={post?.isSolved}
-                threadId={post?.thread_id}
+                threadId={post?.threadId}
                 audioUrl={post?.audioUrl}
               />
             );
@@ -71,6 +68,45 @@ function Posts({ editor, posts }: PostPropsType) {
       </div>
     </>
   );
+}
+
+function applyFilter(list: PostType[], filter: FilterType, isLatest: boolean) {
+  if (filter.type && filter.type !== "all")
+    list = list.filter((l) => {
+      return l.type === filter.type;
+    });
+  if (filter.user?.length)
+    list = list.filter((l) => {
+      return filter.user?.includes(l?.creatorUser?.username);
+    });
+  if (filter.date.startDate)
+    list = list.filter((l) => {
+      const startDate = filter.date.startDate
+        ? new Date(filter.date.startDate)
+        : null;
+      const endDate = filter.date.endDate
+        ? new Date(filter.date.endDate)
+        : null;
+
+      if (startDate && endDate) {
+        const createdAt = new Date(l.created_at);
+        return createdAt > startDate && createdAt < endDate;
+      }
+
+      return false;
+    });
+  if (filter.solved && filter.solved !== "both")
+    list = list.filter((l) => {
+      return l.isSolved === (filter.solved === "solved");
+    });
+  if (list.length > 0) {
+    list.sort(function (a, b) {
+      let c: Date = new Date(a.created_at);
+      let d: Date = new Date(b.created_at);
+      return !isLatest ? c.getTime() - d.getTime() : d.getTime() - c.getTime();
+    });
+  }
+  return list;
 }
 
 export default memo(Posts);
