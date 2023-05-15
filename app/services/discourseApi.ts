@@ -97,7 +97,7 @@ class DiscourseApi {
     audioUrl: string
   ) {
     let auth_headers = this.authHeader();
-    let url = `${this.origin}/text/${textId}/posts?thread=${threadId}`;
+    let url = `${this.origin}text/${textId}/posts?thread=${threadId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `
 <p>${bodyContentWithLink}</p>
@@ -179,18 +179,7 @@ class DiscourseApi {
       throw new Error("cannot delete topic on discourse" + e);
     }
   }
-  async uploadFile(formData: any) {
-    let auth_headers = this.authHeader();
 
-    let res = await fetch(`${this.DiscourseUrl}/uploads.json`, {
-      method: "POST",
-      headers: auth_headers,
-      body: formData,
-    });
-    let data = await res.json();
-    if (data?.errors) throw new Error(data.errors);
-    return data;
-  }
   async logout(id: string) {
     let auth_headers = this.authHeader(true);
     try {
@@ -266,11 +255,7 @@ export async function getpostreplies(topicId: number) {
   const res = apiObj.fetchPostReplies(topicId);
   return res;
 }
-export async function uploadFile(username: string, formData: any) {
-  const apiObj: DiscourseApi = new DiscourseApi(username);
-  const res = apiObj.uploadFile(formData);
-  return res;
-}
+
 export async function createPost(
   topicId: number,
   postString: string,

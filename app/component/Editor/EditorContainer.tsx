@@ -15,10 +15,12 @@ import {
 import { isMobile } from "react-device-detect";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { changeFont, exportDoc, scrollThreadIntoView } from "~/lib/DOMfunction";
+import Spinner from "../UI/Spinner";
 type EditorContainerProps = {
   editor: Editor;
+  isSaving: boolean;
 };
-function EditorContainer({ editor }: EditorContainerProps) {
+function EditorContainer({ editor, isSaving }: EditorContainerProps) {
   const data = useLoaderData();
   const user = useRecoilValue(UserState);
   const [openSuggestion, setOpenSuggestion] =
@@ -82,7 +84,9 @@ function EditorContainer({ editor }: EditorContainerProps) {
   return (
     <div className=" relative shadow-sm  mb-4  ">
       <div className=" bg-white dark:bg-gray-700 z-10 shadow-sm text-3xl  font-bold  text-light py-4 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
-        <h3 className="textname flex gap-2 text-2xl">{data?.text?.name}</h3>
+        <h3 className="textname flex gap-2 text-2xl">
+          {data?.text?.name} {isSaving && <Spinner />}
+        </h3>
         <button
           className="inline-flex text-gray-800 hover:text-white p-2 items-center text-sm font-medium text-center  bg-gray-300  hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600 dark:text-white"
           type="button"

@@ -204,7 +204,7 @@ export default function () {
       setTextHeight(40);
     }
   }, [isMobile]);
-
+  let isSaving = !!saveTextFetcher.formData?.get("patch");
   return (
     <div className=" flex flex-col h-screen">
       <Header editor={editor} />
@@ -231,7 +231,7 @@ export default function () {
             id="textEditorContainer"
           >
             {editor ? (
-              <EditorContainer editor={editor} />
+              <EditorContainer editor={editor} isSaving={isSaving} />
             ) : (
               <div className="flex justify-center h-full w-full animate-pulse bg-gray-200 dark:bg-gray-700">
                 <div className="flex-1 w-full h-full  "></div>
