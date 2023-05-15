@@ -18,7 +18,7 @@ function Suggestions({
   });
   return (
     <div
-      className="p-2 bg-slate-50 dark:bg-gray-700 shadow-md mt-4 max-h-[70vh] overflow-y-auto"
+      className="p-2 ml-2 bg-slate-50 dark:bg-gray-700 shadow-md mt-4 max-h-[70vh] overflow-y-auto"
       style={{ minWidth: 350 }}
     >
       <div className="flex flex-col  gap-2 ">

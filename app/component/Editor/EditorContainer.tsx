@@ -17,7 +17,6 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { changeFont, exportDoc, scrollThreadIntoView } from "~/lib/DOMfunction";
 type EditorContainerProps = {
   editor: Editor;
-  isSaving: boolean;
 };
 function EditorContainer({ editor }: EditorContainerProps) {
   const data = useLoaderData();

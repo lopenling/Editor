@@ -6,8 +6,8 @@ import { useEffect, useState, memo } from "react";
 import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { UserState, textName, theme } from "~/states";
+import { useRecoilValue } from "recoil";
+import { UserState, textName } from "~/states";
 import { Editor } from "@tiptap/react";
 import SearchString from "../Editor/SearchString";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -56,7 +56,7 @@ function Header({ editor }: HeaderProps) {
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
   const textNameValue = useRecoilValue(textName);
-  let [user, setUser] = useRecoilState(UserState);
+  let user = useRecoilValue(UserState);
 
   const changeTheme = () => {
     themeFetcher.submit(
@@ -71,14 +71,14 @@ function Header({ editor }: HeaderProps) {
   };
 
   useEffect(() => {
-    let timeout;
+    let timeout: NodeJS.Timeout;
 
     let editorElement = document.getElementById("textEditorContainer");
-    const handleScroll = (e) => {
+    const handleScroll = () => {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
         const shouldShowTextName =
-          editorElement?.scrollTop > 10 && redirectTo.includes("text");
+          editorElement?.scrollTop! > 10 && redirectTo.includes("text");
         setTextNameOnHeader(shouldShowTextName);
       }, 10);
     };

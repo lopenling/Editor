@@ -123,10 +123,10 @@ function Post({
       id={`p_${threadId}`}
     >
       <div
-        className={`px-4 py-3 transition-all ${
+        className={`px-2 py-3 ml-2 rounded-md shadow-md transition-all ${
           isSelected
             ? "bg-yellow-50 dark:bg-gray-700 dark:rounded-sm"
-            : "bg-transparent"
+            : "bg-gray-50"
         } `}
         onClick={() => handleSelectPost(threadId)}
       >
@@ -206,7 +206,12 @@ function Post({
                   </div>
                 </button>
 
-                <div className="flex items-center justify-start ">
+                <div
+                  className={`${
+                    ReplyCount < 1 && "hidden"
+                  } flex items-center justify-start`}
+                  onClick={() => setShowReplies((prev) => !prev)}
+                >
                   <svg
                     width="16"
                     height="14"
@@ -222,19 +227,11 @@ function Post({
                   </svg>
 
                   <button
-                    onClick={() => setShowReplies((prev) => !prev)}
-                    className=" lowercase text-sm font-medium leading-tight text-gray-500 dark:text-gray-100"
+                    className={`lowercase text-sm font-medium leading-tight text-gray-500 dark:text-gray-100`}
                   >
-                    {showReplies ? (
-                      <span className="ml-2">hide</span>
-                    ) : (
-                      <>
-                        <span className="mr-1 ml-1">{ReplyCount}</span>
-                        {ReplyCount > 1
-                          ? translation.replies
-                          : translation.reply}
-                      </>
-                    )}
+                    <span className="ml-2">
+                      {showReplies ? "hide" : ReplyCount}
+                    </span>
                   </button>
                 </div>
 

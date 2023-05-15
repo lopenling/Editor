@@ -41,16 +41,14 @@ import Split from "react-split";
 import { isMobile } from "react-device-detect";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
 import OnlineUsers from "~/component/UI/OnlineUserList";
-import useSWR from "swr";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
 import { HEADER_HEIGHT } from "~/constants";
-import ProgressBar from "~/component/UI/Progress";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
-  const text = await findTextByTextId(text_id, false);
+  const text = await findTextByTextId(text_id, true);
   const suggestions = findAllSuggestionByTextId(text_id);
   return defer({
     text,
@@ -83,7 +81,6 @@ export interface CommentInstance {
   uuid?: string;
   comments?: any[];
 }
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function () {
   const data = useLoaderData();
@@ -160,7 +157,7 @@ export default function () {
       },
       onUpdate: async ({ editor }) => {
         const dmp = new DiffMatchPatch();
-        let oldContent = swrData.content;
+        let oldContent = data.text.content;
         let newContent = editor.getHTML();
         if (oldContent !== newContent) {
           const changes = dmp.diff_main(oldContent, newContent);
@@ -169,42 +166,28 @@ export default function () {
           if (newContent.length > 2000 && user) saveData(query);
         }
       },
+
+      onCreate: async ({ editor }) => {
+        setTextName(data.text.name);
+      },
     },
     []
   );
-  const {
-    isLoading,
-    data: swrData,
-    error,
-    isValidating,
-    mutate,
-  } = useSWR(`/api/text?textId=${data.text.id}`, fetcher, {
-    onSuccess: async (item) => {
-      setTextName(item.name);
-      editor?.commands.setContent(item.content);
-    },
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-    revalidateOnReconnect: false,
-  });
+  const saveTextFetcher = useFetcher();
   const saveData = async (patch: string) => {
     const formData = new FormData();
     formData.append("id", data.text?.id);
     formData.append("patch", JSON.stringify(patch));
-    await mutate(
-      fetch("/api/text", {
-        method: "POST",
-        body: formData,
-      })
-    );
+    saveTextFetcher.submit(formData, {
+      method: "post",
+      action: "/api/text",
+    });
   };
 
   const { onlineMembers } = usePusherPresence(
     `presence-text_${data.text.id}`,
     data.pusher_env.key,
-    data.pusher_env.cluster,
-    mutate
+    data.pusher_env.cluster
   );
   if (data.text === null)
     return (
@@ -247,21 +230,16 @@ export default function () {
             }}
             id="textEditorContainer"
           >
-            {error && <div>{error}</div>}
-            {isLoading && (
+            {editor ? (
+              <EditorContainer editor={editor} />
+            ) : (
               <div className="flex justify-center h-full w-full animate-pulse bg-gray-200 dark:bg-gray-700">
                 <div className="flex-1 w-full h-full  "></div>
               </div>
             )}
-            {editor && (
-              <EditorContainer
-                editor={editor}
-                isSaving={isValidating || isLoading}
-              />
-            )}
           </div>
           <div
-            className={`md:h-screen p-3  w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
+            className={`md:h-screen pt-3  w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
           >
             {(openSuggestion || suggestionSelected?.id) &&
             suggestionSelected?.id ? (

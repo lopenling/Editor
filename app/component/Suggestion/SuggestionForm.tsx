@@ -115,7 +115,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
       </div>
     );
   return (
-    <div className="p-2 bg-slate-50 dark:bg-gray-700 shadow-md mb-2">
+    <div className="p-2 ml-2 bg-slate-50 dark:bg-gray-700 shadow-md mb-2">
       {addSuggestion.data?.message && (
         <div className="font-sm text-red-500">
           {addSuggestion.data?.message}
