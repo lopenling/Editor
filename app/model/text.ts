@@ -1,7 +1,7 @@
 // find text by textId
 
 import { db } from "~/services/db.server";
-import { fullSearch } from "~/lib/fullsearch";
+import { fullSearch } from "~/lib/fullSearch.server";
 // get all text
 
 export async function findAllText(id = true, name = true, content = false) {

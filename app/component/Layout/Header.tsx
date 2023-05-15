@@ -1,5 +1,5 @@
 import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
-import { Navbar, Avatar, Button, Select } from "flowbite-react";
+import { Avatar, Button } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { useEffect, useState, memo } from "react";
@@ -11,6 +11,8 @@ import { UserState, textName, theme } from "~/states";
 import { Editor } from "@tiptap/react";
 import SearchString from "../Editor/SearchString";
 import { useDetectClickOutside } from "react-detect-click-outside";
+import { HEADER_HEIGHT } from "~/constants";
+import ProgressBar from "../UI/Progress";
 const Logo = () => (
   <img
     src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
@@ -32,8 +34,10 @@ const LogoWithTextName = ({ textNameValue }: { textNameValue: string }) => (
     <h1
       onClick={() => {
         let editorElement = document.getElementById("textEditorContainer");
-
-        editorElement?.scrollTo(0, 0);
+        editorElement?.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
       }}
       style={{ top: -10 }}
       className="text-3xl ml-2 relative  font-bold "
@@ -93,7 +97,12 @@ function Header({ editor }: HeaderProps) {
     onTriggered: () => setShowHeaderMenu(false),
   });
   return (
-    <nav className="header fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-gray-900 shadow-header ">
+    <nav
+      className="header fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-gray-900 shadow-header "
+      style={{
+        height: HEADER_HEIGHT,
+      }}
+    >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textNameValue={textNameValue} />
@@ -324,6 +333,7 @@ function Header({ editor }: HeaderProps) {
           )}
         </div>
       </div>
+      <ProgressBar />
     </nav>
   );
 }
@@ -334,21 +344,20 @@ export function Translation() {
   };
   return (
     <div className="md:mr-10 flex items-center justify-start space-x-0.5">
-      <Select
+      <select
         onChange={changeLanguage}
-        sizing="md"
         className="border-transparent focus:border-transparent focus:ring-0 text-gray-500 bg-transparent  focus:outline-none focus:ring-gray-100 dark:bg-transparent  dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
       >
         {translationCodes.map((code) => (
           <option
             key={code.code}
             value={code.code}
-            className="dark:bg-slate-600 "
+            className="bg-white dark:bg-slate-600 "
           >
             {code.name}
           </option>
         ))}
-      </Select>
+      </select>
     </div>
   );
 }

@@ -8,7 +8,7 @@ function findStringOccurrences(text, searchString) {
   return indices;
 }
 
-function searchFullText(fullText, searchString) {
+function searchSingleText(fullText, searchString) {
   let location = findStringOccurrences(fullText, searchString);
   const jsonList = location.map((l, index) => {
     return {
@@ -21,4 +21,4 @@ function searchFullText(fullText, searchString) {
   });
   return jsonList;
 }
-export default searchFullText;
+export default searchSingleText;

@@ -123,7 +123,7 @@ function Post({
       id={`p_${threadId}`}
     >
       <div
-        className={`p-3 transition-all ${
+        className={`px-4 py-3 transition-all ${
           isSelected
             ? "bg-yellow-50 dark:bg-gray-700 dark:rounded-sm"
             : "bg-transparent"

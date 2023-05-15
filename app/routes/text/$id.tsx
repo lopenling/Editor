@@ -45,6 +45,8 @@ import useSWR from "swr";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
+import { HEADER_HEIGHT } from "~/constants";
+import ProgressBar from "~/component/UI/Progress";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
@@ -224,11 +226,16 @@ export default function () {
     <div className=" flex flex-col h-screen">
       <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
-      <div className="flex-1  flex max-w-6xl w-full mx-auto pt-16">
+      <div
+        className="flex-1  flex max-w-6xl w-full mx-auto "
+        style={{
+          paddingTop: HEADER_HEIGHT,
+        }}
+      >
         <Split
           minSize={!isMobile ? 350 : 100}
           maxSize={750}
-          className="split flex-1 flex flex-col md:flex-row"
+          className="split flex-1 flex flex-col md:flex-row "
           direction={!isMobile ? "horizontal" : "vertical"}
           sizes={!isMobile ? [65, 35] : [50, 50]}
         >
@@ -236,6 +243,7 @@ export default function () {
             style={{
               maxHeight: `${textHeight}vh`,
               overflowY: "scroll",
+              scrollbarWidth: "none",
             }}
             id="textEditorContainer"
           >
@@ -253,7 +261,7 @@ export default function () {
             )}
           </div>
           <div
-            className={`md:h-screen p-3 overflow-y-auto w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
+            className={`md:h-screen p-3  w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
           >
             {(openSuggestion || suggestionSelected?.id) &&
             suggestionSelected?.id ? (
