@@ -74,13 +74,12 @@ export async function findPostByTextId(textId: number, topicList = []) {
         Reply: true,
       },
       where: {
-        textId: textId,
+        textId,
       },
     });
     const postWithReply = await Promise.all(
       posts.map(async (post) => {
         const replies = topicList.find((l) => l.id === post.topic_id);
-
         const isSolved =
           post.Reply.filter((l) => l.is_approved === true).length > 0;
 

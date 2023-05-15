@@ -48,7 +48,7 @@ import { HEADER_HEIGHT } from "~/constants";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
-  const text = await findTextByTextId(text_id, true);
+  const text = await findTextByTextId(text_id, false);
   const suggestions = findAllSuggestionByTextId(text_id);
   return defer({
     text,
@@ -85,6 +85,7 @@ export interface CommentInstance {
 export default function () {
   const data = useLoaderData();
   const setTextName = useSetRecoilState(textName);
+  const [contentData, setContent] = useState("");
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const user = useRecoilValue(UserState);
   const [suggestionSelected, suggestionSelector] = useRecoilState(
@@ -92,7 +93,6 @@ export default function () {
   );
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
-
   const [selectedThread, postSelector] = useRecoilState(selectedPostThread);
   function suggestionSetter(id: string) {
     suggestionSelector({
@@ -104,6 +104,11 @@ export default function () {
       id: id,
     });
   }
+  useEffect(() => {
+    fetch(`/api/text?textId=${data.text.id}`)
+      .then((res) => res.json())
+      .then((data) => setContent(data.content));
+  }, []);
   let editor = useEditor(
     {
       extensions: [
@@ -139,7 +144,6 @@ export default function () {
           },
         }),
       ],
-      content: data.text.content,
       editable: true,
       editorProps: editorProps,
       onSelectionUpdate: ({ editor }) => {
@@ -157,7 +161,7 @@ export default function () {
       },
       onUpdate: async ({ editor }) => {
         const dmp = new DiffMatchPatch();
-        let oldContent = data.text.content;
+        let oldContent = contentData;
         let newContent = editor.getHTML();
         if (oldContent !== newContent) {
           const changes = dmp.diff_main(oldContent, newContent);
@@ -173,6 +177,7 @@ export default function () {
     },
     []
   );
+
   const saveTextFetcher = useFetcher();
   const saveData = async (patch: string) => {
     const formData = new FormData();
@@ -231,7 +236,11 @@ export default function () {
             id="textEditorContainer"
           >
             {editor ? (
-              <EditorContainer editor={editor} isSaving={isSaving} />
+              <EditorContainer
+                editor={editor}
+                isSaving={isSaving}
+                content={contentData}
+              />
             ) : (
               <div className="flex justify-center h-full w-full animate-pulse bg-gray-200 dark:bg-gray-700">
                 <div className="flex-1 w-full h-full  "></div>

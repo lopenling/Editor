@@ -19,19 +19,23 @@ import Spinner from "../UI/Spinner";
 type EditorContainerProps = {
   editor: Editor;
   isSaving: boolean;
+  content: string;
 };
-function EditorContainer({ editor, isSaving }: EditorContainerProps) {
+function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
   const data = useLoaderData();
   const user = useRecoilValue(UserState);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
+
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [fontSize, setFontSize] = useState(
     isMobile ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
   );
-
+  useEffect(() => {
+    editor.commands.setContent(content);
+  }, [content]);
   useEffect(() => {
     if (thread?.id) {
       let d = scrollThreadIntoView(thread.id);
