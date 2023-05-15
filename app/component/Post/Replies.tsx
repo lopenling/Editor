@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect } from "react";
 import Reply from "./Reply";
 
 type replyType = {
-  isAproved: boolean;
+  is_approved: boolean;
 };
 
 type RepliesProps = {

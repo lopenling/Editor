@@ -32,9 +32,9 @@ function combineArrays(array1: any[], array2: any[]): any[] {
     })
     .slice(1)
     .sort((a, b) => {
-      if (a.isAproved === b.isAproved) {
+      if (a.is_approved === b.is_approved) {
         return 0;
       }
-      return a.isAproved ? -1 : 1;
+      return a.is_approved ? -1 : 1;
     });
 }

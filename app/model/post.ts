@@ -82,7 +82,7 @@ export async function findPostByTextId(textId: number, topicList = []) {
         const replies = topicList.find((l) => l.id === post.topic_id);
 
         const isSolved =
-          post.Reply.filter((l) => l.isAproved === true).length > 0;
+          post.Reply.filter((l) => l.is_approved === true).length > 0;
 
         return {
           ...post,

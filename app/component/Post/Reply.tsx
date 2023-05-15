@@ -17,7 +17,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
   let likedByMe = user
     ? reply?.likedBy?.some((d) => d.username == user.username)
     : false;
-  const solved = reply?.isAproved;
+  const solved = reply?.is_approved;
   let like_Count = reply?.likedBy?.length || 0;
   let likeInFetcher = replyLikeFetcher?.formData?.get("like");
 
@@ -73,7 +73,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
     approvedFetcher.submit(
       {
         id: reply?.id,
-        isSolved: reply?.isAproved ?? false,
+        isSolved: reply?.is_approved ?? false,
       },
       {
         method: "post",

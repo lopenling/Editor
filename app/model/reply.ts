@@ -59,7 +59,7 @@ export async function findReplyByPostId(post_id: string) {
         likedBy: true,
       },
       orderBy: {
-        isAproved: "asc",
+        is_approved: "asc",
       },
     });
     return res;
@@ -74,7 +74,7 @@ export async function findAproved(id: string) {
         id,
       },
       select: {
-        isAproved: true,
+        is_approved: true,
       },
     });
     return res;
@@ -124,14 +124,14 @@ export async function updateLikeReply(
     throw new Error("couldnot update reply error" + e.message);
   }
 }
-export async function updateIsAproved(id: string, isAproved: boolean) {
+export async function updateIsAproved(id: string, is_approved: boolean) {
   try {
     let res = await db.reply.update({
       where: {
         id,
       },
       data: {
-        isAproved,
+        is_approved,
       },
     });
     return res;
