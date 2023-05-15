@@ -66,7 +66,6 @@ export default function Suggestion({
       },
       { method: "post", action: "api/suggestion/like" }
     );
-    console.log(res);
     setTimeout(() => {
       replaceMarkContent(editor, suggest.threadId, res?.highestLiked.newValue);
     }, 100);
