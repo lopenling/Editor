@@ -31,7 +31,7 @@ export default function ProgressBar() {
   }, []);
 
   return (
-    <div className="w-full rounded-full h-1.5 mb-4 ">
+    <div className="w-full rounded-full h-1.5  ">
       <div
         style={{ width: `${scrollPercentage}%`, height: 2 }}
         className="bg-blue-600 rounded-full dark:bg-blue-500"

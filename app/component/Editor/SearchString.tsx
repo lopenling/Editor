@@ -99,7 +99,7 @@ function SearchString({ editor }: { editor: Editor | null }) {
             type="reset"
             onClick={() => {
               handleReset();
-              editor.commands.setSearchTerm(null);
+              editor.commands.setSearchTerm("");
             }}
           >
             <svg
