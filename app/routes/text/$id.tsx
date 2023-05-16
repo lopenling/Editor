@@ -9,7 +9,7 @@ import {
   Await,
   useRevalidator,
 } from "@remix-run/react";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
 import EditorContainer from "~/component/Editor/EditorContainer";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -115,11 +115,26 @@ export default function () {
   const { onlineMembers, updateText } = usePusherPresence(
     `presence-text_${data.text.id}`,
     data.pusher_env.key,
-    data.pusher_env.cluster
+    data.pusher_env.cluster,
+    fetchUpdateText
   );
   useEffect(() => {
     fetchUpdateText();
-  }, [updateText]);
+  }, []);
+  const getQuery = useCallback(
+    (newContent: string) => {
+      let oldContent = contentData;
+      const dmp = new DiffMatchPatch();
+      if (oldContent !== newContent) {
+        const changes = dmp.diff_main(oldContent, newContent);
+        const patch = dmp.patch_make(changes);
+        let query = dmp.patch_toText(patch);
+        return query;
+      }
+      return null;
+    },
+    [contentData]
+  );
   let editor = useEditor(
     {
       extensions: [
@@ -171,15 +186,9 @@ export default function () {
         if (!editor.isActive("post")) postSelector({ id: "" });
       },
       onUpdate: async ({ editor }) => {
-        const dmp = new DiffMatchPatch();
-        let oldContent = contentData;
         let newContent = editor.getHTML();
-        if (oldContent !== newContent) {
-          const changes = dmp.diff_main(oldContent, newContent);
-          const patch = dmp.patch_make(changes);
-          let query = dmp.patch_toText(patch);
-          if (newContent.length > 2000 && user) saveData(query);
-        }
+        let query = getQuery(newContent);
+        if (query && newContent.length > 2000 && user) saveData(query);
       },
 
       onCreate: async ({ editor }) => {

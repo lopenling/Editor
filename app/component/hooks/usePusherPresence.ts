@@ -3,7 +3,7 @@ import Pusher from "pusher-js";
 import { useRevalidator } from "@remix-run/react";
 import { Store } from "react-notifications-component";
 
-const usePusherPresence = (channelName, id, cluster) => {
+const usePusherPresence = (channelName, id, cluster, fetchUpdateText) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
   const [updateText, setUpdateText] = useState(false);
   const revalidator = useRevalidator();
@@ -54,9 +54,9 @@ const usePusherPresence = (channelName, id, cluster) => {
       });
     };
     const handleUpdate = (e) => {
+      fetchUpdateText();
       if (channel.members.me.id !== e.user) {
         revalidator.revalidate();
-        setUpdateText(true);
       }
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
