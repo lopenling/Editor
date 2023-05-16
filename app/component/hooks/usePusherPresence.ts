@@ -5,7 +5,6 @@ import { Store } from "react-notifications-component";
 
 const usePusherPresence = (channelName, id, cluster, fetchUpdateText) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
-  const [updateText, setUpdateText] = useState(false);
   const revalidator = useRevalidator();
   useEffect(() => {
     const pusher = new Pusher(id, {
@@ -55,8 +54,23 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText) => {
     };
     const handleUpdate = (e) => {
       fetchUpdateText();
-      if (channel.members.me.id !== e.user) {
+      if (channel.members.me.id !== e.userId) {
         revalidator.revalidate();
+        Store.addNotification({
+          title: "updated",
+          message: e.userName + " made edit",
+          type: "info",
+          insert: "bottom",
+          container: "bottom-left",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 3000,
+            onScreen: true,
+          },
+        });
+      } else {
+        alert("refresh page please");
       }
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
@@ -70,7 +84,7 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText) => {
     };
   }, [channelName]);
 
-  return { onlineMembers, updateText };
+  return { onlineMembers };
 };
 
 export default usePusherPresence;

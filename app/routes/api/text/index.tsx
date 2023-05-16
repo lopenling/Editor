@@ -3,7 +3,6 @@ import { json } from "react-router";
 import { findTextByTextId, updateText } from "~/model/text";
 import pusher from "~/services/pusher.server";
 import DiffMatchPatch from "diff-match-patch";
-import { redis } from "~/services/redis.server";
 import { getUserSession } from "~/services/session.server";
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -25,7 +24,10 @@ export let action: ActionFunction = async ({ request }) => {
       const res = await updateText(parseInt(id), newText);
       if (res.id) {
         let channelId = "presence-text_" + id;
-        await pusher.trigger(channelId, "update-app", { user: user.id });
+        await pusher.trigger(channelId, "update-app", {
+          userId: user.id,
+          userName: user.username,
+        });
       }
       return res;
     }

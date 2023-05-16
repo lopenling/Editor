@@ -14,7 +14,6 @@ export default function ProgressBar() {
         window.innerHeight +
         HEADER_HEIGHT;
       const progress = (viewHeight / fullHeight) * 100;
-      console.log(fullHeight, viewHeight, progress);
       setScrollPercentage(() => Math.floor(progress));
     }
   };
