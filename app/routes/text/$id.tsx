@@ -41,7 +41,7 @@ import Split from "react-split";
 import { isMobile } from "react-device-detect";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
 import OnlineUsers from "~/component/UI/OnlineUserList";
-
+import Pusher from "pusher-js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
 import { HEADER_HEIGHT } from "~/constants";
@@ -104,10 +104,19 @@ export default function () {
       id: id,
     });
   }
-  useEffect(() => {
+  function fetchUpdateText() {
     fetch(`/api/text?textId=${data.text.id}`)
       .then((res) => res.json())
       .then((data) => setContent(data.content));
+  }
+  useEffect(() => {
+    const pusher = new Pusher(data.pusher_env.key, {
+      cluster: data.pusher_env.cluster,
+      authEndpoint: "/auth/pusher", // Replace with your server's auth endpoint
+    });
+    const channel = pusher.subscribe(`presence-text_${data.text.id}`);
+    channel.bind("update-app", fetchUpdateText);
+    fetchUpdateText();
   }, []);
   let editor = useEditor(
     {

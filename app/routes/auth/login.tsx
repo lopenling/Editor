@@ -114,7 +114,3 @@ export let action: ActionFunction = async ({ request, context }) => {
   }
   return null;
 };
-
-export default function Login() {
-  return <div>signing in</div>;
-}
