@@ -100,7 +100,7 @@ function Header({ editor }: HeaderProps) {
     <nav
       className="header fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-gray-900 shadow-header "
       style={{
-        height: HEADER_HEIGHT,
+        height: showHeaderMenu ? "min-content" : HEADER_HEIGHT,
       }}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
