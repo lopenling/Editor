@@ -168,9 +168,9 @@ export default function Suggestion({
       <div className=" w-full text-base leading-normal text-black mb-3">
         <span className="font-bold text-sm">Replace :</span>
         <span
-          onClick={() =>
-            replaceMarkContent(editor, suggest.threadId, suggest.oldValue)
-          }
+          // onClick={() =>
+          //   replaceMarkContent(editor, suggest.threadId, suggest.oldValue)
+          // }
           className={`text-gray-500 dark:text-gray-100`}
         >
           "{suggest.oldValue}"
@@ -202,9 +202,9 @@ export default function Suggestion({
           </editFetcher.Form>
         ) : (
           <span
-            onClick={() =>
-              replaceMarkContent(editor, suggest.threadId, suggest.newValue)
-            }
+            // onClick={() =>
+            //   replaceMarkContent(editor, suggest.threadId, suggest.newValue)
+            // }
             className={`text-gray-500 dark:text-gray-100 `}
           >
             "{suggest.newValue}"
