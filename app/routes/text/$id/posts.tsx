@@ -20,6 +20,7 @@ import { findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
+import { useLiveLoader } from "~/lib/useLiveLoader";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.id && parseInt(params.id);
@@ -69,7 +70,7 @@ export default function PostContainer() {
   const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
-  const data = useLoaderData<typeof loader>();
+  const data = useLiveLoader<typeof loader>();
 
   const { editor }: { editor: Editor } = useOutletContext();
   return (

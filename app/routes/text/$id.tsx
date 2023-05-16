@@ -19,7 +19,7 @@ import {
   selectedPostThread,
   selectedSuggestionThread,
   selectedTextOnEditor,
-  textName,
+  textInfo,
   UserState,
 } from "~/states";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -45,6 +45,7 @@ import OnlineUsers from "~/component/UI/OnlineUserList";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DiffMatchPatch from "diff-match-patch";
 import { HEADER_HEIGHT } from "~/constants";
+import { useLiveLoader } from "~/lib/useLiveLoader";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
@@ -83,8 +84,8 @@ export interface CommentInstance {
 }
 
 export default function () {
-  const data = useLoaderData();
-  const setTextName = useSetRecoilState(textName);
+  const data = useLiveLoader();
+  const setTextName = useSetRecoilState(textInfo);
   const [contentData, setContent] = useState("");
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const user = useRecoilValue(UserState);
@@ -192,7 +193,7 @@ export default function () {
       },
 
       onCreate: async ({ editor }) => {
-        setTextName(data.text.name);
+        setTextName({ name: data?.text.name, id: data?.text.id });
       },
     },
     []

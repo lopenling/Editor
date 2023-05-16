@@ -7,7 +7,7 @@ import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
 import { useRecoilValue } from "recoil";
-import { UserState, textName } from "~/states";
+import { UserState, textInfo } from "~/states";
 import { Editor } from "@tiptap/react";
 import SearchString from "../Editor/SearchString";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -55,7 +55,7 @@ function Header({ editor }: HeaderProps) {
   const translation = uselitteraTranlation();
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
-  const textNameValue = useRecoilValue(textName);
+  const { name: textNameValue } = useRecoilValue(textInfo);
   let user = useRecoilValue(UserState);
 
   const changeTheme = () => {

@@ -13,9 +13,12 @@ export const audioPermission = atom({
 });
 //textName
 
-export const textName = atom({
+export const textInfo = atom({
   key: "textName",
-  default: "",
+  default: {
+    name: "",
+    id: "",
+  },
 });
 
 //editorOptios
