@@ -5,6 +5,7 @@ import { Store } from "react-notifications-component";
 
 const usePusherPresence = (channelName, id, cluster) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
+  const [updateText, setUpdateText] = useState(false);
   const revalidator = useRevalidator();
   useEffect(() => {
     const pusher = new Pusher(id, {
@@ -55,6 +56,7 @@ const usePusherPresence = (channelName, id, cluster) => {
     const handleUpdate = (e) => {
       if (channel.members.me.id !== e.user) {
         revalidator.revalidate();
+        setUpdateText(true);
       }
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
@@ -68,7 +70,7 @@ const usePusherPresence = (channelName, id, cluster) => {
     };
   }, [channelName]);
 
-  return { onlineMembers };
+  return { onlineMembers, updateText };
 };
 
 export default usePusherPresence;

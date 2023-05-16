@@ -7,6 +7,7 @@ import {
   Link,
   Outlet,
   Await,
+  useRevalidator,
 } from "@remix-run/react";
 import { Suspense, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
@@ -107,17 +108,18 @@ export default function () {
   function fetchUpdateText() {
     fetch(`/api/text?textId=${data.text.id}`)
       .then((res) => res.json())
-      .then((data) => setContent(data.content));
+      .then((data) => {
+        setContent(data.content);
+      });
   }
+  const { onlineMembers, updateText } = usePusherPresence(
+    `presence-text_${data.text.id}`,
+    data.pusher_env.key,
+    data.pusher_env.cluster
+  );
   useEffect(() => {
-    const pusher = new Pusher(data.pusher_env.key, {
-      cluster: data.pusher_env.cluster,
-      authEndpoint: "/auth/pusher", // Replace with your server's auth endpoint
-    });
-    const channel = pusher.subscribe(`presence-text_${data.text.id}`);
-    channel.bind("update-app", fetchUpdateText);
     fetchUpdateText();
-  }, []);
+  }, [updateText]);
   let editor = useEditor(
     {
       extensions: [
@@ -198,11 +200,6 @@ export default function () {
     });
   };
 
-  const { onlineMembers } = usePusherPresence(
-    `presence-text_${data.text.id}`,
-    data.pusher_env.key,
-    data.pusher_env.cluster
-  );
   if (data.text === null)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
