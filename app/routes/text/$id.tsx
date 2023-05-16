@@ -265,8 +265,7 @@ export default function () {
           <div
             className={`md:h-screen pt-3  w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
           >
-            {(openSuggestion || suggestionSelected?.id) &&
-            suggestionSelected?.id ? (
+            {openSuggestion || suggestionSelected?.id ? (
               <SuggestionForm editor={editor} />
             ) : (
               <Outlet context={{ user: user, editor, text: data.text }} />

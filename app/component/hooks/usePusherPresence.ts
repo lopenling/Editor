@@ -69,8 +69,6 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText) => {
             onScreen: true,
           },
         });
-      } else {
-        alert("refresh page please");
       }
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
