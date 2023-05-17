@@ -128,13 +128,20 @@ class DiscourseApi {
     return data;
   }
 
-  async createPost(TopicId: number, postString: string) {
+  async createPost(TopicId: string, postString: string, audioUrl: string) {
     let auth_headers = this.authHeader();
 
+    let raw = `<p>
+    ${postString}
+     <audio controls id='audio_lopenling'>
+  <source src="${audioUrl}" type="audio/wav">
+</audio> 
+    </p>
+    `;
     try {
       let newPostData = {
         topic_id: TopicId,
-        raw: postString,
+        raw: raw,
       };
       let params = new URLSearchParams(newPostData).toString();
 
@@ -257,12 +264,13 @@ export async function getpostreplies(topicId: number) {
 }
 
 export async function createPost(
-  topicId: number,
+  topicId: string,
+  audioUrl: string,
   postString: string,
   username: string
 ) {
   const apiObj: DiscourseApi = new DiscourseApi(username);
-  const res = apiObj.createPost(topicId, postString);
+  const res = apiObj.createPost(topicId, postString, audioUrl);
   return res;
 }
 export async function deletePost(postId: number, username: string) {

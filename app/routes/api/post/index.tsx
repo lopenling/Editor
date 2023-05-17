@@ -32,6 +32,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
       throw new Error("set a DISCOURSE_SITE/DISCOURSE_API_KEY in env");
     }
     let audioUrl = Obj.file as string;
+    console.log(audioUrl);
     let textId = parseInt(Obj.textId as string);
 
     try {

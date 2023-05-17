@@ -305,7 +305,7 @@ function Post({
         />
       )}
       {showReplies && (
-        <div className="mt-3">
+        <div className="mt-3 ml-3">
           <Replies
             postId={id}
             topicId={topicId}

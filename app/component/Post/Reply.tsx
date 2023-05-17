@@ -2,6 +2,7 @@ import { useOutletContext } from "@remix-run/react";
 import { useFetcher } from "@remix-run/react/dist/components";
 import { timeAgo } from "~/lib/getFormatedDate";
 import { useState } from "react";
+import AudioPlayer from "../Media/AudioPlayer";
 type ReplyPropType = {
   reply: any;
   isCreator: boolean;
@@ -29,38 +30,30 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
     likedByMe = false;
     like_Count--;
   }
+  const extractAudioInfo = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const audioElement = doc.querySelector("audio");
+    const sourceElement = audioElement?.querySelector("source");
+    let sourceURL = sourceElement?.getAttribute("src");
+    let text = doc?.querySelector("p")?.textContent?.trim();
+    if (sourceURL.startsWith("/") || text.startsWith("/")) {
+      sourceURL = "https://lopenling.org" + sourceURL;
+      let textElement = doc.querySelector("p").lastChild;
+      text = textElement.textContent.trim();
+    }
+    return {
+      source: sourceURL,
+      text: text,
+    };
+  };
   const innerHtml = () => {
     let html = reply.cooked;
+    console.log(reply.cooked);
     if (reply?.cooked) {
       let doc = new DOMParser().parseFromString(reply.cooked, "text/html");
-      let audio = doc.querySelectorAll("audio");
-      let video = doc.querySelectorAll("video");
-      if (!audio) return { __html: reply.cooked };
-      if (!video) return { __html: reply.cooked };
-      if (audio?.length > 0) {
-        audio.forEach((l) => {
-          let originalsrc = l
-            .getElementsByTagName("source")[0]
-            .getAttribute("src");
-
-          let newUrl = "https://lopenling.org" + originalsrc;
-          let srcdata = l.getElementsByTagName("source")[0].getAttribute("src");
-          if (srcdata.startsWith("/"))
-            l.getElementsByTagName("source")[0].setAttribute("src", newUrl);
-        });
-        html = doc.body?.querySelector("audio").parentElement.innerHTML;
-      }
-      if (video?.length > 0) {
-        video.forEach((l) => {
-          let originalsrc = l
-            .getElementsByTagName("source")[0]
-            .getAttribute("src");
-
-          let newUrl = "https://lopenling.org" + originalsrc;
-          l.getElementsByTagName("source")[0].setAttribute("src", newUrl);
-        });
-        html = doc.body?.querySelector(".video-container")?.innerHTML;
-      }
+      let data = extractAudioInfo(reply.cooked);
+      console.log(data);
     }
     return { __html: html };
   };
@@ -112,11 +105,11 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
           {timeAgo(reply?.created_at)}
         </div>
       </div>
-      <p
-        className=" max-w-full py-3 text-base leading-normal text-gray-500 dark:text-gray-100"
-        dangerouslySetInnerHTML={innerHtml()}
-      ></p>
-      <div className="flex justify-between">
+      <p className=" max-w-full py-3 text-base leading-normal text-gray-500 dark:text-gray-100">
+        {extractAudioInfo(reply.cooked).text}
+      </p>
+      <AudioPlayer src={extractAudioInfo(reply.cooked).source} />
+      <div className="flex justify-between mt-3">
         <button
           disabled={!!replyLikeFetcher.formData || !user}
           onClick={handleLikeReply}

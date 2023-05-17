@@ -75,6 +75,7 @@ const AudioPlayer = ({ src }) => {
       updateCurrentTime(e);
     }
   };
+  if (!src) return null;
   return (
     <div className="flex items-center w-full">
       <button

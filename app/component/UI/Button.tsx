@@ -10,7 +10,7 @@ export const Button: FC<FCButton> = ({ label = "", ...props }) => {
   let textColor = props.type === "submit" ? "text-white" : "text-black";
   return (
     <button
-      className={`${color} ${textColor} px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none`}
+      className={`${color} ${textColor} cursor-pointer px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none`}
       {...props}
     >
       {label}
