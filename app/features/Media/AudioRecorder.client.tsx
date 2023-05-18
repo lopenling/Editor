@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useFetcher, useOutletContext, useLoaderData } from "@remix-run/react";
-import { Editor } from "@tiptap/react";
 import { useRecoilState } from "recoil";
-import { audioPermission, selectedTextOnEditor } from "~/states";
-import { formatTime } from "./AudioPlayer";
+import { audioPermission } from "~/states";
+import { formatTime } from "./lib/formatTime";
 const AudioRecorder = ({ setAudio }) => {
   const [permission, setPermission] = useRecoilState(audioPermission);
   const mediaRecorder = useRef(null);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
 import classNames from "classnames";
+import { formatTime } from "./lib/formatTime";
 
 const AudioPlayer = ({ src }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -109,14 +110,5 @@ const AudioPlayer = ({ src }) => {
     </div>
   );
 };
-
-export function formatTime(seconds: any) {
-  if (!seconds) return `00:00:00`;
-  const date = new Date(seconds * 1000);
-  const hh = date.getUTCHours().toString().padStart(2, "0");
-  const mm = date.getUTCMinutes().toString().padStart(2, "0");
-  const ss = date.getUTCSeconds().toString().padStart(2, "0");
-  return `${hh}:${mm}:${ss}`;
-}
 
 export default AudioPlayer;
