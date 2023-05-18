@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { UserState } from "~/states";
 import { timeAgo } from "~/lib/getFormatedDate";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { Button, TextArea } from "~/component/ui";
+import { Button, TextArea } from "~/component/UI";
 import { AudioPlayer, AudioRecorder } from "../Media";
 import { v4 as uuidv4 } from "uuid";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";

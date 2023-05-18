@@ -8,7 +8,7 @@ import {
 } from "~/states";
 import { v4 as uuidv4 } from "uuid";
 import { Editor } from "@tiptap/react";
-import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/ui";
+import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/UI";
 import Suggestion from "./Suggestion";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { AudioPlayer, AudioRecorder } from "../Media";

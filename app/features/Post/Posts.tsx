@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil";
 import { filterDataState, showLatest } from "~/states";
 import { FilterType, ReplyType, UserType } from "~/model/type";
 import Filter from "./Filter";
-import { Skeleton } from "~/component/ui";
+import { Skeleton } from "~/component/UI";
 import { ClientOnly } from "remix-utils";
 import { useAsyncValue } from "@remix-run/react";
 export type PostType = {

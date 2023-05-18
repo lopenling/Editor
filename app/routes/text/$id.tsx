@@ -20,7 +20,7 @@ import { SuggestionForm, SuggestionContainer } from "~/features/Suggestion";
 import Header from "~/component/Layout/Header";
 import Split from "react-split";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
-import { OnlineUsers } from "~/component/ui";
+import { OnlineUsers } from "~/component/UI";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HEADER_HEIGHT } from "~/constants";
 import { isMobile, DiffMatchPatch, useLiveLoader } from "~/lib";

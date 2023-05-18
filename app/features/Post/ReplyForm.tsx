@@ -1,6 +1,6 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useRef, useEffect, useState } from "react";
-import { Button, TextArea } from "~/component/ui";
+import { Button, TextArea } from "~/component/UI";
 import { AudioRecorder, AudioPlayer } from "../Media";
 import { v4 as uuidv4 } from "uuid";
 

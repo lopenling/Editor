@@ -21,7 +21,7 @@ import { UserState } from "./states";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { getUser } from "./model/user";
-import { Loader, GlobalLoading } from "./component/ui";
+import { Loader, GlobalLoading } from "./component/UI";
 import notificationStyle from "react-notifications-component/dist/theme.css";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",

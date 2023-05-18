@@ -5,7 +5,7 @@ import { filterDataState, openFilterState } from "~/states";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Datepicker from "react-tailwindcss-datepicker";
 import { Modal } from "flowbite-react";
-import { Button } from "~/component/ui";
+import { Button } from "~/component/UI";
 type FilterProps = {};
 function Filter({}: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);

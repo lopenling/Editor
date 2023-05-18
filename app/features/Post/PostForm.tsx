@@ -7,7 +7,7 @@ import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
 import AudioRecorder from "../Media/AudioRecorder.client";
 import { AudioPlayer } from "../Media";
-import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/ui";
+import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/UI";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 
 const PostForm = () => {
