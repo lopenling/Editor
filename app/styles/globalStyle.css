@@ -101,6 +101,10 @@ nav > div {
   background-color: var(--ck-color-comment-marker);
   cursor: pointer;
 }
+.dark .post {
+  background-color: darkgray;
+  cursor: pointer;
+}
 .post::selection {
   background-color: var(--ck-color-comment-marker-active);
 }

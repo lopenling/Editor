@@ -18,13 +18,13 @@ export function useLiveLoader<T>() {
       setData(e);
     };
     channel.bind("update-app", handleUpdate);
-
     return () => {
-      channel.unbind("YOUR_EVENT_NAME");
-      pusher.unsubscribe("YOUR_CHANNEL_NAME");
+      channel.unbind("update-app");
+      pusher.unsubscribe(`presence-text_${text.id}`);
       pusher.disconnect();
     };
-  }, [text.id]);
+  }, []);
+
   useEffect(() => {
     revalidate();
   }, [data, revalidate]);

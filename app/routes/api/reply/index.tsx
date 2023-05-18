@@ -14,8 +14,11 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
   try {
     if (request.method === "DELETE") {
       const formData = await request.formData();
-      const postId = formData.get("postId");
+      const postId = formData.get("postId") as string;
       await deletePost(postId, user.username);
+      return {
+        delete: "success",
+      };
     }
     if (request.method === "POST") {
       const uploadHandler: UploadHandler = composeUploadHandlers(
@@ -26,7 +29,8 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
       let Obj = Object.fromEntries(formData);
       const postString = Obj.postString as string;
       const topicId = Obj.topicId as string;
-      let audioUrl = Obj.file as string;
+      let audioUrl = Obj.file as string | null;
+      if (audioUrl === undefined) audioUrl = null;
       let create = await createPost(
         topicId,
         audioUrl,

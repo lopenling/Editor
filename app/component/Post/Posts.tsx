@@ -1,11 +1,15 @@
 import { Editor } from "@tiptap/react";
-import { memo } from "react";
+import { Suspense, memo, useTransition } from "react";
 import { timeAgo } from "~/lib/getFormatedDate";
-import Filter from "./Filter";
 import Post from "./Post";
 import { useRecoilValue } from "recoil";
 import { filterDataState, showLatest } from "~/states";
 import { FilterType, ReplyType, UserType } from "~/model/type";
+import Filter from "./Filter";
+import Skeleton from "../UI/Skeleton";
+import { Await, useLoaderData } from "@remix-run/react";
+import { useLiveLoader } from "~/lib/useLiveLoader";
+import { ClientOnly } from "remix-utils";
 export type PostType = {
   Reply: ReplyType[];
   audioUrl: string;
@@ -25,19 +29,21 @@ export type PostType = {
   creatorUser: UserType;
 };
 type PostPropsType = {
-  editor: Editor | null;
-  posts: PostType[];
+  editor: Editor;
 };
 
-function Posts({ editor, posts }: PostPropsType) {
-  if (!posts || posts?.length < 1) return null;
-  if (!editor) return null;
+function Posts({ editor }: PostPropsType) {
   let filters = useRecoilValue(filterDataState);
+  let data = useLiveLoader<{ posts: PostType[] }>();
   let isLatest = useRecoilValue(showLatest);
-  let lists = applyFilter(posts, filters, isLatest);
+  let lists = applyFilter(data.posts, filters, isLatest);
+  if (!data.posts) {
+    return <Skeleton number={4} height={80} />;
+  }
+
   return (
     <>
-      <Filter />
+      <ClientOnly fallback={<></>}>{() => <Filter />}</ClientOnly>
       <div
         className=" flex flex-col relative overflow-y-auto pr-3"
         style={{
@@ -70,7 +76,11 @@ function Posts({ editor, posts }: PostPropsType) {
   );
 }
 
-function applyFilter(list: PostType[], filter: FilterType, isLatest: boolean) {
+const applyFilter = <T extends PostType>(
+  list: T[],
+  filter: FilterType,
+  isLatest: boolean
+) => {
   if (filter.type && filter.type !== "all")
     list = list.filter((l) => {
       return l.type === filter.type;
@@ -107,6 +117,6 @@ function applyFilter(list: PostType[], filter: FilterType, isLatest: boolean) {
     });
   }
   return list;
-}
+};
 
 export default memo(Posts);

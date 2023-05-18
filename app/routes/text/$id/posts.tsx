@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useTransition } from "react";
 import PostForm from "~/component/Post/PostForm";
 import Skeleton from "~/component/UI/Skeleton";
 import {
@@ -17,7 +17,7 @@ import {
   showLatest,
 } from "~/states";
 import { findPostByTextId } from "~/model/post";
-import { LoaderFunction, defer, redirect } from "@remix-run/node";
+import { LoaderFunction, defer, json, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 import { useLiveLoader } from "~/lib/useLiveLoader";
@@ -29,8 +29,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const Categories = await fetchCategoryData();
   const topicList = Categories.topic_list.topics;
-  const posts = findPostByTextId(textId, topicList);
-  return defer({ text: { id: textId }, posts, threadId });
+  const posts = await findPostByTextId(textId, topicList);
+  return json({ text: { id: textId }, posts, threadId });
 };
 export const ErrorBoundary = ({ error }) => {
   return <div>{error.message}</div>;
@@ -57,6 +57,7 @@ export default function PostContainer() {
         });
       }, 2000);
       setParams("", { preventScrollReset: true });
+
       let timer = setTimeout(() => {
         setSelectedThread({ id: selectedThread });
       }, 1000);
@@ -76,7 +77,6 @@ export default function PostContainer() {
   return (
     <>
       <div className=" w-full items-center justify-end inline-flex gap-2 mb-4 ">
-        {/* sort button */}
         <Dropdown
           label={
             <>
@@ -119,7 +119,6 @@ export default function PostContainer() {
             Earliest
           </Dropdown.Item>
         </Dropdown>
-        {/* filter button */}
         <button
           id="filterButton"
           onClick={() => setOpenFilter((prev) => !prev)}
@@ -144,17 +143,8 @@ export default function PostContainer() {
           </span>
         </button>
       </div>
-
       <PostForm />
-
-      {/* used differ at loader for post list to fetch posts as a promise */}
-      <Suspense fallback={<Skeleton number={4} height={80} />}>
-        <Await resolve={data.posts}>
-          {(posts) => {
-            return <Posts posts={posts} editor={editor} />;
-          }}
-        </Await>
-      </Suspense>
+      <Posts editor={editor} />
     </>
   );
 }

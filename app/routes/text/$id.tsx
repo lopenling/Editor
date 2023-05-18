@@ -46,11 +46,12 @@ import OnlineUsers from "~/component/UI/OnlineUserList";
 import DiffMatchPatch from "diff-match-patch";
 import { HEADER_HEIGHT } from "~/constants";
 import { useLiveLoader } from "~/lib/useLiveLoader";
+import Skeleton from "~/component/UI/Skeleton";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, false);
-  const suggestions = findAllSuggestionByTextId(text_id);
+  const suggestions = await findAllSuggestionByTextId(text_id);
   return defer({
     text,
     suggestions,
@@ -241,13 +242,14 @@ export default function () {
           maxSize={750}
           className="split flex-1 flex flex-col md:flex-row "
           direction={!isMobile ? "horizontal" : "vertical"}
-          sizes={!isMobile ? [65, 35] : [50, 50]}
+          sizes={isMobile ? [50, 50] : [65, 35]}
         >
           <div
             style={{
               maxHeight: `${textHeight}vh`,
               overflowY: "scroll",
               scrollbarWidth: "none",
+              width: "100%",
             }}
             id="textEditorContainer"
           >
@@ -258,9 +260,7 @@ export default function () {
                 content={contentData}
               />
             ) : (
-              <div className="flex justify-center h-full w-full animate-pulse bg-gray-200 dark:bg-gray-700">
-                <div className="flex-1 w-full h-full  "></div>
-              </div>
+              <div />
             )}
           </div>
           <div

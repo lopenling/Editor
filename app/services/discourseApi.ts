@@ -94,7 +94,7 @@ class DiscourseApi {
     topic_name: string | FormDataEntryValue,
     bodyContent: string,
     textId: number,
-    audioUrl: string
+    audioUrl: string | null
   ) {
     let auth_headers = this.authHeader();
     let url = `${this.origin}text/${textId}/posts?thread=${threadId}`;
@@ -107,7 +107,7 @@ class DiscourseApi {
     }
 
     let new_Topic_data = {
-      title: topic_name as string,
+      title: (topic_name + "-" + textId) as string,
       category: category_id,
       raw: post_text,
     };
@@ -128,14 +128,20 @@ class DiscourseApi {
     return data;
   }
 
-  async createPost(TopicId: string, postString: string, audioUrl: string) {
+  async createPost(
+    TopicId: string,
+    postString: string,
+    audioUrl: string | null
+  ) {
     let auth_headers = this.authHeader();
-
+    let audioSegment = audioUrl
+      ? `<audio controls id='audio_lopenling'>
+  <source src="${audioUrl}" type="audio/wav">
+</audio>`
+      : null;
     let raw = `<p>
     ${postString}
-     <audio controls id='audio_lopenling'>
-  <source src="${audioUrl}" type="audio/wav">
-</audio> 
+     ${audioSegment}
     </p>
     `;
     try {
@@ -168,6 +174,7 @@ class DiscourseApi {
           headers: auth_headers,
         }
       );
+      console.log(response);
       return response.status;
     } catch (e) {
       console.log(e);
@@ -265,7 +272,7 @@ export async function getpostreplies(topicId: number) {
 
 export async function createPost(
   topicId: string,
-  audioUrl: string,
+  audioUrl: string | null,
   postString: string,
   username: string
 ) {

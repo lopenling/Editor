@@ -7,10 +7,10 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { UserState, selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
 import AudioPlayer from "../Media/AudioPlayer";
-import copyToClipboard from "~/lib/copyToClipboard";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { removeMark } from "~/tiptap/markAction";
 import { PostType, UserType } from "~/model/type";
+import copyToClipboard from "~/lib/DOMfunction";
 type PostPropType = {
   id: string;
   creatorUser: UserType;
@@ -125,8 +125,8 @@ function Post({
       <div
         className={`px-2 py-3 ml-2 rounded-md shadow-md transition-all ${
           isSelected
-            ? "bg-yellow-50 dark:bg-gray-700 dark:rounded-sm"
-            : "bg-gray-50"
+            ? "bg-yellow-50 dark:bg-gray-500 "
+            : "bg-gray-50 dark:bg-gray-700"
         } `}
         onClick={() => handleSelectPost(threadId)}
       >

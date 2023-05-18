@@ -37,6 +37,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
     const sourceElement = audioElement?.querySelector("source");
     let sourceURL = sourceElement?.getAttribute("src");
     let text = doc?.querySelector("p")?.textContent?.trim();
+    if (!sourceURL) return { text };
     if (sourceURL.startsWith("/") || text.startsWith("/")) {
       sourceURL = "https://lopenling.org" + sourceURL;
       let textElement = doc.querySelector("p").lastChild;
@@ -47,16 +48,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
       text: text,
     };
   };
-  const innerHtml = () => {
-    let html = reply.cooked;
-    console.log(reply.cooked);
-    if (reply?.cooked) {
-      let doc = new DOMParser().parseFromString(reply.cooked, "text/html");
-      let data = extractAudioInfo(reply.cooked);
-      console.log(data);
-    }
-    return { __html: html };
-  };
+
   let avatar_img = ("http://lopenling.org" + reply?.avatar_template).replace(
     "{size}",
     "30"
@@ -88,6 +80,23 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
       }
     );
   }
+  const deleteFetcher = useFetcher();
+  async function deletePost() {
+    let decision = confirm("do you want to delete the post");
+    if (decision) {
+      deleteFetcher.submit(
+        {
+          postId: reply.id,
+        },
+        {
+          action: "api/reply",
+          method: "delete",
+        }
+      );
+    } else {
+      console.log("cancel");
+    }
+  }
   return (
     <div className="w-full flex-col border-l-4 py-2 pl-5">
       <div className="flex justify-between ">
@@ -108,34 +117,58 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
       <p className=" max-w-full py-3 text-base leading-normal text-gray-500 dark:text-gray-100">
         {extractAudioInfo(reply.cooked).text}
       </p>
-      <AudioPlayer src={extractAudioInfo(reply.cooked).source} />
+      <AudioPlayer src={extractAudioInfo(reply.cooked)?.source} />
       <div className="flex justify-between mt-3">
-        <button
-          disabled={!!replyLikeFetcher.formData || !user}
-          onClick={handleLikeReply}
-          className={`${
-            effect && "animate-wiggle"
-          } flex cursor-pointer items-center`}
-          onAnimationEnd={() => setEffect(false)}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            xmlns="http://www.w3.org/2000/svg"
-            className="mr-2"
+        <div className="flex gap-2">
+          <button
+            disabled={!!replyLikeFetcher.formData || !user}
+            onClick={handleLikeReply}
+            className={`${
+              effect && "animate-wiggle"
+            } flex cursor-pointer items-center`}
+            onAnimationEnd={() => setEffect(false)}
           >
-            <path
-              style={{
-                fill: likedByMe ? "rgb(49,196,141)" : "gray",
-              }}
-              d="M0 8.5C-2.93527e-09 8.30302 0.0387987 8.10796 0.114181 7.92597C0.189563 7.74399 0.300052 7.57863 0.43934 7.43934C0.578628 7.30005 0.743986 7.18956 0.925975 7.11418C1.10796 7.0388 1.30302 7 1.5 7C1.69698 7 1.89204 7.0388 2.07403 7.11418C2.25601 7.18956 2.42137 7.30005 2.56066 7.43934C2.69995 7.57863 2.81044 7.74399 2.88582 7.92597C2.9612 8.10796 3 8.30302 3 8.5V14.5C3 14.8978 2.84196 15.2794 2.56066 15.5607C2.27936 15.842 1.89782 16 1.5 16C1.10218 16 0.720644 15.842 0.43934 15.5607C0.158035 15.2794 5.92805e-09 14.8978 0 14.5V8.5ZM4 8.333V13.763C3.99983 14.1347 4.10322 14.499 4.29858 14.8152C4.49394 15.1314 4.77353 15.3869 5.106 15.553L5.156 15.578C5.71089 15.8553 6.32267 15.9998 6.943 16H12.359C12.8215 16.0002 13.2698 15.84 13.6276 15.5469C13.9853 15.2537 14.2303 14.8456 14.321 14.392L15.521 8.392C15.579 8.10187 15.5719 7.80249 15.5002 7.51544C15.4285 7.22839 15.294 6.96082 15.1065 6.73201C14.9189 6.50321 14.6829 6.31887 14.4155 6.19229C14.148 6.0657 13.8559 6.00003 13.56 6H10V2C10 1.46957 9.78929 0.960859 9.41421 0.585786C9.03914 0.210714 8.53043 0 8 0C7.73478 0 7.48043 0.105357 7.29289 0.292893C7.10536 0.48043 7 0.734784 7 1V1.667C7 2.53248 6.71929 3.37462 6.2 4.067L4.8 5.933C4.28071 6.62538 4 7.46752 4 8.333Z"
-            />
-          </svg>
-          <div className=" disabled:text-slate-300 text-sm font-medium leading-tight text-gray-500 dark:text-gray-200">
-            {like_Count > 0 && like_Count}
-          </div>
-        </button>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              xmlns="http://www.w3.org/2000/svg"
+              className="mr-2"
+            >
+              <path
+                style={{
+                  fill: likedByMe ? "rgb(49,196,141)" : "gray",
+                }}
+                d="M0 8.5C-2.93527e-09 8.30302 0.0387987 8.10796 0.114181 7.92597C0.189563 7.74399 0.300052 7.57863 0.43934 7.43934C0.578628 7.30005 0.743986 7.18956 0.925975 7.11418C1.10796 7.0388 1.30302 7 1.5 7C1.69698 7 1.89204 7.0388 2.07403 7.11418C2.25601 7.18956 2.42137 7.30005 2.56066 7.43934C2.69995 7.57863 2.81044 7.74399 2.88582 7.92597C2.9612 8.10796 3 8.30302 3 8.5V14.5C3 14.8978 2.84196 15.2794 2.56066 15.5607C2.27936 15.842 1.89782 16 1.5 16C1.10218 16 0.720644 15.842 0.43934 15.5607C0.158035 15.2794 5.92805e-09 14.8978 0 14.5V8.5ZM4 8.333V13.763C3.99983 14.1347 4.10322 14.499 4.29858 14.8152C4.49394 15.1314 4.77353 15.3869 5.106 15.553L5.156 15.578C5.71089 15.8553 6.32267 15.9998 6.943 16H12.359C12.8215 16.0002 13.2698 15.84 13.6276 15.5469C13.9853 15.2537 14.2303 14.8456 14.321 14.392L15.521 8.392C15.579 8.10187 15.5719 7.80249 15.5002 7.51544C15.4285 7.22839 15.294 6.96082 15.1065 6.73201C14.9189 6.50321 14.6829 6.31887 14.4155 6.19229C14.148 6.0657 13.8559 6.00003 13.56 6H10V2C10 1.46957 9.78929 0.960859 9.41421 0.585786C9.03914 0.210714 8.53043 0 8 0C7.73478 0 7.48043 0.105357 7.29289 0.292893C7.10536 0.48043 7 0.734784 7 1V1.667C7 2.53248 6.71929 3.37462 6.2 4.067L4.8 5.933C4.28071 6.62538 4 7.46752 4 8.333Z"
+              />
+            </svg>
+            <div className=" disabled:text-slate-300 text-sm font-medium leading-tight text-gray-500 dark:text-gray-200">
+              {like_Count > 0 && like_Count}
+            </div>
+          </button>
+          {user && user.username === reply?.username && (
+            <div
+              onClick={deletePost}
+              title="delete"
+              className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
+            >
+              <svg
+                width="14"
+                height="16"
+                viewBox="0 0 14 16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M6 0C5.81434 9.91486e-05 5.63237 0.0518831 5.47447 0.149552C5.31658 0.247222 5.18899 0.386919 5.106 0.553L4.382 2H1C0.734784 2 0.48043 2.10536 0.292893 2.29289C0.105357 2.48043 0 2.73478 0 3C0 3.26522 0.105357 3.51957 0.292893 3.70711C0.48043 3.89464 0.734784 4 1 4V14C1 14.5304 1.21071 15.0391 1.58579 15.4142C1.96086 15.7893 2.46957 16 3 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V4C13.2652 4 13.5196 3.89464 13.7071 3.70711C13.8946 3.51957 14 3.26522 14 3C14 2.73478 13.8946 2.48043 13.7071 2.29289C13.5196 2.10536 13.2652 2 13 2H9.618L8.894 0.553C8.81101 0.386919 8.68342 0.247222 8.52553 0.149552C8.36763 0.0518831 8.18566 9.91486e-05 8 0H6ZM4 6C4 5.73478 4.10536 5.48043 4.29289 5.29289C4.48043 5.10536 4.73478 5 5 5C5.26522 5 5.51957 5.10536 5.70711 5.29289C5.89464 5.48043 6 5.73478 6 6V12C6 12.2652 5.89464 12.5196 5.70711 12.7071C5.51957 12.8946 5.26522 13 5 13C4.73478 13 4.48043 12.8946 4.29289 12.7071C4.10536 12.5196 4 12.2652 4 12V6ZM9 5C8.73478 5 8.48043 5.10536 8.29289 5.29289C8.10536 5.48043 8 5.73478 8 6V12C8 12.2652 8.10536 12.5196 8.29289 12.7071C8.48043 12.8946 8.73478 13 9 13C9.26522 13 9.51957 12.8946 9.70711 12.7071C9.89464 12.5196 10 12.2652 10 12V6C10 5.73478 9.89464 5.48043 9.70711 5.29289C9.51957 5.10536 9.26522 5 9 5Z"
+                  fill="inherit"
+                />
+              </svg>
+            </div>
+          )}
+        </div>
+
         {type === "question" && (
           <div className="cursor-pointer">
             {!solved ? (

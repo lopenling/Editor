@@ -14,7 +14,7 @@ const MONTH_NAMES = [
 ];
 
 export default function getFormattedDate(
-  date,
+  date: Date,
   prefomattedDate: boolean | string = false,
   hideYear = false
 ) {
@@ -45,7 +45,7 @@ export default function getFormattedDate(
 }
 
 // --- Main function
-export function timeAgo(dateParam) {
+export function timeAgo(dateParam: any) {
   if (!dateParam) {
     return null;
   }
