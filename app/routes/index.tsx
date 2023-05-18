@@ -230,14 +230,14 @@ const FeatureSection = () => (
             Accesibility
           </h3>
           <p className="mb-4 text-gray-500 dark:text-gray-400">
-            We store the vast majority of the digital assets in secure offline
-            storage.
+            The vast majority of digital text assets are stored in secure
+            storage. Sharing text is easier than ever.
           </p>
           <a
             href="#"
             className=" text-green-400 inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400"
           >
-            Learn how to keep your funds safe{" "}
+            Learn more about our text library{" "}
             <svg
               className="ml-1 w-5 h-5"
               fill="currentColor"
@@ -269,14 +269,14 @@ const FeatureSection = () => (
 
           <h3 className="mb-2 text-xl font-bold dark:text-white">Community</h3>
           <p className="mb-4 text-gray-500 dark:text-gray-400">
-            Flowbite maintains crypto insurance and all USD cash balances are
-            covered.
+            We are proud to have a thriving and expansive community that
+            actively utilizes our app .
           </p>
           <a
-            href="#"
+            href="https://lopenling.org"
             className="inline-flex text-green-400 items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400"
           >
-            Learn how your crypto is covered{" "}
+            learn more about our community{" "}
             <svg
               className="ml-1 w-5 h-5"
               fill="currentColor"
@@ -309,8 +309,8 @@ const FeatureSection = () => (
             Data Driven
           </h3>
           <p className="mb-4 text-gray-500 dark:text-gray-400">
-            Flowbite marketplace supports a variety of the most popular digital
-            currencies.
+            Our app offers real-time text editing, empowering users to
+            collaborate and make instant modifications to their content.
           </p>
           <a
             href="#"
