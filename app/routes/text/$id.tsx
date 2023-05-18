@@ -1,17 +1,9 @@
-import { getUserSession } from "~/services/session.server";
 import { defer, MetaFunction } from "@remix-run/node";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import {
-  useLoaderData,
-  useFetcher,
-  Link,
-  Outlet,
-  Await,
-  useRevalidator,
-} from "@remix-run/react";
+import { useFetcher, Link, Outlet, Await } from "@remix-run/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
-import EditorContainer from "~/component/Editor/EditorContainer";
+import { EditorContainer } from "~/features/Editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useEditor } from "@tiptap/react";
 import {
@@ -22,31 +14,16 @@ import {
   textInfo,
   UserState,
 } from "~/states";
-import Paragraph from "@tiptap/extension-paragraph";
-import Document from "@tiptap/extension-document";
-import Text from "@tiptap/extension-text";
-import Bold from "@tiptap/extension-bold";
-import HardBreak from "@tiptap/extension-hard-break";
-import Highlight from "@tiptap/extension-highlight";
-import TextStyle from "@tiptap/extension-text-style";
-import FontFamily from "@tiptap/extension-font-family";
-import { Suggestion } from "~/tiptap/tiptap-extension/suggestion";
-import PostMark from "~/tiptap/tiptap-extension/postMark";
-import SuggestionContainer from "~/component/Suggestion/SuggestionContainer";
-import { SearchAndReplace } from "~/tiptap/tiptap-extension/searchAndReplace";
+import * as Extension from "~/features/Editor/tiptap";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
-import SuggestionForm from "~/component/Suggestion/SuggestionForm";
-import editorProps from "~/tiptap/events";
+import { SuggestionForm, SuggestionContainer } from "~/features/Suggestion";
 import Header from "~/component/Layout/Header";
 import Split from "react-split";
-import { isMobile } from "react-device-detect";
 import usePusherPresence from "~/component/hooks/usePusherPresence";
-import OnlineUsers from "~/component/UI/OnlineUserList";
+import OnlineUsers from "~/component/ui/OnlineUserList";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import DiffMatchPatch from "diff-match-patch";
 import { HEADER_HEIGHT } from "~/constants";
-import { useLiveLoader } from "~/lib/useLiveLoader";
-import Skeleton from "~/component/UI/Skeleton";
+import { isMobile, DiffMatchPatch, useLiveLoader } from "~/lib";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
@@ -79,13 +56,9 @@ export function links() {
     },
   ];
 }
-export interface CommentInstance {
-  uuid?: string;
-  comments?: any[];
-}
 
 export default function () {
-  const data = useLiveLoader();
+  const data = useLiveLoader() as ReturnType<typeof loader>;
   const setTextName = useSetRecoilState(textInfo);
   const [contentData, setContent] = useState("");
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
@@ -96,7 +69,7 @@ export default function () {
 
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
-  const [selectedThread, postSelector] = useRecoilState(selectedPostThread);
+  const postSelector = useSetRecoilState(selectedPostThread);
   function suggestionSetter(id: string) {
     suggestionSelector({
       id: id,
@@ -140,40 +113,40 @@ export default function () {
   let editor = useEditor(
     {
       extensions: [
-        Document,
-        Paragraph,
-        Text,
-        Bold,
-        FontFamily,
-        TextStyle,
-        SearchAndReplace.configure({
+        Extension.Document,
+        Extension.Paragraph,
+        Extension.Text,
+        Extension.Bold,
+        Extension.FontFamily,
+        Extension.TextStyle,
+        Extension.SearchAndReplace.configure({
           searchResultClass: "search",
           caseSensitive: false,
           disableRegex: false,
         }),
-        HardBreak.configure({
+        Extension.HardBreak.configure({
           HTMLAttributes: {
             class: "pageBreak",
           },
         }),
-        Highlight.configure({
+        Extension.Highlight.configure({
           HTMLAttributes: {
             class: "highlight",
           },
         }),
-        Suggestion(suggestionSetter).configure({
+        Extension.Suggestion(suggestionSetter).configure({
           HTMLAttributes: {
             class: "suggestion",
           },
         }),
-        PostMark(postSetter).configure({
+        Extension.PostMark(postSetter).configure({
           HTMLAttributes: {
             class: "post",
           },
         }),
       ],
       editable: true,
-      editorProps: editorProps,
+      editorProps: Extension.editorProps,
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
@@ -192,7 +165,6 @@ export default function () {
         let query = getQuery(newContent);
         if (query && newContent.length > 2000 && user) saveData(query);
       },
-
       onCreate: async ({ editor }) => {
         setTextName({ name: data?.text.name, id: data?.text.id });
       },
@@ -211,7 +183,7 @@ export default function () {
     });
   };
 
-  if (data.text === null)
+  if (!data.text)
     return (
       <div className="text-red-700 flex gap-2 items-center justify-center capitalize">
         <p>text not available</p>
@@ -248,6 +220,7 @@ export default function () {
             style={{
               maxHeight: `${textHeight}vh`,
               overflowY: "scroll",
+              overflowX: "hidden",
               scrollbarWidth: "none",
               width: "100%",
             }}

@@ -1,27 +1,17 @@
 import { Link, Form, useSearchParams } from "@remix-run/react";
-import type {
-  HeadersFunction,
-  LoaderFunction,
-  MetaFunction,
-} from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Button, Card, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Layout/Footer";
 import { json } from "@remix-run/node";
 import { searchTextWithName } from "~/model/text";
-import {
-  useLocation,
-  useLoaderData,
-  useNavigation,
-  useOutletContext,
-} from "@remix-run/react";
+import { useLocation, useLoaderData, useNavigation } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { motion } from "framer-motion";
 import Header from "~/component/Layout/Header";
 import { useState, useEffect } from "react";
-import Skeleton from "~/component/UI/Skeleton";
-import HighlightedString from "~/component/UI/HighlightString";
-import { getUserSession } from "~/services/session.server";
-import { getUser } from "~/model/user";
+import Skeleton from "~/component/ui/Skeleton";
+import HighlightedString from "~/component/ui/HighlightString";
+import { HEADER_HEIGHT } from "~/constants";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("s")?.trim();
   let headers = {
@@ -91,7 +81,10 @@ export default function Index() {
     >
       <Header editor={null} />
 
-      <div className=" max-w-2xl mx-auto">
+      <div
+        className=" max-w-2xl mx-auto "
+        style={{ paddingTop: HEADER_HEIGHT }}
+      >
         <div className="inline-flex w-full items-center justify-center  px-3 md:px-1.5 pt-24  ">
           <Form method="get" className="w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
@@ -169,15 +162,14 @@ export default function Index() {
                       className="container w-full"
                       prefetch="intent"
                     >
-                      <Card className="dark:bg-gray-500">
-                        <div className="text-2xl">
-                          <HighlightedString
-                            string={list.name}
-                            highlightClass={"font-bold"}
-                            searchTerm={data.search}
-                          />
-                        </div>
-                        <div className="flex flex-wrap justify-between">
+                      <Card
+                        className="dark:bg-gray-500"
+                        style={{
+                          fontFamily: "monlam",
+                        }}
+                      >
+                        <div className="text-xl">{list.name}</div>
+                        <div className="flex flex-wrap justify-between text-sm">
                           {result && (
                             <HighlightedString
                               string={result[1]}

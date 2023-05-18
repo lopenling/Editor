@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { ClientOnly } from "remix-utils";
 interface FCButton extends React.HTMLAttributes<HTMLButtonElement> {
   label: string;
   disabled?: true | false | undefined;
@@ -10,12 +11,16 @@ export const Button: FC<FCButton> = ({ label = "", ...props }) => {
   let disabled = props.disabled === null ? false : props.disabled;
   let textColor = props.type === "submit" ? "text-white" : "text-black";
   return (
-    <button
-      className={`${color} ${textColor} cursor-pointer px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none`}
-      disabled={disabled}
-      {...props}
-    >
-      {label}
-    </button>
+    <ClientOnly fallback="<button/>">
+      {() => (
+        <button
+          className={`${color} ${textColor} cursor-pointer px-3 py-2 text-xs font-medium text-center  rounded-lg  focus:ring-4 focus:outline-none`}
+          disabled={disabled}
+          {...props}
+        >
+          {label}
+        </button>
+      )}
+    </ClientOnly>
   );
 };

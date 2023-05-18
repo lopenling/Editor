@@ -9,10 +9,10 @@ import uselitteraTranlation, {
 import { useRecoilValue } from "recoil";
 import { UserState, textInfo } from "~/states";
 import { Editor } from "@tiptap/react";
-import SearchString from "../Editor/SearchString";
+import SearchString from "../../features/Editor/component/SearchString";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { HEADER_HEIGHT } from "~/constants";
-import ProgressBar from "../UI/Progress";
+import ProgressBar from "../ui/Progress";
 const Logo = () => (
   <img
     src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"

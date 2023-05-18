@@ -1,13 +1,7 @@
-import { Suspense, useEffect, useTransition } from "react";
-import PostForm from "~/component/Post/PostForm";
-import Skeleton from "~/component/UI/Skeleton";
-import {
-  Await,
-  useLoaderData,
-  useOutletContext,
-  useSearchParams,
-} from "@remix-run/react";
-import Posts from "~/component/Post/Posts";
+import { Suspense, useEffect } from "react";
+import PostForm from "~/features/Post/PostForm";
+import { Await, useOutletContext, useSearchParams } from "@remix-run/react";
+import Posts from "~/features/Post/Posts";
 import { Dropdown } from "flowbite-react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -17,10 +11,10 @@ import {
   showLatest,
 } from "~/states";
 import { findPostByTextId } from "~/model/post";
-import { LoaderFunction, defer, json, redirect } from "@remix-run/node";
+import { LoaderFunction, defer, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
-import { useLiveLoader } from "~/lib/useLiveLoader";
+import { useLiveLoader } from "~/lib";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.id && parseInt(params.id);
@@ -30,7 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const Categories = await fetchCategoryData();
   const topicList = Categories.topic_list.topics;
   const posts = await findPostByTextId(textId, topicList);
-  return json({ text: { id: textId }, posts, threadId });
+  return defer({ text: { id: textId }, posts, threadId });
 };
 export const ErrorBoundary = ({ error }) => {
   return <div>{error.message}</div>;
@@ -144,7 +138,11 @@ export default function PostContainer() {
         </button>
       </div>
       <PostForm />
-      <Posts editor={editor} />
+      <Suspense fallback={<div>loading</div>}>
+        <Await resolve={data.posts}>
+          <Posts editor={editor} />
+        </Await>
+      </Suspense>
     </>
   );
 }
