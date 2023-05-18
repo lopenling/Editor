@@ -8,12 +8,10 @@ import {
 } from "~/states";
 import { v4 as uuidv4 } from "uuid";
 import { Editor } from "@tiptap/react";
-import TextArea from "../../component/ui/TextArea";
-import { Button } from "../../component/ui/Button";
+import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/ui";
 import Suggestion from "./Suggestion";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { AudioPlayer, AudioRecorder } from "../Media";
-import LogInMessage from "../../component/ui/MustLoggedIn";
 
 type SuggestionFormProps = {
   editor: Editor | null;

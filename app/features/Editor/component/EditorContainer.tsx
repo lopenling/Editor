@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 // import EditorSettings from "./EditorSettings";
 import { FaWrench } from "react-icons/fa";
-import { Button } from "../../../component/ui/Button";
+import { Button } from "~/component/ui";
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from "~/constants";
 import {
   UserState,
@@ -15,7 +15,7 @@ import {
 import { isMobile } from "react-device-detect";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { changeFont, exportDoc, scrollThreadIntoView } from "../lib";
-import Spinner from "../../../component/ui/Spinner";
+import { Spinner } from "~/component/ui";
 type EditorContainerProps = {
   editor: Editor;
   isSaving: boolean;

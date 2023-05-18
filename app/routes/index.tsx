@@ -9,8 +9,7 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { motion } from "framer-motion";
 import Header from "~/component/Layout/Header";
 import { useState, useEffect } from "react";
-import Skeleton from "~/component/ui/Skeleton";
-import HighlightedString from "~/component/ui/HighlightString";
+import { HighlightedString, Skeleton } from "~/component/ui";
 import { HEADER_HEIGHT } from "~/constants";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("s")?.trim();

@@ -7,10 +7,8 @@ import { Editor } from "@tiptap/react";
 import { v4 as uuidv4 } from "uuid";
 import AudioRecorder from "../Media/AudioRecorder.client";
 import { AudioPlayer } from "../Media";
-import { Button } from "../../component/ui/Button";
-import TextArea from "../../component/ui/TextArea";
+import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/ui";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
-import LogInMessage from "../../component/ui/MustLoggedIn";
 
 const PostForm = () => {
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
