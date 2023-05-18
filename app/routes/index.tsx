@@ -169,13 +169,7 @@ export default function Index() {
                       >
                         <div className="text-xl">{list.name}</div>
                         <div className="flex flex-wrap justify-between text-sm">
-                          {result && (
-                            <HighlightedString
-                              string={result[1]}
-                              highlightClass={"font-bold"}
-                              searchTerm={data.search}
-                            />
-                          )}
+                          {result && result[1]}
                           <div className="text-sm text-gray-400">
                             {list.total} matches
                           </div>
