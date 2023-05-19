@@ -147,6 +147,27 @@ export async function updatePostLike(
     throw new Error("update post like error: " + e.message);
   }
 }
+export async function updatePostContentandAudio(
+  id: string,
+  content: string,
+  audioUrl: string
+) {
+  try {
+    let response = await db.post.update({
+      data: {
+        content,
+        audioUrl,
+      },
+      where: {
+        id,
+      },
+    });
+    return response;
+  } catch (e) {
+    throw new Error("update post content error: " + e.message);
+  }
+}
+
 //delete post
 export async function deletePost(id: string) {
   try {

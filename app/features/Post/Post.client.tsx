@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useFetcher, useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Replies from "./Replies";
@@ -9,53 +9,48 @@ import { Editor } from "@tiptap/react";
 import { AudioPlayer } from "../Media";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { removeMark } from "~/features/Editor/tiptap/markAction";
-import { PostType, UserType } from "~/model/type";
+import { PostType } from "~/model/type";
 import copyToClipboard from "~/lib/copyToClipboard";
+import { FaPencilAlt } from "react-icons/fa";
+import { FormWithAudio } from "./component/FormWithAudio";
+import { timeAgo } from "~/lib";
 type PostPropType = {
-  id: string;
-  creatorUser: UserType;
-  time: string;
-  postContent: string;
-  likedBy: UserType[];
-  topicId: number;
-  type: "question" | "comment";
-  replyCount: number;
-  isSolved: boolean;
   isOptimistic: boolean;
-  threadId: string;
-  audioUrl: string;
+  post: PostType;
 };
-
-function Post({
-  id,
-  creatorUser,
-  time,
-  postContent,
-  likedBy,
-  topicId,
-  type,
-  replyCount,
-  isSolved,
-  isOptimistic,
-  threadId,
-  audioUrl,
-}: PostPropType) {
+interface DeleteResponse {
+  deleted: PostType;
+}
+function Post({ isOptimistic, post }: PostPropType) {
+  const {
+    id,
+    creatorUser,
+    created_at,
+    content,
+    likedBy,
+    topic_id: topicId,
+    type,
+    replyCount,
+    isSolved,
+    threadId,
+    audioUrl,
+  } = post!;
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [effect, setEffect] = useState(false);
   const [ReplyCount, setReplyCount] = useState(replyCount);
-  const likeFetcher = useFetcher();
-  const deleteFetcher = useFetcherWithPromise();
+  const fetcher = useFetcherWithPromise();
   const { editor }: { editor: Editor } = useOutletContext();
   const translation = uselitteraTranlation();
   const user = useRecoilValue(UserState);
   const [selectedThreadId, setSelectedThreadId] =
     useRecoilState(selectedPostThread);
   const isSelected = selectedThreadId.id === threadId;
+  const [edit, setEdit] = useState(false);
   let likedByMe = user
     ? likedBy.some((l) => l && l.username === user.username)
     : false;
-  let likeInFetcher = likeFetcher?.formData?.get("like");
+  let likeInFetcher = fetcher?.formData?.get("like");
   const handleSelectPost = useCallback(
     (id: string) => {
       setSelectedThreadId({
@@ -64,35 +59,34 @@ function Post({
     },
     [threadId]
   );
-  let likeCount = likeFetcher.data ? likeFetcher.data?.length : likedBy.length;
+  let likeCount = fetcher.data ? fetcher.data?.length : likedBy.length;
   if (likeInFetcher === "true") {
     likedByMe = true;
-    if (likeFetcher.state === "submitting") likeCount++;
+    if (fetcher.state === "submitting") likeCount++;
   }
   if (likeInFetcher === "false") {
     likedByMe = false;
-    if (likeFetcher.state === "submitting") likeCount--;
+    if (fetcher.state === "submitting") likeCount--;
   }
   function handleLikeClick() {
     setEffect(true);
     if (user) {
-      likeFetcher.submit(
+      fetcher.submit(
         {
+          action: "like",
           id,
           userId: user.id,
           like: !likedByMe ? "true" : "false",
         },
-        { method: "post", action: "api/post/like" }
+        { method: "patch", action: "api/post" }
       );
     }
   }
-  interface DeleteResponse {
-    deleted: PostType;
-  }
+
   async function deletePost(): Promise<void> {
     let decision = confirm("do you want to delete the post");
     if (decision) {
-      let res: DeleteResponse | undefined = await deleteFetcher.submit(
+      let res: DeleteResponse | undefined = await fetcher.submit(
         {
           id,
         },
@@ -116,10 +110,14 @@ function Post({
     copyToClipboard(url);
     alert("url coppied on clipboard");
   }
-  let content = postContent.replace(/\n/g, "<br>");
+  function handleEdit() {
+    setEdit(true);
+  }
+  let Postcontent = content.replace(/\n/g, "<br>");
+  if (!creatorUser) return null;
   return (
     <div
-      className={`${deleteFetcher.formData && "hidden"} `}
+      className={`${fetcher.formMethod === "DELETE" && "hidden"} `}
       id={`p_${threadId}`}
     >
       <div
@@ -162,7 +160,7 @@ function Post({
             )}
           </div>
           <p className="flex-1 text-right text-sm leading-tight text-gray-500 dark:text-gray-200">
-            {time}
+            {timeAgo(created_at)!}
           </p>
         </div>
         <div className="flex flex-col items-start justify-start space-y-4">
@@ -170,16 +168,25 @@ function Post({
             <div className="w-full flex items-center justify-end font-light text-xs italic uppercase">
               {type}
             </div>
-            <p dangerouslySetInnerHTML={{ __html: content }} />
+            {edit ? (
+              <FormWithAudio
+                post={post}
+                type="update"
+                fetcher={fetcher}
+                onClose={() => setEdit(false)}
+              />
+            ) : (
+              <p dangerouslySetInnerHTML={{ __html: Postcontent }} />
+            )}
           </div>
-          {audioUrl?.length > 0 && <AudioPlayer src={audioUrl} />}
+          {audioUrl?.length > 0 && !edit && <AudioPlayer src={audioUrl} />}
           {isOptimistic ? (
             <div className="text-sm text-gray-300 font-sans">posting ...</div>
           ) : (
             <div className="flex w-full flex-1 items-center justify-between ">
               <div className="flex h-full w-64 items-center justify-start gap-4">
                 <button
-                  disabled={!user || !!likeFetcher.formData}
+                  disabled={!user || fetcher.formMethod === "PATCH"}
                   className={`${
                     effect && "animate-wiggle"
                   } flex cursor-pointer items-center justify-start gap-1 `}
@@ -253,25 +260,34 @@ function Post({
                   </svg>
                 </div>
                 {user && user.username === creatorUser.username && (
-                  <div
-                    onClick={deletePost}
-                    title="delete"
-                    className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
-                  >
-                    <svg
-                      width="14"
-                      height="16"
-                      viewBox="0 0 14 16"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <>
+                    <div
+                      onClick={deletePost}
+                      title="delete"
+                      className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
                     >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M6 0C5.81434 9.91486e-05 5.63237 0.0518831 5.47447 0.149552C5.31658 0.247222 5.18899 0.386919 5.106 0.553L4.382 2H1C0.734784 2 0.48043 2.10536 0.292893 2.29289C0.105357 2.48043 0 2.73478 0 3C0 3.26522 0.105357 3.51957 0.292893 3.70711C0.48043 3.89464 0.734784 4 1 4V14C1 14.5304 1.21071 15.0391 1.58579 15.4142C1.96086 15.7893 2.46957 16 3 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V4C13.2652 4 13.5196 3.89464 13.7071 3.70711C13.8946 3.51957 14 3.26522 14 3C14 2.73478 13.8946 2.48043 13.7071 2.29289C13.5196 2.10536 13.2652 2 13 2H9.618L8.894 0.553C8.81101 0.386919 8.68342 0.247222 8.52553 0.149552C8.36763 0.0518831 8.18566 9.91486e-05 8 0H6ZM4 6C4 5.73478 4.10536 5.48043 4.29289 5.29289C4.48043 5.10536 4.73478 5 5 5C5.26522 5 5.51957 5.10536 5.70711 5.29289C5.89464 5.48043 6 5.73478 6 6V12C6 12.2652 5.89464 12.5196 5.70711 12.7071C5.51957 12.8946 5.26522 13 5 13C4.73478 13 4.48043 12.8946 4.29289 12.7071C4.10536 12.5196 4 12.2652 4 12V6ZM9 5C8.73478 5 8.48043 5.10536 8.29289 5.29289C8.10536 5.48043 8 5.73478 8 6V12C8 12.2652 8.10536 12.5196 8.29289 12.7071C8.48043 12.8946 8.73478 13 9 13C9.26522 13 9.51957 12.8946 9.70711 12.7071C9.89464 12.5196 10 12.2652 10 12V6C10 5.73478 9.89464 5.48043 9.70711 5.29289C9.51957 5.10536 9.26522 5 9 5Z"
-                        fill="inherit"
-                      />
-                    </svg>
-                  </div>
+                      <svg
+                        width="14"
+                        height="16"
+                        viewBox="0 0 14 16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M6 0C5.81434 9.91486e-05 5.63237 0.0518831 5.47447 0.149552C5.31658 0.247222 5.18899 0.386919 5.106 0.553L4.382 2H1C0.734784 2 0.48043 2.10536 0.292893 2.29289C0.105357 2.48043 0 2.73478 0 3C0 3.26522 0.105357 3.51957 0.292893 3.70711C0.48043 3.89464 0.734784 4 1 4V14C1 14.5304 1.21071 15.0391 1.58579 15.4142C1.96086 15.7893 2.46957 16 3 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V4C13.2652 4 13.5196 3.89464 13.7071 3.70711C13.8946 3.51957 14 3.26522 14 3C14 2.73478 13.8946 2.48043 13.7071 2.29289C13.5196 2.10536 13.2652 2 13 2H9.618L8.894 0.553C8.81101 0.386919 8.68342 0.247222 8.52553 0.149552C8.36763 0.0518831 8.18566 9.91486e-05 8 0H6ZM4 6C4 5.73478 4.10536 5.48043 4.29289 5.29289C4.48043 5.10536 4.73478 5 5 5C5.26522 5 5.51957 5.10536 5.70711 5.29289C5.89464 5.48043 6 5.73478 6 6V12C6 12.2652 5.89464 12.5196 5.70711 12.7071C5.51957 12.8946 5.26522 13 5 13C4.73478 13 4.48043 12.8946 4.29289 12.7071C4.10536 12.5196 4 12.2652 4 12V6ZM9 5C8.73478 5 8.48043 5.10536 8.29289 5.29289C8.10536 5.48043 8 5.73478 8 6V12C8 12.2652 8.10536 12.5196 8.29289 12.7071C8.48043 12.8946 8.73478 13 9 13C9.26522 13 9.51957 12.8946 9.70711 12.7071C9.89464 12.5196 10 12.2652 10 12V6C10 5.73478 9.89464 5.48043 9.70711 5.29289C9.51957 5.10536 9.26522 5 9 5Z"
+                          fill="inherit"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      onClick={handleEdit}
+                      title="edit"
+                      className="fill-gray-400 text-gray-400 dark:text-gray-200 transition-all flex gap-2 items-center justify-start hover:text-blue-400 hover:dark:text-blue-400 hover:fill-red-400"
+                    >
+                      <FaPencilAlt />
+                    </div>
+                  </>
                 )}
               </div>
               {user && (

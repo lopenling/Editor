@@ -8,7 +8,13 @@ import {
 } from "@remix-run/node";
 import { uploadAudio } from "~/services/uploadAudio.server";
 import type { ActionArgs, UploadHandler } from "@remix-run/node";
-
+import {
+  createReply,
+  findReply,
+  isReplyPresent,
+  updateIsAproved,
+  updateLikeReply,
+} from "~/model/reply";
 export const action: ActionFunction = async ({ request }: ActionArgs) => {
   const user = await getUserSession(request);
   try {
@@ -40,6 +46,35 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
       return {
         posts: await create.json(),
       };
+    }
+    if (request.method === "PATCH") {
+      const formData = await request.formData();
+      const user = await getUserSession(request);
+      let Obj = Object.fromEntries(formData);
+      let action = Obj.action as string;
+      if (action === "like") {
+        let post_id = Obj.post_id as string;
+        let id = Obj.id as string;
+        //check if user already like it
+        let replyExist = await isReplyPresent(id);
+        if (!replyExist) {
+          await createReply(id, post_id, user.id);
+        } else {
+          const alreadyLiked = await findReply(id, user.id);
+          await updateLikeReply(id, user.id, !alreadyLiked);
+        }
+        return { success: true };
+      }
+      if (action === "approve") {
+        let replyId = Obj.id as string;
+        let isSolved = Obj.isSolved === "false";
+        try {
+          await updateIsAproved(replyId, isSolved);
+        } catch (e) {
+          throw new Error("error on approving reply");
+        }
+        return null;
+      }
     }
   } catch (e) {
     return {

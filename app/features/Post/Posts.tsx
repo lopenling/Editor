@@ -4,29 +4,12 @@ import { timeAgo, useLiveLoader } from "~/lib";
 import Post from "./Post.client";
 import { useRecoilValue } from "recoil";
 import { filterDataState, showLatest } from "~/states";
-import { FilterType, ReplyType, UserType } from "~/model/type";
+import { FilterType, PostType, ReplyType, UserType } from "~/model/type";
 import Filter from "./Filter";
 import { Skeleton } from "~/component/UI";
 import { ClientOnly } from "remix-utils";
 import { useAsyncValue } from "@remix-run/react";
-export type PostType = {
-  Reply: ReplyType[];
-  audioUrl: string;
-  avatar: string;
-  content: string;
-  creatorUser_id: string;
-  id: string;
-  isSolved: boolean;
-  post_id: number;
-  replyCount: number;
-  textId: number;
-  threadId: string;
-  topic_id: number;
-  type: "comment" | "question";
-  created_at: string;
-  likedBy: [];
-  creatorUser: UserType;
-};
+
 type PostPropsType = {
   editor: Editor;
 };
@@ -57,21 +40,7 @@ function Posts({ editor }: PostPropsType) {
                 lists?.length > 0 &&
                 lists?.map((post: PostType) => {
                   return (
-                    <Post
-                      key={post.id}
-                      id={post.id}
-                      isOptimistic={false}
-                      creatorUser={post.creatorUser}
-                      time={timeAgo(post.created_at)!}
-                      postContent={post.content}
-                      likedBy={post.likedBy}
-                      topicId={post.topic_id}
-                      type={post.type}
-                      replyCount={post?.replyCount}
-                      isSolved={post?.isSolved}
-                      threadId={post?.threadId}
-                      audioUrl={post?.audioUrl}
-                    />
+                    <Post key={post.id} post={post} isOptimistic={false} />
                   );
                 })
               );

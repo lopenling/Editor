@@ -112,6 +112,9 @@ nav > div {
 .search {
   background-color: rgb(232, 233, 137);
 }
+.editor {
+  padding-top: 10px;
+}
 #textEditorContainer {
   font-family: "Monlam", serif;
   line-height: 1.5;

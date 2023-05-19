@@ -85,7 +85,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
 
   return (
     <div className=" relative shadow-sm  mb-4">
-      <div className=" bg-white dark:bg-gray-700 z-10 shadow-sm text-3xl  font-bold  text-light py-4 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
+      <div className=" bg-white dark:bg-gray-700 z-10  text-3xl  font-bold  text-light py-4 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
         <h3 className="textname flex gap-2 text-2xl">
           {data?.text?.name} {isSaving && <Spinner />}
         </h3>

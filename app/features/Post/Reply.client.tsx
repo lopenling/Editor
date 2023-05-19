@@ -60,12 +60,13 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
   function handleAproved() {
     approvedFetcher.submit(
       {
+        action: "approve",
         id: reply?.id,
         isSolved: reply?.is_approved ?? false,
       },
       {
-        method: "post",
-        action: "/api/reply/approve",
+        method: "patch",
+        action: "/api/reply",
       }
     );
   }
@@ -73,13 +74,14 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
     setEffect(true);
     replyLikeFetcher.submit(
       {
+        action: "like",
         post_id: postId,
         id: reply?.id,
         like: !likedByMe ? "true" : "false",
       },
       {
-        method: "post",
-        action: "api/reply/like",
+        method: "patch",
+        action: "api/reply",
       }
     );
   }

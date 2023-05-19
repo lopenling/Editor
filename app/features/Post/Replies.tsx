@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useState, useMemo, useEffect } from "react";
-import Reply from "./Reply";
+import Reply from "./Reply.client";
 
 type replyType = {
   is_approved: boolean;

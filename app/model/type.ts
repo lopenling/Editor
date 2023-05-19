@@ -55,7 +55,7 @@ export interface PostType {
   id: string;
   type: string;
   avatar: string;
-  topicId: number;
+  topic_id: number;
   postId: number;
   content: string;
   audioUrl?: string;
@@ -67,6 +67,8 @@ export interface PostType {
   text: Text;
   replies: ReplyType[];
   likedBy: UserType[];
+  replyCount?: number;
+  isSolved: boolean;
 }
 
 export interface ReplyType {

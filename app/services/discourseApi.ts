@@ -138,16 +138,16 @@ class DiscourseApi {
       ? `<audio controls id='audio_lopenling'>
   <source src="${audioUrl}" type="audio/wav">
 </audio>`
-      : null;
+      : "";
     let raw = `<p>
-    ${postString}
-     ${audioSegment}
+    ${postString + audioSegment}
     </p>
     `;
     try {
       let newPostData = {
         topic_id: TopicId,
         raw: raw,
+        reply_to_post_number: 1,
       };
       let params = new URLSearchParams(newPostData).toString();
 
@@ -163,6 +163,36 @@ class DiscourseApi {
       console.log(e);
     }
   }
+
+  async updatePost(postId: number, content: string, audioUrl: string | null) {
+    let auth_headers = this.authHeader();
+    let audioSegment = audioUrl
+      ? `<br/><audio controls id='audio_lopenling'>
+  <source src="${audioUrl}" type="audio/wav">
+</audio>`
+      : "";
+    let raw = `<p>
+    ${content + audioSegment}
+    </p>
+    `;
+
+    try {
+      const formData = new FormData();
+      formData.append("post[raw]", raw);
+      formData.append("post[edit_reason]", "nothing special");
+      const response = await fetch(
+        `${this.DiscourseUrl}/posts/${postId}.json?`,
+        {
+          method: "PUT",
+          headers: auth_headers,
+          body: formData,
+        }
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   async deletePost(postId: number) {
     let auth_headers = this.authHeader();
 
@@ -280,9 +310,19 @@ export async function createPost(
   const res = apiObj.createPost(topicId, postString, audioUrl);
   return res;
 }
+
+export async function updateDiscoursePost(
+  postId: number,
+  newContent: string,
+  audioUrl: string | null,
+  username: string
+) {
+  const apiObj: DiscourseApi = new DiscourseApi(username);
+  const res = apiObj.updatePost(postId, newContent, audioUrl);
+  return res;
+}
 export async function deletePost(postId: number, username: string) {
   const apiObj: DiscourseApi = new DiscourseApi(username);
-
   const res = apiObj.deletePost(postId);
   return res;
 }

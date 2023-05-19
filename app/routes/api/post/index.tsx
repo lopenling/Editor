@@ -3,10 +3,20 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/server-runtime";
-import { createThread, deleteDiscourseTopic } from "~/services/discourseApi";
+import {
+  createThread,
+  deleteDiscourseTopic,
+  updateDiscoursePost,
+} from "~/services/discourseApi";
 import { getUserSession } from "~/services/session.server";
 
-import { createPost as createPostOnDB, deletePost } from "~/model/post";
+import {
+  createPost as createPostOnDB,
+  deletePost,
+  findPostByUserLiked,
+  updatePostContentandAudio,
+  updatePostLike,
+} from "~/model/post";
 import { uploadAudio } from "~/services/uploadAudio.server";
 import {
   unstable_composeUploadHandlers as composeUploadHandlers,
@@ -78,6 +88,45 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
     return {
       deleted: res,
     };
+  }
+  if (request.method === "PATCH") {
+    const formData = await parseMultipartFormData(request, uploadHandler);
+    let action = formData.get("action") as string;
+    if (action === "like") {
+      let postId = formData.get("id") as string;
+      let userId = formData.get("userId") as string;
+      const likedUsers = await findPostByUserLiked(postId, userId);
+      try {
+        let response = await updatePostLike(
+          postId,
+          userId,
+          likedUsers === null
+        );
+        return response.likedBy;
+      } catch (e) {
+        console.log(e);
+      }
+
+      return { success: true };
+    }
+    if (action === "update") {
+      let newContent = formData.get("body") as string;
+      let postId = formData.get("postId") as string;
+      let audioUrl = formData.get("file") as string;
+      if (!audioUrl) {
+        audioUrl = formData.get("audioUrl") as string;
+      }
+
+      let res = await updatePostContentandAudio(postId, newContent, audioUrl);
+      if (res?.post_id)
+        await updateDiscoursePost(
+          res.post_id,
+          newContent,
+          audioUrl,
+          user.username
+        );
+      return res;
+    }
   }
   return null;
 };
