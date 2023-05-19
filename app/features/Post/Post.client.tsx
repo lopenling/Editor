@@ -78,7 +78,7 @@ function Post({ isOptimistic, post }: PostPropType) {
           userId: user.id,
           like: !likedByMe ? "true" : "false",
         },
-        { method: "patch", action: "api/post" }
+        { method: "patch", action: "api/post", encType: "multipart/form-data" }
       );
     }
   }
