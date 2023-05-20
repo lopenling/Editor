@@ -93,6 +93,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
     const formData = await parseMultipartFormData(request, uploadHandler);
     let action = formData.get("action") as string;
     if (action === "like") {
+      
       let postId = formData.get("id") as string;
       let userId = formData.get("userId") as string;
       const likedUsers = await findPostByUserLiked(postId, userId);

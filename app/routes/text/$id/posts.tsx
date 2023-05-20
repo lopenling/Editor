@@ -39,6 +39,7 @@ export default function PostContainer() {
     let selectedThread = data.threadId;
     if (selectedThread && selectedThread !== "") {
       setTimeout(() => {
+        let threadId = "p_" + selectedThread;
         document.getElementById("p_" + selectedThread)?.scrollIntoView({
           behavior: "smooth",
           block: "center",

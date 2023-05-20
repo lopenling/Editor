@@ -37,13 +37,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
     editor.commands.setContent(content);
   }, [content]);
   useEffect(() => {
-    if (thread?.id) {
-      let d = scrollThreadIntoView(thread.id);
-      scrollThreadIntoView(`p_${thread.id}`);
-      setTimeout(() => {
-        window.getSelection().selectAllChildren(d);
-      }, 100);
-    }
+    let d = scrollThreadIntoView(thread.id, `p_${thread.id}`);
   }, [thread.id]);
 
   const handleBubbleClick = (type: string) => {
