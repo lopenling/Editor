@@ -20,32 +20,37 @@ const Logo = () => (
     className="block object-contain max-h-[37px] "
   />
 );
-const LogoWithTextName = ({ textNameValue }: { textNameValue: string }) => (
-  <div className="flex items-center gap-1">
-    <Link to="/">
-      {" "}
-      <img
-        src={LogoOnly}
-        alt="logo"
-        className="hidden md:block object-contain"
-        style={{ maxHeight: "37px" }}
-      />
-    </Link>
-    <h1
-      onClick={() => {
-        let editorElement = document.getElementById("textEditorContainer");
-        editorElement?.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      }}
-      style={{ top: -10 }}
-      className="text-3xl ml-2 relative  font-bold "
-    >
-      {textNameValue}
-    </h1>
-  </div>
-);
+const LogoWithTextName = ({ textName }: { textName: string }) => {
+  if (textName.length > 20) {
+    textName = textName.slice(0, 25) + "...";
+  }
+  return (
+    <div className="flex items-center gap-1">
+      <Link to="/">
+        {" "}
+        <img
+          src={LogoOnly}
+          alt="logo"
+          className="hidden md:block object-contain"
+          style={{ maxHeight: "37px" }}
+        />
+      </Link>
+      <h1
+        onClick={() => {
+          let editorElement = document.getElementById("textEditorContainer");
+          editorElement?.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
+        style={{ top: -10 }}
+        className="text-3xl ml-2 relative  font-bold "
+      >
+        {textName}
+      </h1>
+    </div>
+  );
+};
 type HeaderProps = {
   editor: Editor | null;
 };
@@ -55,7 +60,7 @@ function Header({ editor }: HeaderProps) {
   const translation = uselitteraTranlation();
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
-  const { name: textNameValue } = useRecoilValue(textInfo);
+  const { name: textName } = useRecoilValue(textInfo);
   let user = useRecoilValue(UserState);
 
   const changeTheme = () => {
@@ -85,7 +90,7 @@ function Header({ editor }: HeaderProps) {
 
     editorElement?.addEventListener("scroll", handleScroll);
     return () => editorElement?.addEventListener("scroll", handleScroll);
-  }, [redirectTo, textNameValue]);
+  }, [redirectTo, textName]);
   let darkMode = user?.preference?.theme === "dark";
   let [showUserMenu, setShowUserMenu] = useState(false);
   let [showHeaderMenu, setShowHeaderMenu] = useState(false);
@@ -105,7 +110,7 @@ function Header({ editor }: HeaderProps) {
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
-          <LogoWithTextName textNameValue={textNameValue} />
+          <LogoWithTextName textName={textName} />
         ) : (
           <NavLink to={"/"} prefetch="intent" className="flex items-center">
             <Logo />

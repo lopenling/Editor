@@ -204,9 +204,10 @@ export default function () {
       <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div
-        className="flex-1  flex max-w-6xl w-full mx-auto "
+        className="flex-1  flex max-w-6xl w-full mx-auto  "
         style={{
           paddingTop: HEADER_HEIGHT,
+          overflowY: "hidden",
         }}
       >
         <Split
@@ -236,8 +237,9 @@ export default function () {
               <div />
             )}
           </div>
+
           <div
-            className={`md:h-screen pt-3  w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
+            className={`md:h-screen flex-1 overflow-y-auto pt-3  w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
           >
             {openSuggestion || suggestionSelected?.id ? (
               <SuggestionForm editor={editor} />
