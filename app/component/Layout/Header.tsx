@@ -14,10 +14,12 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { HEADER_HEIGHT } from "~/constants";
 import { Progress as ProgressBar } from "~/component/UI";
 import { isSmallScreen } from "~/lib";
-
+import { isMobile } from "react-device-detect";
 const Logo = () => (
   <img
-    src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
+    src={
+      "https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
+    }
     alt="logo"
     className="block object-contain max-h-[37px] "
   />
@@ -114,7 +116,11 @@ function Header({ editor }: HeaderProps) {
         {TextNameOnHeader ? (
           <LogoWithTextName textName={textName} />
         ) : (
-          <NavLink to={"/"} prefetch="intent" className="flex items-center">
+          <NavLink
+            to={"/"}
+            prefetch="intent"
+            className="flex items-center w-auto"
+          >
             <Logo />
           </NavLink>
         )}

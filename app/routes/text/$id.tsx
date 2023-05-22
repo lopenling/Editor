@@ -24,6 +24,7 @@ import { OnlineUsers } from "~/component/UI";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HEADER_HEIGHT } from "~/constants";
 import { isSmallScreen, DiffMatchPatch, useLiveLoader } from "~/lib";
+import { isMobile, isTablet } from "react-device-detect";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
@@ -212,11 +213,11 @@ export default function () {
         }}
       >
         <Split
-          minSize={isSmallScreen ? 100 : 350}
+          minSize={isMobile ? 100 : 350}
           maxSize={750}
-          className="split flex-1 flex flex-col xl:flex-row "
-          direction={isSmallScreen ? "vertical" : "horizontal"}
-          sizes={isSmallScreen ? [50, 50] : [65, 35]}
+          className="split flex-1 flex flex-col lg:flex-row "
+          direction={isMobile ? "vertical" : "horizontal"}
+          sizes={isMobile ? [50, 50] : isTablet ? [60, 40] : [65, 35]}
         >
           <div
             style={{
