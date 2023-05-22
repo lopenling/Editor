@@ -206,7 +206,7 @@ export default function () {
       <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div
-        className="flex-1  flex max-w-6xl w-full mx-auto  "
+        className="flex-1  flex max-w-6xl w-full mx-auto max-h-screen overflow-hidden "
         style={{
           paddingTop: HEADER_HEIGHT,
           overflowY: "hidden",
