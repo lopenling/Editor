@@ -13,6 +13,8 @@ import SearchString from "../../features/Editor/component/SearchString";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { HEADER_HEIGHT } from "~/constants";
 import { Progress as ProgressBar } from "~/component/UI";
+import { isSmallScreen } from "~/lib";
+
 const Logo = () => (
   <img
     src="https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
@@ -21,7 +23,7 @@ const Logo = () => (
   />
 );
 const LogoWithTextName = ({ textName }: { textName: string }) => {
-  if (textName.length > 20) {
+  if (textName.length > 20 && isSmallScreen) {
     textName = textName.slice(0, 25) + "...";
   }
   return (
@@ -31,7 +33,7 @@ const LogoWithTextName = ({ textName }: { textName: string }) => {
         <img
           src={LogoOnly}
           alt="logo"
-          className="hidden md:block object-contain"
+          className="block object-contain"
           style={{ maxHeight: "37px" }}
         />
       </Link>
@@ -117,7 +119,7 @@ function Header({ editor }: HeaderProps) {
           </NavLink>
         )}
         <button
-          onClick={() => setShowHeaderMenu(true)}
+          onClick={() => setShowHeaderMenu((p) => !p)}
           type="button"
           className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           aria-expanded="false"

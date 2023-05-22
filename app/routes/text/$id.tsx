@@ -23,7 +23,8 @@ import usePusherPresence from "~/component/hooks/usePusherPresence";
 import { OnlineUsers } from "~/component/UI";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HEADER_HEIGHT } from "~/constants";
-import { isMobile, DiffMatchPatch, useLiveLoader } from "~/lib";
+import { isSmallScreen, DiffMatchPatch, useLiveLoader } from "~/lib";
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
@@ -194,10 +195,10 @@ export default function () {
     );
   const [textHeight, setTextHeight] = useState(90);
   useEffect(() => {
-    if (isMobile) {
+    if (isSmallScreen) {
       setTextHeight(40);
     }
-  }, [isMobile]);
+  }, [isSmallScreen]);
   let isSaving = !!saveTextFetcher.formData?.get("patch");
   return (
     <div className=" flex flex-col h-screen">
@@ -211,11 +212,11 @@ export default function () {
         }}
       >
         <Split
-          minSize={!isMobile ? 350 : 100}
+          minSize={isSmallScreen ? 100 : 350}
           maxSize={750}
-          className="split flex-1 flex flex-col md:flex-row "
-          direction={!isMobile ? "horizontal" : "vertical"}
-          sizes={isMobile ? [50, 50] : [65, 35]}
+          className="split flex-1 flex flex-col xl:flex-row "
+          direction={isSmallScreen ? "vertical" : "horizontal"}
+          sizes={isSmallScreen ? [50, 50] : [65, 35]}
         >
           <div
             style={{
@@ -239,7 +240,7 @@ export default function () {
           </div>
 
           <div
-            className={`md:h-screen flex-1 overflow-y-auto pt-3  w-full bg-white dark:bg-gray-700 md:sticky md:top-0 rounded-sm`}
+            className={`lg:h-screen flex-1 overflow-y-auto pt-3  w-full bg-white dark:bg-gray-700 lg:sticky lg:top-0 rounded-sm`}
           >
             {openSuggestion || suggestionSelected?.id ? (
               <SuggestionForm editor={editor} />

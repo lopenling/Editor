@@ -4,7 +4,8 @@ import useFetcherWithPromise from "./useFetcherPromise";
 import { useLiveLoader } from "./useLiveLoader";
 import getFormattedDate, { timeAgo } from "./getFormatedDate";
 import DiffMatchPatch from "diff-match-patch";
-import { isMobile } from "react-device-detect";
+import { isMobile, isTablet } from "react-device-detect";
+let isSmallScreen = isMobile || isTablet;
 export {
   copyToClipboard,
   fullSearch,
@@ -13,5 +14,5 @@ export {
   getFormattedDate,
   timeAgo,
   DiffMatchPatch,
-  isMobile,
+  isSmallScreen,
 };

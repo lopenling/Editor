@@ -12,7 +12,7 @@ import {
   selectedPostThread,
   selectedTextOnEditor,
 } from "~/states";
-import { isMobile } from "react-device-detect";
+import { isSmallScreen } from "~/lib";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { changeFont, exportDoc, scrollThreadIntoView } from "../lib";
 import { Spinner } from "~/component/UI";
@@ -31,7 +31,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
 
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [fontSize, setFontSize] = useState(
-    isMobile ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
+    isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
   );
   useEffect(() => {
     editor.commands.setContent(content);
@@ -148,7 +148,9 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
           editor={editor}
           className="editor transition-all"
           style={{
-            fontSize: isMobile ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE,
+            fontSize: isSmallScreen
+              ? DEFAULT_FONT_SIZE_MOBILE
+              : DEFAULT_FONT_SIZE,
           }}
         />
       )}
@@ -182,7 +184,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
           editor={editor}
           tippyOptions={{
             appendTo: "parent",
-            placement: isMobile ? "bottom" : "top",
+            placement: isSmallScreen ? "bottom" : "top",
           }}
         >
           <div className="inline-flex rounded-md shadow-sm" role="group">
