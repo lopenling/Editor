@@ -36,7 +36,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         let result = await fetch(url);
         let res = await result.json();
         avatarUrl =
-          "http://lopenling.org" +
+          "https://lopenling.org" +
           res?.user?.avatar_template.replace("{size}", "30");
       }
 

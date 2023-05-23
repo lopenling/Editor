@@ -52,7 +52,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
     };
   };
 
-  let avatar_img = ("http://lopenling.org" + reply?.avatar_template).replace(
+  let avatar_img = ("https://lopenling.org" + reply?.avatar_template).replace(
     "{size}",
     "30"
   );
