@@ -2,7 +2,7 @@ import { LoaderFunction, ActionFunction } from "@remix-run/server-runtime";
 import { json } from "react-router";
 import { findTextByTextId, updateText } from "~/model/text";
 import pusher from "~/services/pusher.server";
-import * as diffMatchPatch from "diff-match-patch";
+import diffMatchPatch from "diff-match-patch";
 import { getUserSession } from "~/services/session.server";
 import { TextType } from "~/model/type";
 
