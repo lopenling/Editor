@@ -9,12 +9,11 @@ import uselitteraTranlation, {
 import { useRecoilValue } from "recoil";
 import { UserState, textInfo } from "~/states";
 import { Editor } from "@tiptap/react";
-import SearchString from "../../features/Editor/component/SearchString";
+import { SearchString } from "~/features/Editor";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { HEADER_HEIGHT } from "~/constants";
 import { Progress as ProgressBar } from "~/component/UI";
 import { isSmallScreen } from "~/lib";
-import { isMobile } from "react-device-detect";
 const Logo = () => (
   <img
     src={
@@ -61,7 +60,7 @@ type HeaderProps = {
 function Header({ editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
-  const translation = uselitteraTranlation();
+  const translation: any = uselitteraTranlation();
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
   const { name: textName } = useRecoilValue(textInfo);
@@ -265,7 +264,7 @@ function Header({ editor }: HeaderProps) {
                         <a
                           target={"_blank"}
                           href={`https://lopenling.org/u/${user?.username}/preferences/account`}
-                          className="block truncate flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                          className=" truncate flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                         >
                           <svg
                             width="20"

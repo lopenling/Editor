@@ -20,3 +20,28 @@ export async function createCommentOnSuggestion(
   });
   return comment;
 }
+
+export async function deleteCommentOnSuggestion(id: number) {
+  const comment = await db.suggestionComment.delete({
+    where: {
+      id,
+    },
+  });
+  return comment;
+}
+export async function updateCommentOnSuggestion(
+  id: number,
+  newContent: string,
+  type: string
+) {
+  const comment = await db.suggestionComment.update({
+    where: {
+      id,
+    },
+    data: {
+      text: newContent,
+      type,
+    },
+  });
+  return comment;
+}

@@ -71,9 +71,9 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
     onTriggered: () => setOpenEditMenu(false),
   });
 
-  const handleFontSizeChange = (e) => {
-    let value = e.target.value;
-    setFontSize(value);
+  const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value: string = e.target.value;
+    setFontSize(parseInt(value));
     changeFont(value);
   };
 
@@ -153,6 +153,16 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
               : DEFAULT_FONT_SIZE,
           }}
         />
+      )}
+      {!content && (
+        <div
+          style={{
+            height: "80vh",
+            width: "100%",
+          }}
+        >
+          <Spinner />
+        </div>
       )}
       {editor && (
         <BubbleMenu

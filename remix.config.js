@@ -10,11 +10,13 @@ module.exports = {
       : undefined,
   serverBuildPath: ".netlify/functions-internal/server.js",
   // appDirectory: "app",
-  // assetsBuildDirectory: "public/build",
+  assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
-
-  routes(defineRoutes) {
-    // uses the v1 convention, works in v1.15+ and v2
-    return createRoutesFromFolders(defineRoutes);
+  future: {
+    v2_routeConvention: true,
   },
+  // routes(defineRoutes) {
+  //   // uses the v1 convention, works in v1.15+ and v2
+  //   return createRoutesFromFolders(defineRoutes);
+  // },
 };

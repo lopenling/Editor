@@ -15,7 +15,7 @@ export async function findAllText(id = true, name = true, content = false) {
       },
     });
     return text;
-  } catch (e) {
+  } catch (e: any) {
     throw new Error("fetching text error" + e.message);
   }
 }
@@ -25,7 +25,7 @@ export async function searchTextWithName(search_term = "") {
     let result = fullSearch(textList, search_term);
 
     return result;
-  } catch (e) {
+  } catch (e: any) {
     throw new Error("error finding text with name" + e.message);
   }
 }
@@ -41,11 +41,13 @@ export async function findTextByTextId(id: number, content: boolean = false) {
         id: true,
         name: true,
         userId: true,
+        author: true,
       },
     });
+    if (text === null) throw new Error("text not available");
     return text;
-  } catch (e) {
-    return "cannot find text with error " + e.message;
+  } catch (e: any) {
+    throw new Error("cannot find text with error " + e.message);
   }
 }
 
@@ -60,7 +62,7 @@ export async function createText(name: string, content: string, id: string) {
       },
     });
     return res;
-  } catch (e) {
+  } catch (e: any) {
     throw new Error("create text error" + e.message);
   }
 }
@@ -73,7 +75,7 @@ export async function deleteText(id: string) {
       },
     });
     return res;
-  } catch (e) {
+  } catch (e: any) {
     throw new Error("delete text error" + e.message);
   }
 }
@@ -90,7 +92,7 @@ export async function updateText(id: number, content: string) {
       },
     });
     return res;
-  } catch (e) {
+  } catch (e: any) {
     throw new Error("update text error" + e.message);
   }
 }

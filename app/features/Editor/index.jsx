@@ -1,4 +1,4 @@
-import EditorContainer from "./component/EditorContainer";
-import SearchString from "./component/SearchString";
+import EditorContainer from "./component/EditorContainer.client";
+import SearchString from "./component/SearchString.client";
 
 export { EditorContainer, SearchString };

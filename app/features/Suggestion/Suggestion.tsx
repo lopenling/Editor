@@ -10,7 +10,7 @@ import { AudioPlayer, AudioRecorder } from "../Media";
 import { v4 as uuidv4 } from "uuid";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { replaceMarkContent } from "~/features/Editor/tiptap/markAction";
-import { SuggestionCommentType, SuggestionType } from "~/model/type";
+import { SuggestionType } from "~/model/type";
 import Comment from "./Comment";
 
 type SuggestionProps = {
@@ -32,6 +32,7 @@ export default function Suggestion({
   const [openEdit, setOpenEdit] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
+  const { text } = useLoaderData();
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
@@ -91,7 +92,7 @@ export default function Suggestion({
       editor?.commands.unsetSuggestion();
     }
   }
-
+  if (!suggest.user) return null;
   return (
     <div
       key={suggest.id}
@@ -166,9 +167,10 @@ export default function Suggestion({
       <div className=" w-full text-base leading-normal text-black mb-3">
         <span className="font-bold text-sm">Replace :</span>
         <span
-          // onClick={() =>
-          //   replaceMarkContent(editor, suggest.threadId, suggest.oldValue)
-          // }
+          onClick={() => {
+            if (text.author.username === user.username)
+              replaceMarkContent(editor, suggest.threadId, suggest.oldValue);
+          }}
           className={`text-gray-500 dark:text-gray-100`}
         >
           "{suggest.oldValue}"
@@ -200,9 +202,10 @@ export default function Suggestion({
           </editFetcher.Form>
         ) : (
           <span
-            // onClick={() =>
-            //   replaceMarkContent(editor, suggest.threadId, suggest.newValue)
-            // }
+            onClick={() => {
+              if (text.author.username === user.username)
+                replaceMarkContent(editor, suggest.threadId, suggest.newValue);
+            }}
             className={`text-gray-500 dark:text-gray-100 `}
           >
             "{suggest.newValue}"

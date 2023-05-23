@@ -46,10 +46,10 @@ export interface SuggestionCommentType {
   suggestion: SuggestionType;
   suggestionId: string;
   author: UserType;
-  created_at: Date;
+  createdAt: Date;
   updated_at: Date;
   userId: string;
-  type?: string;
+  type?: "support" | "reject" | null;
 }
 export interface PostType {
   id: string;
@@ -86,4 +86,14 @@ export interface FilterType {
   };
   user: string[];
   solved: "both" | "solved";
+}
+
+export interface TextType {
+  id: number;
+  name: string;
+  author?: any;
+  content: string;
+  Post?: PostType[];
+  Suggestion?: SuggestionType[];
+  userId?: string | null;
 }
