@@ -59,7 +59,6 @@ export default function Suggestion({
     const res = await likeFetcher.submit(
       {
         id,
-        userId: user.id,
         like: !likedByMe ? "true" : "false",
         threadId: suggest.threadId,
       },

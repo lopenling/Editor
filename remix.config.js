@@ -14,6 +14,7 @@ module.exports = {
   // publicPath: "/build/",
   future: {
     v2_routeConvention: true,
+    v2_errorBoundary: true,
   },
   // routes(defineRoutes) {
   //   // uses the v1 convention, works in v1.15+ and v2

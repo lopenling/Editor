@@ -6,6 +6,7 @@ import getFormattedDate, { timeAgo } from "./getFormatedDate";
 import DiffMatchPatch from "diff-match-patch";
 import { isMobile, isTablet } from "react-device-detect";
 let isSmallScreen = isMobile || isTablet;
+import trigerUpdate from "./trigetPusherUpdate.server";
 export {
   copyToClipboard,
   fullSearch,
@@ -15,4 +16,5 @@ export {
   timeAgo,
   DiffMatchPatch,
   isSmallScreen,
+  trigerUpdate,
 };

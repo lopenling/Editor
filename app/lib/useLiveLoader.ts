@@ -15,6 +15,7 @@ export function useLiveLoader<T>() {
     });
     const channel = pusher.subscribe(`presence-text_${text.id}`);
     let handleUpdate = (e) => {
+      console.log(e);
       setData(e);
     };
     channel.bind("update-app", handleUpdate);

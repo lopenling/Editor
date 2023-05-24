@@ -24,6 +24,7 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from "@remix-run/node";
 import type { ActionArgs, UploadHandler } from "@remix-run/node";
+import { trigerUpdate } from "~/lib";
 
 export const action: ActionFunction = async ({ request }: ActionArgs) => {
   const uploadHandler: UploadHandler = composeUploadHandlers(
@@ -97,12 +98,12 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
       let userId = formData.get("userId") as string;
       const likedUsers = await findPostByUserLiked(postId, userId);
       try {
-        let response = await updatePostLike(
-          postId,
-          userId,
-          likedUsers === null
-        );
-        return response.likedBy;
+        let res = await updatePostLike(postId, userId, likedUsers === null);
+
+        if (res.textId) {
+          await trigerUpdate(user, res.textId);
+        }
+        return res.likedBy;
       } catch (e) {
         console.log(e);
       }

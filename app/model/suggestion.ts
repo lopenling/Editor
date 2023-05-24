@@ -158,7 +158,7 @@ export async function findSuggestionWithMostLikes(id: string) {
       ],
       take: 1,
     });
-    return mostLikedSuggestion;
+    return mostLikedSuggestion[0];
   } catch (e) {
     console.warn(e);
   }

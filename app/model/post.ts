@@ -140,6 +140,7 @@ export async function updatePostLike(
       },
       select: {
         likedBy: true,
+        textId: true,
       },
     });
     return response;

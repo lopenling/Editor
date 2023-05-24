@@ -1,15 +1,15 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import {
-  Link,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useFetcher,
   useLoaderData,
   useNavigation,
+  isRouteErrorResponse,
+  useRouteError,
 } from "@remix-run/react";
 import ErrorPage from "./component/Layout/ErrorPage";
 import { getUserSession } from "./services/session.server";
@@ -49,30 +49,27 @@ export function links() {
   ];
 }
 
-export function CatchBoundary() {
-  return (
-    <>
-      <head>
-        <Meta />
-        <Links />
-        <title>Error</title>
-      </head>
-      <ErrorPage />;
-    </>
-  );
-}
+export function ErrorBoundary() {
+  const error = useRouteError();
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <body>
-      <h1 className=" text-3xl text-red-600 font-sans">App Error</h1>
-      <pre color="red">{error?.message}</pre>
-      <p>
-        try to go to
-        <Link to={"/"}> home page</Link>
-      </p>
-    </body>
-  );
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>{error.status}</h1>
+        <ErrorPage message={error.data} />
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <ErrorPage message={error.message} />
+        <p>The stack trace is:</p>
+        <p>{error.stack}</p>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }
 
 function App() {

@@ -59,7 +59,7 @@ export default function Index() {
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
-    let p = params.get("s");
+    let p = params.get("search");
     if (!p) {
       setSearchInput("");
     } else {
@@ -68,7 +68,7 @@ export default function Index() {
   }, [params]);
   const lists = data.textList;
   const isLoading =
-    navigation.formData?.get("s") && navigation.state === "loading";
+    navigation.formData?.get("search") && navigation.state === "loading";
   if (lists?.message)
     return <div className="text-red-400">{lists?.message}</div>;
   return (

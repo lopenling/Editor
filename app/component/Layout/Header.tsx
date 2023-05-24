@@ -226,7 +226,7 @@ function Header({ editor }: HeaderProps) {
 
                       <div
                         onClick={changeTheme}
-                        className="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                        className={` cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white`}
                       >
                         {darkMode ? (
                           <div className="flex gap-2 ">
@@ -235,7 +235,10 @@ function Header({ editor }: HeaderProps) {
                               viewBox="0 0 20 20"
                               fill="currentColor"
                               aria-hidden="true"
-                              className="w-5 h-5"
+                              className={`${
+                                themeFetcher.formData?.get("theme") &&
+                                "animate-spin"
+                              } w-5 h-5`}
                             >
                               <path
                                 fillRule="evenodd"
@@ -252,7 +255,10 @@ function Header({ editor }: HeaderProps) {
                               viewBox="0 0 20 20"
                               fill="currentColor"
                               aria-hidden="true"
-                              className="w-5 h-5"
+                              className={`${
+                                themeFetcher.formData?.get("theme") &&
+                                "animate-spin"
+                              } w-5 h-5`}
                             >
                               <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                             </svg>

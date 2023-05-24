@@ -9,11 +9,11 @@ export const loader: LoaderFunction = async ({
   params,
   request,
 }: LoaderArgs) => {
-  const id = parseInt(params.id);
+  const id = parseInt(params?.id!);
   const post = await findPostByTopicId(id);
-  let posts: [] = [];
+  let posts: any[] = [];
   const data = getposts(id);
-  const replyListPromise = findReplyByPostId(post.id);
+  const replyListPromise = findReplyByPostId(post?.id);
   let [postsData, replyList] = await Promise.all([data, replyListPromise]);
   let postsList = postsData.post_stream?.posts;
   posts = combineArrays(replyList, postsList);

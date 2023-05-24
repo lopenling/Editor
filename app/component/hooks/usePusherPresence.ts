@@ -54,22 +54,6 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText) => {
     };
     const handleUpdate = (e) => {
       fetchUpdateText();
-      if (channel.members.me.id !== e.userId) {
-        revalidator.revalidate();
-        Store.addNotification({
-          title: "updated",
-          message: e.userName + " made edit",
-          type: "info",
-          insert: "bottom",
-          container: "bottom-left",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 3000,
-            onScreen: true,
-          },
-        });
-      }
     };
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
     channel.bind("pusher:member_added", handleMemberAdded);

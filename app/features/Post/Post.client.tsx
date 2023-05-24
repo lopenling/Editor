@@ -151,13 +151,9 @@ function Post({ isOptimistic, post }: PostPropType) {
               src={creatorUser.avatarUrl}
               alt="Extra small avatar"
             ></img>
-            <a
-              href={`https://lopenling.org/t/${topicId}`}
-              target="_blank"
-              className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200"
-            >
+            <div className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
               {creatorUser.name}
-            </a>
+            </div>
             {isSolved && (
               <svg
                 width="14"
@@ -246,7 +242,9 @@ function Post({ isOptimistic, post }: PostPropType) {
                 onClose={() => setEdit(false)}
               />
             ) : (
-              <p dangerouslySetInnerHTML={{ __html: Postcontent }} />
+              <a href={`https://lopenling.org/t/${topicId}`} target="_blank">
+                <p dangerouslySetInnerHTML={{ __html: Postcontent }} />
+              </a>
             )}
           </div>
           {audioUrl && audioUrl?.length > 0 && !edit && (

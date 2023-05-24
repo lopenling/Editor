@@ -5,6 +5,7 @@ import pusher from "~/services/pusher.server";
 import diffMatchPatch from "diff-match-patch";
 import { getUserSession } from "~/services/session.server";
 import { TextType } from "~/model/type";
+import { trigerUpdate } from "~/lib";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const textId = new URL(request.url).searchParams.get("textId") ?? "";
@@ -23,13 +24,7 @@ export let action: ActionFunction = async ({ request }) => {
   try {
     if (result.every((element: any) => element === true)) {
       const res = await updateText(parseInt(id), newText);
-      if (res.id) {
-        let channelId = "presence-text_" + id;
-        await pusher.trigger(channelId, "update-app", {
-          userId: user.id,
-          userName: user.username,
-        });
-      }
+      await trigerUpdate(user, parseInt(id));
       return res;
     }
     return null;

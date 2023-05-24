@@ -1,24 +1,27 @@
 import { Link } from "@remix-run/react";
 
-export default function ErrorPage() {
+type error = { message: string };
+export default function ErrorPage({ message }: error) {
   return (
-    <main className="flex h-screen w-full flex-col items-center justify-center bg-slate-500">
-      <h1 className="text-9xl font-extrabold tracking-widest text-white">
-        404
-      </h1>
-      <div className="absolute rotate-12 rounded bg-[#FF6A3D] px-2 text-sm">
-        Page Not Found
-      </div>
-      <button className="mt-5">
-        <a className="group relative inline-block text-sm font-medium text-[#FF6A3D] focus:outline-none focus:ring active:text-orange-500">
-          <span className="absolute inset-0 translate-x-0.5 translate-y-0.5 bg-[#FF6A3D] transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
-          <Link to="/">
-            <span className="relative block border border-current bg-[#1A2238] px-8 py-3 text-white">
-              Go Home
-            </span>
-          </Link>
-        </a>
-      </button>
-    </main>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <p className="text-gray-700 mb-4">{message}</p>
+      <a
+        href="/"
+        style={{ textDecoration: "none", marginLeft: 10 }}
+        className=" bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 no-underline"
+      >
+        [Home page]
+      </a>
+      <img
+        src="https://st.depositphotos.com/1006899/2650/i/600/depositphotos_26505551-stock-photo-error-metaphor.jpg"
+        alt="errorMessage"
+      />
+    </div>
   );
 }

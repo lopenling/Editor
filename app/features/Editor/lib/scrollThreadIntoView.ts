@@ -1,4 +1,5 @@
 export function scrollThreadIntoView(thread: string, thread2: string) {
+  if (!thread || !thread2) return null;
   let doc = document.getElementById(thread);
   let doc2 = document.getElementById(thread2);
   if (doc && doc2) scrollElementsIntoView(doc, doc2);
