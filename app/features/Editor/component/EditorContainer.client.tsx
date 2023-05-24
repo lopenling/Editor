@@ -81,7 +81,14 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
     <div className=" relative shadow-sm  mb-4">
       <div className=" bg-white dark:bg-gray-700 z-10  text-3xl  font-bold  text-light py-4 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
         <h3 className="textname flex gap-2 text-2xl">
-          {data?.text?.name} {isSaving && <Spinner />}
+          <div className="flex items-center gap-2">
+            {data?.text?.name}
+            {isSaving && (
+              <span className="text-sm font-light animate-pulse">
+                saving...
+              </span>
+            )}
+          </div>
         </h3>
         <button
           className="inline-flex text-gray-800 hover:text-white p-2 items-center text-sm font-medium text-center  bg-gray-300  hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600 dark:text-white"
@@ -147,11 +154,12 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
       ) : (
         <EditorContent
           editor={editor}
-          className="editor transition-all"
+          className="editor transition-all "
           style={{
             fontSize: isSmallScreen
               ? DEFAULT_FONT_SIZE_MOBILE
               : DEFAULT_FONT_SIZE,
+            pointerEvents: isSaving ? "none" : "all",
           }}
         />
       )}
