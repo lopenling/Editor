@@ -67,7 +67,6 @@ export default function PostContainer() {
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
   const data = useLiveLoader<typeof loader>();
-
   const { editor }: { editor: Editor } = useOutletContext();
   return (
     <>

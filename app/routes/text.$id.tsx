@@ -1,6 +1,12 @@
 import { defer, MetaFunction } from "@remix-run/node";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import { useFetcher, Link, Outlet, Await } from "@remix-run/react";
+import {
+  useFetcher,
+  Link,
+  Outlet,
+  Await,
+  useLoaderData,
+} from "@remix-run/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
 import { EditorContainer } from "~/features/Editor";
@@ -25,13 +31,16 @@ import { OnlineUsers } from "~/component/UI";
 import { HEADER_HEIGHT } from "~/constants";
 import { isSmallScreen, DiffMatchPatch, useLiveLoader } from "~/lib";
 import { isMobile, isTablet } from "react-device-detect";
+import { getUserSession } from "~/services/session.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, false);
   const suggestions = await findAllSuggestionByTextId(text_id);
+  const user = await getUserSession(request);
   return defer({
+    user,
     text,
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
@@ -64,7 +73,7 @@ export default function () {
   const setTextName = useSetRecoilState(textInfo);
   const [contentData, setContent] = useState("");
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
-  const user = useRecoilValue(UserState);
+  const { user } = useLoaderData();
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );
@@ -93,7 +102,8 @@ export default function () {
     `presence-text_${data.text.id}`,
     data.pusher_env.key,
     data.pusher_env.cluster,
-    fetchUpdateText
+    fetchUpdateText,
+    user
   );
   useEffect(() => {
     fetchUpdateText();
