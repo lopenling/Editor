@@ -27,10 +27,11 @@ function Posts({ editor }: PostPropsType) {
     <>
       <ClientOnly fallback={<></>}>{() => <Filter />}</ClientOnly>
       <div
-        className=" flex flex-col relative overflow-y-auto pr-3"
+        className=" flex flex-col relative overflow-y-auto pr-3 "
         style={{
           height: "min-content",
           maxHeight: "80vh",
+          fontFamily: "sans-serif",
         }}
       >
         <Suspense fallback="loading">

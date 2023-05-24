@@ -250,9 +250,7 @@ export default function Suggestion({
             </div>
             <div
               onClick={() => setOpenComment((prev) => !prev)}
-              className={`flex items-start justify-start space-x-1.5  rounded-t-lg ${
-                openComment && "bg-gray-100"
-              }`}
+              className={`flex items-start justify-start space-x-1.5  rounded-t-lg `}
             >
               <svg
                 width="16"

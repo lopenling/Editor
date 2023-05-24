@@ -139,9 +139,10 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
           </ul>
         </div>
       </div>
+
       {!editor ? (
         <div className="flex justify-center h-[400px] w-full animate-pulse">
-          <div className="flex w-full h-full bg-gray-300 dark:bg-gray-700"></div>
+          <div className="flex-1 mr-2 h-full bg-gray-300 dark:bg-gray-700"></div>
         </div>
       ) : (
         <EditorContent
@@ -155,13 +156,16 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
         />
       )}
       {!content && (
-        <div
-          style={{
-            height: "80vh",
-            width: "100%",
-          }}
-        >
-          <Spinner />
+        <div className="flex  h-[400px] w-full animate-pulse ">
+          <div role="status" className="flex-1 mr-2  max-w-sm animate-pulse">
+            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
+            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
+            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
+            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
+            <span className="sr-only">Loading...</span>
+          </div>
         </div>
       )}
       {editor && (

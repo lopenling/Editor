@@ -1,4 +1,4 @@
-import { useEffect, memo } from "react";
+import { memo } from "react";
 import { ReactNotifications } from "react-notifications-component";
 type OnlineUsersPropsType = {
   onlineMembers: { id: string; info: { avatarUrl: string } }[];
@@ -9,6 +9,7 @@ const OnlineUsers = ({ onlineMembers, count }: OnlineUsersPropsType) => {
   return (
     <>
       <ReactNotifications />
+
       <div className="fixed bottom-2 right-2 p-2 z-50 bg-green-200 rounded">
         {onlineMembers && (
           <div className="flex gap-2">

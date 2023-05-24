@@ -7,6 +7,7 @@ import DiffMatchPatch from "diff-match-patch";
 import { isMobile, isTablet } from "react-device-detect";
 let isSmallScreen = isMobile || isTablet;
 import trigerUpdate from "./trigetPusherUpdate.server";
+import containTibetanletter from "./containsTIbetanWord";
 export {
   copyToClipboard,
   fullSearch,
@@ -17,4 +18,5 @@ export {
   DiffMatchPatch,
   isSmallScreen,
   trigerUpdate,
+  containTibetanletter,
 };

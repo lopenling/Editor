@@ -19,7 +19,7 @@ function Suggestions({
   return (
     <div
       className="p-2 ml-2 bg-slate-50 dark:bg-gray-700 shadow-md mt-4 h-[80vh] max-h-[80vh] overflow-visible overflow-y-auto z-1"
-      style={{ minWidth: 350 }}
+      style={{ minWidth: 350, fontFamily: "sans-serif" }}
     >
       <div className="flex flex-col  gap-2 ">
         <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">

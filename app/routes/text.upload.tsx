@@ -24,7 +24,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!user) return redirect("/");
   let textList = await findAllText();
   if (user.admin !== "true")
-    textList = textList.filter((text) => text.userId == user.id);
+    textList = textList.filter((text) => text.userId === user.id);
+
   return { textList, user };
 };
 export const action: ActionFunction = async ({ request }) => {

@@ -13,7 +13,7 @@ import { SearchString } from "~/features/Editor";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { HEADER_HEIGHT } from "~/constants";
 import { Progress as ProgressBar } from "~/component/UI";
-import { isSmallScreen } from "~/lib";
+import { containTibetanletter, isSmallScreen } from "~/lib";
 const Logo = () => (
   <img
     src={
@@ -46,7 +46,7 @@ const LogoWithTextName = ({ textName }: { textName: string }) => {
             behavior: "smooth",
           });
         }}
-        style={{ top: -10 }}
+        style={{ top: containTibetanletter(textName) ? -10 : 0 }}
         className="text-3xl ml-2 relative  font-bold "
       >
         {textName}
@@ -109,6 +109,7 @@ function Header({ editor }: HeaderProps) {
       className="header fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-gray-900 shadow-header "
       style={{
         height: showHeaderMenu ? "min-content" : HEADER_HEIGHT,
+        fontFamily: "serif",
       }}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">

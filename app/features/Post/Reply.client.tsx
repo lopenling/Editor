@@ -123,7 +123,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
         {extractAudioInfo(reply.cooked).text}
       </p>
       <AudioPlayer src={extractAudioInfo(reply.cooked)?.source} />
-      <div className="flex justify-between mt-3">
+      <div className="flex justify-between mt-3 mb-2">
         <div className="flex gap-2">
           <button
             disabled={!!replyLikeFetcher.formData || !user}
@@ -214,6 +214,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
           </div>
         )}
       </div>
+      <hr />
     </div>
   );
 }
