@@ -37,10 +37,10 @@ import { ClientOnly } from "remix-utils";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
-  if (!text_id) throw new Error("not valid textId");
   const text = await findTextByTextId(text_id, false);
   const suggestions = await findAllSuggestionByTextId(text_id);
   const user = await getUserSession(request);
+  console.log(text, user, suggestions, text_id);
   return defer({
     user,
     text,
@@ -94,7 +94,7 @@ export default function () {
     });
   }
   function fetchUpdateText() {
-    fetch(`/api/text?textId=${data.text.id}`)
+    fetch(`/api/text?textId=${data?.text?.id}`)
       .then((res) => res.json())
       .then((data) => {
         setContent(data.content);
