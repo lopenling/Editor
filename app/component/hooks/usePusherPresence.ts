@@ -38,7 +38,7 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText, user) => {
       channel.unbind();
       pusher.unsubscribe(channelName);
     };
-  }, [channelName, user.id, revalidate]);
+  }, [channelName, user?.id, revalidate]);
   return { onlineMembers };
 };
 

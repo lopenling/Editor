@@ -40,7 +40,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const text = await findTextByTextId(text_id, false);
   const suggestions = await findAllSuggestionByTextId(text_id);
   const user = await getUserSession(request);
-  console.log(text, user, suggestions, text_id);
   return defer({
     user,
     text,
