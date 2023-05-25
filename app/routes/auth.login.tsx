@@ -110,7 +110,14 @@ export let action: ActionFunction = async ({ request, context }) => {
       );
       return requireSession;
     }
-    return redirect(redirectTo);
+    const session = await getSession(request.headers.get("Cookie"));
+    session.set("user", { ...user });
+
+    return redirect(redirectTo, {
+      headers: {
+        "set-cookie": await commitSession(session, { sameSite: "lax" }),
+      },
+    });
   }
   return null;
 };
