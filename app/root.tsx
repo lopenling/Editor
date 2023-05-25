@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   let user = await getUser(userSession.id);
   return { user };
 };
-
 export function links() {
   return [
     {

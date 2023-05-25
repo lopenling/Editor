@@ -1,7 +1,12 @@
 import { Suspense, useEffect } from "react";
 import PostForm from "~/features/Post/PostForm";
-import { Await, useOutletContext, useSearchParams } from "@remix-run/react";
-import Posts from "~/features/Post/Posts";
+import {
+  Await,
+  ShouldRevalidateFunction,
+  useOutletContext,
+  useSearchParams,
+} from "@remix-run/react";
+import Posts from "~/features/Post/Posts.client";
 import { Dropdown } from "flowbite-react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -15,6 +20,7 @@ import { LoaderFunction, defer, redirect } from "@remix-run/node";
 import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 import { useLiveLoader } from "~/lib";
+import { ClientOnly } from "remix-utils";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.id && parseInt(params.id);
@@ -31,6 +37,7 @@ export const ErrorBoundary = ({ error }) => {
 };
 
 export default function PostContainer() {
+  const data = useLiveLoader<typeof loader>();
   let [, setParams] = useSearchParams();
   let [selectedPostThread, setSelectedThread] = useRecoilState(
     selectedPostThreadState
@@ -66,7 +73,6 @@ export default function PostContainer() {
   const [isLatestPost, setIsLatestPost] = useRecoilState(showLatest);
   const setOpenFilter = useSetRecoilState(openFilterState);
   const translation = uselitteraTranlation();
-  const data = useLiveLoader<typeof loader>();
   const { editor }: { editor: Editor } = useOutletContext();
   return (
     <>
@@ -138,11 +144,13 @@ export default function PostContainer() {
         </button>
       </div>
       <PostForm />
-      <Suspense fallback={<div>loading</div>}>
-        <Await resolve={data.posts}>
-          <Posts editor={editor} />
-        </Await>
-      </Suspense>
+      <ClientOnly fallback={<div>loading</div>}>
+        {() => (
+          <Await resolve={data.posts}>
+            <Posts editor={editor} />
+          </Await>
+        )}
+      </ClientOnly>
     </>
   );
 }

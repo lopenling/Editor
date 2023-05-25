@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import Pusher from "pusher-js";
-import { Store } from "react-notifications-component";
 import { useRevalidator } from "@remix-run/react";
 
 const usePusherPresence = (channelName, id, cluster, fetchUpdateText, user) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
   const { revalidate } = useRevalidator();
+
   useEffect(() => {
     const pusher = new Pusher(id, {
       cluster,
@@ -26,23 +26,19 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText, user) => {
     };
     const handleUpdate = (e) => {
       fetchUpdateText();
-    };
-    let handleUpdateLoader = (e) => {
-      if (e.userId == user.id) return null;
       revalidate();
     };
+
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
     channel.bind("pusher:member_added", handleMemberAdded);
     channel.bind("pusher:member_removed", handleMemberRemoved);
 
     channel.bind("update-app", handleUpdate);
-    channel.bind("revalidate", handleUpdateLoader);
     return () => {
       channel.unbind();
       pusher.unsubscribe(channelName);
     };
-  }, [channelName, user]);
-
+  }, [channelName, user.id, revalidate]);
   return { onlineMembers };
 };
 

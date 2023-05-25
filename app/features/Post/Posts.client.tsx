@@ -1,6 +1,5 @@
 import { Editor } from "@tiptap/react";
 import { Suspense, memo } from "react";
-import { timeAgo, useLiveLoader } from "~/lib";
 import Post from "./Post.client";
 import { useRecoilValue } from "recoil";
 import { filterDataState, showLatest } from "~/states";

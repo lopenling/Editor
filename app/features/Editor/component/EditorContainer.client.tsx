@@ -17,7 +17,7 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { changeFont, exportDoc, scrollThreadIntoView } from "../lib";
 import { Spinner } from "~/component/UI";
 type EditorContainerProps = {
-  editor: Editor;
+  editor: Editor | null;
   isSaving: boolean;
   content: string;
 };
@@ -34,7 +34,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
     isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
   );
   useEffect(() => {
-    editor.commands.setContent(content);
+    editor?.commands.setContent(content);
   }, [content]);
   useEffect(() => {
     let d = scrollThreadIntoView(thread.id, `p_${thread.id}`);

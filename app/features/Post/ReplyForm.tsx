@@ -22,7 +22,7 @@ export default function ReplyForm({
 
   const [textArea, setTextArea] = useState("");
   useEffect(() => {
-    if (postFetcher.type === "done") {
+    if (postFetcher.state === "idle") {
       updateReplyCount();
       closeReply();
     }

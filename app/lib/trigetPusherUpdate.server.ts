@@ -4,7 +4,7 @@ import pusher from "~/services/pusher.server";
 async function trigerUpdate(user: UserType, textId: number) {
   if (textId) {
     let channelId = `presence-text_${textId}`;
-    return await pusher.trigger(channelId, "revalidate", {
+    return await pusher.trigger(channelId, "update-app", {
       userId: user?.id,
       userName: user?.username,
     });

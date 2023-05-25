@@ -14,7 +14,7 @@ import { HEADER_HEIGHT } from "~/constants";
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get("search")?.trim();
   let headers = {
-    "Cache-Control": "max-age=60, s-maxage=60480",
+    "Cache-Control": "max-age=15, s-maxage=60480,stale-while-revalidate=60",
   };
   if (searchText) {
     let obj = await searchTextWithName(searchText);

@@ -6,6 +6,7 @@ import {
   Outlet,
   Await,
   useLoaderData,
+  useRevalidator,
 } from "@remix-run/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
@@ -32,6 +33,7 @@ import { HEADER_HEIGHT } from "~/constants";
 import { isSmallScreen, DiffMatchPatch, useLiveLoader } from "~/lib";
 import { isMobile, isTablet } from "react-device-detect";
 import { getUserSession } from "~/services/session.server";
+import { ClientOnly } from "remix-utils";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
@@ -108,6 +110,7 @@ export default function () {
   useEffect(() => {
     fetchUpdateText();
   }, []);
+
   const getQuery = useCallback(
     (newContent: string) => {
       let oldContent = contentData;
@@ -211,6 +214,8 @@ export default function () {
     }
   }, [isSmallScreen]);
   let isSaving = !!saveTextFetcher.formData?.get("patch");
+
+  if (!editor) return null;
   return (
     <div className=" flex flex-col h-screen">
       <Header editor={editor} />
@@ -239,15 +244,15 @@ export default function () {
             }}
             id="textEditorContainer"
           >
-            {editor ? (
-              <EditorContainer
-                editor={editor}
-                isSaving={isSaving}
-                content={contentData}
-              />
-            ) : (
-              <div />
-            )}
+            <ClientOnly fallback={<div>load</div>}>
+              {() => (
+                <EditorContainer
+                  editor={editor}
+                  isSaving={isSaving}
+                  content={contentData}
+                />
+              )}
+            </ClientOnly>
           </div>
 
           <div
