@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import { useFetcher, useOutletContext } from "@remix-run/react";
+import { useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
@@ -11,7 +11,6 @@ import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { removeMark } from "~/features/Editor/tiptap/markAction";
 import { PostType } from "~/model/type";
 import copyToClipboard from "~/lib/copyToClipboard";
-import { FaPencilAlt } from "react-icons/fa";
 import { FormWithAudio } from "./component/FormWithAudio";
 import { timeAgo } from "~/lib";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -56,7 +55,6 @@ function Post({ isOptimistic, post }: PostPropType) {
     ? likedBy.some((l) => l && l.username === user.username)
     : false;
 
-  let likeInFetcher = fetcher?.formData?.get("like");
   const handleSelectPost = useCallback(
     (id: string) => {
       setSelectedThreadId({
@@ -68,6 +66,7 @@ function Post({ isOptimistic, post }: PostPropType) {
 
   let likeCount = fetcher.data ? fetcher.data?.length : likedBy.length;
 
+  let likeInFetcher = fetcher?.formData?.get("like");
   likedByMe =
     likeInFetcher === "true"
       ? true

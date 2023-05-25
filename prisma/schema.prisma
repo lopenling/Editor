@@ -3,9 +3,14 @@ generator client {
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Post {
@@ -78,7 +83,7 @@ model User {
   name              String
   username          String              @unique
   email             String              @unique
-  role              Role                @default(BASIC)
+  // role              Role                @default(BASIC)
   created_at        DateTime            @default(now())
   updated_at        DateTime?           @updatedAt
   isAdmin           Boolean
@@ -103,7 +108,7 @@ model UserPreference {
   User     User?
 }
 
-enum Role {
-  BASIC
-  SCHOLAR
-}
+// enum Role {
+//   BASIC
+//   SCHOLAR
+// }
