@@ -23,6 +23,7 @@ import { AnimatePresence } from "framer-motion";
 import { getUser } from "./model/user";
 import { Loader, GlobalLoading } from "./component/UI";
 import notificationStyle from "react-notifications-component/dist/theme.css";
+import generate from "~/importOldData/generate";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   viewport: "width=device-width,initial-scale=1",
@@ -81,7 +82,7 @@ function App() {
   useEffect(() => {
     setUser(data.user);
   }, [data]);
-
+  console.log(generate());
   return (
     <html className={data.user?.preference?.theme || "light"}>
       <head>

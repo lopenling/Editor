@@ -177,7 +177,7 @@ export default function () {
       onUpdate: async ({ editor }) => {
         let newContent = editor.getHTML();
         let query = getQuery(newContent);
-        if (query && newContent.length > 2000 && user) saveData(query);
+        if (query && newContent.length > 100 && user) saveData(query);
       },
       onCreate: async ({ editor }) => {
         setTextName({ name: data?.text.name, id: data?.text.id });
