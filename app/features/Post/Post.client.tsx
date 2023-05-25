@@ -360,7 +360,9 @@ function Post({ isOptimistic, post }: PostPropType) {
       {openReply && (
         <ReplyForm
           topicId={topicId}
-          closeReply={() => setOpenReply(false)}
+          closeReply={() => {
+            setOpenReply(false);
+          }}
           updateReplyCount={() => setReplyCount((p) => p + 1)}
         />
       )}

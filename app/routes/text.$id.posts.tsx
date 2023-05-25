@@ -6,7 +6,7 @@ import {
   useOutletContext,
   useSearchParams,
 } from "@remix-run/react";
-import Posts from "~/features/Post/Posts.client";
+import Posts from "~/features/Post/Posts";
 import { Dropdown } from "flowbite-react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -144,13 +144,11 @@ export default function PostContainer() {
         </button>
       </div>
       <PostForm />
-      <ClientOnly fallback={<div>loading</div>}>
-        {() => (
-          <Await resolve={data.posts}>
-            <Posts editor={editor} />
-          </Await>
-        )}
-      </ClientOnly>
+      <Suspense fallback={<div>loading</div>}>
+        <Await resolve={data.posts}>
+          <Posts editor={editor} />
+        </Await>
+      </Suspense>
     </>
   );
 }

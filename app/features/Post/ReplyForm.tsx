@@ -19,10 +19,9 @@ export default function ReplyForm({
   const textareaRef = useRef(null);
   const loaderData = useLoaderData();
   const [audio, setAudio] = useState({ tempUrl: "", blob: null });
-
   const [textArea, setTextArea] = useState("");
   useEffect(() => {
-    if (postFetcher.state === "idle") {
+    if (postFetcher.data) {
       updateReplyCount();
       closeReply();
     }
