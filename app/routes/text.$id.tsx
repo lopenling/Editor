@@ -101,7 +101,7 @@ export default function () {
       });
   }
   const { onlineMembers } = usePusherPresence(
-    `presence-text_${data.text.id}`,
+    `presence-text_${data?.text?.id}`,
     data.pusher_env.key,
     data.pusher_env.cluster,
     fetchUpdateText,
