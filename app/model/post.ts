@@ -1,6 +1,7 @@
 // create post
 
 import { db } from "~/services/db.server";
+import { fetchCategoryData } from "~/services/discourseApi";
 
 export async function createPost(
   type: string,
@@ -65,7 +66,9 @@ export async function findPostByTopicId(TopicId: number) {
     return "couldnot find the by TopicId" + e.message;
   }
 }
-export async function findPostByTextId(textId: number, topicList = []) {
+export async function findPostByTextId(textId: number) {
+  const Categories = await fetchCategoryData();
+  const topicList = Categories.topic_list.topics;
   try {
     let posts = await db.post.findMany({
       include: {

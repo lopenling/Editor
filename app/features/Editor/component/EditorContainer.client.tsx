@@ -7,7 +7,6 @@ import { FaWrench } from "react-icons/fa";
 import { Button } from "~/component/UI";
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from "~/constants";
 import {
-  UserState,
   openSuggestionState,
   selectedPostThread,
   selectedTextOnEditor,
@@ -23,7 +22,7 @@ type EditorContainerProps = {
 };
 function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
   const data = useLoaderData();
-  const user = useRecoilValue(UserState);
+  const user = data.user;
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);

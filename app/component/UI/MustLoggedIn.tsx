@@ -29,7 +29,7 @@ export default function LogInMessage() {
         <span className="sr-only">Warning icon</span>
       </div>
       <loginFetcher.Form
-        method="post"
+        method="POST"
         id="login"
         action="/auth/login"
         className="flex items-center ml-3 text-sm font-normal"

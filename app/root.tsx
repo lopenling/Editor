@@ -23,12 +23,18 @@ import { AnimatePresence } from "framer-motion";
 import { getUser } from "./model/user";
 import { Loader, GlobalLoading } from "./component/UI";
 import notificationStyle from "react-notifications-component/dist/theme.css";
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  viewport: "width=device-width,initial-scale=1",
-  description: "annotation of text and discussion on budhist text",
-  title: "Lopenling App",
-});
+
+export function meta() {
+  return [
+    { title: "Lopenling App" },
+    {
+      name: "description",
+      content: "annotation of text and discussion on budhist text",
+    },
+    { property: "og:title", content: "Lopenling App" },
+  ];
+}
+
 export const loader: LoaderFunction = async ({ request }) => {
   let userSession = await getUserSession(request);
   if (!userSession) return { user: null };
@@ -77,10 +83,7 @@ function App() {
   let routeChanged =
     navigation.state === "loading" &&
     navigation.location?.pathname.includes("/text");
-  let setUser = useSetRecoilState(UserState);
-  useEffect(() => {
-    setUser(data.user);
-  }, [data]);
+
   return (
     <html className={data.user?.preference?.theme || "light"}>
       <head>
@@ -102,7 +105,7 @@ function App() {
                 <Loader />
               </div>
             ) : (
-              <Outlet />
+              <Outlet context={{ user: data.user }} />
             )}
           </AnimatePresence>
         </LitteraProvider>

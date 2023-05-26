@@ -1,8 +1,12 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import {
+  useFetcher,
+  useLoaderData,
+  useOutlet,
+  useOutletContext,
+} from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { UserState } from "~/states";
 import { timeAgo } from "~/lib/getFormatedDate";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { Button, TextArea } from "~/component/UI";
@@ -27,7 +31,7 @@ export default function Suggestion({
   const likeFetcher = useFetcherWithPromise();
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
-  const user = useRecoilValue(UserState);
+  const { user } = useOutletContext();
   const [effect, setEffect] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openComment, setOpenComment] = useState(false);
@@ -62,7 +66,7 @@ export default function Suggestion({
         like: !likedByMe ? "true" : "false",
         threadId: suggest.threadId,
       },
-      { method: "post", action: "api/suggestion/like" }
+      { method: "POST", action: "api/suggestion/like" }
     );
     setTimeout(() => {
       replaceMarkContent(editor, suggest.threadId, res?.highestLiked.newValue);
@@ -79,7 +83,7 @@ export default function Suggestion({
         },
         {
           action: "api/suggestion",
-          method: "delete",
+          method: "DELETE",
         }
       );
     } else {

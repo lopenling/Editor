@@ -17,23 +17,18 @@ import {
 } from "~/states";
 import { findPostByTextId } from "~/model/post";
 import { LoaderFunction, defer, redirect } from "@remix-run/node";
-import { fetchCategoryData } from "~/services/discourseApi";
 import { Editor } from "@tiptap/react";
 import { useLiveLoader } from "~/lib";
-import { ClientOnly } from "remix-utils";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.id && parseInt(params.id);
   const threadId = new URL(request.url).searchParams.get("thread") ?? "";
   if (textId === "" || !textId) return redirect("/");
-
-  const Categories = await fetchCategoryData();
-  const topicList = Categories.topic_list.topics;
-  const posts = await findPostByTextId(textId, topicList);
+  const posts = findPostByTextId(textId);
   return defer({ text: { id: textId }, posts, threadId });
 };
 export const ErrorBoundary = ({ error }) => {
-  return <div>{error.message}</div>;
+  return <div>{error?.message}</div>;
 };
 
 export default function PostContainer() {

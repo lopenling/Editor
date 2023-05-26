@@ -7,6 +7,7 @@ import {
   Await,
   useLoaderData,
   useRevalidator,
+  useOutletContext,
 } from "@remix-run/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { findTextByTextId } from "~/model/text";
@@ -19,7 +20,6 @@ import {
   selectedSuggestionThread,
   selectedTextOnEditor,
   textInfo,
-  UserState,
 } from "~/states";
 import * as Extension from "~/features/Editor/tiptap";
 import { findAllSuggestionByTextId } from "~/model/suggestion";
@@ -39,9 +39,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
   const text = await findTextByTextId(text_id, false);
   const suggestions = await findAllSuggestionByTextId(text_id);
-  const user = await getUserSession(request);
   return defer({
-    user,
     text,
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
@@ -55,10 +53,9 @@ export function ErrorBoundary({ error }) {
 export const meta: MetaFunction = ({ data }) => {
   let dataName = data?.text?.name;
   let title = dataName ? dataName : "text";
-  return {
-    title,
-  };
+  return [{ title }];
 };
+
 export function links() {
   return [
     {
@@ -74,7 +71,7 @@ export default function () {
   const setTextName = useSetRecoilState(textInfo);
   const [contentData, setContent] = useState("");
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
-  const { user } = useLoaderData();
+  const { user } = useOutletContext();
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );
@@ -192,7 +189,7 @@ export default function () {
     formData.append("id", data.text?.id);
     formData.append("patch", JSON.stringify(patch));
     saveTextFetcher.submit(formData, {
-      method: "post",
+      method: "POST",
       action: "/api/text",
     });
   };

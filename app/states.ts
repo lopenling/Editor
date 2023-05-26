@@ -87,9 +87,3 @@ export const selectedTextOnEditor = atom({
     content: "",
   },
 });
-
-//user
-export const UserState = atom<UserType>({
-  key: "userState",
-  default: null,
-});

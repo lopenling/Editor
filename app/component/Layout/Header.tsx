@@ -1,4 +1,11 @@
-import { Form, Link, NavLink, useFetcher, useLocation } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  NavLink,
+  useFetcher,
+  useLocation,
+  useOutletContext,
+} from "@remix-run/react";
 import { Avatar, Button } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
@@ -64,7 +71,7 @@ function Header({ editor }: HeaderProps) {
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
   const { name: textName } = useRecoilValue(textInfo);
-  let user = useRecoilValue(UserState);
+  let { user } = useOutletContext();
 
   const changeTheme = () => {
     themeFetcher.submit(
@@ -73,7 +80,7 @@ function Header({ editor }: HeaderProps) {
       },
       {
         action: "/api/user/preference/theme",
-        method: "post",
+        method: "POST",
       }
     );
   };
@@ -292,7 +299,7 @@ function Header({ editor }: HeaderProps) {
                       </div>
 
                       <Form
-                        method="post"
+                        method="POST"
                         action="/auth/login"
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
@@ -318,7 +325,7 @@ function Header({ editor }: HeaderProps) {
             ) : (
               <div className="flex gap-2 justify-between" id="user-menu-button">
                 <loginFetcher.Form
-                  method="post"
+                  method="POST"
                   id="login"
                   action="/auth/login"
                   className="flex items-center"

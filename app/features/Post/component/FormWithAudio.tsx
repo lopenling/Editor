@@ -82,7 +82,7 @@ export function FormWithAudio({
       form_data.append("action", "update");
       form_data.append("postId", post?.id);
       let responseData = await fetcher.submit(form_data, {
-        method: "patch",
+        method: "PATCH",
         action: "/api/post",
         encType: "multipart/form-data",
       });
@@ -94,7 +94,7 @@ export function FormWithAudio({
       }
       if (selection) {
         let awaitdata = await fetcher.submit(form_data, {
-          method: "post",
+          method: "POST",
           action: "/api/post",
           encType: "multipart/form-data",
         });

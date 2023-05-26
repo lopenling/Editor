@@ -1,11 +1,12 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import {
+  useFetcher,
+  useLoaderData,
+  useOutlet,
+  useOutletContext,
+} from "@remix-run/react";
 import { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  UserState,
-  openSuggestionState,
-  selectedSuggestionThread,
-} from "~/states";
+import { openSuggestionState, selectedSuggestionThread } from "~/states";
 import { v4 as uuidv4 } from "uuid";
 import { Editor } from "@tiptap/react";
 import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/UI";
@@ -19,7 +20,7 @@ type SuggestionFormProps = {
 
 export default function SuggestionForm({ editor }: SuggestionFormProps) {
   const data = useLoaderData();
-  let user = useRecoilValue(UserState);
+  let { user } = useOutletContext();
   const [suggestionInput, setSuggestionInput] = useState("");
   const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
@@ -61,7 +62,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     }
     let awaitdata = await addSuggestion.submit(form_data, {
       action: "/api/suggestion",
-      method: "post",
+      method: "POST",
       encType: "multipart/form-data",
     });
     if (!awaitdata?.message) {

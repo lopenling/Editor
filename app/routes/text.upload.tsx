@@ -18,7 +18,6 @@ import { FileUploader } from "react-drag-drop-files";
 import { Tabs } from "flowbite-react";
 import Header from "~/component/Layout/Header";
 import { useRecoilValue } from "recoil";
-import { UserState } from "~/states";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUserSession(request);
   if (!user) return redirect("/");
@@ -46,9 +45,9 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function UploadText() {
-  const formRef = useRef();
+  const formRef: HTMLFormElement = useRef();
   const data = useLoaderData();
-  const user = useRecoilValue(UserState);
+  const user = data.user;
   const navigation = useNavigation();
   const [textContent, setTextContent] = useState("");
   const uploadId = useId();
@@ -76,7 +75,11 @@ export default function UploadText() {
     <>
       {" "}
       <Header editor={null} />
-      <Form method="post" ref={formRef} className="max-w-2xl m-auto pt-20">
+      <Form
+        method="POST"
+        ref={(ref) => formRef}
+        className="max-w-2xl m-auto pt-20"
+      >
         <div className="mb-6">
           <label
             htmlFor={uploadId + "textName"}
@@ -136,11 +139,10 @@ export default function UploadText() {
   );
 }
 
-type PropsType = { text: { id: number; name: string } };
+type PropsType = { text: { id: number; name: string; author: any } };
 
 function EachText({ text }: PropsType) {
   const deleteFetcher = useFetcher();
-
   function handleDeleteText(textId: string) {
     let check = confirm("do you wish to delete the text");
     if (check)
@@ -154,8 +156,9 @@ function EachText({ text }: PropsType) {
       );
   }
   return (
-    <>
-      {" "}
+    <div className="flex  gap-3 items-center justify-between">
+      <div style={{ fontFamily: "sans-serif" }}>{text.author?.name}</div>
+
       <div
         className={` py-1 px-2 relative bg-white rounded-lg border-slate-600 border-2
       ${deleteFetcher.formData && " hidden"} dark:text-slate-700`}
@@ -169,6 +172,6 @@ function EachText({ text }: PropsType) {
           x
         </button>
       </div>
-    </>
+    </div>
   );
 }

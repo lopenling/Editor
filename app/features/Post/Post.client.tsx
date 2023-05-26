@@ -4,7 +4,7 @@ import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { UserState, selectedPostThread } from "~/states";
+import { selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
 import { AudioPlayer } from "../Media";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
@@ -43,7 +43,7 @@ function Post({ isOptimistic, post }: PostPropType) {
   const [openEditMenu, setOpenEditMenu] = useState(false);
 
   const { editor }: { editor: Editor } = useOutletContext();
-  const user = useRecoilValue(UserState);
+  const { user } = useOutletContext();
   const [selectedThreadId, setSelectedThreadId] =
     useRecoilState(selectedPostThread);
 
@@ -86,7 +86,7 @@ function Post({ isOptimistic, post }: PostPropType) {
           userId: user.id,
           like: !likedByMe ? "true" : "false",
         },
-        { method: "patch", action: "api/post", encType: "multipart/form-data" }
+        { method: "PATCH", action: "api/post", encType: "multipart/form-data" }
       );
     }
   }
@@ -100,7 +100,7 @@ function Post({ isOptimistic, post }: PostPropType) {
         },
         {
           action: "api/post",
-          method: "delete",
+          method: "DELETE",
         }
       );
       if (typeof res !== "undefined" && "deleted" in res) {
@@ -128,8 +128,6 @@ function Post({ isOptimistic, post }: PostPropType) {
     onTriggered: () => setOpenEditMenu(false),
   });
 
-  let Postcontent = content.replace(/\n/g, "<br>");
-  if (!creatorUser) return null;
   return (
     <div
       className={`${fetcher.formMethod === "DELETE" && "hidden"} `}
@@ -147,11 +145,11 @@ function Post({ isOptimistic, post }: PostPropType) {
           <div className="flex items-center justify-start space-x-3">
             <img
               className="w-6 h-6 rounded-full"
-              src={creatorUser.avatarUrl}
+              src={creatorUser?.avatarUrl}
               alt="Extra small avatar"
             ></img>
             <div className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
-              {creatorUser.name}
+              {creatorUser?.name}
             </div>
             {isSolved && (
               <svg
@@ -199,7 +197,7 @@ function Post({ isOptimistic, post }: PostPropType) {
                 className="py-1 text-sm text-gray-700 dark:text-gray-200"
                 aria-labelledby="dropdownMenuIconHorizontalButton"
               >
-                {user && user.username === creatorUser.username && (
+                {user && user.username === creatorUser?.username && (
                   <>
                     <li>
                       <div
@@ -246,7 +244,7 @@ function Post({ isOptimistic, post }: PostPropType) {
                 target="_blank"
                 className="w-fit block"
               >
-                <p dangerouslySetInnerHTML={{ __html: Postcontent }} />
+                <p>{content}</p>
               </a>
             )}
           </div>

@@ -26,7 +26,7 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText, user) => {
     };
     const handleUpdate = (e) => {
       fetchUpdateText();
-      revalidate();
+      if (e.userId !== user.id) revalidate();
     };
 
     channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);

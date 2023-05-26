@@ -154,7 +154,7 @@ class DiscourseApi {
       const response = await fetch(
         `${this.DiscourseUrl}/posts.json?` + params,
         {
-          method: "post",
+          method: "POST",
           headers: auth_headers,
         }
       );
@@ -200,7 +200,7 @@ class DiscourseApi {
       const response = await fetch(
         `${this.DiscourseUrl}/posts/${postId}.json`,
         {
-          method: "delete",
+          method: "DELETE",
           headers: auth_headers,
         }
       );
@@ -229,7 +229,7 @@ class DiscourseApi {
     try {
       let url = `${this.DiscourseUrl}/admin/users/${id}/log_out`;
       const response = await fetch(url, {
-        method: "post",
+        method: "POST",
         headers: auth_headers,
       });
       return response;

@@ -29,7 +29,7 @@ function Replies({
     setLoading(true);
     postListFetcher.submit(
       {},
-      { method: "get", action: `/api/reply/${topicId}` }
+      { method: "GET", action: `/api/reply/${topicId}` }
     );
   }, []);
   useEffect(() => {

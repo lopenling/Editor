@@ -160,7 +160,7 @@ function Filter({}: FilterProps) {
                     />
                   </svg>
                   <searchUser.Form
-                    method="get"
+                    method="GET"
                     action="/api/user/search"
                     className="flex w-full"
                   >
@@ -174,7 +174,7 @@ function Filter({}: FilterProps) {
                           {
                             filterUser: e.target.value,
                           },
-                          { method: "get", action: "/api/user/search" }
+                          { method: "GET", action: "/api/user/search" }
                         );
                       }}
                       className="h-full flex-1 border-none border-transparent bg-transparent text-sm leading-none text-gray-900 outline-none focus:border-none focus:border-transparent focus:outline-none focus:ring-0"

@@ -41,15 +41,20 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   };
 }
 
-export const meta: MetaFunction = ({ data }) => {
-  return {
-    viewport: "width=device-width,initial-scale=1",
-    description: "annotation of text and discussion on budhist text",
-    title: data?.search
-      ? `${data?.search} - Lopenling Search`
-      : "Lopenling App",
-  };
-};
+export function meta({ data }) {
+  let title = data?.search
+    ? `${data?.search} - Lopenling Search`
+    : "Lopenling App";
+  return [
+    {
+      title,
+    },
+    {
+      name: "description",
+      content: "annotation of text and discussion on budhist text",
+    },
+  ];
+}
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
@@ -85,7 +90,7 @@ export default function Index() {
         style={{ paddingTop: HEADER_HEIGHT }}
       >
         <div className="inline-flex w-full items-center justify-center  px-3 md:px-1.5 pt-24  ">
-          <Form method="get" className="w-full max-w-2xl">
+          <Form method="GET" className="w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
               <TextInput
                 name="search"

@@ -4,7 +4,6 @@ import { timeAgo } from "~/lib";
 import { useState } from "react";
 import { AudioPlayer } from "../Media";
 import { useRecoilValue } from "recoil";
-import { UserState } from "~/states";
 import { UserType } from "~/model/type";
 type ReplyPropType = {
   reply: any;
@@ -17,7 +16,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
   const replyLikeFetcher = useFetcher();
   const approvedFetcher = useFetcher();
   const [effect, setEffect] = useState(false);
-  const user: UserType = useRecoilValue(UserState);
+  const { user } = useOutletContext();
   let likedByMe = user
     ? reply?.likedBy?.some((d) => d.username == user.username)
     : false;
@@ -65,7 +64,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
         isSolved: reply?.is_approved ?? false,
       },
       {
-        method: "patch",
+        method: "PATCH",
         action: "/api/reply",
       }
     );
@@ -80,7 +79,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
         like: !likedByMe ? "true" : "false",
       },
       {
-        method: "patch",
+        method: "PATCH",
         action: "api/reply",
       }
     );
@@ -95,7 +94,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
         },
         {
           action: "api/reply",
-          method: "delete",
+          method: "DELETE",
         }
       );
     } else {

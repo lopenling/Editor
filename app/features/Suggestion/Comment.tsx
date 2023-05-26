@@ -3,9 +3,8 @@ import { SuggestionCommentType } from "~/model/type";
 import { AudioPlayer } from "../Media";
 import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { UserState } from "~/states";
 import { useRecoilValue } from "recoil";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, useOutletContext } from "@remix-run/react";
 import { Button, TextArea } from "~/component/UI";
 
 type CommentProps = {
@@ -28,7 +27,7 @@ const Comment = ({ comment }: { comment: SuggestionCommentType }) => {
   const [edit, setEdit] = useState(false);
   const [newContent, setNewContent] = useState(comment.text);
   const [checked, setChecked] = useState(comment.type === "support");
-  const user = useRecoilValue(UserState);
+  const { user } = useOutletContext();
 
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
@@ -53,7 +52,7 @@ const Comment = ({ comment }: { comment: SuggestionCommentType }) => {
         },
         {
           action: "api/suggestion/comment",
-          method: "delete",
+          method: "DELETE",
           encType: "multipart/form-data",
         }
       );
@@ -70,7 +69,7 @@ const Comment = ({ comment }: { comment: SuggestionCommentType }) => {
       },
       {
         action: "api/suggestion/comment",
-        method: "patch",
+        method: "PATCH",
         encType: "multipart/form-data",
       }
     );

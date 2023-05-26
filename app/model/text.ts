@@ -12,6 +12,7 @@ export async function findAllText(id = true, name = true, content = false) {
         name,
         content,
         userId: true,
+        author: true,
       },
     });
     return text;
