@@ -45,7 +45,7 @@ export function links() {
   return [
     {
       rel: "icon",
-      href: "https://lopenling.org/uploads/default/optimized/1X/dc5520a6052a0314c4b370af1420c9c9c105526b_2_32x32.png",
+      href: "/favicon.ico",
       type: "image/png",
     },
     { rel: "stylesheet", href: tailwindStyle, as: "style" },

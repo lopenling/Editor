@@ -60,7 +60,7 @@ export function links() {
   return [
     {
       rel: "icon",
-      href: "https://lopenling-app.openpecha.workers.dev/favicon.png",
+      href: "/favicon.ico",
       type: "image/png",
     },
   ];
