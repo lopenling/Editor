@@ -11,7 +11,9 @@ services:
     healthCheckPath: /healthcheck
     envVars:
       - key: DATABASE_URL
-        value: postgres://tenkus:iObXoWQ9fU6KqdqfMFjzSRc6W6g7kxgN@dpg-chq3lbik728ivvrgh220-a/lopenling_db
+        fromDatabase:
+          name: lopenling
+          property: connectionString
       - key: SESSION_SECRET
         generateValue: true
       - key: NODE_ENV #required so NODE_ENV is set in build env
