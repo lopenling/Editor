@@ -1,6 +1,6 @@
 databases:
   - name: lopenling
-
+  - plan: free
 services:
   - type: web
     name: remix

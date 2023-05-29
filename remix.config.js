@@ -1,17 +1,17 @@
-const { createRoutesFromFolders } = require("@remix-run/v1-route-convention");
+// const { createRoutesFromFolders } = require("@remix-run/v1-route-convention");
 
 /** @type {import('@remix-run/dev').AppConfig} */
 
 module.exports = {
   ignoredRouteFiles: ["**/.*"],
-  server:
-    process.env.NETLIFY || process.env.NETLIFY_LOCAL
-      ? "./server.ts"
-      : undefined,
-  serverBuildPath: ".netlify/functions-internal/server.js",
+  // server:
+  //   process.env.NETLIFY || process.env.NETLIFY_LOCAL
+  //     ? "./server.ts"
+  //     : undefined,
+  // serverBuildPath: ".netlify/functions-internal/server.js",
   serverModuleFormat: "cjs",
   // appDirectory: "app",
-  assetsBuildDirectory: "public/build",
+  // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   future: {
     v2_routeConvention: true,
