@@ -4,8 +4,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
-    "start": "remix-serve build",
-    "start:mocks": "binode --require ./mocks -- @remix-run/serve:remix-serve build",
+    "start": "cross-env NODE_ENV=production netlify dev",
     "typecheck": "tsc"
   },
   "dependencies": {
