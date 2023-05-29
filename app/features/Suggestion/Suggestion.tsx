@@ -114,7 +114,7 @@ export default function Suggestion({
           <p className="text-sm text-gray-600 dark:text-gray-400">{time}</p>
         </div>
         <button
-          className="inline-flex items-center text-sm font-medium text-center text-gray-400 bg-gray-50 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          className="inline-flex items-center text-sm font-medium text-center text-gray-400  rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           type="button"
           onClick={() => setOpenEditMenu((p) => !p)}
         >

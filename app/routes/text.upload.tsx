@@ -18,6 +18,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { Tabs } from "flowbite-react";
 import Header from "~/component/Layout/Header";
 import { useRecoilValue } from "recoil";
+import { TextType } from "~/model/type";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUserSession(request);
   if (!user) return redirect("/");
@@ -52,16 +53,14 @@ export default function UploadText() {
   const [textContent, setTextContent] = useState("");
   const uploadId = useId();
   if (navigation.state !== "idle") {
-    formRef.current.reset();
+    formRef?.current?.reset();
   }
-  const [file, setFile] = useState(null);
 
-  const handleChange = async (file) => {
-    setFile(file);
-    let text: string = await readFileContent(file);
+  const handleChange = async (file: any) => {
+    let text: any = await readFileContent(file);
     setTextContent(text);
   };
-  function readFileContent(file) {
+  function readFileContent(file: any) {
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
       reader.onload = (event) => resolve(event.target.result);
@@ -131,7 +130,7 @@ export default function UploadText() {
         </button>
       </Form>
       <div className="flex flex-col space-y-3 w-max mx-auto text-lg">
-        {data.textList.map((text: { id: number; name: string }) => (
+        {data.textList.map((text: TextType) => (
           <EachText text={text} key={text.id} />
         ))}
       </div>
@@ -139,7 +138,7 @@ export default function UploadText() {
   );
 }
 
-type PropsType = { text: { id: number; name: string; author: any } };
+type PropsType = { text: TextType };
 
 function EachText({ text }: PropsType) {
   const deleteFetcher = useFetcher();

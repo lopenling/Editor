@@ -92,7 +92,7 @@ export interface TextType {
   id: number;
   name: string;
   author?: any;
-  content: string;
+  content?: string;
   Post?: PostType[];
   Suggestion?: SuggestionType[];
   userId?: string | null;

@@ -96,6 +96,7 @@ export default function () {
         setContent(data.content);
       });
   }
+
   const { onlineMembers } = usePusherPresence(
     `presence-text_${data?.text?.id}`,
     data.pusher_env.key,
