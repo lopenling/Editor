@@ -51,7 +51,14 @@ export function ErrorBoundary({ error }) {
 export const meta: MetaFunction = ({ data }) => {
   let dataName = data?.text?.name;
   let title = dataName ? dataName : "text";
-  return [{ title }];
+  return [
+    { title },
+    {
+      name: "viewport",
+      content:
+        "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+    },
+  ];
 };
 
 export function links() {

@@ -14,13 +14,14 @@ import uselitteraTranlation, {
   translationCodes,
 } from "~/locales/useLitteraTranslations";
 import { useRecoilValue } from "recoil";
-import { UserState, textInfo } from "~/states";
+import { textInfo } from "~/states";
 import { Editor } from "@tiptap/react";
 import { SearchString } from "~/features/Editor";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { HEADER_HEIGHT } from "~/constants";
 import { Progress as ProgressBar } from "~/component/UI";
 import { containTibetanletter, isSmallScreen } from "~/lib";
+import { UserType } from "~/model/type";
 const Logo = () => (
   <img
     src={
@@ -71,7 +72,7 @@ function Header({ editor }: HeaderProps) {
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
   const { name: textName } = useRecoilValue(textInfo);
-  let { user } = useOutletContext();
+  let { user }: { user: UserType } = useOutletContext();
 
   const changeTheme = () => {
     themeFetcher.submit(
@@ -119,7 +120,7 @@ function Header({ editor }: HeaderProps) {
         fontFamily: "serif",
       }}
     >
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
+      <div className=" flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textName={textName} />
         ) : (
@@ -156,7 +157,7 @@ function Header({ editor }: HeaderProps) {
           ref={headermenuref}
           className={`${
             !showHeaderMenu && "hidden md:flex"
-          }  items-center justify-center flex-col md:flex-row md:justify-end gap-2 md:order-2 w-full md:w-auto`}
+          }  items-center justify-center flex-col lg:flex-row md:justify-end gap-2 md:order-2 w-full md:w-auto`}
         >
           <div className="w-full flex items-center justify-between pt-3 md:p-0">
             {editor && <SearchString editor={editor} />}
