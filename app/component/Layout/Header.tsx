@@ -54,7 +54,7 @@ const LogoWithTextName = ({ textName }: { textName: string }) => {
             behavior: "smooth",
           });
         }}
-        style={{ top: containTibetanletter(textName) ? -10 : 0 }}
+        style={{ top: containTibetanletter(textName) ? -7 : 0, fontSize: 24 }}
         className="text-3xl ml-2 relative  font-bold "
       >
         {textName}
