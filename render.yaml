@@ -11,7 +11,7 @@ services:
     startCommand: npx prisma migrate deploy && npm run start
     healthCheckPath: /healthcheck
     envVars:
-      - key: DATABASE_URL
+      - key: postgres://tenkus:iObXoWQ9fU6KqdqfMFjzSRc6W6g7kxgN@dpg-chq3lbik728ivvrgh220-a/lopenling_db
         fromDatabase:
           name: remixdb
           property: connectionString
