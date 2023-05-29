@@ -23,12 +23,12 @@ export async function isUserPresent(username: string) {
   return user;
 }
 
-export async function getUser(id: string) {
-  if (!id) return null;
+export async function getUser(username: string) {
+  if (!username) return null;
   try {
     let user = await db.user.findUnique({
       where: {
-        id,
+        username,
       },
       include: {
         likedPost: true,

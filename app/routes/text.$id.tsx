@@ -5,8 +5,6 @@ import {
   Link,
   Outlet,
   Await,
-  useLoaderData,
-  useRevalidator,
   useOutletContext,
 } from "@remix-run/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
@@ -32,8 +30,8 @@ import { OnlineUsers } from "~/component/UI";
 import { HEADER_HEIGHT } from "~/constants";
 import { isSmallScreen, DiffMatchPatch, useLiveLoader } from "~/lib";
 import { isMobile, isTablet } from "react-device-detect";
-import { getUserSession } from "~/services/session.server";
 import { ClientOnly } from "remix-utils";
+import { UserType } from "~/model/type";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const text_id = parseInt(params.id);
@@ -71,7 +69,7 @@ export default function () {
   const setTextName = useSetRecoilState(textInfo);
   const [contentData, setContent] = useState("");
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
-  const { user } = useOutletContext();
+  const { user }: { user: UserType } = useOutletContext();
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
   );

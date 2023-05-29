@@ -1,10 +1,6 @@
-import { atom, selector } from "recoil";
-import { FilterType, PostType, UserType } from "./model/type";
-//theme
-export const theme = atom({
-  key: "theme-tailwind",
-  default: false,
-});
+import { atom } from "recoil";
+import { FilterType } from "./model/type";
+
 //permission
 
 export const audioPermission = atom({
@@ -21,17 +17,6 @@ export const textInfo = atom({
   },
 });
 
-//editorOptios
-
-export const showSearchPanelState = atom({
-  key: "showSearch",
-  default: false,
-});
-
-export const showFontSizeState = atom({
-  key: "showfontSize",
-  default: false,
-});
 //threadSelection
 export const openSuggestionState = atom({
   key: "openSuggestion",

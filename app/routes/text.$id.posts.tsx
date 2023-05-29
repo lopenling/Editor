@@ -21,19 +21,22 @@ import { Editor } from "@tiptap/react";
 import { useLiveLoader } from "~/lib";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const textId = params.id && parseInt(params.id);
+  const id = params.id && parseInt(params.id);
   const threadId = new URL(request.url).searchParams.get("thread") ?? "";
-  if (textId === "" || !textId) return redirect("/");
-  const posts = findPostByTextId(textId);
-  return defer({ text: { id: textId }, posts, threadId });
+  if (id === "" || !id) return redirect("/");
+  const posts = findPostByTextId(id);
+  return defer(
+    { text: { id }, posts, threadId },
+    { headers: { "Cache-Control": "max-age=300, s-maxage=3600" } }
+  );
 };
-export const ErrorBoundary = ({ error }) => {
+export const ErrorBoundary = ({ error }: { error: Error }) => {
   return <div>{error?.message}</div>;
 };
 
 export default function PostContainer() {
   const data = useLiveLoader<typeof loader>();
-  let [, setParams] = useSearchParams();
+  let [param, setParams] = useSearchParams();
   let [selectedPostThread, setSelectedThread] = useRecoilState(
     selectedPostThreadState
   );
@@ -41,7 +44,6 @@ export default function PostContainer() {
     let selectedThread = data.threadId;
     if (selectedThread && selectedThread !== "") {
       setTimeout(() => {
-        let threadId = "p_" + selectedThread;
         document.getElementById("p_" + selectedThread)?.scrollIntoView({
           behavior: "smooth",
           block: "center",

@@ -15,7 +15,7 @@ function Loader() {
         }
         return prevProgress;
       });
-    }, 50);
+    }, 100);
 
     return () => clearInterval(interval);
   }, []);

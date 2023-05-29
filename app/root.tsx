@@ -16,9 +16,7 @@ import { getUserSession } from "./services/session.server";
 import globalStyle from "./styles/globalStyle.css";
 import tailwindStyle from "./styles/tailwind.css";
 import { LitteraProvider } from "@assembless/react-littera";
-import { RecoilRoot, useSetRecoilState } from "recoil";
-import { UserState } from "./states";
-import { useEffect } from "react";
+import { RecoilRoot } from "recoil";
 import { AnimatePresence } from "framer-motion";
 import { getUser } from "./model/user";
 import { Loader, GlobalLoading } from "./component/UI";
@@ -34,11 +32,10 @@ export function meta() {
     { property: "og:title", content: "Lopenling App" },
   ];
 }
-
 export const loader: LoaderFunction = async ({ request }) => {
   let userSession = await getUserSession(request);
   if (!userSession) return { user: null };
-  let user = await getUser(userSession.id);
+  let user = await getUser(userSession.username);
   return { user };
 };
 export function links() {
