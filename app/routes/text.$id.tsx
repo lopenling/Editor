@@ -194,6 +194,7 @@ export default function () {
     const formData = new FormData();
     formData.append("id", data.text?.id);
     formData.append("patch", JSON.stringify(patch));
+    console.log("hi");
     saveTextFetcher.submit(formData, {
       method: "POST",
       action: "/api/text",

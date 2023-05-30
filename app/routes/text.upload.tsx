@@ -5,7 +5,6 @@ import {
 } from "@remix-run/server-runtime";
 import {
   Form,
-  useActionData,
   useFetcher,
   useLoaderData,
   useNavigation,
@@ -17,7 +16,6 @@ import { useId } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { Tabs } from "flowbite-react";
 import Header from "~/component/Layout/Header";
-import { useRecoilValue } from "recoil";
 import { TextType } from "~/model/type";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUserSession(request);
@@ -46,8 +44,8 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function UploadText() {
-  const formRef: HTMLFormElement = useRef();
-  const data = useLoaderData();
+  const formRef = useRef<HTMLFormElement | null>();
+  const data = useLoaderData<typeof loader>();
   const user = data.user;
   const navigation = useNavigation();
   const [textContent, setTextContent] = useState("");
@@ -74,11 +72,7 @@ export default function UploadText() {
     <>
       {" "}
       <Header editor={null} />
-      <Form
-        method="POST"
-        ref={(ref) => formRef}
-        className="max-w-2xl m-auto pt-20"
-      >
+      <Form method="POST" ref={formRef} className="max-w-2xl m-auto pt-20">
         <div className="mb-6">
           <label
             htmlFor={uploadId + "textName"}

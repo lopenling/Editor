@@ -6,7 +6,6 @@ import {
   useLocation,
   useOutletContext,
 } from "@remix-run/react";
-import { Avatar, Button } from "flowbite-react";
 import LogoOnly from "~/assets/logo.png";
 import { useLitteraMethods } from "@assembless/react-littera";
 import { useEffect, useState, memo } from "react";
@@ -19,7 +18,7 @@ import { Editor } from "@tiptap/react";
 import { SearchString } from "~/features/Editor";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { HEADER_HEIGHT } from "~/constants";
-import { Progress as ProgressBar } from "~/component/UI";
+import { Progress as ProgressBar, Avatar } from "~/component/UI";
 import { containTibetanletter, isSmallScreen } from "~/lib";
 import { UserType } from "~/model/type";
 const Logo = () => (
@@ -120,7 +119,7 @@ function Header({ editor }: HeaderProps) {
         fontFamily: "serif",
       }}
     >
-      <div className=" flex flex-wrap items-center justify-between mx-auto p-2">
+      <div className=" max-w-6xl flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textName={textName} />
         ) : (
@@ -168,7 +167,7 @@ function Header({ editor }: HeaderProps) {
               <>
                 <button
                   type="button"
-                  className="flex  text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  className="flex  text-sm  rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   id="user-menu-button"
                   onClick={() => setShowUserMenu((prev) => !prev)}
                 >
@@ -177,7 +176,7 @@ function Header({ editor }: HeaderProps) {
                     alt={user.name}
                     img={user.avatarUrl}
                     rounded={true}
-                    size="sm"
+                    size="md"
                     title={user?.name}
                   />
                 </button>
@@ -324,7 +323,7 @@ function Header({ editor }: HeaderProps) {
                 )}
               </>
             ) : (
-              <div className="flex gap-2 justify-between" id="user-menu-button">
+              <div className="flex gap-4 justify-between" id="user-menu-button">
                 <loginFetcher.Form
                   method="POST"
                   id="login"
@@ -346,15 +345,13 @@ function Header({ editor }: HeaderProps) {
                     {translation.login}
                   </button>
                 </loginFetcher.Form>
-                <Button
-                  className=" text-green-400 border-2 border-green-300"
-                  color=""
+                <a
+                  href={"https://lopenling.org/signup"}
                   id="signup"
+                  className=" text-green-400 border-2 border-green-300 p-1 capitalize rounded-md font-serif"
                 >
-                  <a href={"https://lopenling.org/signup"}>
-                    {translation.signup}
-                  </a>
-                </Button>
+                  {translation.signup}
+                </a>
               </div>
             )}
           </div>
