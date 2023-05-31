@@ -77,6 +77,11 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
     setFontSize(parseInt(value));
     changeFont(value);
   };
+  const [showImage, setShowImage] = useState();
+
+  const toggleImage = (e) => {
+    setShowImage(e.target.checked);
+  };
 
   return (
     <div className=" relative shadow-sm  mb-4">
@@ -108,6 +113,17 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
             className="py-1 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
+            <li className="flex items-center py-2 px-4">
+              <input
+                id="imageToggle"
+                type="checkbox"
+                className="mr-2 cursor-pointer mb-2"
+                onChange={toggleImage}
+              />
+              <label htmlFor="imageToggle" className="cursor-pointer mb-2">
+                show Image
+              </label>
+            </li>
             <li
               onClick={() => exportDoc(editor?.getText(), data.text.name)}
               className=" cursor-pointer flex py-2 px-4 items-center hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -147,7 +163,16 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
           </ul>
         </div>
       </div>
-
+      <div className="flex justify-center w-full max-w-full">
+        {showImage && (
+          <img
+            alt="Text Image"
+            src={data.page.imageUrl}
+            className="p-2 object-contain"
+            style={{ border: "1px solid gray" }}
+          />
+        )}
+      </div>
       {!editor ? (
         <div className="flex justify-center h-[400px] w-full animate-pulse">
           <div className="flex-1 mr-2 h-full bg-gray-300 dark:bg-gray-700"></div>

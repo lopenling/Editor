@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import { useRevalidator } from "@remix-run/react";
 
-const usePusherPresence = (channelName, id, cluster, fetchUpdateText, user) => {
+const usePusherPresence = (channelName, id, cluster, user) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
   const { revalidate } = useRevalidator();
 
@@ -25,7 +25,6 @@ const usePusherPresence = (channelName, id, cluster, fetchUpdateText, user) => {
       setOnlineMembers(Object.entries(channel.members.members));
     };
     const handleUpdate = (e) => {
-      fetchUpdateText();
       if (e.userId) revalidate();
     };
 

@@ -89,7 +89,7 @@ function App() {
   return (
     <html className={data.user?.preference?.theme || "light"}>
       <head>
-        <meta charset="UTF-8"></meta>
+        <meta charSet="UTF-8"></meta>
         <Meta />
         <link
           href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"

@@ -1,6 +1,7 @@
 import { LoaderArgs, LoaderFunction } from "@remix-run/node";
 import {
   Await,
+  Link,
   Outlet,
   useFetcher,
   useLoaderData,
@@ -27,6 +28,9 @@ import { EditorContainer } from "~/features/Editor";
 import { SuggestionContainer, SuggestionForm } from "~/features/Suggestion";
 import { getUserSession } from "~/services/session.server";
 import { findAllSuggestionByPageId } from "~/model/suggestion";
+import { OnlineUsers } from "~/component/UI";
+import usePusherPresence from "~/component/hooks/usePusherPresence";
+import Pagination from "~/component/UI/Pagination";
 export const loader: LoaderFunction = async ({
   request,
   params,
@@ -35,13 +39,24 @@ export const loader: LoaderFunction = async ({
   let order = params.pageId as string;
   let page = await getPage(parseInt(textId), parseInt(order));
   let user = await getUserSession(request);
-  const suggestions = await findAllSuggestionByPageId(page.id);
-  return { page, text: page?.text, user, suggestions };
+  const suggestions = await findAllSuggestionByPageId(page?.id);
+  return {
+    page,
+    text: page?.text,
+    user,
+    suggestions,
+    pusher_env: { key: process.env.key, cluster: process.env.cluster },
+  };
 };
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  const [showImage, setShowImage] = useState();
+  if (!data.page)
+    return (
+      <div>
+        no page exist <Link to="/">go to home</Link>
+      </div>
+    );
   const { user } = data;
   let content = data.page.content;
   const [suggestionSelected, suggestionSelector] = useRecoilState(
@@ -67,7 +82,12 @@ export default function Page() {
   useEffect(() => {
     setContent(content);
   }, []);
-
+  const { onlineMembers } = usePusherPresence(
+    `presence-text_${data?.page?.id}`,
+    data.pusher_env.key,
+    data.pusher_env.cluster,
+    data.user
+  );
   const getQuery = useCallback(
     (newContent: string) => {
       let oldContent = contentData;
@@ -161,12 +181,11 @@ export default function Page() {
       setTextHeight(40);
     }
   }, [isSmallScreen]);
-  const toggleImage = (e) => {
-    setShowImage(e.target.checked);
-  };
+
   return (
     <>
       <Header editor={editor} />
+      <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div style={{ height: 100 }}></div>
       <Split
         minSize={isMobile ? 100 : 350}
@@ -175,41 +194,20 @@ export default function Page() {
         direction={isMobile ? "vertical" : "horizontal"}
         sizes={isMobile ? [50, 50] : isTablet ? [60, 40] : [65, 35]}
       >
-        <div>
-          <input
-            id="imageToggle"
-            type="checkbox"
-            className="mr-2 cursor-pointer mb-2"
-            onChange={toggleImage}
-          />
-          <label htmlFor="imageToggle" className="cursor-pointer mb-2">
-            show Image
-          </label>
-          {showImage && (
-            <img
-              alt="Text Image"
-              src={data.page.imageUrl}
-              className=""
-              style={{ border: "1px solid gray" }}
-            />
-          )}
-          <div
-            style={{
-              maxHeight: `${textHeight}vh`,
-              overflowY: "scroll",
-              overflowX: "hidden",
-              scrollbarWidth: "none",
-              width: "100%",
-            }}
-            id="textEditorContainer"
-          >
-            <EditorContainer
-              editor={editor}
-              isSaving={false}
-              content={content}
-            />
-          </div>
+        <div
+          style={{
+            maxHeight: `${textHeight}vh`,
+            overflowY: "scroll",
+            overflowX: "hidden",
+            scrollbarWidth: "none",
+            width: "100%",
+          }}
+          id="textEditorContainer"
+        >
+          <EditorContainer editor={editor} isSaving={false} content={content} />
+          <Pagination />
         </div>
+
         <div
           className={`lg:h-screen flex-1 overflow-y-auto pt-3  w-full bg-white dark:bg-gray-700 lg:sticky lg:top-0 rounded-sm`}
         >
