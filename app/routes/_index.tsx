@@ -3,7 +3,7 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Button, Card, TextInput } from "flowbite-react";
 import FooterContainer from "~/component/Layout/Footer";
 import { json } from "@remix-run/node";
-import { searchTextWithName } from "~/model/text";
+import { searchPages } from "~/model/page";
 import { useLocation, useLoaderData, useNavigation } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import { motion } from "framer-motion";
@@ -17,13 +17,14 @@ export let loader: LoaderFunction = async ({ request }) => {
     "Cache-Control": "max-age=15, s-maxage=60480,stale-while-revalidate=60",
   };
   if (searchText) {
-    let obj = await searchTextWithName(searchText);
+    let obj = await searchPages(searchText);
     let textList = Object.keys(obj).map((key) => ({
       name: obj[key].name,
       results: obj[key].results,
+      order: obj[key].order,
       total: obj[key].total,
       extra: obj[key].extra,
-      id: obj[key].id,
+      textId: obj[key].textId,
     }));
     return json(
       { textList, search: searchText },
@@ -155,18 +156,19 @@ export default function Index() {
               {lists?.map(
                 (
                   list: {
-                    id: number;
+                    textId: number;
                     extra: boolean;
                     total: number;
                     results: [];
                     name: string;
+                    order: number;
                   },
                   index: number
                 ) => {
                   let result = list.results[0];
                   return (
                     <Link
-                      to={"/text/" + list.id + "/posts"}
+                      to={`/text/${list.textId}/page/${list.order}/posts`}
                       key={"id" + index}
                       className="container w-full"
                       prefetch="intent"

@@ -9,7 +9,6 @@ export default function generateText() {
     const endTag = `</post>`;
     const startIndex = tag.start;
     const endIndex = tag.end + startTag.length;
-
     newText =
       newText.slice(0, startIndex) +
       startTag +

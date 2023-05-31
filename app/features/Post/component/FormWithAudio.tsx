@@ -1,8 +1,8 @@
-import { useOutletContext } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { selectedTextOnEditor } from "~/states";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedTextOnEditor, textInfo } from "~/states";
 import { v4 as uuidv4 } from "uuid";
 import { Button, TextArea } from "~/component/UI";
 import { AudioPlayer, AudioRecorder } from "~/features/Media";
@@ -22,10 +22,12 @@ export function FormWithAudio({
   let content = post?.content ?? "";
   let audioUrl = post?.audioUrl ?? "";
   const [audio, setAudio] = useState({ tempUrl: audioUrl, blob: null });
+  const { name: textName } = useRecoilValue(textInfo);
+
   const [body, setBody] = useState(content);
   const [error, setError] = useState("");
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
-  const data = useOutletContext();
+  const data = useLoaderData();
   let isFormEmpty = body.length < 5;
   const { editor }: { editor: Editor } = useOutletContext();
   useEffect(() => {
@@ -66,7 +68,8 @@ export function FormWithAudio({
       threadId: id,
       selectionSegment: selection.content,
       textId: data?.text?.id,
-      topic: data?.text?.name,
+      pageId: data?.page?.id,
+      topic: textName,
       body: body,
       type: selection.type,
     };

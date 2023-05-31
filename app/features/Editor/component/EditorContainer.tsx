@@ -14,7 +14,6 @@ import {
 import { isSmallScreen } from "~/lib";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { changeFont, exportDoc, scrollThreadIntoView } from "../lib";
-import { Spinner } from "~/component/UI";
 type EditorContainerProps = {
   editor: Editor | null;
   isSaving: boolean;
@@ -23,6 +22,11 @@ type EditorContainerProps = {
 function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
+  useEffect(() => {
+    setTimeout(() => {
+      editor?.commands.setContent(content);
+    }, 100);
+  }, [content, editor]);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
@@ -32,9 +36,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
   const [fontSize, setFontSize] = useState(
     isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE
   );
-  useEffect(() => {
-    editor?.commands.setContent(content);
-  }, [content]);
+
   useEffect(() => {
     let d = scrollThreadIntoView(thread.id, `p_${thread.id}`);
   }, [thread.id]);
@@ -162,19 +164,7 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
           }}
         />
       )}
-      {!content && (
-        <div className="flex  h-[400px] w-full animate-pulse ">
-          <div role="status" className="flex-1 mr-2  max-w-sm animate-pulse">
-            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      )}
+
       {editor && (
         <BubbleMenu
           shouldShow={({ editor }) => {

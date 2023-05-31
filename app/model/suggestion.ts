@@ -1,10 +1,10 @@
 import { db } from "~/services/db.server";
 
-export async function findAllSuggestionByTextId(textId: number) {
+export async function findAllSuggestionByPageId(pageId: string) {
   try {
     let data = await db.suggestion.findMany({
       where: {
-        textId,
+        pageId,
       },
       include: {
         user: true,
@@ -50,6 +50,7 @@ export async function createSuggestion({
   oldValue,
   newValue,
   textId,
+  pageId,
   userId,
   threadId,
   audioUrl,
@@ -60,6 +61,7 @@ export async function createSuggestion({
         oldValue,
         newValue,
         textId: parseInt(textId),
+        pageId: pageId,
         userId,
         threadId,
         audioUrl,

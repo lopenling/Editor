@@ -20,7 +20,7 @@ type SuggestionFormProps = {
 
 export default function SuggestionForm({ editor }: SuggestionFormProps) {
   const data = useLoaderData();
-  let { user } = useOutletContext();
+  let { user } = data;
   const [suggestionInput, setSuggestionInput] = useState("");
   const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
@@ -48,6 +48,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     let item = {
       oldValue: originalText,
       textId: data.text.id,
+      pageId: data.page.id,
       newValue: suggestionInput,
       userId: user?.id,
       threadId: id,

@@ -33,11 +33,14 @@ export let action: ActionFunction = async ({ request }: ActionArgs) => {
     const userId = Obj.userId as string;
     const threadId = Obj.threadId as string;
     const filepath = Obj.file as string;
+    const pageId = Obj.pageId as string;
+
     try {
       let responce = await createSuggestion({
         oldValue,
         newValue,
         textId,
+        pageId,
         userId,
         threadId,
         audioUrl: filepath,

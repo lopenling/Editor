@@ -18,12 +18,14 @@ model Post {
   audioUrl       String?
   created_at     DateTime @default(now())
   creatorUser_id String
-  textId         Int
+  pageId         String
   threadId       String
   creatorUser    User     @relation("creatorPost", fields: [creatorUser_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Text           Text     @relation(fields: [textId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Reply          Reply[]
+  page           Page     @relation(fields: [pageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  text           Text     @relation(fields: [textId], references: [id])
+  reply          Reply[]
   likedBy        User[]   @relation("likedPost")
+  textId         Int
 }
 
 model Reply {
@@ -37,16 +39,27 @@ model Reply {
 model Text {
   id         Int          @id @unique @default(autoincrement())
   name       String
-  content    String
   userId     String?
+  author     User?        @relation(fields: [userId], references: [id])
+  Page       Page[]
+  Suggestion Suggestion[]
+  Post       Post[]
+}
+
+model Page {
+  id         String       @id @unique @default(uuid())
+  text       Text         @relation(fields: [textId], references: [id])
+  order      Int
+  content    String
+  textId     Int
   Post       Post[]
   Suggestion Suggestion[]
-  author     User?        @relation(fields: [userId], references: [id])
+  imageUrl   String
 }
 
 model Suggestion {
   id                String              @id @unique @default(uuid())
-  textId            Int
+  pageId            String
   oldValue          String
   newValue          String
   userId            String
@@ -54,10 +67,12 @@ model Suggestion {
   created_at        DateTime            @default(now())
   updated_at        DateTime?           @updatedAt
   audioUrl          String?
-  text              Text                @relation(fields: [textId], references: [id], onDelete: Cascade)
+  page              Page                @relation(fields: [pageId], references: [id])
+  text              Text                @relation(fields: [textId], references: [id])
   user              User                @relation("suggestionCreator", fields: [userId], references: [id])
   SuggestionComment SuggestionComment[]
   likedBy           User[]              @relation("likedSuggestion")
+  textId            Int
 }
 
 model SuggestionComment {

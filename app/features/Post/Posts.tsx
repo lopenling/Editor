@@ -7,21 +7,18 @@ import { FilterType, PostType, ReplyType, UserType } from "~/model/type";
 import Filter from "./Filter";
 import { Skeleton } from "~/component/UI";
 import { ClientOnly } from "remix-utils";
-import { useAsyncValue } from "@remix-run/react";
 
 type PostPropsType = {
   editor: Editor;
 };
 
-function Posts({ editor }: PostPropsType) {
+function Posts({ editor, posts }: PostPropsType) {
   let filters = useRecoilValue(filterDataState);
   let isLatest = useRecoilValue(showLatest);
-  let posts = useAsyncValue();
   if (!posts) {
     return <Skeleton number={4} height={80} />;
   }
   let lists = applyFilter(posts, filters, isLatest);
-
   return (
     <>
       <ClientOnly fallback={<></>}>{() => <Filter />}</ClientOnly>

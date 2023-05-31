@@ -88,7 +88,7 @@ function SearchString({ editor }: { editor: Editor }) {
             className={` h-full w-full border-none bg-transparent text-sm leading-tight text-gray-500 outline-0 focus:border-transparent focus:ring-0`}
           ></input>
         </form>
-        <input name="textId" readOnly value={data.text.id} hidden />
+        <input name="textId" readOnly value={data.page.id} hidden />
         <button type="submit" hidden></button>
 
         {searchState === "done" && searchString && searchString !== "" && (

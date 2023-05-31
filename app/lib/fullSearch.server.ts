@@ -7,7 +7,6 @@ export const fullSearch = (textList, search_term) => {
   const max_results = 0;
 
   for (let text of textList) {
-    let id = text.id;
     const content_length = text.content.length;
     const textWithNewlines = text.content.replace(
       /<br\s*\/?\s*(class\s*=\s*['"]\S*['"])?\s*>/gi,
@@ -18,13 +17,14 @@ export const fullSearch = (textList, search_term) => {
       content.matchAll(new RegExp(search_term, "g"))
     );
     const titleMatch = Array.from(
-      text.name.matchAll(new RegExp(search_term, "g"))
+      text.text.name.matchAll(new RegExp(search_term, "g"))
     );
 
     if (titleMatch.length > 0 || contentMatch.length > 0) {
       const result = {
-        id: text.id,
-        name: text.name,
+        textId: text.textId,
+        order: text.order,
+        name: text.text.name,
         results: [],
         total: 0,
         extra: false,
@@ -78,7 +78,7 @@ export const fullSearch = (textList, search_term) => {
     }
   }
   // Sort the array by the 'total' property in descending order
-
+  console.log(results);
   results.sort((a, b) => b.total - a.total);
   return results;
 };

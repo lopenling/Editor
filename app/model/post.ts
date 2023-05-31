@@ -10,6 +10,7 @@ export async function createPost(
   post_id: number,
   threadId: string,
   textId: number,
+  pageId: string,
   content: string,
   creatorUser_id: string,
   audioUrl: string
@@ -25,9 +26,11 @@ export async function createPost(
         threadId,
         creatorUser_id: creatorUser_id,
         textId: textId,
+        pageId: pageId,
         audioUrl: audioUrl,
       },
     });
+    console.log(createPost);
     return createPost;
   } catch (e) {
     console.log(e);
@@ -66,7 +69,7 @@ export async function findPostByTopicId(TopicId: number) {
     return "couldnot find the by TopicId" + e.message;
   }
 }
-export async function findPostByTextId(textId: number) {
+export async function findPostByTextIdAndPage(textId: number, pageId: string) {
   const Categories = await fetchCategoryData();
   const topicList = Categories.topic_list.topics;
   try {
@@ -74,17 +77,18 @@ export async function findPostByTextId(textId: number) {
       include: {
         creatorUser: true,
         likedBy: true,
-        Reply: true,
+        reply: true,
       },
       where: {
         textId,
+        pageId,
       },
     });
     const postWithReply = await Promise.all(
       posts.map(async (post) => {
         const replies = topicList.find((l) => l.id === post.topic_id);
         const isSolved =
-          post.Reply.filter((l) => l.is_approved === true).length > 0;
+          post.reply.filter((l) => l.is_approved === true).length > 0;
 
         return {
           ...post,

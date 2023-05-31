@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
     }
     let audioUrl = Obj.file as string;
     let textId = parseInt(Obj.textId as string);
-
+    let pageId = Obj.pageId as string;
     try {
       const data = await createThread(
         user.username,
@@ -64,6 +64,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
           data["id"],
           Obj.threadId as string,
           textId,
+          pageId,
           Obj.body as string,
           user.id,
           audioUrl
