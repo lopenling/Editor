@@ -9,7 +9,11 @@ export async function getPage(textId: number, order: number) {
         order,
       },
       include: {
-        text: true,
+        text: {
+          include: {
+            Page: true,
+          },
+        },
       },
     });
     return page;

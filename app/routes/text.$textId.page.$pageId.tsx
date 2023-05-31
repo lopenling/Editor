@@ -43,6 +43,7 @@ export const loader: LoaderFunction = async ({
   return {
     page,
     text: page?.text,
+    pageCount: page?.text.Page.length,
     user,
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
@@ -186,7 +187,7 @@ export default function Page() {
     <>
       <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
-      <div style={{ height: 100 }}></div>
+      <div style={{ height: 70 }}></div>
       <Split
         minSize={isMobile ? 100 : 350}
         maxSize={750}
@@ -204,8 +205,8 @@ export default function Page() {
           }}
           id="textEditorContainer"
         >
+          <Pagination pageCount={data.pageCount} />
           <EditorContainer editor={editor} isSaving={false} content={content} />
-          <Pagination />
         </div>
 
         <div
