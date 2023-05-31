@@ -194,6 +194,7 @@ export default function Page() {
         className="split flex-1 flex flex-col lg:flex-row max-w-6xl mx-auto"
         direction={isMobile ? "vertical" : "horizontal"}
         sizes={isMobile ? [50, 50] : isTablet ? [60, 40] : [65, 35]}
+        gutterStyle={() => ({ height: "70vh", width: "10px" })}
       >
         <div
           style={{
