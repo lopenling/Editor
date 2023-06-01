@@ -1,0 +1,22 @@
+id: O0A4F0B4F
+default_language: bo
+source: https://library.bdrc.io
+initial_creation_type: ocr
+imported: 2022-12-13 17:05:03.938546+00:00
+last_modified: 2022-12-13 17:05:03.938574+00:00
+source_metadata:
+  id: http://purl.bdrc.io/resource/W1PD95844
+  status: http://purl.bdrc.io/admindata/StatusReleased
+  access: http://purl.bdrc.io/admindata/AccessFairUse
+  geo_restriction:
+  - CN
+  reproduction_of: http://purl.bdrc.io/resource/MW1PD95844
+  copyright_status: http://purl.bdrc.io/resource/CopyrightPublicDomain
+  title: དེ་བཞིན་གཤེགས་པའི་སྙིང་པོ་ཡི་གེ་བརྒྱ་པའི་བསྲུང་བ་དང་སྡིག་པ་བཤགས་པའི་ཆོ་ག
+  languages:
+  - bo
+bases:
+  7367:
+    source_metadata: {}
+    order: 1
+    base_file: 7367.txt

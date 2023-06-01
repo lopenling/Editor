@@ -7,6 +7,9 @@
     "start": "cross-env NODE_ENV=production netlify dev",
     "typecheck": "tsc"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@assembless/react-littera": "^2.4.0",
     "@aws-sdk/client-s3": "^3.315.0",

@@ -1,0 +1,155 @@
+id: 07dc813ccfc04cdb9b94d4acffd5ac01
+annotation_type: Durchen
+revision: '00001'
+annotations:
+  4bf7f166dc864029944e0ff6acaba7f4:
+    span:
+      start: 295
+      end: 300
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: ཏྲཱ་ཨ་
+      narthang:
+        note: ཏྲཱ་ཨ་
+      derge:
+        note: ཏྲ་ཡ་
+      chone:
+        note: ཏྲ་ཡ་
+  5ce35c00f9a6475fa06c0065b83260bd:
+    span:
+      start: 311
+      end: 316
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: བཱཔྟཱི་
+      narthang:
+        note: བཱཔྟི
+      derge:
+        note: བཱཔྟི
+      chone:
+        note: བཱཔྟི
+  95f62127391d4fb79e46bfaaf6ed99e7:
+    span:
+      start: 324
+      end: 340
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: ཏཱ་བ་ལེ་ནཱཾ་
+      narthang:
+        note: ཏཱ་བ་ལེ་ནཱཾ་
+      derge:
+        note: ཏ་བ་ལི་ནཱན། ཨོཾ་
+      chone:
+        note: ཏ་བ་ལི་ནཱན། ཨོཾ་
+  2be4a0b7dc97481ba8e31c7ae1be7f53:
+    span:
+      start: 357
+      end: 368
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: ཏོ། ནནྟཱ་
+      narthang:
+        note: ཏོ་ནེནྟཱ་
+      derge:
+        note: ཏོ྅་ནནྟ་ཏཱ་
+      chone:
+        note: ཏོ྅་ནནྟ་ཏཱ་
+  d9d82fec55aa4bd4a3a6feb7b7e88e9d:
+    span:
+      start: 401
+      end: 403
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: ཎ
+      narthang:
+        note: ཎ
+      derge:
+        note: ཎེ
+      chone:
+        note: ཎེ
+  2086b9ccccc444a9b1b70facc1693d2a:
+    span:
+      start: 448
+      end: 450
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: ལ
+      narthang:
+        note: ལ
+      derge:
+        note: ལཱ
+      chone:
+        note: ལཱ
+  1946522e0b344bf794bf80ac90ed9411:
+    span:
+      start: 472
+      end: 476
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: བྷ་ག་ཝ་
+      narthang:
+        note: བྷ་ག་ཝ་
+      derge:
+        note: ག་ག་
+      chone:
+        note: ག་ག་
+  dcab2cb61d2f4c29a3662d66fa6a4158:
+    span:
+      start: 1341
+      end: 1351
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: མ་དང་
+      narthang:
+        note: མ་དང་
+      derge:
+        note: པའི་ཆོས་ལ་
+      chone:
+        note: པའི་ཆོས་ལ་
+    printable: true
+  2c902405038a4450b1b769ea9d7fe6db:
+    span:
+      start: 1578
+      end: 1589
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: ཀྱང་རུང་སྟེ་
+      narthang:
+        note: ཀྱང་རུང་སྟེ་
+      derge:
+        note: པའི་ཆོས་ཏེ་
+      chone:
+        note: པའི་ཆོས་ཏེ་
+  b50b93d541424fb0a3ffa1b9aebe87df:
+    span:
+      start: 1775
+      end: 1782
+      errors: {}
+    metadata: {}
+    options:
+      peking:
+        note: བསྟན་པ་
+      narthang:
+        note: བསྟན་པ་
+      derge:
+        note: བརྟན་པ་
+      chone:
+        note: བརྟན་པ་

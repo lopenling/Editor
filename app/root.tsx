@@ -84,7 +84,7 @@ function App() {
   const navigation = useNavigation();
   let routeChanged =
     navigation.state === "loading" &&
-    navigation.location?.pathname.includes("/text");
+    !navigation.location?.pathname.includes("/text");
 
   return (
     <html className={data.user?.preference?.theme || "light"}>
@@ -97,7 +97,7 @@ function App() {
         />
         <Links />
       </head>
-      <body className="relative dark:bg-gray-600 dark:text-white  scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
+      <body className="relative dark:bg-gray-600 dark:text-white  scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 max-h-[100vh] overflow-hidden">
         <LitteraProvider locales={["en_US", "bo_TI"]}>
           <AnimatePresence mode="wait" initial={false}>
             {routeChanged ? (

@@ -78,7 +78,6 @@ export const fullSearch = (textList, search_term) => {
     }
   }
   // Sort the array by the 'total' property in descending order
-  console.log(results);
   results.sort((a, b) => b.total - a.total);
   return results;
 };

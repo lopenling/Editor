@@ -80,6 +80,7 @@ export default function Index() {
   const lists = data.textList;
   const isLoading =
     navigation.formData?.get("search") && navigation.state === "loading";
+  console.log(lists);
   if (lists?.message)
     return <div className="text-red-400">{lists?.message}</div>;
   return (
@@ -168,7 +169,7 @@ export default function Index() {
                   let result = list.results[0];
                   return (
                     <Link
-                      to={`/text/${list.textId}/page/${list.order}/posts`}
+                      to={`/text/${list.textId}/page/1/posts`}
                       key={"id" + index}
                       className="container w-full"
                       prefetch="intent"
@@ -179,11 +180,11 @@ export default function Index() {
                           fontFamily: "monlam",
                         }}
                       >
-                        <div className="text-xl">{list.name}</div>
+                        <div className="text-xl">{result.name}</div>
                         <div className="flex flex-wrap justify-between text-sm">
                           {result && result[1]}
                           <div className="text-sm text-gray-400">
-                            {list.total} matches
+                            {result.total} matches
                           </div>
                         </div>
                       </Card>

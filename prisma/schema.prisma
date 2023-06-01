@@ -60,13 +60,14 @@ model Page {
 model Suggestion {
   id                String              @id @unique @default(uuid())
   pageId            String
-  oldValue          String
+  oldValue          String?
   newValue          String
   userId            String
   threadId          String
   created_at        DateTime            @default(now())
   updated_at        DateTime?           @updatedAt
   audioUrl          String?
+  version           String?
   page              Page                @relation(fields: [pageId], references: [id])
   text              Text                @relation(fields: [textId], references: [id])
   user              User                @relation("suggestionCreator", fields: [userId], references: [id])

@@ -1,4 +1,4 @@
-import { LoaderArgs, LoaderFunction } from "@remix-run/node";
+import { LoaderArgs, LoaderFunction, defer } from "@remix-run/node";
 import {
   Await,
   Link,
@@ -39,15 +39,15 @@ export const loader: LoaderFunction = async ({
   let order = params.pageId as string;
   let page = await getPage(parseInt(textId), parseInt(order));
   let user = await getUserSession(request);
-  const suggestions = await findAllSuggestionByPageId(page?.id);
-  return {
+  const suggestions = findAllSuggestionByPageId(page?.id);
+  return defer({
     page,
     text: page?.text,
     pageCount: page?.text.Page.length,
     user,
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
-  };
+  });
 };
 
 export default function Page() {
@@ -194,7 +194,7 @@ export default function Page() {
         className="split flex-1 flex flex-col lg:flex-row max-w-6xl mx-auto"
         direction={isMobile ? "vertical" : "horizontal"}
         sizes={isMobile ? [50, 50] : isTablet ? [60, 40] : [65, 35]}
-        gutterStyle={() => ({ height: "70vh", width: "10px" })}
+        gutterStyle={() => ({ height: "90vh", width: "10px" })}
       >
         <div
           style={{

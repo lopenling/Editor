@@ -41,9 +41,24 @@ export async function searchPages(search_term = "") {
         text: true,
       },
     });
-    let result = fullSearch(textList, search_term);
+    let results = fullSearch(textList, search_term);
+    let groupedData = [];
 
-    return result;
+    for (const item of results) {
+      const { textId } = item;
+      const existingGroup = groupedData.find(
+        (group) => group.textId === textId
+      );
+      if (existingGroup) {
+        existingGroup.results.push(item);
+      } else {
+        groupedData.push({
+          textId: textId,
+          results: [item],
+        });
+      }
+    }
+    return groupedData;
   } catch (e: any) {
     throw new Error("error finding text with name" + e.message);
   }
