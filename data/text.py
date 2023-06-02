@@ -6,7 +6,18 @@ file_name = 'O0A4F0B4F'
 base_name = 7367
 
 
-def fetchText(base_name):
+def get_meta_data(file_name):
+    file_path = f'./{file_name}/{file_name}.opf/meta.yml'
+    try:
+        with io.open(file_path, 'r', encoding='utf-8') as meta_file:
+            yaml_data = yaml.safe_load(meta_file)
+            return yaml_data
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+def fetchText(file_name, base_name):
     file_path = f'./{file_name}/base/{base_name}.txt'
     try:
         with io.open(file_path, 'r', encoding='utf-8') as textFile:
@@ -68,9 +79,6 @@ def create_json_file(data, file_path):
 def create_txt_file(data, file_path):
     with io.open(file_path, "w", encoding='utf-8') as file:
         file.write(data)
-
-
-print("Text file created successfully.")
 
 
 def applyAnnotation(text, annotation):
@@ -142,7 +150,7 @@ def generate_paginated_text():
                 paginatedText['order'] = order
                 pagination_data.append(paginatedText)
 
-            text = fetchText(base_name)
+            text = fetchText(file_name, base_name)
             paginated_text = cut_text_by_pagination(text, pagination_data)
             return paginated_text
 
@@ -160,8 +168,12 @@ def generate_paginated_text():
 text = generate_paginated_text()
 annotation = extract_annotations_array(fetch_annotation(base_name))
 datas = generate_merged_array(text, annotation)
-
+meta = get_meta_data(file_name)
+output = {}
 for data in datas:
     data['content'] = applyAnnotation(data['content'], data['annotation'])
 
-d = create_json_file(datas, './data.json')
+output['data'] = datas
+output['meta'] = meta['source_metadata']
+output['base'] = meta['bases']
+d = create_json_file(output, './data.json')

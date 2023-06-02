@@ -84,7 +84,7 @@ export function FormWithAudio({
     if (type === "update") {
       form_data.append("body", body);
       form_data.append("action", "update");
-      form_data.append("postId", post?.id);
+      form_data.append("postId", post?.id!);
       let responseData = await fetcher.submit(form_data, {
         method: "PATCH",
         action: "/api/post",

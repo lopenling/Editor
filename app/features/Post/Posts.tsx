@@ -33,13 +33,17 @@ function Posts({ editor, posts }: PostPropsType) {
         <Suspense fallback="loading">
           <ClientOnly>
             {() => {
-              return (
-                lists?.length > 0 &&
+              return lists?.length > 0 ? (
                 lists?.map((post: PostType) => {
                   return (
                     <Post key={post.id} post={post} isOptimistic={false} />
                   );
                 })
+              ) : (
+                <div className="text-center">
+                  <p>No post available</p>
+                  Feel free to be the first one to ask Question !
+                </div>
               );
             }}
           </ClientOnly>

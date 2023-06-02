@@ -144,7 +144,7 @@ export async function updateSuggestionContent(id: string, newValue: string) {
 }
 export async function findSuggestionWithMostLikes(id: string) {
   try {
-    const mostLikedSuggestion = await db.suggestion.findMany({
+    const mostLikedSuggestion = await db.suggestion.findFirst({
       where: {
         threadId: id,
       },
@@ -160,7 +160,7 @@ export async function findSuggestionWithMostLikes(id: string) {
       ],
       take: 1,
     });
-    return mostLikedSuggestion[0];
+    return mostLikedSuggestion;
   } catch (e) {
     console.warn(e);
   }

@@ -58,17 +58,18 @@ function replaceMarkContent(
               )
             );
           const markType = editor.view.state.schema.marks.suggestion;
-          editor.view.dispatch(
-            trx.replaceWith(
-              from,
-              to,
-              editor.view.state.schema.text(content, [
-                markType.create({
-                  id: markID,
-                }),
-              ])
-            )
-          );
+          if (editor.state.doc.textBetween(from, to, " ") !== content)
+            editor.view.dispatch(
+              trx.replaceWith(
+                from,
+                to,
+                editor.view.state.schema.text(content, [
+                  markType.create({
+                    id: markID,
+                  }),
+                ])
+              )
+            );
         }
       });
     }

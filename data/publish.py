@@ -26,6 +26,7 @@ supabase = create_client(url, key)
 datas = read_json_file('./data.json')
 userId = "08a6a7bb-6877-4fe9-b95a-ba0b3c27c204"
 textId = 10
+text_title = datas.get('meta').get('title')
 
 
 def upload_default_user():
@@ -103,20 +104,19 @@ def upload_suggestion(annotationId, value, userId, pageId):
 
 
 def main():
-    text_id = upload_text(
-        'text_testing', '08a6a7bb-6877-4fe9-b95a-ba0b3c27c204')
-    for data in datas:
-        page_id = upload_Page(data['content'], '', data['order'], textId)
-        for annotation in data['annotation']:
-            for version in annotation['versions']:
-                keys = list(version.keys())
-                values = list(version.values())
-                key = keys[0]
-                value = values[0]
+
+    upload_text(
+        text_title, userId)
+    for data in datas.get('data'):
+        content = data.get('content')
+        order = data.get('order')
+        page_id = upload_Page(content, '', order, textId)
+        for annotation in data.get('annotation'):
+            for version in annotation.get('versions'):
+                key, value = next(iter(version.items()))
                 userId = getUserId(key)
                 res = upload_suggestion(
                     annotation['id'], value, userId, page_id)
-                print(res)
     return res
 
 
@@ -131,4 +131,5 @@ def getUserId(name):
         return "a3e238db-65b1-45a7-825b-1fb3f2bbf2ab"
 
 
-main()
+print(text_title)
+# main()

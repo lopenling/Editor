@@ -78,6 +78,9 @@ nav > div {
 .ProseMirror {
   line-height: 1.9;
 }
+.textEditorContainer::-webkit-scrollbar {
+  display: none;
+}
 .dark .ProseMirror ::selection {
   background: #374151;
 }

@@ -19,14 +19,21 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     let update = await updateSuggestionLike(id, user.id, likedUsers === null);
     if (update) {
-      let highestLiked = await findSuggestionWithMostLikes(threadId);
-      if (highestLiked?.textId) {
-        await trigerUpdate(user, highestLiked.textId);
+      const highestLiked = await findSuggestionWithMostLikes(threadId);
+      if (highestLiked) {
+        await trigerUpdate(user, highestLiked?.pageId);
+        return json(
+          {
+            highestLiked: highestLiked.newValue,
+            likedBy: update,
+          },
+          {
+            headers: {
+              "Cache-Control": "max-age=0, s-maxage=0",
+            },
+          }
+        );
       }
-      return {
-        highestLiked: highestLiked,
-        likedBy: update,
-      };
     }
     return true;
   } catch (e) {

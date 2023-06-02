@@ -16,6 +16,9 @@ function Suggestions({
   let list = suggestions.filter((sug) => {
     return sug.threadId === suggestionThread.id;
   });
+
+  let groupedSuggestion = transformObjectsByNewValue(list);
+  console.log(groupedSuggestion);
   return (
     <div
       className="p-2 ml-2 bg-slate-50 dark:bg-gray-700 shadow-md mt-4 h-[80vh] max-h-[80vh] overflow-visible overflow-y-auto z-1"
@@ -25,17 +28,69 @@ function Suggestions({
         <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
           Suggestion
         </h2>
-        {list.map((suggest) => (
-          <Suggestion
-            optimistic={false}
-            editor={editor}
-            suggest={suggest}
-            key={suggest.id}
-          />
-        ))}
+        {groupedSuggestion.map((suggest) => {
+          return (
+            <Suggestion
+              optimistic={false}
+              editor={editor}
+              suggest={suggest}
+              key={suggest.id}
+            />
+          );
+        })}
       </div>
     </div>
   );
 }
 
 export default Suggestions;
+
+function combineObjectsByNewValue(objects) {
+  const combinedObjects = {};
+
+  objects.forEach((obj) => {
+    const { newValue } = obj;
+    if (newValue in combinedObjects) {
+      combinedObjects[newValue].push(obj);
+    } else {
+      combinedObjects[newValue] = [obj];
+    }
+  });
+
+  return combinedObjects;
+}
+
+function transformObjectsByNewValue(objects) {
+  const transformedObjects = [];
+
+  const combinedObjects = combineObjectsByNewValue(objects);
+
+  for (const newValue in combinedObjects) {
+    const objectsWithSameNewValue = combinedObjects[newValue];
+    const usersArray = objectsWithSameNewValue.map((obj) => obj.user);
+    const likedByArray = objectsWithSameNewValue.reduce((likedByArr, obj) => {
+      likedByArr.push(...obj.likedBy);
+      return likedByArr;
+    }, []);
+
+    objectsWithSameNewValue.forEach((obj) => {
+      const newObj = { ...obj };
+      newObj.user = usersArray;
+      newObj.likedBy = likedByArray;
+      transformedObjects.push(newObj);
+    });
+  }
+
+  // Remove repeating newValue data
+  const uniqueValues = [
+    ...new Set(transformedObjects.map((obj) => obj.newValue)),
+  ];
+  const uniqueTransformedObjects = uniqueValues.map((newValue) => {
+    const objectsWithSameNewValue = transformedObjects.filter(
+      (obj) => obj.newValue === newValue
+    );
+    return objectsWithSameNewValue[0];
+  });
+
+  return uniqueTransformedObjects;
+}

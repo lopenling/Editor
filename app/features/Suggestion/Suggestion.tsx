@@ -5,7 +5,7 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { timeAgo } from "~/lib/getFormatedDate";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -31,12 +31,11 @@ export default function Suggestion({
   const likeFetcher = useFetcherWithPromise();
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
-  const { user } = useOutletContext();
   const [effect, setEffect] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
-  const { text } = useLoaderData();
+  const { text, user } = useLoaderData();
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
@@ -68,10 +67,9 @@ export default function Suggestion({
       },
       { method: "POST", action: "api/suggestion/like" }
     );
-    setTimeout(() => {
-      replaceMarkContent(editor, suggest.threadId, res?.highestLiked.newValue);
-    }, 100);
+    replaceMarkContent(editor, suggest.threadId, res?.highestLiked);
   };
+
   let time = timeAgo(suggest.created_at);
 
   function deleteSuggestion(id: string) {
@@ -102,16 +100,29 @@ export default function Suggestion({
       className={`${deleteFetcher.formData && "hidden"} p-3 `}
     >
       <div className="relative flex justify-between mb-2">
-        <div className="  flex gap-3">
-          <img
-            className="w-6 h-6 rounded-full"
-            src={suggest.user.avatarUrl}
-            alt="Extra small avatar"
-          ></img>
-          <p className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
-            {suggest.user.name}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{time}</p>
+        <div className="  flex gap-3 items-center">
+          <div className="flex -space-x-4">
+            {suggest.user.map((item) => (
+              <img
+                title={item.username}
+                key={item.id}
+                className="w-6 h-6 border-2 border-white rounded-full dark:border-gray-800"
+                src={item.avatarUrl}
+                alt="a"
+              />
+            ))}
+          </div>
+          <div className="text-base flex gap-1 font-medium leading-tight text-gray-900 dark:text-gray-200 ">
+            {suggest.user.map((item, index) => (
+              <div key={item.id} className="capitalize">
+                {item.username}
+                {index !== suggest.user.length - 1 && <span>,</span>}
+              </div>
+            ))}
+          </div>
+          {suggest.oldValue && (
+            <p className="text-sm text-gray-600 dark:text-gray-400">{time}</p>
+          )}
         </div>
         <button
           className="inline-flex items-center text-sm font-medium text-center text-gray-400  rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600"
