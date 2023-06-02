@@ -14,15 +14,16 @@ import { LoaderFunction, defer, redirect } from "@remix-run/node";
 import { Editor } from "@tiptap/react";
 import { useLiveLoader } from "~/lib";
 import { Skeleton, Dropdown, DropdownItem } from "~/component/UI";
-import { getPageId } from "~/model/page";
+import { getPage, getPageId } from "~/model/page";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
   const threadId = new URL(request.url).searchParams.get("thread") ?? "";
-  const pageId = await getPageId(parseInt(textId), parseInt(order));
-  const posts = await findPostByTextIdAndPage(parseInt(textId), pageId);
-  return defer({ text: { id: textId }, posts, threadId, page: { id: pageId } });
+  let page = await getPage(parseInt(textId), parseInt(order));
+
+  const posts = await findPostByTextIdAndPage(parseInt(textId), page?.id);
+  return defer({ text: { id: textId }, posts, threadId, page });
 };
 export const ErrorBoundary = ({ error }: { error: Error }) => {
   return <div>{error?.message}</div>;

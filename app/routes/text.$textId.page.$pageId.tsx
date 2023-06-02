@@ -18,8 +18,8 @@ import {
   textInfo,
 } from "~/states";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { DiffMatchPatch, isSmallScreen } from "~/lib";
+import { Suspense, useEffect, useState } from "react";
+import { isSmallScreen } from "~/lib";
 import Header from "~/component/Layout/Header";
 
 import Split from "react-split";
@@ -192,7 +192,12 @@ export default function Page() {
           id="textEditorContainer"
         >
           <Pagination pageCount={data.pageCount} />
-          <EditorContainer editor={editor} isSaving={false} content={content} />
+          <EditorContainer
+            editor={editor}
+            isSaving={false}
+            content={content}
+            order={data.page.order}
+          />
         </div>
 
         <div

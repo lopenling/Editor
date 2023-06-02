@@ -94,10 +94,11 @@ class DiscourseApi {
     topic_name: string | FormDataEntryValue,
     bodyContent: string,
     textId: number,
+    order: number,
     audioUrl: string | null
   ) {
     let auth_headers = this.authHeader();
-    let url = `${this.origin}/text/${textId}/posts?thread=${threadId}`;
+    let url = `${this.origin}/text/${textId}/page/${order}/posts?thread=${threadId}`;
     let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
     let post_text = `
 <p>${bodyContentWithLink}</p>
@@ -246,6 +247,7 @@ export async function createThread(
   postContent: string,
   parentCategoryId: string,
   textId: number,
+  order: number,
   audioUrl: string | null,
   threadId: string
 ) {
@@ -275,6 +277,7 @@ export async function createThread(
     blockquoteArea,
     postContent as string,
     textId,
+    order,
     audioUrl
   );
   return topic;

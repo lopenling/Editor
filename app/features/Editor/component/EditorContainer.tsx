@@ -18,8 +18,14 @@ type EditorContainerProps = {
   editor: Editor | null;
   isSaving: boolean;
   content: string;
+  order: number;
 };
-function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
+function EditorContainer({
+  editor,
+  isSaving,
+  content,
+  order,
+}: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
   useEffect(() => {
@@ -82,13 +88,12 @@ function EditorContainer({ editor, isSaving, content }: EditorContainerProps) {
   const toggleImage = (e) => {
     setShowImage(e.target.checked);
   };
-
   return (
     <div className=" relative shadow-sm  mb-4">
       <div className=" bg-white dark:bg-gray-700 z-10  text-3xl  font-bold  text-light py-4 px-2  flex items-center justify-between  text-gray-900 dark:text-white">
         <h3 className="textname flex gap-2 text-2xl">
           <div className="flex items-center gap-2">
-            {data.text.name}
+            {data.text.name} ({order})
             {isSaving && (
               <span className="text-sm font-light animate-pulse">
                 saving...

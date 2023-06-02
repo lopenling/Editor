@@ -69,6 +69,7 @@ export function FormWithAudio({
       selectionSegment: selection.content,
       textId: data?.text?.id,
       pageId: data?.page?.id,
+      order: data?.page?.order,
       topic: textName,
       body: body,
       type: selection.type,
