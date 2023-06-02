@@ -167,43 +167,63 @@ export default function Suggestion({
           </ul>
         </div>
       </div>
-      <div className=" w-full text-base leading-normal text-black mb-3">
-        <span className="font-bold text-sm">Replace :</span>
-        <span
-          onClick={() => {
-            if (text.author.username === user.username)
-              replaceMarkContent(editor, suggest.threadId, suggest.oldValue);
-          }}
-          className={`text-gray-500 dark:text-gray-100`}
-        >
-          "{suggest.oldValue}"
-        </span>
-        <span className="font-bold text-sm"> with :</span>
-        {openEdit ? (
-          <editFetcher.Form
-            className="flex gap-2"
-            action="/api/suggestion"
-            method="PATCH"
-            onSubmit={() => setOpenEdit(false)}
+      {suggest.oldValue ? (
+        <div className=" w-full text-base leading-normal text-black mb-3">
+          <span className="font-bold text-sm">Replace :</span>
+          <span
+            onClick={() => {
+              if (text.author.username === user.username)
+                replaceMarkContent(editor, suggest.threadId, suggest.oldValue);
+            }}
+            className={`text-gray-500 dark:text-gray-100`}
           >
-            <input
-              name="newValue"
-              type="text"
-              className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              defaultValue={suggest.newValue}
-            />
-            <input name="id" type="text" value={suggest.id} hidden />
-            <Button
-              label={editFetcher.state === "submitting" ? "saving" : "confirm"}
-              type="submit"
-            />
-            <Button
-              label="cancel"
-              type="reset"
-              onClick={() => setOpenEdit(false)}
-            />
-          </editFetcher.Form>
-        ) : (
+            "{suggest.oldValue}"
+          </span>
+          <span className="font-bold text-sm"> with :</span>
+          {openEdit ? (
+            <editFetcher.Form
+              className="flex gap-2"
+              action="/api/suggestion"
+              method="PATCH"
+              onSubmit={() => setOpenEdit(false)}
+            >
+              <input
+                name="newValue"
+                type="text"
+                className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                defaultValue={suggest.newValue}
+              />
+              <input name="id" type="text" value={suggest.id} hidden />
+              <Button
+                label={
+                  editFetcher.state === "submitting" ? "saving" : "confirm"
+                }
+                type="submit"
+              />
+              <Button
+                label="cancel"
+                type="reset"
+                onClick={() => setOpenEdit(false)}
+              />
+            </editFetcher.Form>
+          ) : (
+            <span
+              onClick={() => {
+                if (text.author.username === user.username)
+                  replaceMarkContent(
+                    editor,
+                    suggest.threadId,
+                    suggest.newValue
+                  );
+              }}
+              className={`text-gray-500 dark:text-gray-100 `}
+            >
+              "{suggest.newValue}"
+            </span>
+          )}
+        </div>
+      ) : (
+        <div>
           <span
             onClick={() => {
               if (text.author.username === user.username)
@@ -213,8 +233,9 @@ export default function Suggestion({
           >
             "{suggest.newValue}"
           </span>
-        )}
-      </div>
+        </div>
+      )}
+
       <div className="mb-2">
         {suggest?.audioUrl && suggest.audioUrl !== "" && (
           <AudioPlayer src={suggest?.audioUrl} />

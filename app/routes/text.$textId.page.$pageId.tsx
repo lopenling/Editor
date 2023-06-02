@@ -39,7 +39,7 @@ export const loader: LoaderFunction = async ({
   let order = params.pageId as string;
   let page = await getPage(parseInt(textId), parseInt(order));
   let user = await getUserSession(request);
-  const suggestions = findAllSuggestionByPageId(page?.id);
+  const suggestions = await findAllSuggestionByPageId(page?.id);
   return defer({
     page,
     text: page?.text,
@@ -89,26 +89,13 @@ export default function Page() {
     data.pusher_env.cluster,
     data.user
   );
-  const getQuery = useCallback(
-    (newContent: string) => {
-      let oldContent = contentData;
-      const dmp = new DiffMatchPatch();
-      if (oldContent !== newContent) {
-        const changes = dmp.diff_main(oldContent, newContent);
-        const patch = dmp.patch_make(changes);
-        let query = dmp.patch_toText(patch);
-        return query;
-      }
-      return null;
-    },
-    [contentData]
-  );
+
   const saveTextFetcher = useFetcher();
-  const saveData = async (patch: string) => {
+  const saveData = async (text: string) => {
     const formData = new FormData();
     formData.append("textId", data.text?.id);
     formData.append("pageId", data.page?.id);
-    formData.append("patch", JSON.stringify(patch));
+    formData.append("text", text);
     saveTextFetcher.submit(formData, {
       method: "POST",
       action: "/api/text",
@@ -167,8 +154,7 @@ export default function Page() {
       },
       onUpdate: async ({ editor }) => {
         let newContent = editor.getHTML();
-        let query = getQuery(newContent);
-        if (query && newContent.length > 10 && user) saveData(query);
+        if (newContent.length > 10 && user) saveData(newContent);
       },
       onCreate: async ({ editor }) => {
         setTextName({ name: data?.text.name, id: data?.text.id });
@@ -182,7 +168,6 @@ export default function Page() {
       setTextHeight(40);
     }
   }, [isSmallScreen]);
-
   return (
     <>
       <Header editor={editor} />

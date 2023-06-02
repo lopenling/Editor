@@ -12,7 +12,6 @@ export default function Pagination({ pageCount }: PaginationPropType) {
   let navigation = useNavigation();
   let PreviousLink = `/text/${textId}/page/${order - 1}/posts`;
   let nextLink = `/text/${textId}/page/${order + 1}/posts`;
-  console.log(navigation);
   return (
     <div className="flex justify-end gap-3">
       {order - 1 > 0 && (
