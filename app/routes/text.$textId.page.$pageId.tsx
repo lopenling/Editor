@@ -174,12 +174,15 @@ export default function Page() {
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div style={{ height: 70 }}></div>
       <Split
-        minSize={isMobile ? 100 : 350}
-        maxSize={750}
+        minSize={isMobile ? 400 : 600}
         className="split flex-1 flex flex-col lg:flex-row max-w-6xl mx-auto"
         direction={isMobile ? "vertical" : "horizontal"}
         sizes={isMobile ? [50, 50] : isTablet ? [60, 40] : [65, 35]}
-        gutterStyle={() => ({ height: "90vh", width: "10px" })}
+        gutterStyle={() =>
+          isMobile
+            ? { height: "10px", width: "100vw" }
+            : { height: "90vh", width: "10px" }
+        }
       >
         <div
           style={{
