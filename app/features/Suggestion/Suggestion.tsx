@@ -14,12 +14,11 @@ import { AudioPlayer, AudioRecorder } from "../Media";
 import { v4 as uuidv4 } from "uuid";
 import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { replaceMarkContent } from "~/features/Editor/tiptap/markAction";
-import { SuggestionType } from "~/model/type";
 import Comment from "./Comment";
 
 type SuggestionProps = {
   editor: Editor | null;
-  suggest: SuggestionType;
+  suggest: any;
   optimistic: boolean;
 };
 
@@ -93,7 +92,6 @@ export default function Suggestion({
       editor?.commands.unsetSuggestion();
     }
   }
-  if (!suggest.user) return null;
   return (
     <div
       key={suggest.id}
@@ -101,25 +99,29 @@ export default function Suggestion({
     >
       <div className="relative flex justify-between mb-2">
         <div className="  flex gap-3 items-center">
-          <div className="flex -space-x-4">
-            {suggest.user.map((item) => (
-              <img
-                title={item.username}
-                key={item.id}
-                className="w-6 h-6 border-2 border-white rounded-full dark:border-gray-800"
-                src={item.avatarUrl}
-                alt="a"
-              />
-            ))}
-          </div>
-          <div className="text-base flex gap-1 font-medium leading-tight text-gray-900 dark:text-gray-200 ">
-            {suggest.user.map((item, index) => (
-              <div key={item.id} className="capitalize">
-                {item.username}
-                {index !== suggest.user.length - 1 && <span>,</span>}
+          {suggest.user.length && (
+            <>
+              <div className="flex -space-x-4">
+                {suggest.user?.map((item) => (
+                  <img
+                    title={item.username}
+                    key={item.id}
+                    className="w-6 h-6 border-2 border-white rounded-full dark:border-gray-800"
+                    src={item.avatarUrl}
+                    alt="a"
+                  />
+                ))}
               </div>
-            ))}
-          </div>
+              <div className="text-base flex gap-1 font-medium leading-tight text-gray-900 dark:text-gray-200 ">
+                {suggest.user?.map((item, index) => (
+                  <div key={item.id + index} className="capitalize">
+                    {item.username}
+                    {index !== suggest.user.length - 1 && <span>,</span>}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
           {suggest.oldValue && (
             <p className="text-sm text-gray-600 dark:text-gray-400">{time}</p>
           )}
@@ -150,26 +152,28 @@ export default function Suggestion({
             className="py-1 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
-            {user && user.username === suggest.user.username && (
-              <>
-                <li>
-                  <div
-                    onClick={() => setOpenEdit(true)}
-                    className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Edit
-                  </div>
-                </li>
-                <li>
-                  <div
-                    onClick={() => deleteSuggestion(suggest.id)}
-                    className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Remove
-                  </div>
-                </li>
-              </>
-            )}
+            {user &&
+              suggest.user.length &&
+              suggest.user?.some((e) => e.username === user.username) && (
+                <>
+                  <li>
+                    <div
+                      onClick={() => setOpenEdit(true)}
+                      className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Edit
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => deleteSuggestion(suggest.id)}
+                      className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Remove
+                    </div>
+                  </li>
+                </>
+              )}
             <li>
               <div className="block py-2 cursor-pointer px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                 Report

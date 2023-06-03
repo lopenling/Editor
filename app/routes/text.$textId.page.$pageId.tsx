@@ -58,7 +58,7 @@ export default function Page() {
         no page exist <Link to="/">go to home</Link>
       </div>
     );
-  const { user } = data;
+  const user = data.user;
   let content = data.page.content;
   const [suggestionSelected, suggestionSelector] = useRecoilState(
     selectedSuggestionThread
@@ -79,10 +79,6 @@ export default function Page() {
       id: id,
     });
   }
-  const [contentData, setContent] = useState("");
-  useEffect(() => {
-    setContent(content);
-  }, []);
   const { onlineMembers } = usePusherPresence(
     `presence-text_${data?.page?.id}`,
     data.pusher_env.key,
@@ -137,6 +133,7 @@ export default function Page() {
           },
         }),
       ],
+      content: content,
       editable: true,
       editorProps: Extension.editorProps,
       onSelectionUpdate: ({ editor }) => {
@@ -198,7 +195,6 @@ export default function Page() {
           <EditorContainer
             editor={editor}
             isSaving={false}
-            content={content}
             order={data.page.order}
           />
         </div>

@@ -17,22 +17,11 @@ import { changeFont, exportDoc, scrollThreadIntoView } from "../lib";
 type EditorContainerProps = {
   editor: Editor | null;
   isSaving: boolean;
-  content: string;
   order: number;
 };
-function EditorContainer({
-  editor,
-  isSaving,
-  content,
-  order,
-}: EditorContainerProps) {
+function EditorContainer({ editor, isSaving, order }: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
-  useEffect(() => {
-    setTimeout(() => {
-      editor?.commands.setContent(content);
-    }, 100);
-  }, [content, editor]);
   const [openSuggestion, setOpenSuggestion] =
     useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
