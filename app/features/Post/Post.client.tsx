@@ -7,12 +7,11 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
 import { AudioPlayer } from "../Media";
-import useFetcherWithPromise from "~/lib/useFetcherPromise";
 import { removeMark } from "~/features/Editor/tiptap/markAction";
 import { PostType } from "~/model/type";
 import copyToClipboard from "~/lib/copyToClipboard";
 import { FormWithAudio } from "./component/FormWithAudio";
-import { timeAgo } from "~/lib";
+import { timeAgo, useFetcherWithPromise } from "~/lib";
 import { useDetectClickOutside } from "react-detect-click-outside";
 type PostPropType = {
   isOptimistic: boolean;

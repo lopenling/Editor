@@ -12,7 +12,7 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { Button, TextArea } from "~/component/UI";
 import { AudioPlayer, AudioRecorder } from "../Media";
 import { v4 as uuidv4 } from "uuid";
-import useFetcherWithPromise from "~/lib/useFetcherPromise";
+import { useFetcherWithPromise } from "~/lib";
 import { replaceMarkContent } from "~/features/Editor/tiptap/markAction";
 import Comment from "./Comment";
 
