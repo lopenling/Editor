@@ -9,7 +9,6 @@ export async function findAllText(id = true, name = true, content = false) {
       select: {
         id,
         name,
-        content,
         userId: true,
         author: true,
       },

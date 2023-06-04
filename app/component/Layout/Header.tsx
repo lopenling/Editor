@@ -21,6 +21,8 @@ import { HEADER_HEIGHT } from "~/constants";
 import { Progress as ProgressBar, Avatar } from "~/component/UI";
 import { containTibetanletter, isSmallScreen } from "~/lib";
 import { UserType } from "~/model/type";
+import { FaSearch } from "react-icons/fa";
+
 const Logo = () => (
   <img
     src={
@@ -102,11 +104,14 @@ function Header({ editor }: HeaderProps) {
     return () => editorElement?.addEventListener("scroll", handleScroll);
   }, [redirectTo, textName]);
   let darkMode = user?.preference?.theme === "dark";
-  let [showUserMenu, setShowUserMenu] = useState(false);
-  let [showHeaderMenu, setShowHeaderMenu] = useState(false);
-
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showHeaderMenu, setShowHeaderMenu] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const ref = useDetectClickOutside({
     onTriggered: () => setShowUserMenu(false),
+  });
+  const searchRef = useDetectClickOutside({
+    onTriggered: () => setShowSearch(false),
   });
   const headermenuref = useDetectClickOutside({
     onTriggered: () => setShowHeaderMenu(false),
@@ -119,7 +124,7 @@ function Header({ editor }: HeaderProps) {
         fontFamily: "serif",
       }}
     >
-      <div className=" max-w-6xl flex flex-wrap items-center justify-between mx-auto p-2">
+      <div className=" flex flex-wrap items-center justify-between mx-auto p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textName={textName} />
         ) : (
@@ -159,15 +164,30 @@ function Header({ editor }: HeaderProps) {
           }  items-center justify-center flex-col lg:flex-row md:justify-end gap-2 md:order-2 w-full md:w-auto`}
         >
           <div className="w-full flex items-center justify-between pt-3 md:p-0">
-            {editor && <SearchString editor={editor} />}
-
-            <Translation />
+            {editor && (
+              <div className="mt-2 mr-2 " ref={searchRef}>
+                <button onClick={() => setShowSearch((p) => !p)}>
+                  <FaSearch
+                    className="text-gray-400 hover:text-gray-600 "
+                    size={24}
+                  />
+                </button>
+                {showSearch && (
+                  <div
+                    className="absolute top-[100%] right-0 bg-white mt-2"
+                    style={{ width: 515 }}
+                  >
+                    <SearchString editor={editor} />
+                  </div>
+                )}
+              </div>
+            )}
 
             {user ? (
               <>
                 <button
                   type="button"
-                  className="flex  text-sm  rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  className="  text-sm  rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   id="user-menu-button"
                   onClick={() => setShowUserMenu((prev) => !prev)}
                 >
@@ -183,8 +203,8 @@ function Header({ editor }: HeaderProps) {
                 {showUserMenu && (
                   <div
                     ref={ref}
-                    style={{ top: 50, right: 50 }}
-                    className="z-50 absolute my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                    style={{ top: "100%" }}
+                    className="z-50 absolute px-3 right-0 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
                     id="user-dropdown-bittun"
                   >
                     <div className="px-4 py-3">
@@ -231,6 +251,7 @@ function Header({ editor }: HeaderProps) {
                         </svg>
                         Upload text
                       </NavLink>
+                      <Translation />
 
                       <div
                         onClick={changeTheme}

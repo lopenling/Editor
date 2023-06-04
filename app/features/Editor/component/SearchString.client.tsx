@@ -2,7 +2,6 @@ import { useLoaderData } from "@remix-run/react";
 import { Editor } from "@tiptap/react";
 import { useState, useEffect, memo } from "react";
 import { searchSingleText } from "../lib";
-import { FaSearch } from "react-icons/fa";
 type locationType = {
   start: number;
   length: number;
@@ -68,7 +67,7 @@ function SearchString({ editor }: { editor: Editor }) {
 
   return (
     <div
-      className={`searchForm items-center  flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border  
+      className={`searchForm items-center p-2 flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border  
      `}
     >
       <div className="flex w-full">
@@ -83,9 +82,10 @@ function SearchString({ editor }: { editor: Editor }) {
             name="searchString"
             type="text"
             placeholder="search"
+            autoFocus={true}
             value={searchString}
             onChange={(e) => setSearchString(e.target.value)}
-            className={` h-full w-full border-none bg-transparent text-sm leading-tight text-gray-500 outline-0 focus:border-transparent focus:ring-0`}
+            className={` h-full w-full border-1 bg-transparent text-sm leading-tight text-gray-500 outline-1 focus:border-transparent focus:ring-1`}
           ></input>
         </form>
         <input name="textId" readOnly value={data.page.id} hidden />
@@ -160,9 +160,7 @@ function SearchString({ editor }: { editor: Editor }) {
           </div>
         </>
       ) : (
-        <div className="pr-3 text-gray-400" onClick={handleSearch}>
-          <FaSearch />
-        </div>
+        <div className="pr-3 text-gray-400" onClick={handleSearch}></div>
       )}
     </div>
   );

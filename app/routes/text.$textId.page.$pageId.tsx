@@ -170,56 +170,46 @@ export default function Page() {
       <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div style={{ height: 70 }}></div>
-      <Split
-        minSize={isMobile ? 400 : 600}
-        className="split flex-1 flex flex-col lg:flex-row max-w-6xl mx-auto"
-        direction={isMobile ? "vertical" : "horizontal"}
-        sizes={isMobile ? [50, 50] : isTablet ? [60, 40] : [65, 35]}
-        gutterStyle={() =>
-          isMobile
-            ? { height: "10px", width: "100vw" }
-            : { height: "90vh", width: "10px" }
-        }
-      >
-        <div
-          style={{
-            maxHeight: `${textHeight}vh`,
-            overflowY: "scroll",
-            overflowX: "hidden",
-            scrollbarWidth: "none",
-            width: "100%",
-          }}
-          id="textEditorContainer"
-        >
-          <Pagination pageCount={data.pageCount} />
-          <EditorContainer
-            editor={editor}
-            isSaving={false}
-            order={data.page.order}
-          />
-        </div>
 
-        <div
-          className={`lg:h-screen flex-1 overflow-y-auto pt-3  w-full bg-white dark:bg-gray-700 lg:sticky lg:top-0 rounded-sm`}
-        >
-          {openSuggestion || suggestionSelected?.id ? (
-            <SuggestionForm editor={editor} />
-          ) : (
-            <>
-              <Outlet context={{ user: user, editor, text: data.page }} />
-            </>
-          )}
-          {suggestionSelected?.id ? (
-            <Suspense fallback={<div>loading</div>}>
-              <Await resolve={data.suggestions}>
-                {(data) => (
-                  <SuggestionContainer editor={editor} suggestions={data} />
-                )}
-              </Await>
-            </Suspense>
-          ) : null}
-        </div>
-      </Split>
+      <div
+        className="max-w-3xl mx-auto"
+        style={{
+          maxHeight: `${textHeight}vh`,
+          overflowY: "scroll",
+          overflowX: "hidden",
+          scrollbarWidth: "none",
+          width: "100%",
+        }}
+        id="textEditorContainer"
+      >
+        <Pagination pageCount={data.pageCount} />
+        <EditorContainer
+          editor={editor}
+          isSaving={false}
+          order={data.page.order}
+        />
+      </div>
+
+      {/* <div
+        className={`lg:h-screen flex-1 overflow-y-auto pt-3  w-full bg-white dark:bg-gray-700 lg:sticky lg:top-0 rounded-sm`}
+      >
+        {openSuggestion || suggestionSelected?.id ? (
+          <SuggestionForm editor={editor} />
+        ) : (
+          <>
+            <Outlet context={{ user: user, editor, text: data.page }} />
+          </>
+        )}
+        {suggestionSelected?.id ? (
+          <Suspense fallback={<div>loading</div>}>
+            <Await resolve={data.suggestions}>
+              {(data) => (
+                <SuggestionContainer editor={editor} suggestions={data} />
+              )}
+            </Await>
+          </Suspense>
+        ) : null}
+      </div> */}
     </>
   );
 }
