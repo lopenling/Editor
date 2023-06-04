@@ -1,9 +1,9 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { useOutletContext } from "@remix-run/react";
 import uselitteraTranlation from "~/locales/useLitteraTranslations";
 import Replies from "./Replies";
 import ReplyForm from "./ReplyForm";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { selectedPostThread } from "~/states";
 import { Editor } from "@tiptap/react";
 import { AudioPlayer } from "../Media";

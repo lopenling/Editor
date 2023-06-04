@@ -205,7 +205,9 @@ export default function Page() {
           {openSuggestion || suggestionSelected?.id ? (
             <SuggestionForm editor={editor} />
           ) : (
-            <Outlet context={{ user: user, editor, text: data.page }} />
+            <>
+              <Outlet context={{ user: user, editor, text: data.page }} />
+            </>
           )}
           {suggestionSelected?.id ? (
             <Suspense fallback={<div>loading</div>}>
