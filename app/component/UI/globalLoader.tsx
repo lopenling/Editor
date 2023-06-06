@@ -1,17 +1,17 @@
-import { useNavigation } from "@remix-run/react";
+import { useNavigation } from '@remix-run/react';
 
 function GlobalLoading() {
   const transition = useNavigation();
-  const active = transition.state !== "idle";
+  const active = transition.state !== 'idle';
 
   return (
     <div
       role="progressbar"
-      aria-valuetext={active ? "Loading" : undefined}
+      aria-valuetext={active ? 'Loading' : undefined}
       aria-hidden={!active}
       className={`
-         pointer-events-none fixed left-0 bottom-0 z-50 p-4 transition-all duration-500 ease-out ${
-           active ? "translate-y-0" : "translate-y-full"
+         pointer-events-none fixed bottom-0 left-0 z-50 p-4 transition-all duration-500 ease-out ${
+           active ? 'translate-y-0' : 'translate-y-full'
          }`}
     >
       <svg
@@ -22,13 +22,7 @@ function GlobalLoading() {
         width="1em"
         height="1em"
       >
-        <circle
-          className="stroke-blue-600/25"
-          cx={12}
-          cy={12}
-          r={10}
-          strokeWidth={4}
-        />
+        <circle className="stroke-blue-600/25" cx={12} cy={12} r={10} strokeWidth={4} />
         <path
           className="fill-blue-600"
           d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"

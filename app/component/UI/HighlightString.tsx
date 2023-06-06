@@ -1,6 +1,6 @@
-import * as React from "react";
-import GraphemeSplitter from "grapheme-splitter";
-import reactStringReplace from "react-string-replace";
+import * as React from 'react';
+import GraphemeSplitter from 'grapheme-splitter';
+import reactStringReplace from 'react-string-replace';
 
 type Props = {
   string: string;
@@ -17,7 +17,7 @@ export default class HighlightedString extends React.Component<Props> {
   render() {
     const string = this.props.string;
     let nameHtml = string;
-    let stringClass = this.props.stringClass || "";
+    let stringClass = this.props.stringClass || '';
     if (this.props.searchTerm) {
       const searchTerm = this.props.searchTerm;
       const splitter = new GraphemeSplitter();
@@ -25,7 +25,7 @@ export default class HighlightedString extends React.Component<Props> {
       const start = string.indexOf(searchTerm);
       const end = start + searchTerm.length;
       let position = 0;
-      let foundGraphemes = "";
+      let foundGraphemes = '';
       if (start > -1) {
         for (let i = 0; i < graphemes.length; i++) {
           let grapheme = graphemes[i];

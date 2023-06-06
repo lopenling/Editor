@@ -1,8 +1,8 @@
-import { LoaderFunction, LoaderArgs } from "@remix-run/server-runtime";
-import { json } from "react-router";
-import { getposts } from "~/services/discourseApi";
-import { findPostByTopicId } from "~/model/post";
-import { findReplyByPostId } from "~/model/reply";
+import { LoaderFunction, LoaderArgs } from '@remix-run/server-runtime';
+import { json } from 'react-router';
+import { getposts } from '~/services/discourseApi';
+import { findPostByTopicId } from '~/model/post';
+import { findReplyByPostId } from '~/model/reply';
 
 export const loader: LoaderFunction = async ({ params }: LoaderArgs) => {
   const id = parseInt(params?.id!);

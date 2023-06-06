@@ -1,4 +1,4 @@
-import { db } from "~/services/db.server";
+import { db } from '~/services/db.server';
 
 //create comment on suggestion
 
@@ -7,7 +7,7 @@ export async function createCommentOnSuggestion(
   suggestionId: string,
   userId: string,
   audioUrl: string,
-  type: "support" | "reject" | null
+  type: 'support' | 'reject' | null
 ) {
   const comment = await db.suggestionComment.create({
     data: {
@@ -29,11 +29,7 @@ export async function deleteCommentOnSuggestion(id: number) {
   });
   return comment;
 }
-export async function updateCommentOnSuggestion(
-  id: number,
-  newContent: string,
-  type: string
-) {
+export async function updateCommentOnSuggestion(id: number, newContent: string, type: string) {
   const comment = await db.suggestionComment.update({
     where: {
       id,

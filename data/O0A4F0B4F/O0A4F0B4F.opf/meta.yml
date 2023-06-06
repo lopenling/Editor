@@ -9,12 +9,12 @@ source_metadata:
   status: http://purl.bdrc.io/admindata/StatusReleased
   access: http://purl.bdrc.io/admindata/AccessFairUse
   geo_restriction:
-  - CN
+    - CN
   reproduction_of: http://purl.bdrc.io/resource/MW1PD95844
   copyright_status: http://purl.bdrc.io/resource/CopyrightPublicDomain
   title: དེ་བཞིན་གཤེགས་པའི་སྙིང་པོ་ཡི་གེ་བརྒྱ་པའི་བསྲུང་བ་དང་སྡིག་པ་བཤགས་པའི་ཆོ་ག
   languages:
-  - bo
+    - bo
 bases:
   7367:
     source_metadata: {}

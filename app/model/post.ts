@@ -1,7 +1,7 @@
 // create post
 
-import { db } from "~/services/db.server";
-import { fetchCategoryData } from "~/services/discourseApi";
+import { db } from '~/services/db.server';
+import { fetchCategoryData } from '~/services/discourseApi';
 
 export async function createPost(
   type: string,
@@ -34,7 +34,7 @@ export async function createPost(
     return createPost;
   } catch (e) {
     console.log(e);
-    throw new Error("post couldnot be created " + e);
+    throw new Error('post couldnot be created ' + e);
   }
 }
 
@@ -51,7 +51,7 @@ export async function findPostByUser(userId) {
     });
     return posts;
   } catch (e) {
-    return "couldnot find by userId" + e.message;
+    return 'couldnot find by userId' + e.message;
   }
 }
 export async function findPostByTopicId(TopicId: number) {
@@ -66,7 +66,7 @@ export async function findPostByTopicId(TopicId: number) {
     });
     return posts;
   } catch (e) {
-    return "couldnot find the by TopicId" + e.message;
+    return 'couldnot find the by TopicId' + e.message;
   }
 }
 export async function findPostByTextIdAndPage(textId: number, pageId: string) {
@@ -87,8 +87,7 @@ export async function findPostByTextIdAndPage(textId: number, pageId: string) {
     const postWithReply = await Promise.all(
       posts.map(async (post) => {
         const replies = topicList.find((l) => l.id === post.topic_id);
-        const isSolved =
-          post.reply.filter((l) => l.is_approved === true).length > 0;
+        const isSolved = post.reply.filter((l) => l.is_approved === true).length > 0;
 
         return {
           ...post,
@@ -117,16 +116,12 @@ export async function findPostByUserLiked(id: string, userId: string) {
     });
     return f;
   } catch (e) {
-    throw new Error("could not find post by userliked" + e.message);
+    throw new Error('could not find post by userliked' + e.message);
   }
 }
 //update post
 
-export async function updatePostLike(
-  id: string,
-  userId: string,
-  payload: boolean
-) {
+export async function updatePostLike(id: string, userId: string, payload: boolean) {
   try {
     let response = await db.post.update({
       data: {
@@ -152,14 +147,10 @@ export async function updatePostLike(
     });
     return response;
   } catch (e) {
-    throw new Error("update post like error: " + e.message);
+    throw new Error('update post like error: ' + e.message);
   }
 }
-export async function updatePostContentandAudio(
-  id: string,
-  content: string,
-  audioUrl: string
-) {
+export async function updatePostContentandAudio(id: string, content: string, audioUrl: string) {
   try {
     let response = await db.post.update({
       data: {
@@ -172,7 +163,7 @@ export async function updatePostContentandAudio(
     });
     return response;
   } catch (e) {
-    throw new Error("update post content error: " + e.message);
+    throw new Error('update post content error: ' + e.message);
   }
 }
 
@@ -186,6 +177,6 @@ export async function deletePost(id: string) {
     });
     return data;
   } catch (e) {
-    throw new Error("cannot delete post ", e);
+    throw new Error('cannot delete post ', e);
   }
 }

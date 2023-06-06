@@ -1,5 +1,5 @@
-import { fullSearch } from "~/lib";
-import { db } from "~/services/db.server";
+import { fullSearch } from '~/lib';
+import { db } from '~/services/db.server';
 
 export async function getPage(textId: number, order: number) {
   try {
@@ -34,7 +34,7 @@ export async function getPageId(textId: number, order: number) {
     console.log(e);
   }
 }
-export async function searchPages(search_term = "") {
+export async function searchPages(search_term = '') {
   try {
     const textList = await db.page.findMany({
       include: {
@@ -46,9 +46,7 @@ export async function searchPages(search_term = "") {
 
     for (const item of results) {
       const { textId } = item;
-      const existingGroup = groupedData.find(
-        (group) => group.textId === textId
-      );
+      const existingGroup = groupedData.find((group) => group.textId === textId);
       if (existingGroup) {
         existingGroup.results.push(item);
       } else {
@@ -60,7 +58,7 @@ export async function searchPages(search_term = "") {
     }
     return groupedData;
   } catch (e: any) {
-    throw new Error("error finding text with name" + e.message);
+    throw new Error('error finding text with name' + e.message);
   }
 }
 export async function updatePage(pageId: string, content: string) {
@@ -75,6 +73,6 @@ export async function updatePage(pageId: string, content: string) {
     });
     return res;
   } catch (e: any) {
-    throw new Error("update text error" + e.message);
+    throw new Error('update text error' + e.message);
   }
 }

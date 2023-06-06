@@ -1,4 +1,4 @@
-import { db } from "~/services/db.server";
+import { db } from '~/services/db.server';
 
 export async function findAllSuggestionByPageId(pageId: string) {
   try {
@@ -15,11 +15,11 @@ export async function findAllSuggestionByPageId(pageId: string) {
           },
         },
       },
-      orderBy: [{ likedBy: { _count: "desc" } }, { created_at: "desc" }],
+      orderBy: [{ likedBy: { _count: 'desc' } }, { created_at: 'desc' }],
     });
     return data;
   } catch (e) {
-    throw new Error("error fetching suggestion" + e);
+    throw new Error('error fetching suggestion' + e);
   }
 }
 
@@ -38,23 +38,15 @@ export async function getSuggestionWithThreadId(threadId: string) {
           },
         },
       },
-      orderBy: [{ created_at: "asc" }, { likedBy: { _count: "desc" } }],
+      orderBy: [{ created_at: 'asc' }, { likedBy: { _count: 'desc' } }],
     });
     return data;
   } catch (e) {
-    throw new Error("error fetching suggestion" + e);
+    throw new Error('error fetching suggestion' + e);
   }
 }
 
-export async function createSuggestion({
-  oldValue,
-  newValue,
-  textId,
-  pageId,
-  userId,
-  threadId,
-  audioUrl,
-}) {
+export async function createSuggestion({ oldValue, newValue, textId, pageId, userId, threadId, audioUrl }) {
   try {
     let data = await db.suggestion.create({
       data: {
@@ -69,17 +61,13 @@ export async function createSuggestion({
     });
     return data;
   } catch (e) {
-    throw new Error("suggestion cannot be created on DB" + e);
+    throw new Error('suggestion cannot be created on DB' + e);
   }
 }
 
 //update
 
-export async function updateSuggestionLike(
-  id: string,
-  userId: string,
-  payload: boolean
-) {
+export async function updateSuggestionLike(id: string, userId: string, payload: boolean) {
   try {
     let response = await db.suggestion.update({
       data: {
@@ -104,7 +92,7 @@ export async function updateSuggestionLike(
     });
     return response;
   } catch (e) {
-    throw new Error("update suggestion like error: " + e.message);
+    throw new Error('update suggestion like error: ' + e.message);
   }
 }
 
@@ -122,7 +110,7 @@ export async function findSuggestionByUserLiked(id: string, userId: string) {
     });
     return f;
   } catch (e) {
-    throw new Error("could not find suggestion by userliked" + e.message);
+    throw new Error('could not find suggestion by userliked' + e.message);
   }
 }
 
@@ -139,7 +127,7 @@ export async function updateSuggestionContent(id: string, newValue: string) {
     });
     return response;
   } catch (e) {
-    throw new Error("update suggestion like error: " + e.message);
+    throw new Error('update suggestion like error: ' + e.message);
   }
 }
 export async function findSuggestionWithMostLikes(id: string) {
@@ -151,11 +139,11 @@ export async function findSuggestionWithMostLikes(id: string) {
       orderBy: [
         {
           likedBy: {
-            _count: "desc",
+            _count: 'desc',
           },
         },
         {
-          created_at: "desc",
+          created_at: 'desc',
         },
       ],
       take: 1,
@@ -175,6 +163,6 @@ export async function deleteSuggestion(id: string) {
     });
     return data;
   } catch (e) {
-    throw new Error("cannot delete post ", e);
+    throw new Error('cannot delete post ', e);
   }
 }

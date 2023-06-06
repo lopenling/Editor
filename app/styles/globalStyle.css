@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 @font-face {
-  font-family: "Monlam";
-  src: url("/font/monlam_bodyig.woff") format("woff");
+  font-family: 'Monlam';
+  src: url('/font/monlam_bodyig.woff') format('woff');
   font-style: normal;
   font-display: swap;
 }
@@ -42,13 +42,19 @@ body {
 }
 
 /* width */
-body > * ::-webkit-scrollbar {
+body  ::-webkit-scrollbar {
   width: 10px;
 }
 main {
   scroll-behavior: smooth;
   scroll-snap-type: mandatory;
   scroll-padding-top: 100px;
+}
+#tableContent::-webkit-scrollbar{
+  width: 0;
+}
+#postContent::-webkit-scrollbar{
+  width:0;
 }
 /* Track */
 *::-webkit-scrollbar {
@@ -119,7 +125,7 @@ nav > div {
   padding-top: 10px;
 }
 #textEditorContainer {
-  font-family: "Monlam", serif;
+  font-family: 'Monlam', serif;
   line-height: 1.5;
 }
 button,
@@ -156,8 +162,6 @@ select:focus {
   height: 100%;
   transition: 0.25s;
 }
-.split {
-}
 
 .split > div {
   float: left;
@@ -175,10 +179,10 @@ select:focus {
   background-position: 50%;
 }
 .gutter.gutter-horizontal {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
   cursor: col-resize;
 }
 .gutter.gutter-vertical {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
   cursor: row-resize;
 }

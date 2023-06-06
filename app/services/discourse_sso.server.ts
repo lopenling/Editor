@@ -1,10 +1,9 @@
-import { getSession } from "~/services/session.server";
-var CryptoJS = require("crypto-js");
+import { getSession } from '~/services/session.server';
+var CryptoJS = require('crypto-js');
 
 function randomString(length) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
   let counter = 0;
   while (counter < length) {
@@ -17,11 +16,11 @@ function randomString(length) {
 async function getNonce() {
   let nonce;
   let session = await getSession();
-  if (session.has("sso_nonce")) {
-    nonce = session.get("sso_nonce");
+  if (session.has('sso_nonce')) {
+    nonce = session.get('sso_nonce');
   } else {
     nonce = randomString(32);
-    session.set("sso_nonce", nonce);
+    session.set('sso_nonce', nonce);
   }
   return nonce;
 }
@@ -44,6 +43,6 @@ export let redirectDiscourse = async function (sso_redirect: string) {
     sso: payloadBase64,
     sig: signature,
   }).toString();
-  url = url + "?" + qs;
+  url = url + '?' + qs;
   return url;
 };

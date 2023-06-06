@@ -1,10 +1,10 @@
-import { getMarkRange, Mark, mergeAttributes } from "@tiptap/core";
-import { Plugin, TextSelection } from "prosemirror-state";
+import { getMarkRange, Mark, mergeAttributes } from '@tiptap/core';
+import { Plugin, TextSelection } from 'prosemirror-state';
 export interface SuggestionOptions {
   multicolor: boolean;
   HTMLAttributes: Record<string, any>;
 }
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     post: {
       /**
@@ -25,7 +25,7 @@ declare module "@tiptap/core" {
 
 const PostMark = (setter) =>
   Mark.create({
-    name: "post",
+    name: 'post',
 
     addOptions() {
       return {
@@ -38,22 +38,21 @@ const PostMark = (setter) =>
       return {
         color: {
           default: null,
-          parseHTML: (element) =>
-            element.getAttribute("data-color") || element.style.backgroundColor,
+          parseHTML: (element) => element.getAttribute('data-color') || element.style.backgroundColor,
           renderHTML: (attributes) => {
             if (!attributes.color) {
               return {};
             }
 
             return {
-              "data-color": attributes.color,
+              'data-color': attributes.color,
               style: `background-color: ${attributes.color}; color: inherit`,
             };
           },
         },
         id: {
           default: null,
-          parseHTML: (element) => element.getAttribute("id"),
+          parseHTML: (element) => element.getAttribute('id'),
           renderHTML: (attributes) => {
             return {
               id: attributes.id,
@@ -66,17 +65,13 @@ const PostMark = (setter) =>
     parseHTML() {
       return [
         {
-          tag: "post",
+          tag: 'post',
         },
       ];
     },
 
     renderHTML({ HTMLAttributes }) {
-      return [
-        "post",
-        mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-        0,
-      ];
+      return ['post', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
     },
 
     addCommands() {
@@ -108,10 +103,7 @@ const PostMark = (setter) =>
               if (!range) return false;
               const clickedNode = event.target;
               setter(clickedNode?.id);
-              const [$start, $end] = [
-                doc.resolve(range.from),
-                doc.resolve(range.to),
-              ];
+              const [$start, $end] = [doc.resolve(range.from), doc.resolve(range.to)];
               view.dispatch(tr.setSelection(new TextSelection($start, $end)));
 
               return true;

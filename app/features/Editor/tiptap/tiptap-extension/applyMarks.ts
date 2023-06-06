@@ -1,6 +1,6 @@
-import { Extension } from "@tiptap/core";
-import { Editor } from "@tiptap/react";
-import React from "react";
+import { Extension } from '@tiptap/core';
+import { Editor } from '@tiptap/react';
+import React from 'react';
 export const applyAnnotationFunction = (
   editor: Editor,
   annotation: any,
@@ -13,7 +13,7 @@ export const applyAnnotationFunction = (
     content = updateContent;
   }
   let annotations: any = annotation;
-  let html = "<p>";
+  let html = '<p>';
 
   let allkeys: string[] = [];
   let searchKey = [];
@@ -34,7 +34,7 @@ export const applyAnnotationFunction = (
   [...content].forEach((c, i: number) => {
     if (searchKey.includes(i)) {
       let s = searchLocation.find((p) => p.start === i);
-      let text = "";
+      let text = '';
       let length = s?.searchString?.length;
       for (let j = i; j < i + length; j++) {
         text += content[j];
@@ -44,7 +44,7 @@ export const applyAnnotationFunction = (
       html += getBoldOnHighlight(text);
     }
     if (allPageBreakerStart.includes(i) && i !== 0) {
-      html += "</p><p>";
+      html += '</p><p>';
       html +=
         "<img src='https://iiif.bdrc.io/bdr:I2KG210156::I2KG2101560003.jpg/full/full/0/default.jpg' alt='Pecha Image'/>";
     }
@@ -57,7 +57,7 @@ export const applyAnnotationFunction = (
         html += content[j];
         skiplength.push(j);
       }
-      html += "</span>";
+      html += '</span>';
     } else {
       if (skiplength.includes(i)) {
         return;
@@ -65,30 +65,21 @@ export const applyAnnotationFunction = (
       html += `<span id='s_${i}'>${c}</span>`;
     }
   });
-  html += "</p>";
+  html += '</p>';
   editor.commands.setContent(html);
-  html = "";
+  html = '';
 };
 
-const applyAnnotation = (
-  annotation: [],
-  pageBreaker: any,
-  searchLocation: any
-) =>
+const applyAnnotation = (annotation: [], pageBreaker: any, searchLocation: any) =>
   Extension.create({
-    name: "v_annotation",
+    name: 'v_annotation',
     addStorage() {
       return {
         v_annotation: annotation,
       };
     },
     onCreate(this: { editor: Editor }) {
-      applyAnnotationFunction(
-        this.editor,
-        annotation,
-        pageBreaker,
-        searchLocation
-      );
+      applyAnnotationFunction(this.editor, annotation, pageBreaker, searchLocation);
       if (searchLocation.length) {
         let d = searchLocation[0];
         this.editor

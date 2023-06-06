@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { FaPlay, FaPause } from "react-icons/fa";
-import classNames from "classnames";
-import { formatTime } from "./lib/formatTime";
+import React, { useState, useEffect, useMemo } from 'react';
+import { FaPlay, FaPause } from 'react-icons/fa';
+import classNames from 'classnames';
+import { formatTime } from './lib/formatTime';
 
 const AudioPlayer = ({ src }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -23,12 +23,12 @@ const AudioPlayer = ({ src }) => {
   }
   useEffect(() => {
     if (audio) {
-      audio.addEventListener("timeupdate", handleTimeUpdate);
-      audio.addEventListener("durationchange", handleLoadedMetadata, false);
-      audio.addEventListener("ended", handleEnd);
+      audio.addEventListener('timeupdate', handleTimeUpdate);
+      audio.addEventListener('durationchange', handleLoadedMetadata, false);
+      audio.addEventListener('ended', handleEnd);
       return () => {
-        audio.removeEventListener("timeupdate", handleTimeUpdate);
-        audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+        audio.removeEventListener('timeupdate', handleTimeUpdate);
+        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       };
     }
   }, [audio]);
@@ -54,10 +54,9 @@ const AudioPlayer = ({ src }) => {
     updateCurrentTime(e);
   };
   const updateCurrentTime = (e) => {
-    const progressBar = document.getElementById("progress-bar");
+    const progressBar = document.getElementById('progress-bar');
     const rect = progressBar.getBoundingClientRect();
-    const newCurrentTime =
-      audio.duration * ((e.clientX - rect.left) / rect.width);
+    const newCurrentTime = audio.duration * ((e.clientX - rect.left) / rect.width);
     if (newCurrentTime !== Infinity) {
       audio.currentTime = newCurrentTime;
       setCurrentTime(newCurrentTime);
@@ -78,17 +77,17 @@ const AudioPlayer = ({ src }) => {
   };
   if (!src || src === undefined) return null;
   return (
-    <div className="flex items-center w-full">
+    <div className="flex w-full items-center">
       <button
         onClick={togglePlay}
         type="button"
-        className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+        className="rounded-full bg-gray-200 p-2 focus:outline-none hover:bg-gray-300"
       >
         {isPlaying ? <FaPause /> : <FaPlay />}
       </button>
-      <div className="flex-1 ml-4">
+      <div className="ml-4 flex-1">
         <div
-          className="h-2 bg-gray-200 rounded-full"
+          className="h-2 rounded-full bg-gray-200"
           id="progress-bar"
           onMouseDown={handleProgressMouseDown}
           onMouseMove={handleProgressMouseMove}
@@ -96,8 +95,8 @@ const AudioPlayer = ({ src }) => {
           onMouseLeave={handleProgressMouseUp}
         >
           <div
-            className={classNames("h-full bg-blue-500 rounded-full", {
-              "w-full": currentTime === duration,
+            className={classNames('h-full rounded-full bg-blue-500', {
+              'w-full': currentTime === duration,
             })}
             style={{ width: `${(currentTime / duration) * 100}%` }}
           ></div>

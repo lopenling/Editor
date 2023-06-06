@@ -1,8 +1,8 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
-import { useRef, useEffect, useState } from "react";
-import { Button, TextArea } from "~/component/UI";
-import { AudioRecorder, AudioPlayer } from "../Media";
-import { v4 as uuidv4 } from "uuid";
+import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useRef, useEffect, useState } from 'react';
+import { Button, TextArea } from '~/component/UI';
+import { AudioRecorder, AudioPlayer } from '../Media';
+import { v4 as uuidv4 } from 'uuid';
 
 type ReplyFormPropsType = {
   closeReply: () => void;
@@ -10,16 +10,12 @@ type ReplyFormPropsType = {
   updateReplyCount: () => void;
 };
 
-export default function ReplyForm({
-  closeReply,
-  topicId,
-  updateReplyCount,
-}: ReplyFormPropsType) {
+export default function ReplyForm({ closeReply, topicId, updateReplyCount }: ReplyFormPropsType) {
   const postFetcher = useFetcher();
   const textareaRef = useRef(null);
   const loaderData = useLoaderData();
-  const [audio, setAudio] = useState({ tempUrl: "", blob: null });
-  const [textArea, setTextArea] = useState("");
+  const [audio, setAudio] = useState({ tempUrl: '', blob: null });
+  const [textArea, setTextArea] = useState('');
   useEffect(() => {
     if (postFetcher.data) {
       updateReplyCount();
@@ -27,14 +23,14 @@ export default function ReplyForm({
     }
   }, [postFetcher.formData, loaderData.posts, topicId]);
   if (postFetcher.formData) {
-    if (textareaRef.current) textareaRef.current.value = "";
+    if (textareaRef.current) textareaRef.current.value = '';
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     var form_data = new FormData();
     if (audio.blob) {
-      form_data.append("file", audio.blob, `reply-${topicId}-${uuidv4()}.wav`);
+      form_data.append('file', audio.blob, `reply-${topicId}-${uuidv4()}.wav`);
     }
     let item = {
       postString: textArea,
@@ -44,17 +40,17 @@ export default function ReplyForm({
       form_data.append(key, item[key]);
     }
     postFetcher.submit(form_data, {
-      action: "/api/reply",
-      method: "POST",
-      encType: "multipart/form-data",
+      action: '/api/reply',
+      method: 'POST',
+      encType: 'multipart/form-data',
     });
   };
 
   return (
-    <div className="flex justify-between mt-1">
+    <div className="mt-1 flex justify-between">
       <div
         style={{
-          borderLeft: "4px solid #e5e7eb",
+          borderLeft: '4px solid #e5e7eb',
           height: 180,
         }}
       ></div>
@@ -62,8 +58,8 @@ export default function ReplyForm({
         onSubmit={handleSubmit}
         className="flex w-11/12 flex-col justify-center"
         style={{
-          opacity: postFetcher.state !== "idle" ? 0.5 : 1,
-          cursor: postFetcher.state !== "idle" ? "not-allowed" : "auto",
+          opacity: postFetcher.state !== 'idle' ? 0.5 : 1,
+          cursor: postFetcher.state !== 'idle' ? 'not-allowed' : 'auto',
         }}
       >
         <TextArea
@@ -77,17 +73,12 @@ export default function ReplyForm({
           value={textArea}
           onChange={(e) => setTextArea(e.target.value)}
         />
-        {audio.tempUrl !== "" ? (
+        {audio.tempUrl !== '' ? (
           <>
-            <div className="mt-2 w-full flex items-center gap-3 ">
+            <div className="mt-2 flex w-full items-center gap-3 ">
               <AudioPlayer src={audio.tempUrl} />
-              <div onClick={() => setAudio({ tempUrl: "", blob: null })}>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+              <div onClick={() => setAudio({ tempUrl: '', blob: null })}>
+                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path
                     fillRule="evenodd"
                     clipRule="evenodd"
@@ -99,24 +90,20 @@ export default function ReplyForm({
             </div>
           </>
         ) : null}
-        <div className="flex justify-between gap-2 mt-2">
-          {audio.tempUrl === "" ? (
-            <AudioRecorder setAudio={setAudio} />
-          ) : (
-            <div />
-          )}
+        <div className="mt-2 flex justify-between gap-2">
+          {audio.tempUrl === '' ? <AudioRecorder setAudio={setAudio} /> : <div />}
           <div className="flex justify-end gap-2">
             <Button onClick={closeReply} type="reset" label="close" />
             <Button
               type="submit"
               onClick={handleSubmit}
-              disabled={textArea === "" || postFetcher.state !== "idle"}
+              disabled={textArea === '' || postFetcher.state !== 'idle'}
               label={
-                postFetcher.state === "submitting"
-                  ? "submiting"
-                  : postFetcher.state === "loading"
-                  ? "post created"
-                  : "respond"
+                postFetcher.state === 'submitting'
+                  ? 'submiting'
+                  : postFetcher.state === 'loading'
+                  ? 'post created'
+                  : 'respond'
               }
             />
           </div>

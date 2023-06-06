@@ -9,8 +9,8 @@ export function scrollThreadIntoView(thread: string, thread2: string) {
 function scrollElementsIntoView(element1: HTMLElement, element2: HTMLElement) {
   // Scroll the first element into view
   Promise.all([
-    element1.scrollIntoView({ block: "center" }),
-    element2.scrollIntoView({ behavior: "smooth", block: "center" }),
+    element1.scrollIntoView({ block: 'center' }),
+    element2.scrollIntoView({ behavior: 'smooth', block: 'center' }),
   ]);
 
   // Delay the scrolling of the second element to ensure it is within the view

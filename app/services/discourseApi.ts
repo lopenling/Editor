@@ -1,5 +1,5 @@
-import { MAX_CATEGORY_NAME_LENGTH } from "~/constants";
-import { isUserPresent } from "~/model/user";
+import { MAX_CATEGORY_NAME_LENGTH } from '~/constants';
+import { isUserPresent } from '~/model/user';
 class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
@@ -7,22 +7,21 @@ class DiscourseApi {
   category: string | undefined;
   categoryName: string;
   origin: string | undefined;
-  constructor(username: string = "") {
-    if (!process.env.DISCOURSE_API_KEY || !process.env.DISCOURSE_SITE)
-      throw new Error("asign api and url  in env");
+  constructor(username: string = '') {
+    if (!process.env.DISCOURSE_API_KEY || !process.env.DISCOURSE_SITE) throw new Error('asign api and url  in env');
 
     this.DiscourseUrl = process.env.DISCOURSE_SITE;
     this.apiKey = process.env.DISCOURSE_API_KEY;
     this.username = username;
     this.category = process.env.DISCOURSE_QA_CATEGORY_ID;
-    this.categoryName = "test";
+    this.categoryName = 'test';
     this.origin = process.env.ORIGIN_LOCATION;
   }
 
   authHeader(admin = false) {
     let auth_headers = {
-      "Api-Key": this.apiKey,
-      "Api-Username": admin ? "tenkus47" : this.username,
+      'Api-Key': this.apiKey,
+      'Api-Username': admin ? 'tenkus47' : this.username,
     };
     return auth_headers;
   }
@@ -32,13 +31,9 @@ class DiscourseApi {
     return await res.json();
   }
   async fetchCategoryList(id: string | undefined) {
-    const res = await fetch(
-      `${this.DiscourseUrl}/categories.json?include_subcategories=true`
-    );
+    const res = await fetch(`${this.DiscourseUrl}/categories.json?include_subcategories=true`);
     const categories = await res.json();
-    const filterCategory = categories?.category_list.categories.find(
-      (category) => category?.id === parseInt(id)
-    );
+    const filterCategory = categories?.category_list.categories.find((category) => category?.id === parseInt(id));
     if (!filterCategory.subcategory_ids.length) return null;
     return filterCategory.subcategory_list;
   }
@@ -54,9 +49,7 @@ class DiscourseApi {
   }
   async fetchPostReplies(postId: number) {
     if (postId) {
-      const res = await fetch(
-        `${this.DiscourseUrl}/posts/${postId}/replies.json`
-      );
+      const res = await fetch(`${this.DiscourseUrl}/posts/${postId}/replies.json`);
       const data = await res.json();
       return data;
     }
@@ -72,18 +65,15 @@ class DiscourseApi {
     };
     let queryParams = new URLSearchParams(newCategoryData).toString();
     try {
-      const response = await fetch(
-        `${this.DiscourseUrl}/categories.json?` + queryParams,
-        {
-          method: "POST",
-          headers: authHeaders,
-        }
-      );
+      const response = await fetch(`${this.DiscourseUrl}/categories.json?` + queryParams, {
+        method: 'POST',
+        headers: authHeaders,
+      });
       let category = await response.json();
-      console.log("Created category:", category);
+      console.log('Created category:', category);
       return category;
     } catch (e) {
-      console.error("Failed to create category:", e);
+      console.error('Failed to create category:', e);
       throw e;
     }
   }
@@ -103,43 +93,34 @@ class DiscourseApi {
     let post_text = `
 <p>${bodyContentWithLink}</p>
 `;
-    if (audioUrl && audioUrl !== "") {
+    if (audioUrl && audioUrl !== '') {
       post_text = `<p>${bodyContentWithLink}</p><audio controls><source src="${audioUrl}" type="audio/webm"></audio>`;
     }
 
     let new_Topic_data = {
-      title: (topic_name + "-" + textId) as string,
+      title: (topic_name + '-' + textId) as string,
       category: category_id,
       raw: post_text,
     };
     let queryParams = new URLSearchParams(new_Topic_data).toString();
-    const response = await fetch(
-      `${this.DiscourseUrl}/posts.json?${queryParams}`,
-      {
-        method: "POST",
-        headers: auth_headers,
-      }
-    );
+    const response = await fetch(`${this.DiscourseUrl}/posts.json?${queryParams}`, {
+      method: 'POST',
+      headers: auth_headers,
+    });
     let data = await response.json();
     if (data?.errors) {
-      throw new Error(
-        "Post cannot be created due to dublication!" + data.errors
-      );
+      throw new Error('Post cannot be created due to dublication!' + data.errors);
     }
     return data;
   }
 
-  async createPost(
-    TopicId: string,
-    postString: string,
-    audioUrl: string | null
-  ) {
+  async createPost(TopicId: string, postString: string, audioUrl: string | null) {
     let auth_headers = this.authHeader();
     let audioSegment = audioUrl
       ? `<audio controls id='audio_lopenling'>
   <source src="${audioUrl}" type="audio/wav">
 </audio>`
-      : "";
+      : '';
     let raw = `<p>
     ${postString + audioSegment}
     </p>
@@ -152,13 +133,10 @@ class DiscourseApi {
       };
       let params = new URLSearchParams(newPostData).toString();
 
-      const response = await fetch(
-        `${this.DiscourseUrl}/posts.json?` + params,
-        {
-          method: "POST",
-          headers: auth_headers,
-        }
-      );
+      const response = await fetch(`${this.DiscourseUrl}/posts.json?` + params, {
+        method: 'POST',
+        headers: auth_headers,
+      });
       return response;
     } catch (e) {
       console.log(e);
@@ -171,7 +149,7 @@ class DiscourseApi {
       ? `<br/><audio controls id='audio_lopenling'>
   <source src="${audioUrl}" type="audio/wav">
 </audio>`
-      : "";
+      : '';
     let raw = `<p>
     ${content + audioSegment}
     </p>
@@ -179,16 +157,13 @@ class DiscourseApi {
 
     try {
       const formData = new FormData();
-      formData.append("post[raw]", raw);
-      formData.append("post[edit_reason]", "nothing special");
-      const response = await fetch(
-        `${this.DiscourseUrl}/posts/${postId}.json?`,
-        {
-          method: "PUT",
-          headers: auth_headers,
-          body: formData,
-        }
-      );
+      formData.append('post[raw]', raw);
+      formData.append('post[edit_reason]', 'nothing special');
+      const response = await fetch(`${this.DiscourseUrl}/posts/${postId}.json?`, {
+        method: 'PUT',
+        headers: auth_headers,
+        body: formData,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -198,13 +173,10 @@ class DiscourseApi {
     let auth_headers = this.authHeader();
 
     try {
-      const response = await fetch(
-        `${this.DiscourseUrl}/posts/${postId}.json`,
-        {
-          method: "DELETE",
-          headers: auth_headers,
-        }
-      );
+      const response = await fetch(`${this.DiscourseUrl}/posts/${postId}.json`, {
+        method: 'DELETE',
+        headers: auth_headers,
+      });
       console.log(response);
       return response.status;
     } catch (e) {
@@ -216,12 +188,12 @@ class DiscourseApi {
     let auth_headers = this.authHeader();
     try {
       const response = await fetch(`${this.DiscourseUrl}/t/${id}.json`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: auth_headers,
       });
       return response.status;
     } catch (e) {
-      throw new Error("cannot delete topic on discourse" + e);
+      throw new Error('cannot delete topic on discourse' + e);
     }
   }
 
@@ -230,7 +202,7 @@ class DiscourseApi {
     try {
       let url = `${this.DiscourseUrl}/admin/users/${id}/log_out`;
       const response = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: auth_headers,
       });
       return response;
@@ -251,23 +223,18 @@ export async function createThread(
   audioUrl: string | null,
   threadId: string
 ) {
-  if (!textTitle || !blockquoteArea || !postContent)
-    throw new Error("failed to access Topic Id");
+  if (!textTitle || !blockquoteArea || !postContent) throw new Error('failed to access Topic Id');
   const api: DiscourseApi = new DiscourseApi(userName);
   const categories = await api.fetchCategoryList(parentCategoryId);
   if (textTitle.length > 40) {
-    textTitle =
-      textTitle.substring(0, MAX_CATEGORY_NAME_LENGTH) + `_text_${textId}`;
+    textTitle = textTitle.substring(0, MAX_CATEGORY_NAME_LENGTH) + `_text_${textId}`;
   }
   const category = categories.find((c: any) => c.name === textTitle.trim());
   let categoryId: number;
   if (category) {
     categoryId = category.id;
   } else {
-    const newCategory = await api.addCategory(
-      textTitle,
-      parseInt(parentCategoryId)
-    );
+    const newCategory = await api.addCategory(textTitle, parseInt(parentCategoryId));
     categoryId = newCategory.category.id;
   }
   let topic = await api.addTopic(
@@ -303,12 +270,7 @@ export async function getpostreplies(topicId: number) {
   return res;
 }
 
-export async function createPost(
-  topicId: string,
-  audioUrl: string | null,
-  postString: string,
-  username: string
-) {
+export async function createPost(topicId: string, audioUrl: string | null, postString: string, username: string) {
   const apiObj: DiscourseApi = new DiscourseApi(username);
   const res = apiObj.createPost(topicId, postString, audioUrl);
   return res;

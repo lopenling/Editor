@@ -1,14 +1,14 @@
-import { useLittera } from "@assembless/react-littera";
-import en from "~/assets/locale/en.json";
-import bo from "~/assets/locale/bo.json";
+import { useLittera } from '@assembless/react-littera';
+import en from '~/assets/locale/en.json';
+import bo from '~/assets/locale/bo.json';
 
 type translationType = {
   filter: string;
 };
 
 export const translationCodes = [
-  { code: "en_US", name: "English" },
-  { code: "bo_TI", name: "བོད་ཡིག" },
+  { code: 'en_US', name: 'English' },
+  { code: 'bo_TI', name: 'བོད་ཡིག' },
 ];
 
 export function translationList() {

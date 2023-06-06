@@ -1,18 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import { useFetcher, useOutletContext, useLoaderData } from "@remix-run/react";
-import { useRecoilState } from "recoil";
-import { audioPermission } from "~/states";
-import { formatTime } from "./lib/formatTime";
+import { useState, useRef, useEffect } from 'react';
+import { useFetcher, useOutletContext, useLoaderData } from '@remix-run/react';
+import { useRecoilState } from 'recoil';
+import { audioPermission } from '~/states';
+import { formatTime } from './lib/formatTime';
 const AudioRecorder = ({ setAudio }) => {
   const [permission, setPermission] = useRecoilState(audioPermission);
   const mediaRecorder = useRef(null);
-  const [recordingStatus, setRecordingStatus] = useState("inactive");
+  const [recordingStatus, setRecordingStatus] = useState('inactive');
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   const [timer, setTimer] = useState(0);
   useEffect(() => {
     let intervalId;
-    if (recordingStatus === "recording") {
+    if (recordingStatus === 'recording') {
       intervalId = setInterval(() => {
         setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
@@ -24,7 +24,7 @@ const AudioRecorder = ({ setAudio }) => {
 
   // const mimeType = "audio/wav";
   const getMicrophonePermission = async () => {
-    if ("MediaRecorder" in window) {
+    if ('MediaRecorder' in window) {
       try {
         const streamData = await navigator.mediaDevices.getUserMedia({
           audio: true,
@@ -36,14 +36,14 @@ const AudioRecorder = ({ setAudio }) => {
         return false;
       }
     } else {
-      alert("The MediaRecorder API is not supported in your browser.");
+      alert('The MediaRecorder API is not supported in your browser.');
     }
   };
   let localAudioChunks = [];
   const startRecording = async () => {
     let stream = await getMicrophonePermission();
     if (stream) {
-      setRecordingStatus("recording");
+      setRecordingStatus('recording');
 
       //create new Media recorder instance using the stream
       const media = new MediaRecorder(stream);
@@ -52,7 +52,7 @@ const AudioRecorder = ({ setAudio }) => {
       //invokes the start method to start the recording process
       mediaRecorder.current.start();
       mediaRecorder.current.ondataavailable = (event) => {
-        if (typeof event.data === "undefined") return;
+        if (typeof event.data === 'undefined') return;
         if (event.data.size === 0) return;
         localAudioChunks.push(event.data);
       };
@@ -60,21 +60,21 @@ const AudioRecorder = ({ setAudio }) => {
     }
   };
   const pauseRecording = async () => {
-    setRecordingStatus("paused");
+    setRecordingStatus('paused');
     mediaRecorder.current.pause();
   };
   const handleResume = async () => {
-    setRecordingStatus("recording");
+    setRecordingStatus('recording');
     mediaRecorder.current.start();
     mediaRecorder.current.ondataavailable = (event) => {
-      if (typeof event.data === "undefined") return;
+      if (typeof event.data === 'undefined') return;
       if (event.data.size === 0) return;
       localAudioChunks.push(event.data);
     };
     setAudioChunks(localAudioChunks);
   };
   const stopRecording = () => {
-    setRecordingStatus("inactive");
+    setRecordingStatus('inactive');
     //stops the recording instance
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
@@ -89,21 +89,16 @@ const AudioRecorder = ({ setAudio }) => {
   };
 
   return (
-    <div className="flex justify-center items-center gap-3 flex-col">
+    <div className="flex flex-col items-center justify-center gap-3">
       <div className="audio-controls">
-        {recordingStatus === "inactive" ? (
+        {recordingStatus === 'inactive' ? (
           <button
             onClick={startRecording}
             type="button"
             title="record"
-            className="fill-gray-500 hover:fill-red-500 bg-gray-100 rounded-full p-2 "
+            className="rounded-full bg-gray-100 fill-gray-500 p-2 hover:fill-red-500 "
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -112,14 +107,12 @@ const AudioRecorder = ({ setAudio }) => {
             </svg>
           </button>
         ) : null}
-        {recordingStatus === "paused" && (
-          <button onClick={handleResume}>resume</button>
-        )}
-        {recordingStatus === "recording" ? (
+        {recordingStatus === 'paused' && <button onClick={handleResume}>resume</button>}
+        {recordingStatus === 'recording' ? (
           <>
             <div className="timer flex gap-3">
               <svg
-                className="animate-pulse bg-gray-100 rounded-full"
+                className="animate-pulse rounded-full bg-gray-100"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -136,13 +129,7 @@ const AudioRecorder = ({ setAudio }) => {
               </svg>
               <div>{formatTime(timer)} recording...</div>
               <button onClick={stopRecording} type="button">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     fillRule="evenodd"
                     clipRule="evenodd"

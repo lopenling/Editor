@@ -1,16 +1,10 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedSuggestionThread, selectedTextOnEditor } from "~/states";
-import { Editor } from "@tiptap/react";
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { selectedSuggestionThread, selectedTextOnEditor } from '~/states';
+import { Editor } from '@tiptap/react';
 
-import Suggestion from "./Suggestion";
-import { SuggestionType } from "~/model/type";
-function Suggestions({
-  editor,
-  suggestions,
-}: {
-  editor: Editor | null;
-  suggestions: SuggestionType[];
-}) {
+import Suggestion from './Suggestion';
+import { SuggestionType } from '~/model/type';
+function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestions: SuggestionType[] }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
 
   let list = suggestions.filter((sug) => {
@@ -18,25 +12,15 @@ function Suggestions({
   });
 
   let groupedSuggestion = transformObjectsByNewValue(list);
-  console.log(groupedSuggestion);
   return (
     <div
-      className="p-2 ml-2 bg-slate-50 dark:bg-gray-700 shadow-md mt-4 h-[80vh] max-h-[80vh] overflow-visible overflow-y-auto z-1"
-      style={{ minWidth: 350, fontFamily: "sans-serif" }}
+      className="z-1 ml-2 mt-4 h-[80vh] max-h-[80vh] overflow-visible overflow-y-auto bg-slate-50 p-2 shadow-md dark:bg-gray-700"
+      style={{ minWidth: 350, fontFamily: 'sans-serif' }}
     >
       <div className="flex flex-col  gap-2 ">
-        <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-          Suggestion
-        </h2>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white lg:text-2xl">Suggestion</h2>
         {groupedSuggestion.map((suggest) => {
-          return (
-            <Suggestion
-              optimistic={false}
-              editor={editor}
-              suggest={suggest}
-              key={suggest.id}
-            />
-          );
+          return <Suggestion optimistic={false} editor={editor} suggest={suggest} key={suggest.id} />;
         })}
       </div>
     </div>
@@ -82,13 +66,9 @@ function transformObjectsByNewValue(objects) {
   }
 
   // Remove repeating newValue data
-  const uniqueValues = [
-    ...new Set(transformedObjects.map((obj) => obj.newValue)),
-  ];
+  const uniqueValues = [...new Set(transformedObjects.map((obj) => obj.newValue))];
   const uniqueTransformedObjects = uniqueValues.map((newValue) => {
-    const objectsWithSameNewValue = transformedObjects.filter(
-      (obj) => obj.newValue === newValue
-    );
+    const objectsWithSameNewValue = transformedObjects.filter((obj) => obj.newValue === newValue);
     return objectsWithSameNewValue[0];
   });
 

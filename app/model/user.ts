@@ -1,4 +1,4 @@
-import { db } from "~/services/db.server";
+import { db } from '~/services/db.server';
 
 //find all user
 export async function getAllUser() {
@@ -58,14 +58,14 @@ export async function createUserInDB(
         avatarUrl,
         preference: {
           create: {
-            theme: "light",
-            language: "en",
+            theme: 'light',
+            language: 'en',
           },
         },
       },
     });
     return newUser;
   } catch (e) {
-    return "user Cannot be created" + e;
+    return 'user Cannot be created' + e;
   }
 }

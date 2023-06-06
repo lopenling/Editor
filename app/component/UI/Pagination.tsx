@@ -1,5 +1,5 @@
-import { Link, useLoaderData, useNavigation } from "@remix-run/react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { Link, useLoaderData, useNavigation } from '@remix-run/react';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 type PaginationPropType = {
   pageCount: number;
@@ -15,19 +15,13 @@ export default function Pagination({ pageCount }: PaginationPropType) {
   return (
     <div className="flex justify-end gap-3">
       {order - 1 > 0 && (
-        <Link
-          to={PreviousLink}
-          className="flex items-center gap-2 rounded p-1 bg-gray-100 mr-1"
-        >
+        <Link to={PreviousLink} className="mr-1 flex items-center gap-2 rounded bg-gray-100 p-1">
           <FaArrowLeft />
           previous
         </Link>
       )}
       {order + 1 <= pageCount && (
-        <Link
-          to={nextLink}
-          className="flex items-center gap-2 rounded p-1 bg-gray-100 mr-1"
-        >
+        <Link to={nextLink} className="mr-1 flex items-center gap-2 rounded bg-gray-100 p-1">
           next
           <FaArrowRight />
         </Link>
