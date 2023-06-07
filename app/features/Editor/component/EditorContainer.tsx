@@ -1,6 +1,6 @@
 import { useLoaderData } from '@remix-run/react';
 import { BubbleMenu, Editor, EditorContent } from '@tiptap/react';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 // import EditorSettings from "./EditorSettings";
 import { Button } from '~/component/UI';

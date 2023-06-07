@@ -23,13 +23,41 @@ function Posts({ posts }: PostPropsType) {
     <>
       <ClientOnly fallback={<></>}>{() => <Filter />}</ClientOnly>
       <div
-        className=" relative flex flex-col overflow-y-auto pr-3 "
         style={{
-          height: 'max-content',
-          maxHeight: '80vh',
           fontFamily: 'sans-serif',
         }}
+        className=" relative flex flex-col pr-3 overflow-x-hidden"
       >
+        {lists?.length > 0 ? (
+          lists?.map((post: PostType, index: number) => {
+            return (
+              <>
+                <Post key={post.id} post={post} isOptimistic={false} />
+                {lists.length > index + 1 && <hr className="my-5" />}
+              </>
+            );
+          })
+        ) : (
+          <div className="text-center">
+            <p>No post available</p>
+            Feel free to be the first one to ask Question !
+          </div>
+        )}
+        {lists?.length > 0 ? (
+          lists?.map((post: PostType, index: number) => {
+            return (
+              <>
+                <Post key={post.id} post={post} isOptimistic={false} />
+                {lists.length > index + 1 && <hr className="my-5" />}
+              </>
+            );
+          })
+        ) : (
+          <div className="text-center">
+            <p>No post available</p>
+            Feel free to be the first one to ask Question !
+          </div>
+        )}{' '}
         {lists?.length > 0 ? (
           lists?.map((post: PostType, index: number) => {
             return (

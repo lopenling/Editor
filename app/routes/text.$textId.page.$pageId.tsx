@@ -26,9 +26,7 @@ import usePusherPresence from '~/component/hooks/usePusherPresence';
 import Pagination from '~/component/UI/Pagination';
 import { FaListUl, FaRegComments } from 'react-icons/fa';
 import TableOfContents from '~/features/Editor/component/TableOfContent';
-import { useDetectClickOutside } from 'react-detect-click-outside';
-import { Modal } from 'flowbite-react';
-import { CSSTransition } from 'react-transition-group';
+import Modal from 'react-modal';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   let textId = params.textId as string;
   let order = params.pageId as string;
@@ -96,6 +94,7 @@ export default function Page() {
   const [showTable, setShowTable] = useRecoilState(showTableContent);
   const [showPostSide, setShowPostSide] = useRecoilState(showPostContent);
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
+  const saveTextFetcher = useFetcher();
   function suggestionSetter(id: string) {
     suggestionSelector({
       id: id,
@@ -113,7 +112,6 @@ export default function Page() {
     data.user
   );
 
-  const saveTextFetcher = useFetcher();
   const saveData = async (text: string) => {
     const formData = new FormData();
     formData.append('textId', data.text?.id);
@@ -124,9 +122,6 @@ export default function Page() {
       action: '/api/text',
     });
   };
-  const postRef = useDetectClickOutside({
-    onTriggered: () => setShowPostSide(false),
-  });
   let editor = useEditor(
     {
       extensions: [
@@ -257,8 +252,7 @@ export default function Page() {
             position: 'sticky',
             top: 70,
             overflowX: 'hidden',
-            overflowY: 'scroll',
-            height: '80vh',
+            height: '90vh',
           }}
           id="postContent"
         >
@@ -282,7 +276,7 @@ export default function Page() {
                 x: showPostSide ? 0 : '100%',
               }}
               transition={{ duration: 0.3 }}
-              className={`hidden min-w-[450px] flex-1 overflow-y-auto rounded-sm bg-white pt-3  dark:bg-gray-700  md:block md:w-1/4 lg:sticky lg:top-0 lg:h-screen`}
+              className={`hidden max-h-[50%]  md:max-h-max min-w-[450px] flex-1 rounded-sm bg-white pt-3  dark:bg-gray-700  md:block md:w-1/4 lg:sticky lg:top-0 lg:h-screen`}
             >
               <PostSidebar
                 page={data.page}
@@ -296,37 +290,41 @@ export default function Page() {
           )}
         </div>
       </div>
-     {/* for mobile devicess */}
-      <CSSTransition
-        in={showPostSide || suggestionSelected?.id || openSuggestion}
-        timeout={300}
-        classNames="flex md:hidden popup "
-        unmountOnExit
+      {/* for mobile devicess */}
+      <Modal
+        isOpen={showPostSide || suggestionSelected?.id || openSuggestion}
+        onRequestClose={() => setShowPostSide(false)}
+        className="modal-content w-full md:hidden"
+        overlayClassName="modal-overlay md:hidden"
       >
-        <div className="popup-container">
-          <div className="popup-content w-full rounded bg-white ">
-            {suggestionSelected?.id || openSuggestion ? (
-              <div className="absolute bottom-0">
-                <SuggestionSidebar
-                  suggestions={data.suggestions}
-                  suggestionSelected={suggestionSelected}
-                  openSuggestion={openSuggestion}
-                  editor={editor}
-                ></SuggestionSidebar>
-              </div>
-            ) : (
-              <PostSidebar
-                page={data.page}
-                user={user}
-                id={selectedPost.id}
-                type={selection.type}
-                showPostSide={showPostSide}
-                editor={editor}
-              />
-            )}
+        {suggestionSelected?.id || openSuggestion ? (
+          <div className="absolute bottom-0">
+            <SuggestionSidebar
+              suggestions={data.suggestions}
+              suggestionSelected={suggestionSelected}
+              openSuggestion={openSuggestion}
+              editor={editor}
+            ></SuggestionSidebar>
           </div>
-        </div>
-      </CSSTransition>
+        ) : (
+            <div style={
+              {
+                maxHeight: '50dvh',
+                overflowY:'scroll'
+              }
+            }>
+
+          <PostSidebar
+            page={data.page}
+            user={user}
+            id={selectedPost.id}
+            type={selection.type}
+            showPostSide={showPostSide}
+            editor={editor}
+          />
+          </div>
+        )}
+      </Modal>
     </>
   );
 }
