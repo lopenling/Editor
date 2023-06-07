@@ -5,12 +5,12 @@ type OnlineUsersPropsType = {
   count: number;
 };
 const OnlineUsers = ({ onlineMembers, count }: OnlineUsersPropsType) => {
-  if (count < 1) return null;
+  if (count < 2) return null;
   return (
     <>
       <ReactNotifications />
 
-      <div className="fixed bottom-2 right-2 z-50 rounded bg-green-200 p-2">
+      <div className="fixed bottom-2 right-2 z-50 rounded p-2">
         {onlineMembers && (
           <div className="flex gap-2">
             <div> online: {count}</div>

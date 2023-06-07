@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GrClose } from 'react-icons/gr';
 
 const TableOfContents = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +16,9 @@ const TableOfContents = ({ onClose }) => {
     <div className="w-64 bg-gray-100 p-4">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold">Table of Contents</h2>
-        <button className="text-gray-600 hover:text-gray-900" onClick={handleClose}>
-          Close
+
+        <button onClick={handleClose} className="mr-2 bg-gray-200 p-2">
+          <GrClose size={22} className="cursor-pointer text-gray-500" />
         </button>
       </div>
       <ul>

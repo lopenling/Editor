@@ -65,7 +65,7 @@ export default function PostContainer() {
   return (
     <>
       <div className=" mb-4 flex w-full items-center justify-between gap-2 ">
-        <div className="flex items-center gap-2">
+        <div className="ml-2 flex items-center gap-2">
           <LatestFilter />
           <button
             id="filterButton"
@@ -86,7 +86,7 @@ export default function PostContainer() {
           </button>
         </div>
         {showPostSide && (
-          <button onClick={() => setShowPostSide(false)}>
+          <button onClick={() => setShowPostSide(false)} className="mr-2 bg-gray-200 p-2">
             <GrClose size={22} className="cursor-pointer text-gray-500" />
           </button>
         )}

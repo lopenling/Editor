@@ -15,6 +15,7 @@ import { UserType } from '~/model/type';
 import { FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import { AiOutlineTranslation } from 'react-icons/ai';
 import EditorSetting from '~/features/Editor/component/EditorSetting';
+import { FaUserAlt } from 'react-icons/fa';
 const Logo = () => (
   <img
     src={'https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
@@ -141,9 +142,23 @@ function Header({ editor }: HeaderProps) {
           ref={headermenuref}
           className={`${
             !showHeaderMenu && 'hidden md:flex'
-          }  w-full flex-col items-center justify-center gap-2 md:order-2 md:w-auto md:justify-end lg:flex-row`}
+          }  w-full flex-col items-center justify-center  md:order-2 md:w-auto md:justify-end lg:flex-row`}
         >
-          <div className="flex w-full items-center justify-between pt-3 md:p-0">
+          <div className="flex w-full items-center justify-between gap-2 pt-3 md:p-0">
+            {!user && (
+              <div className="flex gap-2" id="user-menu-button">
+                <a href={'https://lopenling.org/signup'} id="signup" className="loginButton">
+                  {translation.signup}
+                </a>
+                <loginFetcher.Form method="POST" id="login" action="/auth/login" className="mr-2 flex items-center">
+                  <input type="hidden" name="redirectTo" defaultValue={redirectTo} />
+                  <button type="submit" name="_action" value="login" className="loginButton flex items-center gap-1">
+                    <FaUserAlt />
+                    {translation.login}
+                  </button>
+                </loginFetcher.Form>
+              </div>
+            )}
             {editor && (
               <>
                 <div className="mr-2 mt-2 " ref={searchRef}>
@@ -151,7 +166,7 @@ function Header({ editor }: HeaderProps) {
                     <FaSearch className="text-gray-400 hover:text-gray-600 " size={24} />
                   </button>
                   {showSearch && (
-                    <div className="absolute right-0 top-[100%] mt-2 bg-white" style={{ width: 515,maxWidth:'50vw' }}>
+                    <div className="absolute right-0 top-[100%] mt-2 bg-white" style={{ width: 515, maxWidth: '50vw' }}>
                       <SearchString editor={editor} />
                     </div>
                   )}
@@ -160,7 +175,7 @@ function Header({ editor }: HeaderProps) {
               </>
             )}
 
-            {user ? (
+            {user && (
               <>
                 <button
                   type="button"
@@ -278,28 +293,6 @@ function Header({ editor }: HeaderProps) {
                   </div>
                 )}
               </>
-            ) : (
-              <div className="flex justify-between gap-4" id="user-menu-button">
-                <loginFetcher.Form method="POST" id="login" action="/auth/login" className="flex items-center">
-                  <input type="hidden" name="redirectTo" defaultValue={redirectTo} />
-
-                  <button
-                    type="submit"
-                    name="_action"
-                    value="login"
-                    className="text-sm font-medium capitalize leading-tight text-gray-900 dark:text-white"
-                  >
-                    {translation.login}
-                  </button>
-                </loginFetcher.Form>
-                <a
-                  href={'https://lopenling.org/signup'}
-                  id="signup"
-                  className=" rounded-md border-2 border-green-300 p-1 font-serif capitalize text-green-400"
-                >
-                  {translation.signup}
-                </a>
-              </div>
             )}
           </div>
         </div>

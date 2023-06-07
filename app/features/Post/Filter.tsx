@@ -64,7 +64,13 @@ function Filter({}: FilterProps) {
 
   let isFetchingUser = searchUser.state === 'loading';
   return (
-    <Modal show={openFilter} onClose={() => setOpenFilter(false)} dismissible={true} size="md">
+    <Modal
+      show={openFilter}
+      onClose={() => setOpenFilter(false)}
+      dismissible={true}
+      size="md"
+      style={{ height: '100dvh' }}
+    >
       <Modal.Header>{translation.filter}</Modal.Header>
       <div className="p-5">
         <div className="flex flex-col items-start justify-start space-y-4">

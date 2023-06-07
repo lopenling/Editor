@@ -121,7 +121,7 @@ function Post({ isOptimistic, post }: PostPropType) {
   return (
     <div className={`${fetcher.formMethod === 'DELETE' && 'hidden'} `} id={`p_${threadId}`}>
       <div
-        className={`ml-2 rounded-md px-2 py-3 shadow-md  ${
+        className={`mb-1 ml-2 rounded-md px-2 py-3 shadow-md  ${
           isSelected ? 'bg-yellow-50 dark:bg-gray-500 ' : 'bg-gray-50 dark:bg-gray-700'
         } `}
         onClick={() => handleSelectPost(threadId)}
@@ -318,7 +318,6 @@ function Post({ isOptimistic, post }: PostPropType) {
           />
         </div>
       )}
-      <hr className="my-5" />
     </div>
   );
 }

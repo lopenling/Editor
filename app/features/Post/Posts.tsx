@@ -12,7 +12,7 @@ type PostPropsType = {
   posts: any[];
 };
 
-function Posts({  posts }: PostPropsType) {
+function Posts({ posts }: PostPropsType) {
   let filters = useRecoilValue(filterDataState);
   let isLatest = useRecoilValue(showLatest);
   if (!posts) {
@@ -30,18 +30,21 @@ function Posts({  posts }: PostPropsType) {
           fontFamily: 'sans-serif',
         }}
       >
-       
-        {
-          lists?.length > 0 ? (
-            lists?.map((post: PostType) => {
-              return <Post key={post.id} post={post} isOptimistic={false} />;
-            })
-          ) : (
-            <div className="text-center">
-              <p>No post available</p>
-              Feel free to be the first one to ask Question !
-            </div>
-          )}
+        {lists?.length > 0 ? (
+          lists?.map((post: PostType, index: number) => {
+            return (
+              <>
+                <Post key={post.id} post={post} isOptimistic={false} />
+                {lists.length > index + 1 && <hr className="my-5" />}
+              </>
+            );
+          })
+        ) : (
+          <div className="text-center">
+            <p>No post available</p>
+            Feel free to be the first one to ask Question !
+          </div>
+        )}
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import { LoaderArgs, LoaderFunction, defer } from '@remix-run/node';
 import { Await, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
-import { useEditor } from '@tiptap/react';
+import { Editor, useEditor } from '@tiptap/react';
 import { getPage } from '~/model/page';
 import * as Extension from '~/features/Editor/tiptap';
 import { motion } from 'framer-motion';
@@ -14,7 +14,7 @@ import {
   textInfo,
 } from '~/states';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Suspense, useEffect,  } from 'react';
+import { Suspense, useEffect } from 'react';
 import Header from '~/component/Layout/Header';
 
 import { EditorContainer } from '~/features/Editor';
@@ -28,6 +28,7 @@ import { FaListUl, FaRegComments } from 'react-icons/fa';
 import TableOfContents from '~/features/Editor/component/TableOfContent';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { Modal } from 'flowbite-react';
+import { CSSTransition } from 'react-transition-group';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   let textId = params.textId as string;
   let order = params.pageId as string;
@@ -43,6 +44,40 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
   });
 };
+
+function PostSidebar(props: { id: any; showPostSide: any; type: string; user: any; editor: any; page: any }) {
+  return (
+    <Outlet
+      context={{
+        user: props.user,
+        editor: props.editor,
+        text: props.page,
+      }}
+    />
+  );
+}
+
+function SuggestionSidebar(props: {
+  openSuggestion: any;
+  suggestionSelected: { id: any };
+  editor: Editor | null;
+  suggestions: any;
+}) {
+  return (
+    <motion.div
+      animate={{
+        x: props.openSuggestion || props.suggestionSelected?.id ? 0 : '100%',
+      }}
+    >
+      <SuggestionForm editor={props.editor} />
+      <Suspense fallback={<div>loading</div>}>
+        <Await resolve={props.suggestions}>
+          {(data) => <SuggestionContainer editor={props.editor} suggestions={data} />}
+        </Await>
+      </Suspense>
+    </motion.div>
+  );
+}
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
@@ -153,28 +188,33 @@ export default function Page() {
     []
   );
   useEffect(() => {
-    if (selectedPost.id  || selection.type !== '') {
+    if (selectedPost.id || selection.type !== '') {
       setShowPostSide(true);
-    }
-    else {
+    } else {
       setShowPostSide(false);
     }
-  },[selectedPost.id, selection.type])
-  
+  }, [selectedPost.id, selection.type]);
+
+  useEffect(() => {
+    if (!showPostSide) {
+      postSelector({ id: '' });
+      editor?.commands.setTextSelection(0);
+    }
+  }, [showPostSide]);
+
   if (!editor) return null;
   return (
     <>
       <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div style={{ height: 70 }}></div>
-      <div className="relative flex  h-min  justify-between gap-4 transition-all">
+      <div className="relative flex h-min justify-between gap-4 transition-all">
         <div
-          className="hidden min-w-[350px] md:block"
+          className="hidden w-fit md:block"
           style={{
             zIndex: 1,
             position: 'sticky',
             top: 70,
-            overflowX: 'hidden',
             overflowY: 'scroll',
             height: '80vh',
           }}
@@ -187,11 +227,9 @@ export default function Page() {
           >
             <FaListUl size={22} className="cursor-pointer text-gray-500 " />
           </button>
-          <motion.div 
-            className="side-popup"
-            initial={{ x: '-100%' }}
+          <motion.div
             animate={{
-              x: showTable ? 0 : '-100%',
+              x: showTable ? 0 : '-100vw',
             }}
             transition={{ duration: 0.3 }}
           >
@@ -225,75 +263,70 @@ export default function Page() {
           id="postContent"
         >
           <button
-            className="absolute rounded-full hover:bg-gray-300 "
-            style={{ top: 20, right: 20, background: '#eee', padding: 10 }}
+            className="absolute rounded-full hover:bg-gray-300"
+            style={{ top: 20, right: 20, background: '#eee', padding: 10, zIndex: '-1' }}
             onClick={() => setShowPostSide((p) => !p)}
           >
-            <FaRegComments size={22} className="cursor-pointer text-gray-500" />
+            <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
           </button>
           {suggestionSelected?.id || openSuggestion ? (
-            <motion.div
-              animate={{
-                x: openSuggestion || suggestionSelected?.id ? 0 : '100%',
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              <SuggestionForm editor={editor} />
-              <Suspense fallback={<div>loading</div>}>
-                <Await resolve={data.suggestions}>
-                  {(data) => <SuggestionContainer editor={editor} suggestions={data} />}
-                </Await>
-              </Suspense>
-            </motion.div>
+            <SuggestionSidebar
+              suggestions={data.suggestions}
+              suggestionSelected={suggestionSelected}
+              openSuggestion={openSuggestion}
+              editor={editor}
+            ></SuggestionSidebar>
           ) : (
             <motion.div
               animate={{
                 x: showPostSide ? 0 : '100%',
               }}
               transition={{ duration: 0.3 }}
-              className={`max-w-[450px] flex-1 overflow-y-auto rounded-sm  bg-white  pt-3 dark:bg-gray-700 lg:sticky lg:top-0 lg:h-screen`}
+              className={`hidden min-w-[450px] flex-1 overflow-y-auto rounded-sm bg-white pt-3  dark:bg-gray-700  md:block md:w-1/4 lg:sticky lg:top-0 lg:h-screen`}
             >
-              <Outlet context={{ user: user, editor, text: data.page }} />
+              <PostSidebar
+                page={data.page}
+                user={user}
+                id={selectedPost.id}
+                type={selection.type}
+                showPostSide={showPostSide}
+                editor={editor}
+              />
             </motion.div>
           )}
         </div>
       </div>
-      {suggestionSelected?.id || openSuggestion ? (
-        <Modal show={openSuggestion || !!suggestionSelected?.id} dismissible={true} size="md" className="md:hidden">
-          <motion.div
-            animate={{
-              x: openSuggestion || suggestionSelected?.id ? 0 : '100%',
-            }}
-          >
-            <SuggestionForm editor={editor} />
-            <Suspense fallback={<div>loading</div>}>
-              <Await resolve={data.suggestions}>
-                {(data) => <SuggestionContainer editor={editor} suggestions={data} />}
-              </Await>
-            </Suspense>
-          </motion.div>
-        </Modal>
-      ) : (
-        <Modal
-          show={showPostSide}
-          dismissible={true}
-          onClose={() => {
-            setShowPostSide(false);
-            console.log('closed');
-          }}
-          size="md"
-          className="md:hidden"
-        >
-          <motion.div
-            animate={{
-              x: selectedPost.id || showPostSide || selection.type !== '' ? 0 : '100%',
-            }}
-            className={`max-w-[450px] flex-1 overflow-y-auto rounded-sm  bg-white  pt-3 dark:bg-gray-700 lg:sticky lg:top-0 lg:h-screen`}
-          >
-            <Outlet context={{ user: user, editor, text: data.page }} />
-          </motion.div>
-        </Modal>
-      )}
+     {/* for mobile devicess */}
+      <CSSTransition
+        in={showPostSide || suggestionSelected?.id || openSuggestion}
+        timeout={300}
+        classNames="flex md:hidden popup "
+        unmountOnExit
+      >
+        <div className="popup-container">
+          <div className="popup-content w-full rounded bg-white ">
+            {suggestionSelected?.id || openSuggestion ? (
+              <div className="absolute bottom-0">
+                <SuggestionSidebar
+                  suggestions={data.suggestions}
+                  suggestionSelected={suggestionSelected}
+                  openSuggestion={openSuggestion}
+                  editor={editor}
+                ></SuggestionSidebar>
+              </div>
+            ) : (
+              <PostSidebar
+                page={data.page}
+                user={user}
+                id={selectedPost.id}
+                type={selection.type}
+                showPostSide={showPostSide}
+                editor={editor}
+              />
+            )}
+          </div>
+        </div>
+      </CSSTransition>
     </>
   );
 }
