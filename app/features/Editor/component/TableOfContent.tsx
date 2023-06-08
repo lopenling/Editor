@@ -17,8 +17,8 @@ const TableOfContents = ({ onClose }) => {
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold">Table of Contents</h2>
 
-        <button onClick={handleClose} className="mr-2 bg-gray-200 p-2">
-          <GrClose size={22} className="cursor-pointer text-gray-500" />
+        <button onClick={handleClose} className="mr-2">
+          <GrClose size={14} className="cursor-pointer text-gray-500" />
         </button>
       </div>
       <ul>

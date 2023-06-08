@@ -43,36 +43,7 @@ function Posts({ posts }: PostPropsType) {
             Feel free to be the first one to ask Question !
           </div>
         )}
-        {lists?.length > 0 ? (
-          lists?.map((post: PostType, index: number) => {
-            return (
-              <>
-                <Post key={post.id} post={post} isOptimistic={false} />
-                {lists.length > index + 1 && <hr className="my-5" />}
-              </>
-            );
-          })
-        ) : (
-          <div className="text-center">
-            <p>No post available</p>
-            Feel free to be the first one to ask Question !
-          </div>
-        )}{' '}
-        {lists?.length > 0 ? (
-          lists?.map((post: PostType, index: number) => {
-            return (
-              <>
-                <Post key={post.id} post={post} isOptimistic={false} />
-                {lists.length > index + 1 && <hr className="my-5" />}
-              </>
-            );
-          })
-        ) : (
-          <div className="text-center">
-            <p>No post available</p>
-            Feel free to be the first one to ask Question !
-          </div>
-        )}
+     
       </div>
     </>
   );

@@ -205,7 +205,7 @@ export default function Page() {
       <div style={{ height: 70 }}></div>
       <div className="relative flex h-min justify-between gap-4 transition-all">
         <div
-          className="hidden w-fit md:block"
+          className="hidden w-fit md:block" 
           style={{
             zIndex: 1,
             position: 'sticky',
@@ -227,6 +227,7 @@ export default function Page() {
               x: showTable ? 0 : '-100vw',
             }}
             transition={{ duration: 0.3 }}
+            className='rounded-2xl'
           >
             <TableOfContents onClose={() => setShowTable(false)} />
           </motion.div>
@@ -276,7 +277,7 @@ export default function Page() {
                 x: showPostSide ? 0 : '100%',
               }}
               transition={{ duration: 0.3 }}
-              className={`hidden max-h-[50%]  md:max-h-max min-w-[450px] flex-1 rounded-sm bg-white pt-3  dark:bg-gray-700  md:block md:w-1/4 lg:sticky lg:top-0 lg:h-screen`}
+              className={`hidden max-h-[50%]  md:max-h-max min-w-[450px] flex-1 bg-white pt-3  dark:bg-gray-700  md:block md:w-1/4 lg:sticky lg:top-0 lg:h-screen`}
             >
               <PostSidebar
                 page={data.page}
