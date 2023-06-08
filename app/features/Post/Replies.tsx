@@ -1,6 +1,6 @@
-import { useFetcher } from "@remix-run/react";
-import { useState, useMemo, useEffect } from "react";
-import Reply from "./Reply.client";
+import { useFetcher } from '@remix-run/react';
+import { useState, useMemo, useEffect } from 'react';
+import Reply from './Reply.client';
 
 type replyType = {
   is_approved: boolean;
@@ -10,27 +10,17 @@ type RepliesProps = {
   postId: string;
   topicId: number;
   isCreator: boolean;
-  type: "question" | "comment";
+  type: 'question' | 'comment';
   replyCount: number;
   setReplyCount: any;
 };
-function Replies({
-  postId,
-  topicId,
-  isCreator,
-  type,
-  replyCount,
-  setReplyCount,
-}: RepliesProps) {
+function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }: RepliesProps) {
   const [replies, setReplies] = useState<replyType[]>([]);
   const [loading, setLoading] = useState(false);
   const postListFetcher = useFetcher();
   useEffect(() => {
     setLoading(true);
-    postListFetcher.submit(
-      {},
-      { method: "GET", action: `/api/reply/${topicId}` }
-    );
+    postListFetcher.submit({}, { method: 'GET', action: `/api/reply/${topicId}` });
   }, []);
   useEffect(() => {
     let data = postListFetcher.data;
@@ -44,11 +34,11 @@ function Replies({
   let postdata = useMemo(() => replies, [replies]);
   if (loading)
     return (
-      <div className="flex my-2 justify-center items-center">
+      <div className="my-2 flex items-center justify-center">
         <div role="status">
           <svg
             aria-hidden="true"
-            className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="mr-2 h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -70,15 +60,7 @@ function Replies({
   return (
     <>
       {postdata.map((reply: any, index: number) => {
-        return (
-          <Reply
-            key={reply.id}
-            reply={reply}
-            isCreator={isCreator}
-            postId={postId}
-            type={type}
-          />
-        );
+        return <Reply key={reply.id} reply={reply} isCreator={isCreator} postId={postId} type={type} />;
       })}
     </>
   );

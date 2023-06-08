@@ -1,5 +1,5 @@
-import { useRef, useEffect, useCallback } from "react";
-import { SubmitFunction, useFetcher } from "@remix-run/react";
+import { useRef, useEffect, useCallback } from 'react';
+import { SubmitFunction, useFetcher } from '@remix-run/react';
 export function useFetcherWithPromise() {
   let resolveRef = useRef<any>();
   let promiseRef = useRef<Promise<any>>();
@@ -26,7 +26,7 @@ export function useFetcherWithPromise() {
   );
 
   useEffect(() => {
-    if (fetcher.data && fetcher.state === "idle") {
+    if (fetcher.data && fetcher.state === 'idle') {
       resolveRef.current(fetcher.data);
       resetResolver();
     }

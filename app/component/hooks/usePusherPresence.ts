@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import Pusher from "pusher-js";
-import { useRevalidator } from "@remix-run/react";
+import { useState, useEffect } from 'react';
+import Pusher from 'pusher-js';
+import { useRevalidator } from '@remix-run/react';
 
 const usePusherPresence = (channelName, id, cluster, user) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
@@ -9,7 +9,7 @@ const usePusherPresence = (channelName, id, cluster, user) => {
   useEffect(() => {
     const pusher = new Pusher(id, {
       cluster,
-      authEndpoint: "/auth/pusher", // Replace with your server's auth endpoint
+      authEndpoint: '/auth/pusher', // Replace with your server's auth endpoint
     });
     const channel = pusher.subscribe(channelName);
 
@@ -28,11 +28,11 @@ const usePusherPresence = (channelName, id, cluster, user) => {
       if (e.userId) revalidate();
     };
 
-    channel.bind("pusher:subscription_succeeded", handleSubscriptionSucceeded);
-    channel.bind("pusher:member_added", handleMemberAdded);
-    channel.bind("pusher:member_removed", handleMemberRemoved);
+    channel.bind('pusher:subscription_succeeded', handleSubscriptionSucceeded);
+    channel.bind('pusher:member_added', handleMemberAdded);
+    channel.bind('pusher:member_removed', handleMemberRemoved);
 
-    channel.bind("update-app", handleUpdate);
+    channel.bind('update-app', handleUpdate);
     return () => {
       channel.unbind();
       pusher.unsubscribe(channelName);

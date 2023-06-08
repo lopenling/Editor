@@ -1,5 +1,5 @@
-import { useFetcher, useLocation } from "@remix-run/react";
-import uselitteraTranlation from "~/locales/useLitteraTranslations";
+import { useFetcher, useLocation } from '@remix-run/react';
+import uselitteraTranlation from '~/locales/useLitteraTranslations';
 
 export default function LogInMessage() {
   let loginFetcher = useFetcher();
@@ -9,13 +9,13 @@ export default function LogInMessage() {
   return (
     <div
       id="toast-success"
-      className="flex items-center w-full  p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+      className="mb-4 flex w-full  items-center rounded-lg bg-white p-4 text-gray-500 shadow dark:bg-gray-800 dark:text-gray-400"
       role="alert"
     >
-      <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-orange-700 dark:text-orange-200">
+      <div className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 dark:bg-orange-700 dark:text-orange-200">
         <svg
           aria-hidden="true"
-          className="w-5 h-5"
+          className="h-5 w-5"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@ export default function LogInMessage() {
         method="POST"
         id="login"
         action="/auth/login"
-        className="flex items-center ml-3 text-sm font-normal"
+        className="ml-3 flex items-center text-sm font-normal"
       >
         <input type="hidden" name="redirectTo" defaultValue={redirectTo} />
 
@@ -40,7 +40,7 @@ export default function LogInMessage() {
           type="submit"
           name="_action"
           value="login"
-          className="text-sm font-medium leading-tight text-gray-900 capitalize dark:text-white"
+          className="text-sm font-medium capitalize leading-tight text-gray-900 dark:text-white"
         >
           click to {translation.login}
         </button>

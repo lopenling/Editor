@@ -1,68 +1,63 @@
-import { useLoaderData, useOutletContext } from "@remix-run/react";
-import { Editor } from "@tiptap/react";
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedTextOnEditor, textInfo } from "~/states";
-import { v4 as uuidv4 } from "uuid";
-import { Button, TextArea } from "~/component/UI";
-import { AudioPlayer, AudioRecorder } from "~/features/Media";
-import { PostType } from "~/model/type";
+import { useLoaderData, useOutletContext } from '@remix-run/react';
+import { Editor } from '@tiptap/react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { selectedTextOnEditor, textInfo } from '~/states';
+import { v4 as uuidv4 } from 'uuid';
+import { Button, TextArea } from '~/component/UI';
+import { AudioPlayer, AudioRecorder } from '~/features/Media';
+import { PostType } from '~/model/type';
 type FormWithAudioProps = {
   fetcher: any;
-  type: "post" | "update";
+  type: 'post' | 'update';
   post: PostType | null;
   onClose?: () => void | null;
 };
-export function FormWithAudio({
-  fetcher,
-  type,
-  post,
-  onClose = () => {},
-}: FormWithAudioProps) {
-  let content = post?.content ?? "";
-  let audioUrl = post?.audioUrl ?? "";
+export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormWithAudioProps) {
+  let content = post?.content ?? '';
+  let audioUrl = post?.audioUrl ?? '';
   const [audio, setAudio] = useState({ tempUrl: audioUrl, blob: null });
   const { name: textName } = useRecoilValue(textInfo);
 
   const [body, setBody] = useState(content);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const data = useLoaderData();
   let isFormEmpty = body.length < 5;
   const { editor }: { editor: Editor } = useOutletContext();
   useEffect(() => {
-    setBody(content ? content : "");
-    setAudio({ tempUrl: audioUrl ? audioUrl : "", blob: null });
-    setError("");
+    setBody(content ? content : '');
+    setAudio({ tempUrl: audioUrl ? audioUrl : '', blob: null });
+    setError('');
   }, [selection.start]);
   function validator() {
     let lengthOfSelection = selection.end - selection?.start;
-    let errormessage = "";
-    if (audio.tempUrl !== "" && isFormEmpty) {
-      errormessage = "ERROR : describe the audio";
+    let errormessage = '';
+    if (audio.tempUrl !== '' && isFormEmpty) {
+      errormessage = 'ERROR : describe the audio';
     } else if (isFormEmpty) {
-      errormessage = "ERROR : write more than 5 character";
+      errormessage = 'ERROR : write more than 5 character';
     } else if (lengthOfSelection > 254) {
-      errormessage = "ERROR : selecting more than 255 letter not allowed";
+      errormessage = 'ERROR : selecting more than 255 letter not allowed';
     } else if (body.length > 250) {
-      errormessage = "ERROR : content more than 255 letter not allowed";
+      errormessage = 'ERROR : content more than 255 letter not allowed';
     } else {
-      errormessage = "";
+      errormessage = '';
     }
     return errormessage;
   }
   async function handleSubmit(e) {
     e.preventDefault();
     let errormessage = validator();
-    if (errormessage && errormessage !== "") {
+    if (errormessage && errormessage !== '') {
       setError(errormessage);
       return null;
     }
     let id = null;
-    if (!editor.isActive("post")) {
+    if (!editor.isActive('post')) {
       id = uuidv4();
     } else {
-      id = editor.getAttributes("post")?.id;
+      id = editor.getAttributes('post')?.id;
     }
     let item = {
       threadId: id,
@@ -77,18 +72,18 @@ export function FormWithAudio({
     let blob = audio?.blob;
     var form_data = new FormData();
     if (blob) {
-      form_data.append("file", blob, `text-${data?.text?.id}-${uuidv4()}.wav`);
+      form_data.append('file', blob, `text-${data?.text?.id}-${uuidv4()}.wav`);
     } else {
-      form_data.append("audioUrl", audio.tempUrl);
+      form_data.append('audioUrl', audio.tempUrl);
     }
-    if (type === "update") {
-      form_data.append("body", body);
-      form_data.append("action", "update");
-      form_data.append("postId", post?.id!);
+    if (type === 'update') {
+      form_data.append('body', body);
+      form_data.append('action', 'update');
+      form_data.append('postId', post?.id!);
       let responseData = await fetcher.submit(form_data, {
-        method: "PATCH",
-        action: "/api/post",
-        encType: "multipart/form-data",
+        method: 'PATCH',
+        action: '/api/post',
+        encType: 'multipart/form-data',
       });
       if (responseData) onClose();
       return responseData;
@@ -98,12 +93,12 @@ export function FormWithAudio({
       }
       if (selection) {
         let awaitdata = await fetcher.submit(form_data, {
-          method: "POST",
-          action: "/api/post",
-          encType: "multipart/form-data",
+          method: 'POST',
+          action: '/api/post',
+          encType: 'multipart/form-data',
         });
         if (!awaitdata?.message) {
-          setSelection({ ...selection, type: "" });
+          setSelection({ ...selection, type: '' });
           editor.commands.setPost({
             id,
           });
@@ -112,25 +107,14 @@ export function FormWithAudio({
     }
   }
   return (
-    <fetcher.Form className="flex flex-col gap-3">
-      <TextArea
-        placeholder="what are your thoughts?"
-        autoFocus
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        style={{ height: 108 }}
-      />
-      {audio.tempUrl !== "" ? (
+    <fetcher.Form className="flex flex-col gap-3 ">
+      <TextArea placeholder="what are your thoughts?" value={body} onChange={(e) => setBody(e.target.value)} />
+      {audio.tempUrl !== '' ? (
         <>
-          <div className="w-full flex items-center gap-3 ">
+          <div className="flex w-full items-center gap-3 ">
             <AudioPlayer src={audio.tempUrl} />
-            <div onClick={() => setAudio({ tempUrl: "", blob: null })}>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+            <div onClick={() => setAudio({ tempUrl: '', blob: null })}>
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
@@ -142,21 +126,17 @@ export function FormWithAudio({
           </div>
         </>
       ) : null}
-      {error && error !== "" && (
-        <div className="font-sm text-red-500">{error}</div>
-      )}
-      {fetcher.data?.message && (
-        <div className="font-sm text-red-500">{fetcher.data?.message}</div>
-      )}
-      <div className="flex justify-between items-center">
-        {audio.tempUrl === "" ? <AudioRecorder setAudio={setAudio} /> : <div />}
+      {error && error !== '' && <div className="font-sm text-red-500">{error}</div>}
+      {fetcher.data?.message && <div className="font-sm text-red-500">{fetcher.data?.message}</div>}
+      <div className="flex items-center justify-between">
+        {audio.tempUrl === '' ? <AudioRecorder setAudio={setAudio} /> : <div />}
 
         <div className="flex justify-end gap-2">
           <Button
             type="reset"
             onClick={() => {
-              setAudio({ tempUrl: "", blob: null });
-              setSelection({ ...selection, type: "" });
+              setAudio({ tempUrl: '', blob: null });
+              setSelection({ ...selection, type: '' });
               onClose();
             }}
             label="cancel"

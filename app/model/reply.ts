@@ -1,12 +1,8 @@
 //create reply
 
-import { db } from "~/services/db.server";
+import { db } from '~/services/db.server';
 
-export async function createReply(
-  id: string,
-  postId: string,
-  likedById: string
-) {
+export async function createReply(id: string, postId: string, likedById: string) {
   try {
     let reply = await db.reply.create({
       data: {
@@ -28,7 +24,7 @@ export async function createReply(
     });
     return reply;
   } catch (e) {
-    throw new Error("creating reply Error " + e.message);
+    throw new Error('creating reply Error ' + e.message);
   }
 }
 
@@ -46,7 +42,7 @@ export async function findReply(id: string, likedBy: string) {
     });
     return data;
   } catch (e) {
-    throw new Error("couldnot find reply error" + e.message);
+    throw new Error('couldnot find reply error' + e.message);
   }
 }
 export async function findReplyByPostId(post_id: string) {
@@ -59,12 +55,12 @@ export async function findReplyByPostId(post_id: string) {
         likedBy: true,
       },
       orderBy: {
-        is_approved: "asc",
+        is_approved: 'asc',
       },
     });
     return res;
   } catch (e) {
-    throw new Error("finding reply by postId error" + e.message);
+    throw new Error('finding reply by postId error' + e.message);
   }
 }
 export async function findAproved(id: string) {
@@ -79,7 +75,7 @@ export async function findAproved(id: string) {
     });
     return res;
   } catch (e) {
-    throw new Error("error finding aproved in reply" + e.message);
+    throw new Error('error finding aproved in reply' + e.message);
   }
 }
 export async function isReplyPresent(replyId: string): Promise<boolean> {
@@ -96,11 +92,7 @@ export async function isReplyPresent(replyId: string): Promise<boolean> {
   }
 }
 //update isAproved
-export async function updateLikeReply(
-  id: string,
-  likedBy: string,
-  put: boolean
-) {
+export async function updateLikeReply(id: string, likedBy: string, put: boolean) {
   try {
     await db.reply.update({
       where: {
@@ -121,7 +113,7 @@ export async function updateLikeReply(
       },
     });
   } catch (e) {
-    throw new Error("couldnot update reply error" + e.message);
+    throw new Error('couldnot update reply error' + e.message);
   }
 }
 export async function updateIsAproved(id: string, is_approved: boolean) {
@@ -136,6 +128,6 @@ export async function updateIsAproved(id: string, is_approved: boolean) {
     });
     return res;
   } catch (e) {
-    throw new Error("updating approved error" + e.message);
+    throw new Error('updating approved error' + e.message);
   }
 }

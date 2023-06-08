@@ -1,5 +1,5 @@
-import data from "./data.json";
-import { textData } from "./text.js";
+import data from './data.json';
+import { textData } from './text.js';
 export default function generateText() {
   const text = textData;
   let newText = text;
@@ -10,11 +10,7 @@ export default function generateText() {
     const startIndex = tag.start;
     const endIndex = tag.end + startTag.length;
     newText =
-      newText.slice(0, startIndex) +
-      startTag +
-      newText.slice(startIndex, endIndex) +
-      endTag +
-      newText.slice(endIndex);
+      newText.slice(0, startIndex) + startTag + newText.slice(startIndex, endIndex) + endTag + newText.slice(endIndex);
   }
   return newText;
 }

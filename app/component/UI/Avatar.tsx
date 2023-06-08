@@ -3,26 +3,19 @@ interface AvatarType {
   alt: string;
   img: string;
   rounded: boolean;
-  size: "sm" | "md";
+  size: 'sm' | 'md';
 }
 
 export function Avatar({ title, alt, img, rounded, size }: AvatarType) {
   let px = 8;
   switch (size) {
-    case "sm":
+    case 'sm':
       px = 8;
       break;
-    case "md":
+    case 'md':
       px = 10;
       break;
   }
 
-  return (
-    <img
-      className={`w-${px} h-${px} p-1 ${rounded && "rounded-full"}`}
-      src={img}
-      alt={alt}
-      title={title}
-    />
-  );
+  return <img className={`w-${px} h-${px} p-1 ${rounded && 'rounded-full'}`} src={img} alt={alt} title={title} />;
 }

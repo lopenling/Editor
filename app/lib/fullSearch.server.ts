@@ -2,23 +2,16 @@ export const fullSearch = (textList, search_term) => {
   const results = [];
   const extract_length = 60;
   const left = parseInt((extract_length - search_term.length) / 2);
-  const delimiters = "།་ ";
-  const delimiter_regex = new RegExp(`[${delimiters}]`, "g");
+  const delimiters = '།་ ';
+  const delimiter_regex = new RegExp(`[${delimiters}]`, 'g');
   const max_results = 0;
 
   for (let text of textList) {
     const content_length = text.content.length;
-    const textWithNewlines = text.content.replace(
-      /<br\s*\/?\s*(class\s*=\s*['"]\S*['"])?\s*>/gi,
-      "\n"
-    );
-    const content = textWithNewlines.replace(/(<([^>]+)>)/gi, "");
-    const contentMatch = Array.from(
-      content.matchAll(new RegExp(search_term, "g"))
-    );
-    const titleMatch = Array.from(
-      text.text.name.matchAll(new RegExp(search_term, "g"))
-    );
+    const textWithNewlines = text.content.replace(/<br\s*\/?\s*(class\s*=\s*['"]\S*['"])?\s*>/gi, '\n');
+    const content = textWithNewlines.replace(/(<([^>]+)>)/gi, '');
+    const contentMatch = Array.from(content.matchAll(new RegExp(search_term, 'g')));
+    const titleMatch = Array.from(text.text.name.matchAll(new RegExp(search_term, 'g')));
 
     if (titleMatch.length > 0 || contentMatch.length > 0) {
       const result = {
@@ -31,10 +24,7 @@ export const fullSearch = (textList, search_term) => {
       };
 
       for (let m of contentMatch) {
-        if (
-          max_results === 0 ||
-          (max_results > 0 && result.total < max_results)
-        ) {
+        if (max_results === 0 || (max_results > 0 && result.total < max_results)) {
           let start = m.index - left;
 
           if (start < 0) {
@@ -45,10 +35,7 @@ export const fullSearch = (textList, search_term) => {
             end = content_length;
           }
           let extract = content.substring(start, end);
-          const delimiterMatches = Array.from(
-            extract.matchAll(delimiter_regex),
-            (m) => m.index
-          );
+          const delimiterMatches = Array.from(extract.matchAll(delimiter_regex), (m) => m.index);
 
           if (delimiterMatches.length > 0) {
             const firstMatch = delimiterMatches[0];

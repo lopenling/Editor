@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 interface DropdownProps {
   label: any;
@@ -19,11 +19,7 @@ const Dropdown = ({ label, size, color, children }: DropdownProps) => {
   };
 
   return (
-    <div
-      className={`relative inline-block ${
-        size === "sm" ? "text-sm" : "text-base"
-      } `}
-    >
+    <div className={`relative inline-block ${size === 'sm' ? 'text-sm' : 'text-base'} `}>
       <button
         type="button"
         className={` flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2`}
@@ -32,7 +28,7 @@ const Dropdown = ({ label, size, color, children }: DropdownProps) => {
         {label}
       </button>
       {isOpen && (
-        <div className="absolute mt-2 space-y-1 w-40 rounded-md shadow-lg bg-white dark:bg-gray-800 z-10">
+        <div className="absolute z-10 mt-2 w-40 space-y-1 rounded-md bg-white shadow-lg dark:bg-gray-800">
           {React.Children.map(children, (child) =>
             React.cloneElement(child, {
               onClick: () => {
@@ -56,7 +52,7 @@ interface DropdownItemProps {
 
 const DropdownItem = ({ onClick, active, children }: DropdownItemProps) => {
   const itemClasses = `block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-50 dark:hover:bg-gray-700 dark:hover:text-white ${
-    active ? "bg-green-300 dark:bg-gray-300 text-white" : ""
+    active ? 'bg-green-300 dark:bg-gray-300 text-white' : ''
   }`;
 
   return (

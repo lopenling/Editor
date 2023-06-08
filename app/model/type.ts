@@ -49,7 +49,7 @@ export interface SuggestionCommentType {
   createdAt: Date;
   updated_at: Date;
   userId: string;
-  type?: "support" | "reject" | null;
+  type?: 'support' | 'reject' | null;
 }
 export interface PostType {
   id: string;
@@ -79,13 +79,13 @@ export interface ReplyType {
   likedBy: UserType[];
 }
 export interface FilterType {
-  type: "all" | "comment" | "question";
+  type: 'all' | 'comment' | 'question';
   date: {
     startDate: Date | null;
     endDate: Date | null;
   };
   user: string[];
-  solved: "both" | "solved";
+  solved: 'both' | 'solved';
 }
 
 export interface TextType {

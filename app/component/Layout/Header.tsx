@@ -1,60 +1,48 @@
-import {
-  Form,
-  Link,
-  NavLink,
-  useFetcher,
-  useLocation,
-  useOutletContext,
-} from "@remix-run/react";
-import LogoOnly from "~/assets/logo.png";
-import { useLitteraMethods } from "@assembless/react-littera";
-import { useEffect, useState, memo } from "react";
-import uselitteraTranlation, {
-  translationCodes,
-} from "~/locales/useLitteraTranslations";
-import { useRecoilValue } from "recoil";
-import { textInfo } from "~/states";
-import { Editor } from "@tiptap/react";
-import { SearchString } from "~/features/Editor";
-import { useDetectClickOutside } from "react-detect-click-outside";
-import { HEADER_HEIGHT } from "~/constants";
-import { Progress as ProgressBar, Avatar } from "~/component/UI";
-import { containTibetanletter, isSmallScreen } from "~/lib";
-import { UserType } from "~/model/type";
+import { Form, Link, NavLink, useFetcher, useLocation, useOutletContext } from '@remix-run/react';
+import LogoOnly from '~/assets/logo.png';
+import { useLitteraMethods } from '@assembless/react-littera';
+import { useEffect, useState, memo } from 'react';
+import uselitteraTranlation, { translationCodes } from '~/locales/useLitteraTranslations';
+import { useRecoilValue } from 'recoil';
+import { textInfo } from '~/states';
+import { Editor } from '@tiptap/react';
+import { SearchString } from '~/features/Editor';
+import { useDetectClickOutside } from 'react-detect-click-outside';
+import { HEADER_HEIGHT } from '~/constants';
+import { Progress as ProgressBar, Avatar } from '~/component/UI';
+import { containTibetanletter, isSmallScreen } from '~/lib';
+import { UserType } from '~/model/type';
+import { FaSearch, FaSignOutAlt } from 'react-icons/fa';
+import { AiOutlineTranslation } from 'react-icons/ai';
+import EditorSetting from '~/features/Editor/component/EditorSetting';
+import { FaUserAlt } from 'react-icons/fa';
 const Logo = () => (
   <img
-    src={
-      "https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png"
-    }
+    src={'https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
     alt="logo"
-    className="block object-contain max-h-[37px] "
+    className="block max-h-[37px] object-contain "
   />
 );
 const LogoWithTextName = ({ textName }: { textName: string }) => {
   if (textName.length > 20 && isSmallScreen) {
-    textName = textName.slice(0, 25) + "...";
+    textName = textName.slice(0, 25) + '...';
   }
   return (
     <div className="flex items-center gap-1">
       <Link to="/">
-        {" "}
-        <img
-          src={LogoOnly}
-          alt="logo"
-          className="block object-contain"
-          style={{ maxHeight: "37px" }}
-        />
+        {' '}
+        <img src={LogoOnly} alt="logo" className="block object-contain" style={{ maxHeight: '37px' }} />
       </Link>
       <h1
         onClick={() => {
-          let editorElement = document.getElementById("textEditorContainer");
+          let editorElement = document.getElementById('textEditorContainer');
           editorElement?.scrollTo({
             top: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
         }}
         style={{ top: containTibetanletter(textName) ? -7 : 0, fontSize: 24 }}
-        className="text-3xl ml-2 relative  font-bold "
+        className="relative ml-2 text-3xl  font-bold "
       >
         {textName}
       </h1>
@@ -76,11 +64,11 @@ function Header({ editor }: HeaderProps) {
   const changeTheme = () => {
     themeFetcher.submit(
       {
-        theme: user?.preference?.theme !== "dark" ? "dark" : "light",
+        theme: user?.preference?.theme !== 'dark' ? 'dark' : 'light',
       },
       {
-        action: "/api/user/preference/theme",
-        method: "POST",
+        action: '/api/user/preference/theme',
+        method: 'POST',
       }
     );
   };
@@ -88,58 +76,56 @@ function Header({ editor }: HeaderProps) {
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    let editorElement = document.getElementById("textEditorContainer");
+    let editorElement = document.getElementById('textEditorContainer');
     const handleScroll = () => {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
-        const shouldShowTextName =
-          editorElement?.scrollTop! > 10 && redirectTo.includes("text");
+        const shouldShowTextName = editorElement?.scrollTop! > 10 && redirectTo.includes('text');
         setTextNameOnHeader(shouldShowTextName);
       }, 10);
     };
 
-    editorElement?.addEventListener("scroll", handleScroll);
-    return () => editorElement?.addEventListener("scroll", handleScroll);
+    editorElement?.addEventListener('scroll', handleScroll);
+    return () => editorElement?.addEventListener('scroll', handleScroll);
   }, [redirectTo, textName]);
-  let darkMode = user?.preference?.theme === "dark";
-  let [showUserMenu, setShowUserMenu] = useState(false);
-  let [showHeaderMenu, setShowHeaderMenu] = useState(false);
-
+  let darkMode = user?.preference?.theme === 'dark';
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showHeaderMenu, setShowHeaderMenu] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const ref = useDetectClickOutside({
     onTriggered: () => setShowUserMenu(false),
+  });
+  const searchRef = useDetectClickOutside({
+    onTriggered: () => setShowSearch(false),
   });
   const headermenuref = useDetectClickOutside({
     onTriggered: () => setShowHeaderMenu(false),
   });
   return (
     <nav
-      className="header fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-gray-900 shadow-header "
+      className="header shadow-header fixed top-0 z-50 w-full border-gray-200 bg-white dark:bg-gray-900 "
       style={{
-        height: showHeaderMenu ? "min-content" : HEADER_HEIGHT,
-        fontFamily: "serif",
+        height: showHeaderMenu ? 'min-content' : HEADER_HEIGHT,
+        fontFamily: 'serif',
       }}
     >
-      <div className=" max-w-6xl flex flex-wrap items-center justify-between mx-auto p-2">
+      <div className=" mx-auto flex flex-wrap items-center justify-between p-2">
         {TextNameOnHeader ? (
           <LogoWithTextName textName={textName} />
         ) : (
-          <NavLink
-            to={"/"}
-            prefetch="intent"
-            className="flex items-center w-auto"
-          >
+          <NavLink to={'/'} prefetch="intent" className="flex w-auto items-center">
             <Logo />
           </NavLink>
         )}
         <button
           onClick={() => setShowHeaderMenu((p) => !p)}
           type="button"
-          className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="ml-1 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200 hover:bg-gray-100 dark:text-gray-400 dark:focus:ring-gray-600 dark:hover:bg-gray-700 md:hidden"
           aria-expanded="false"
         >
           <span className="sr-only">Open main menu</span>
           <svg
-            className="w-6 h-6"
+            className="h-6 w-6"
             aria-hidden="true"
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -155,45 +141,63 @@ function Header({ editor }: HeaderProps) {
         <div
           ref={headermenuref}
           className={`${
-            !showHeaderMenu && "hidden md:flex"
-          }  items-center justify-center flex-col lg:flex-row md:justify-end gap-2 md:order-2 w-full md:w-auto`}
+            !showHeaderMenu && 'hidden md:flex'
+          }  w-full flex-col items-center justify-center  md:order-2 md:w-auto md:justify-end lg:flex-row`}
         >
-          <div className="w-full flex items-center justify-between pt-3 md:p-0">
-            {editor && <SearchString editor={editor} />}
+          <div className="flex w-full items-center justify-between gap-2 pt-3 md:p-0">
+            {!user && (
+              <div className="flex gap-2" id="user-menu-button">
+                <a href={'https://lopenling.org/signup'} id="signup" className="loginButton">
+                  {translation.signup}
+                </a>
+                <loginFetcher.Form method="POST" id="login" action="/auth/login" className="mr-2 flex items-center">
+                  <input type="hidden" name="redirectTo" defaultValue={redirectTo} />
+                  <button type="submit" name="_action" value="login" className="loginButton flex items-center gap-1">
+                    <FaUserAlt />
+                    {translation.login}
+                  </button>
+                </loginFetcher.Form>
+              </div>
+            )}
+            {editor && (
+              <>
+                <div className="mr-2 mt-2 " ref={searchRef}>
+                  <button onClick={() => setShowSearch((p) => !p)}>
+                    <FaSearch className="text-gray-400 hover:text-gray-600 " size={24} />
+                  </button>
+                  {showSearch && (
+                    <div className="absolute right-0 top-[100%] mt-2 bg-white" style={{ width: 515, maxWidth: '50vw' }}>
+                      <SearchString editor={editor} />
+                    </div>
+                  )}
+                </div>
+                <EditorSetting editor={editor} />
+              </>
+            )}
 
-            <Translation />
-
-            {user ? (
+            {user && (
               <>
                 <button
                   type="button"
-                  className="flex  text-sm  rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  className="  rounded-full  text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 md:mr-0"
                   id="user-menu-button"
                   onClick={() => setShowUserMenu((prev) => !prev)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  <Avatar
-                    alt={user.name}
-                    img={user.avatarUrl}
-                    rounded={true}
-                    size="md"
-                    title={user?.name}
-                  />
+                  <Avatar alt={user.name} img={user.avatarUrl} rounded={true} size="md" title={user?.name} />
                 </button>
                 {showUserMenu && (
                   <div
                     ref={ref}
-                    style={{ top: 50, right: 50 }}
-                    className="z-50 absolute my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                    style={{ top: '100%' }}
+                    className="absolute right-0 z-50 list-none divide-y divide-gray-100 rounded-lg bg-white px-3 text-base shadow dark:divide-gray-600 dark:bg-gray-700"
                     id="user-dropdown-bittun"
                   >
                     <div className="px-4 py-3">
-                      <span className="block text-sm text-gray-900 dark:text-white">
-                        {user.name}
-                      </span>
-                      <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
+                      <span className="block text-sm text-gray-900 dark:text-white">{user.name}</span>
+                      <span className="block truncate  text-sm text-gray-500 dark:text-gray-400">
                         <a
-                          target={"_self"}
+                          target={'_self'}
                           href={`https://lopenling.org/u/${user?.username}/summary`}
                           className="block truncate text-sm font-medium"
                         >
@@ -201,40 +205,12 @@ function Header({ editor }: HeaderProps) {
                         </a>
                       </span>
                     </div>
-                    <div
-                      className=" flex flex-col justify-center"
-                      aria-labelledby="user-menu-button "
-                    >
-                      <NavLink
-                        preventScrollReset
-                        to="/text/upload"
-                        prefetch="render"
-                        className="flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M11.4697 2.46967C11.7626 2.17678 12.2374 2.17678 12.5303 2.46967L17.0303 6.96967C17.3232 7.26256 17.3232 7.73744 17.0303 8.03033C16.7374 8.32322 16.2626 8.32322 15.9697 8.03033L12.75 4.81066L12.75 16.5C12.75 16.9142 12.4142 17.25 12 17.25C11.5858 17.25 11.25 16.9142 11.25 16.5L11.25 4.81066L8.03033 8.03033C7.73744 8.32322 7.26256 8.32322 6.96967 8.03033C6.67678 7.73744 6.67678 7.26256 6.96967 6.96967L11.4697 2.46967ZM3 15.75C3.41421 15.75 3.75 16.0858 3.75 16.5V18.75C3.75 19.5784 4.42157 20.25 5.25 20.25H18.75C19.5784 20.25 20.25 19.5784 20.25 18.75V16.5C20.25 16.0858 20.5858 15.75 21 15.75C21.4142 15.75 21.75 16.0858 21.75 16.5V18.75C21.75 20.4069 20.4069 21.75 18.75 21.75H5.25C3.59315 21.75 2.25 20.4069 2.25 18.75V16.5C2.25 16.0858 2.58579 15.75 3 15.75Z"
-                            fill={darkMode ? "white" : "#111928"}
-                            stroke="#111928"
-                            strokeWidth="0.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        Upload text
-                      </NavLink>
+                    <div className=" flex flex-col justify-center" aria-labelledby="user-menu-button ">
+                      <Translation />
 
                       <div
                         onClick={changeTheme}
-                        className={` cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white`}
+                        className={` cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white`}
                       >
                         {darkMode ? (
                           <div className="flex gap-2 ">
@@ -243,10 +219,7 @@ function Header({ editor }: HeaderProps) {
                               viewBox="0 0 20 20"
                               fill="currentColor"
                               aria-hidden="true"
-                              className={`${
-                                themeFetcher.formData?.get("theme") &&
-                                "animate-spin"
-                              } w-5 h-5`}
+                              className={`${themeFetcher.formData?.get('theme') && 'animate-spin'} h-5 w-5`}
                             >
                               <path
                                 fillRule="evenodd"
@@ -263,10 +236,7 @@ function Header({ editor }: HeaderProps) {
                               viewBox="0 0 20 20"
                               fill="currentColor"
                               aria-hidden="true"
-                              className={`${
-                                themeFetcher.formData?.get("theme") &&
-                                "animate-spin"
-                              } w-5 h-5`}
+                              className={`${themeFetcher.formData?.get('theme') && 'animate-spin'} h-5 w-5`}
                             >
                               <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                             </svg>
@@ -276,9 +246,9 @@ function Header({ editor }: HeaderProps) {
                       </div>
                       <div>
                         <a
-                          target={"_blank"}
+                          target={'_blank'}
                           href={`https://lopenling.org/u/${user?.username}/preferences/account`}
-                          className=" truncate flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                          className=" flex gap-2 truncate px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           <svg
                             width="20"
@@ -291,7 +261,7 @@ function Header({ editor }: HeaderProps) {
                               fillRule="evenodd"
                               clipRule="evenodd"
                               d="M11.49 3.17C11.11 1.61 8.88999 1.61 8.50999 3.17C8.45326 3.40442 8.34198 3.62212 8.18522 3.80541C8.02845 3.9887 7.83062 4.13238 7.60784 4.22477C7.38505 4.31716 7.1436 4.35564 6.90313 4.33709C6.66266 4.31854 6.42997 4.24347 6.22399 4.118C4.85199 3.282 3.28199 4.852 4.11799 6.224C4.65799 7.11 4.17899 8.266 3.17099 8.511C1.60999 8.89 1.60999 11.111 3.17099 11.489C3.40547 11.5458 3.62322 11.6572 3.80651 11.8141C3.98979 11.971 4.13343 12.1689 4.22573 12.3918C4.31803 12.6147 4.35639 12.8563 4.33766 13.0968C4.31894 13.3373 4.24368 13.5701 4.11799 13.776C3.28199 15.148 4.85199 16.718 6.22399 15.882C6.42993 15.7563 6.66265 15.6811 6.90318 15.6623C7.14371 15.6436 7.38527 15.682 7.60817 15.7743C7.83108 15.8666 8.02904 16.0102 8.18592 16.1935C8.34281 16.3768 8.45419 16.5945 8.51099 16.829C8.88999 18.39 11.111 18.39 11.489 16.829C11.546 16.5946 11.6575 16.377 11.8144 16.1939C11.9713 16.0107 12.1692 15.8672 12.3921 15.7749C12.6149 15.6826 12.8564 15.6442 13.0969 15.6628C13.3373 15.6815 13.57 15.7565 13.776 15.882C15.148 16.718 16.718 15.148 15.882 13.776C15.7565 13.57 15.6815 13.3373 15.6628 13.0969C15.6442 12.8564 15.6826 12.6149 15.7749 12.3921C15.8672 12.1692 16.0107 11.9713 16.1939 11.8144C16.377 11.6575 16.5946 11.546 16.829 11.489C18.39 11.11 18.39 8.889 16.829 8.511C16.5945 8.45419 16.3768 8.34281 16.1935 8.18593C16.0102 8.02904 15.8666 7.83109 15.7743 7.60818C15.682 7.38527 15.6436 7.14372 15.6623 6.90318C15.681 6.66265 15.7563 6.42994 15.882 6.224C16.718 4.852 15.148 3.282 13.776 4.118C13.5701 4.24368 13.3373 4.31895 13.0968 4.33767C12.8563 4.35639 12.6147 4.31804 12.3918 4.22574C12.1689 4.13344 11.971 3.9898 11.8141 3.80651C11.6572 3.62323 11.5458 3.40548 11.489 3.171L11.49 3.17ZM9.99999 13C10.7956 13 11.5587 12.6839 12.1213 12.1213C12.6839 11.5587 13 10.7956 13 10C13 9.20435 12.6839 8.44129 12.1213 7.87868C11.5587 7.31607 10.7956 7 9.99999 7C9.20434 7 8.44128 7.31607 7.87867 7.87868C7.31606 8.44129 6.99999 9.20435 6.99999 10C6.99999 10.7956 7.31606 11.5587 7.87867 12.1213C8.44128 12.6839 9.20434 13 9.99999 13V13Z"
-                              fill={darkMode ? "white" : "#111928"}
+                              fill={darkMode ? 'white' : '#111928'}
                             />
                           </svg>
                           Preferences
@@ -301,7 +271,7 @@ function Header({ editor }: HeaderProps) {
                       <Form
                         method="POST"
                         action="/auth/login"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         <input
                           type="hidden"
@@ -310,11 +280,12 @@ function Header({ editor }: HeaderProps) {
                           defaultValue={redirectTo}
                         />
                         <button
-                          className="text-sm font-medium leading-tight "
+                          className="flex items-center gap-2 px-1 text-sm font-medium leading-tight"
                           type="submit"
                           name="_action"
                           value="logout"
                         >
+                          <FaSignOutAlt />
                           {translation.logout}
                         </button>
                       </Form>
@@ -322,37 +293,6 @@ function Header({ editor }: HeaderProps) {
                   </div>
                 )}
               </>
-            ) : (
-              <div className="flex gap-4 justify-between" id="user-menu-button">
-                <loginFetcher.Form
-                  method="POST"
-                  id="login"
-                  action="/auth/login"
-                  className="flex items-center"
-                >
-                  <input
-                    type="hidden"
-                    name="redirectTo"
-                    defaultValue={redirectTo}
-                  />
-
-                  <button
-                    type="submit"
-                    name="_action"
-                    value="login"
-                    className="text-sm font-medium leading-tight text-gray-900 capitalize dark:text-white"
-                  >
-                    {translation.login}
-                  </button>
-                </loginFetcher.Form>
-                <a
-                  href={"https://lopenling.org/signup"}
-                  id="signup"
-                  className=" text-green-400 border-2 border-green-300 p-1 capitalize rounded-md font-serif"
-                >
-                  {translation.signup}
-                </a>
-              </div>
             )}
           </div>
         </div>
@@ -367,17 +307,14 @@ export function Translation() {
     methods.setLocale(e.target.value);
   };
   return (
-    <div className="md:mr-10 flex items-center justify-start space-x-0.5">
+    <div className="flex  items-center justify-start space-x-0.5 px-4">
+      <AiOutlineTranslation />
       <select
         onChange={changeLanguage}
-        className="border-transparent focus:border-transparent focus:ring-0 text-gray-500 bg-transparent  focus:outline-none focus:ring-gray-100 dark:bg-transparent  dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+        className="border-transparent bg-transparent text-gray-500 focus:border-transparent focus:outline-none  focus:ring-0 focus:ring-gray-100 dark:border-gray-600  dark:bg-transparent dark:text-white dark:focus:ring-gray-700"
       >
         {translationCodes.map((code) => (
-          <option
-            key={code.code}
-            value={code.code}
-            className="bg-white dark:bg-slate-600 "
-          >
+          <option key={code.code} value={code.code} className="bg-white dark:bg-slate-600 ">
             {code.name}
           </option>
         ))}

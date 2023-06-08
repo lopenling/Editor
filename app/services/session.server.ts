@@ -1,51 +1,50 @@
-import { redirect } from "@remix-run/server-runtime";
-import { redirectDiscourse } from "~/services/discourse_sso.server";
+import { redirect } from '@remix-run/server-runtime';
+import { redirectDiscourse } from '~/services/discourse_sso.server';
 // import {
 //   createCookie,
 //   createCloudflareKVSessionStorage,
 // } from "@remix-run/cloudflare";
-import { createCookieSessionStorage } from "@remix-run/node";
-import { logout } from "./discourseApi";
+import { createCookieSessionStorage } from '@remix-run/node';
+import { logout } from './discourseApi';
 
-const { getSession, commitSession, destroySession } =
-  createCookieSessionStorage({
-    // a Cookie from `createCookie` or the CookieOptions to create one
-    cookie: {
-      // Expires can also be set (although maxAge overrides it when used in combination).
-      // Note that this method is NOT recommended as `new Date` creates only one date on each server deployment, not a dynamic date in the future!
-      //
-      // expires: new Date(Date.now() + 60_000),
-      secrets: ["r3m1xr0ck5"],
-      sameSite: "lax",
-      maxAge: 43200, // this is half day in sec
-      secure: true,
-    },
-  });
+const { getSession, commitSession, destroySession } = createCookieSessionStorage({
+  // a Cookie from `createCookie` or the CookieOptions to create one
+  cookie: {
+    // Expires can also be set (although maxAge overrides it when used in combination).
+    // Note that this method is NOT recommended as `new Date` creates only one date on each server deployment, not a dynamic date in the future!
+    //
+    // expires: new Date(Date.now() + 60_000),
+    secrets: ['r3m1xr0ck5'],
+    sameSite: 'lax',
+    maxAge: 43200, // this is half day in sec
+    secure: true,
+  },
+});
 
 export async function getUserSession(request: Request) {
-  const session = await getSession(request.headers.get("Cookie"));
-  let user = session.get("user");
+  const session = await getSession(request.headers.get('Cookie'));
+  let user = session.get('user');
   return user;
 }
 
 export async function destroyUserSession(request: Request) {
-  const session = await getSession(request.headers.get("Cookie"));
-  let external_id = session.get("user").external_id;
+  const session = await getSession(request.headers.get('Cookie'));
+  let external_id = session.get('user').external_id;
   let discourse = await logout(external_id);
   if (discourse?.status === 200) {
-    return await destroySession(session, { sameSite: "lax" });
+    return await destroySession(session, { sameSite: 'lax' });
   }
   return null;
 }
 
 export async function login(request: Request, next: any, redirectTo: string) {
-  let session = await getSession(request.headers.get("Cookie"));
-  const user = session.get("user");
+  let session = await getSession(request.headers.get('Cookie'));
+  const user = session.get('user');
   if (!user) {
     let url = await redirectDiscourse(request.url);
-    session.set("success-redirect", { redirectTo });
+    session.set('success-redirect', { redirectTo });
     const headers = {
-      "set-cookie": await commitSession(session, { sameSite: "lax" }),
+      'set-cookie': await commitSession(session, { sameSite: 'lax' }),
     };
     return redirect(url, { headers });
   }

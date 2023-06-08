@@ -1,20 +1,20 @@
-import { Link, Form, useSearchParams } from "@remix-run/react";
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { Button, Card, TextInput } from "flowbite-react";
-import FooterContainer from "~/component/Layout/Footer";
-import { json } from "@remix-run/node";
-import { searchPages } from "~/model/page";
-import { useLocation, useLoaderData, useNavigation } from "@remix-run/react";
-import uselitteraTranlation from "~/locales/useLitteraTranslations";
-import { motion } from "framer-motion";
-import Header from "~/component/Layout/Header";
-import { useState, useEffect } from "react";
-import { Skeleton } from "~/component/UI";
-import { HEADER_HEIGHT } from "~/constants";
+import { Link, Form, useSearchParams } from '@remix-run/react';
+import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import { Button, Card, TextInput } from 'flowbite-react';
+import FooterContainer from '~/component/Layout/Footer';
+import { json } from '@remix-run/node';
+import { searchPages } from '~/model/page';
+import { useLocation, useLoaderData, useNavigation } from '@remix-run/react';
+import uselitteraTranlation from '~/locales/useLitteraTranslations';
+import { motion } from 'framer-motion';
+import Header from '~/component/Layout/Header';
+import { useState, useEffect } from 'react';
+import { Skeleton } from '~/component/UI';
+import { HEADER_HEIGHT } from '~/constants';
 export let loader: LoaderFunction = async ({ request }) => {
-  const searchText = new URL(request.url).searchParams.get("search")?.trim();
+  const searchText = new URL(request.url).searchParams.get('search')?.trim();
   let headers = {
-    "Cache-Control": "max-age=15, s-maxage=60480,stale-while-revalidate=60",
+    'Cache-Control': 'max-age=15, s-maxage=60480,stale-while-revalidate=60',
   };
   if (searchText) {
     let obj = await searchPages(searchText);
@@ -38,26 +38,23 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return {
-    "Cache-Control": loaderHeaders.get("Cache-Control"),
+    'Cache-Control': loaderHeaders.get('Cache-Control'),
   };
 }
 
 export function meta({ data }) {
-  let title = data?.search
-    ? `${data?.search} - Lopenling Search`
-    : "Lopenling App";
+  let title = data?.search ? `${data?.search} - Lopenling Search` : 'Lopenling App';
   return [
     {
       title,
     },
     {
-      name: "description",
-      content: "annotation of text and discussion on budhist text",
+      name: 'description',
+      content: 'annotation of text and discussion on budhist text',
     },
     {
-      name: "viewport",
-      content:
-        "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
     },
   ];
 }
@@ -67,36 +64,31 @@ export default function Index() {
   const navigation = useNavigation();
   const translation: any = uselitteraTranlation();
   const [params] = useSearchParams();
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
-    let p = params.get("search");
+    let p = params.get('search');
     if (!p) {
-      setSearchInput("");
+      setSearchInput('');
     } else {
       setSearchInput(p);
     }
   }, [params]);
   const lists = data.textList;
-  const isLoading =
-    navigation.formData?.get("search") && navigation.state === "loading";
+  const isLoading = navigation.formData?.get('search') && navigation.state === 'loading';
   console.log(lists);
-  if (lists?.message)
-    return <div className="text-red-400">{lists?.message}</div>;
+  if (lists?.message) return <div className="text-red-400">{lists?.message}</div>;
   return (
     <motion.div
       key={useLocation().pathname}
-      initial={{ x: "5%", opacity: 0 }}
-      animate={{ x: "0%", opacity: 1 }}
-      exit={{ x: "5%", opacity: 0 }}
+      initial={{ x: '5%', opacity: 0 }}
+      animate={{ x: '0%', opacity: 1 }}
+      exit={{ x: '5%', opacity: 0 }}
     >
       <Header editor={null} />
 
-      <div
-        className=" max-w-2xl mx-auto "
-        style={{ paddingTop: HEADER_HEIGHT }}
-      >
-        <div className="inline-flex w-full items-center justify-center  px-3 md:px-1.5 pt-24  ">
+      <div className=" mx-auto max-w-2xl " style={{ paddingTop: HEADER_HEIGHT }}>
+        <div className="inline-flex w-full items-center justify-center  px-3 pt-24 md:px-1.5  ">
           <Form method="GET" className="w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
               <TextInput
@@ -106,16 +98,10 @@ export default function Index() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 type="search"
                 required
-                style={{ height: "100%" }}
+                style={{ height: '100%' }}
                 className="flex-1 text-gray-500"
                 icon={() => (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M14.75 14.75L10.25 10.25M11.75 6.5C11.75 7.18944 11.6142 7.87213 11.3504 8.50909C11.0865 9.14605 10.6998 9.7248 10.2123 10.2123C9.7248 10.6998 9.14605 11.0865 8.50909 11.3504C7.87213 11.6142 7.18944 11.75 6.5 11.75C5.81056 11.75 5.12787 11.6142 4.49091 11.3504C3.85395 11.0865 3.2752 10.6998 2.78769 10.2123C2.30018 9.7248 1.91347 9.14605 1.64963 8.50909C1.3858 7.87213 1.25 7.18944 1.25 6.5C1.25 5.10761 1.80312 3.77226 2.78769 2.78769C3.77226 1.80312 5.10761 1.25 6.5 1.25C7.89239 1.25 9.22774 1.80312 10.2123 2.78769C11.1969 3.77226 11.75 5.10761 11.75 6.5Z"
                       stroke="#6B7280"
@@ -126,12 +112,7 @@ export default function Index() {
                   </svg>
                 )}
               />
-              <Button
-                type="submit"
-                className="bg-green-400 text-white h-full"
-                color={"#1C64F2"}
-                size="lg"
-              >
+              <Button type="submit" className="h-full bg-green-400 text-white" color={'#1C64F2'} size="lg">
                 {translation.searchText}
               </Button>
             </div>
@@ -144,11 +125,11 @@ export default function Index() {
             <>
               {lists.length === 0 && (
                 <div
-                  className="text-gray-300 text-xl font-extrabold capitalize"
+                  className="text-xl font-extrabold capitalize text-gray-300"
                   style={{
                     fontSize: 20,
-                    fontFamily: "Inter",
-                    lineHeight: "150%",
+                    fontFamily: 'Inter',
+                    lineHeight: '150%',
                   }}
                 >
                   No result found
@@ -170,22 +151,20 @@ export default function Index() {
                   return (
                     <Link
                       to={`/text/${list.textId}/page/1/posts`}
-                      key={"id" + index}
+                      key={'id' + index}
                       className="container w-full"
                       prefetch="intent"
                     >
                       <Card
                         className="dark:bg-gray-500"
                         style={{
-                          fontFamily: "monlam",
+                          fontFamily: 'monlam',
                         }}
                       >
                         <div className="text-xl">{result.name}</div>
                         <div className="flex flex-wrap justify-between text-sm">
                           {result && result[1]}
-                          <div className="text-sm text-gray-400">
-                            {result.total} matches
-                          </div>
+                          <div className="text-sm text-gray-400">{result.total} matches</div>
                         </div>
                       </Card>
                     </Link>
@@ -208,14 +187,12 @@ export default function Index() {
 
 const FeatureSection = () => (
   <section className="bg-gray-50 dark:bg-gray-700">
-    <div className="py-8 px-4 mx-auto max-w-screen-xl text-center sm:py-16 lg:px-6">
-      <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+    <div className="mx-auto max-w-screen-xl px-4 py-8 text-center sm:py-16 lg:px-6">
+      <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
         Welcome to Lopenling
       </h2>
-      <p className="text-gray-500 sm:text-xl dark:text-gray-400">
-        Here are a few reasons to use Lopenling
-      </p>
-      <div className="mt-8 lg:mt-12 space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+      <p className="text-gray-500 dark:text-gray-400 sm:text-xl">Here are a few reasons to use Lopenling</p>
+      <div className="mt-8 space-y-8 md:grid md:grid-cols-2 md:gap-12 md:space-y-0 lg:mt-12 lg:grid-cols-3">
         <div>
           <svg
             width="40"
@@ -223,7 +200,7 @@ const FeatureSection = () => (
             viewBox="0 0 40 53"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="mx-auto mb-4 w-12 h-12 text-primary-600 dark:text-primary-500"
+            className="text-primary-600 dark:text-primary-500 mx-auto mb-4 h-12 w-12"
           >
             <path
               fillRule="evenodd"
@@ -233,24 +210,16 @@ const FeatureSection = () => (
             />
           </svg>
 
-          <h3 className="mb-2 text-xl font-bold dark:text-white">
-            Accesibility
-          </h3>
+          <h3 className="mb-2 text-xl font-bold dark:text-white">Accesibility</h3>
           <p className="mb-4 text-gray-500 dark:text-gray-400">
-            The vast majority of digital text assets are stored in secure
-            storage. Sharing text is easier than ever.
+            The vast majority of digital text assets are stored in secure storage. Sharing text is easier than ever.
           </p>
           <a
             href="#"
-            className=" text-green-400 inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400"
+            className=" text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400 inline-flex items-center text-sm font-medium text-green-400"
           >
-            Learn more about our text library{" "}
-            <svg
-              className="ml-1 w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            Learn more about our text library{' '}
+            <svg className="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path
                 fillRule="evenodd"
                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -261,7 +230,7 @@ const FeatureSection = () => (
         </div>
         <div>
           <svg
-            className="mx-auto mb-4 w-12 h-12 text-primary-600 dark:text-primary-500"
+            className="text-primary-600 dark:text-primary-500 mx-auto mb-4 h-12 w-12"
             width="58"
             height="49"
             viewBox="0 0 58 49"
@@ -276,20 +245,14 @@ const FeatureSection = () => (
 
           <h3 className="mb-2 text-xl font-bold dark:text-white">Community</h3>
           <p className="mb-4 text-gray-500 dark:text-gray-400">
-            We are proud to have a thriving and expansive community that
-            actively utilizes our app .
+            We are proud to have a thriving and expansive community that actively utilizes our app .
           </p>
           <a
             href="https://lopenling.org"
-            className="inline-flex text-green-400 items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400"
+            className="text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400 inline-flex items-center text-sm font-medium text-green-400"
           >
-            learn more about our community{" "}
-            <svg
-              className="ml-1 w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            learn more about our community{' '}
+            <svg className="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path
                 fillRule="evenodd"
                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -300,7 +263,7 @@ const FeatureSection = () => (
         </div>
         <div>
           <svg
-            className="mx-auto mb-4 w-12 h-12 text-primary-600 dark:text-primary-500"
+            className="text-primary-600 dark:text-primary-500 mx-auto mb-4 h-12 w-12"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -312,24 +275,17 @@ const FeatureSection = () => (
               fill="#31C48D"
             ></path>
           </svg>
-          <h3 className="mb-2 text-xl font-bold dark:text-white">
-            Data Driven
-          </h3>
+          <h3 className="mb-2 text-xl font-bold dark:text-white">Data Driven</h3>
           <p className="mb-4 text-gray-500 dark:text-gray-400">
-            Our app offers real-time text editing, empowering users to
-            collaborate and make instant modifications to their content.
+            Our app offers real-time text editing, empowering users to collaborate and make instant modifications to
+            their content.
           </p>
           <a
             href="#"
-            className=" text-green-400 inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400"
+            className=" text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400 inline-flex items-center text-sm font-medium text-green-400"
           >
-            How to implement best practices{" "}
-            <svg
-              className="ml-1 w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            How to implement best practices{' '}
+            <svg className="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path
                 fillRule="evenodd"
                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"

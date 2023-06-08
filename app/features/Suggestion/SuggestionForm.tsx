@@ -1,18 +1,13 @@
-import {
-  useFetcher,
-  useLoaderData,
-  useOutlet,
-  useOutletContext,
-} from "@remix-run/react";
-import { useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { openSuggestionState, selectedSuggestionThread } from "~/states";
-import { v4 as uuidv4 } from "uuid";
-import { Editor } from "@tiptap/react";
-import { Button, TextArea, MustLoggedIn as LogInMessage } from "~/component/UI";
-import Suggestion from "./Suggestion";
-import { useFetcherWithPromise } from "~/lib";
-import { AudioPlayer, AudioRecorder } from "../Media";
+import { useFetcher, useLoaderData, useOutlet, useOutletContext } from '@remix-run/react';
+import { useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { openSuggestionState, selectedSuggestionThread } from '~/states';
+import { v4 as uuidv4 } from 'uuid';
+import { Editor } from '@tiptap/react';
+import { Button, TextArea, MustLoggedIn as LogInMessage } from '~/component/UI';
+import Suggestion from './Suggestion';
+import { useFetcherWithPromise } from '~/lib';
+import { AudioPlayer, AudioRecorder } from '../Media';
 
 type SuggestionFormProps = {
   editor: Editor | null;
@@ -21,26 +16,26 @@ type SuggestionFormProps = {
 export default function SuggestionForm({ editor }: SuggestionFormProps) {
   const data = useLoaderData();
   let { user } = data;
-  const [suggestionInput, setSuggestionInput] = useState("");
+  const [suggestionInput, setSuggestionInput] = useState('');
   const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
   const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
   const setOpenSuggestion = useSetRecoilState(openSuggestionState);
-  const [audio, setAudio] = useState({ tempUrl: "", blob: null });
+  const [audio, setAudio] = useState({ tempUrl: '', blob: null });
   const handleSuggestionSubmit = async () => {
-    if (suggestionInput === "") {
-      setError("suggestion cannot be empty");
+    if (suggestionInput === '') {
+      setError('suggestion cannot be empty');
       return null;
     }
     const { state } = editor;
     const { from, to } = state.selection;
-    const originalText = state.doc.textBetween(from, to, " ");
+    const originalText = state.doc.textBetween(from, to, ' ');
     let id = null;
 
-    if (!editor.isActive("suggestion")) {
+    if (!editor.isActive('suggestion')) {
       id = uuidv4();
     } else {
-      id = editor.getAttributes("suggestion").id;
+      id = editor.getAttributes('suggestion').id;
     }
     setSelectedSuggestion({
       id: id,
@@ -56,15 +51,15 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     let blob = audio.blob;
     var form_data = new FormData();
     if (blob) {
-      form_data.append("file", blob, `text-${data?.text?.id}-${uuidv4()}.wav`);
+      form_data.append('file', blob, `text-${data?.text?.id}-${uuidv4()}.wav`);
     }
     for (var key in item) {
       form_data.append(key, item[key]);
     }
     let awaitdata = await addSuggestion.submit(form_data, {
-      action: "/api/suggestion",
-      method: "POST",
-      encType: "multipart/form-data",
+      action: '/api/suggestion',
+      method: 'POST',
+      encType: 'multipart/form-data',
     });
     if (!awaitdata?.message) {
       editor.commands.setSuggestion({
@@ -72,16 +67,16 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
         original: originalText,
       });
       setError(null);
-      setSuggestionInput("");
+      setSuggestionInput('');
       setAudio({
         blob: null,
-        tempUrl: "",
+        tempUrl: '',
       });
     }
   };
   const handleSuggestionCancel = () => {
     setSelectedSuggestion({
-      id: "",
+      id: '',
     });
     setOpenSuggestion(false);
   };
@@ -89,54 +84,45 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
   if (!user) return <LogInMessage />;
   if (isPosting)
     return (
-      <div className="p-2 bg-slate-50 dark:bg-gray-700 shadow-md ">
+      <div className="bg-slate-50 p-2 shadow-md dark:bg-gray-700 ">
         <div className="flex flex-col gap-2 ">
           <Suggestion
             editor={null}
             optimistic={true}
             suggest={{
               created_at: new Date(),
-              id: "",
+              id: '',
               likedBy: [],
-              newValue: addSuggestion.formData?.get("newValue") as string,
-              oldValue: addSuggestion.formData?.get("oldValue") as string,
-              textId: parseInt(addSuggestion.formData?.get("textId") as string),
-              threadId: addSuggestion.formData?.get("threadId") as string,
+              newValue: addSuggestion.formData?.get('newValue') as string,
+              oldValue: addSuggestion.formData?.get('oldValue') as string,
+              textId: parseInt(addSuggestion.formData?.get('textId') as string),
+              threadId: addSuggestion.formData?.get('threadId') as string,
               updatedAt: new Date(),
               user: user,
               suggestionComments: [],
-              userId: "",
+              userId: '',
               text: data.text.id,
-              audioUrl: "",
+              audioUrl: '',
             }}
           />
         </div>
       </div>
     );
   return (
-    <div className="p-2 ml-2 bg-slate-50 dark:bg-gray-700 shadow-md mb-2">
-      {addSuggestion.data?.message && (
-        <div className="font-sm text-red-500">
-          {addSuggestion.data?.message}
-        </div>
-      )}
+    <div className="mb-2 ml-2 bg-slate-50 p-2 shadow-md dark:bg-gray-700">
+      {addSuggestion.data?.message && <div className="font-sm text-red-500">{addSuggestion.data?.message}</div>}
       <TextArea
         placeholder="any suggestion?"
         value={suggestionInput}
         rows={1}
         onChange={(e) => setSuggestionInput(e.target.value)}
       />
-      {audio.tempUrl !== "" ? (
+      {audio.tempUrl !== '' ? (
         <>
-          <div className="w-full flex items-center gap-3 mt-2">
+          <div className="mt-2 flex w-full items-center gap-3">
             <AudioPlayer src={audio.tempUrl} />
-            <div onClick={() => setAudio({ tempUrl: "", blob: null })}>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+            <div onClick={() => setAudio({ tempUrl: '', blob: null })}>
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
@@ -150,19 +136,15 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
       ) : null}
       {error && <div className="text-red-400">{error}</div>}
       <div className="flex justify-between">
-        {audio.tempUrl === "" ? <AudioRecorder setAudio={setAudio} /> : <div />}
-        <div className="flex justify-end mt-3 gap-2">
+        {audio.tempUrl === '' ? <AudioRecorder setAudio={setAudio} /> : <div />}
+        <div className="mt-3 flex justify-end gap-2">
           <Button
-            disabled={addSuggestion.state !== "idle"}
+            disabled={addSuggestion.state !== 'idle'}
             onClick={handleSuggestionSubmit}
             type="submit"
             label="submit"
           />
-          <Button
-            onClick={handleSuggestionCancel}
-            type="reset"
-            label="cancel"
-          />
+          <Button onClick={handleSuggestionCancel} type="reset" label="cancel" />
         </div>
       </div>
     </div>

@@ -1,12 +1,12 @@
-import { ActionFunction } from "@remix-run/node";
-import pusher from "~/services/pusher.server";
-import { getUserSession } from "~/services/session.server";
+import { ActionFunction } from '@remix-run/node';
+import pusher from '~/services/pusher.server';
+import { getUserSession } from '~/services/session.server';
 
 export const action: ActionFunction = async ({ request }) => {
   let user = await getUserSession(request);
   let formData = await request.formData();
-  const socket_id = formData.get("socket_id");
-  const channel_name = formData.get("channel_name");
+  const socket_id = formData.get('socket_id');
+  const channel_name = formData.get('channel_name');
   if (user) {
     let presenceData = {
       user_id: user.id,

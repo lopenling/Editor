@@ -1,74 +1,88 @@
-import { atom } from "recoil";
-import { FilterType } from "./model/type";
+import { atom } from 'recoil';
+import { FilterType } from './model/type';
 
 //permission
 
 export const audioPermission = atom({
-  key: "audioPermission",
+  key: 'audioPermission',
   default: false,
+});
+
+export const showImageState = atom({
+  default: false,
+  key: 'showImage',
+});
+
+export const showTableContent = atom({
+  default: false,
+  key: 'tableOfContent',
+});
+export const showPostContent = atom({
+  default: false,
+  key: 'postContent',
 });
 //textName
 
 export const textInfo = atom({
-  key: "textName",
+  key: 'textName',
   default: {
-    name: "",
-    id: "",
+    name: '',
+    id: '',
   },
 });
 
 //threadSelection
 export const openSuggestionState = atom({
-  key: "openSuggestion",
+  key: 'openSuggestion',
   default: false,
 });
 
 export const selectedSuggestionThread = atom({
-  key: "selectedSuggestionThread",
+  key: 'selectedSuggestionThread',
   default: {
-    id: "",
+    id: '',
   },
 });
 export const selectedPostThread = atom({
-  key: "selectedPostThread",
+  key: 'selectedPostThread',
   default: {
-    id: "",
+    id: '',
   },
 });
 //share State
 
 export const shareState = atom({
-  key: "sharePost",
+  key: 'sharePost',
   default: false,
 });
 
 //filter related states
 export const openFilterState = atom({
-  key: "openFilter", // unique ID (with respect to other atoms/selectors)
+  key: 'openFilter', // unique ID (with respect to other atoms/selectors)
   default: false, // default value (aka initial value)
 });
 export const showLatest = atom<boolean>({
-  key: "latestFilter",
+  key: 'latestFilter',
   default: true,
 });
 export const filterDataState = atom<FilterType>({
-  key: "filterData",
+  key: 'filterData',
   default: {
-    type: "all",
+    type: 'all',
     date: { startDate: null, endDate: null },
     user: [],
-    solved: "both",
+    solved: 'both',
   },
 });
 
 //text selection
 
 export const selectedTextOnEditor = atom({
-  key: "selectionSection",
+  key: 'selectionSection',
   default: {
-    type: "",
+    type: '',
     start: 0,
     end: 0,
-    content: "",
+    content: '',
   },
 });

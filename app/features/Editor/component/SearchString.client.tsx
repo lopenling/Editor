@@ -1,8 +1,7 @@
-import { useLoaderData } from "@remix-run/react";
-import { Editor } from "@tiptap/react";
-import { useState, useEffect, memo } from "react";
-import { searchSingleText } from "../lib";
-import { FaSearch } from "react-icons/fa";
+import { useLoaderData } from '@remix-run/react';
+import { Editor } from '@tiptap/react';
+import { useState, useEffect, memo } from 'react';
+import { searchSingleText } from '../lib';
 type locationType = {
   start: number;
   length: number;
@@ -14,17 +13,11 @@ function SearchString({ editor }: { editor: Editor }) {
   const data = useLoaderData();
   const [index, setIndex] = useState(1);
   const [selectedSearch, setSelectedSearch] = useState<locationType>(null);
-  const [searchString, setSearchString] = useState("");
-  const [searchState, setSearchState] = useState<null | "searching" | "done">(
-    null
-  );
+  const [searchString, setSearchString] = useState('');
+  const [searchState, setSearchState] = useState<null | 'searching' | 'done'>(null);
   const [searchLocations, setSearchLocation] = useState<locationType[]>([]);
   function nextSearch() {
-    if (
-      index > -1 &&
-      searchLocations?.length &&
-      index < searchLocations?.length
-    ) {
+    if (index > -1 && searchLocations?.length && index < searchLocations?.length) {
       setIndex((prev) => prev + 1);
     }
   }
@@ -42,33 +35,27 @@ function SearchString({ editor }: { editor: Editor }) {
     }
   }, [index, searchLocations]);
   useEffect(() => {
-    if (selectedSearch?.start)
-      editor
-        ?.chain()
-        .focus()
-        .setTextSelection(selectedSearch.start)
-        .scrollIntoView()
-        .run();
+    if (selectedSearch?.start) editor?.chain().focus().setTextSelection(selectedSearch.start).scrollIntoView().run();
   }, [selectedSearch]);
   function handleSearch() {
     if (searchString.length > 0) {
-      setSearchState("searching");
+      setSearchState('searching');
       let content = editor.getText();
       let locations = searchSingleText(content, searchString);
       setSearchLocation(locations);
       editor.commands.setSearchTerm(searchString);
-      setSearchState("done");
+      setSearchState('done');
     }
   }
   function handleReset() {
-    editor.commands.setSearchTerm("");
-    setSearchString("");
+    editor.commands.setSearchTerm('');
+    setSearchString('');
     setSearchLocation([]);
   }
 
   return (
     <div
-      className={`searchForm items-center  flex flex-row space-x-2.5 rounded-lg rounded-bl-lg border  
+      className={`searchForm flex flex-row items-center space-x-2.5 rounded-lg rounded-bl-lg border p-2  
      `}
     >
       <div className="flex w-full">
@@ -83,29 +70,24 @@ function SearchString({ editor }: { editor: Editor }) {
             name="searchString"
             type="text"
             placeholder="search"
+            autoFocus={true}
             value={searchString}
             onChange={(e) => setSearchString(e.target.value)}
-            className={` h-full w-full border-none bg-transparent text-sm leading-tight text-gray-500 outline-0 focus:border-transparent focus:ring-0`}
+            className={` border-1 h-full w-full bg-transparent text-sm leading-tight text-gray-500 outline-1 focus:border-transparent focus:ring-1`}
           ></input>
         </form>
         <input name="textId" readOnly value={data.page.id} hidden />
         <button type="submit" hidden></button>
 
-        {searchState === "done" && searchString && searchString !== "" && (
+        {searchState === 'done' && searchString && searchString !== '' && (
           <button
             type="reset"
             onClick={() => {
               handleReset();
-              editor.commands.setSearchTerm("");
+              editor.commands.setSearchTerm('');
             }}
           >
-            <svg
-              width="11"
-              height="12"
-              viewBox="0 0 11 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -124,13 +106,7 @@ function SearchString({ editor }: { editor: Editor }) {
           </p>
           <div className="flex gap-2 rounded-md shadow-sm" role="group">
             <div className="cursor-pointer" onClick={prevSearch}>
-              <svg
-                width="15"
-                height="9"
-                viewBox="0 0 15 9"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg width="15" height="9" viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M1.6665 7.50001L7.49984 1.66667L13.3332 7.50001"
                   stroke="#6B7280"
@@ -140,14 +116,8 @@ function SearchString({ editor }: { editor: Editor }) {
                 />
               </svg>
             </div>
-            <div className="cursor-pointer mr-3" onClick={nextSearch}>
-              <svg
-                width="15"
-                height="9"
-                viewBox="0 0 15 9"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+            <div className="mr-3 cursor-pointer" onClick={nextSearch}>
+              <svg width="15" height="9" viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M13.3332 1.5L7.49984 7.33333L1.6665 1.5"
                   stroke="#6B7280"
@@ -160,9 +130,7 @@ function SearchString({ editor }: { editor: Editor }) {
           </div>
         </>
       ) : (
-        <div className="pr-3 text-gray-400" onClick={handleSearch}>
-          <FaSearch />
-        </div>
+        <div className="pr-3 text-gray-400" onClick={handleSearch}></div>
       )}
     </div>
   );

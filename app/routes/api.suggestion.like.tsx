@@ -1,11 +1,7 @@
-import { ActionFunction, json } from "@remix-run/server-runtime";
-import { trigerUpdate } from "~/lib";
-import {
-  findSuggestionByUserLiked,
-  findSuggestionWithMostLikes,
-  updateSuggestionLike,
-} from "~/model/suggestion";
-import { getUserSession } from "~/services/session.server";
+import { ActionFunction, json } from '@remix-run/server-runtime';
+import { trigerUpdate } from '~/lib';
+import { findSuggestionByUserLiked, findSuggestionWithMostLikes, updateSuggestionLike } from '~/model/suggestion';
+import { getUserSession } from '~/services/session.server';
 
 export const action: ActionFunction = async ({ request }) => {
   let user = await getUserSession(request);
@@ -29,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
           },
           {
             headers: {
-              "Cache-Control": "max-age=0, s-maxage=0",
+              'Cache-Control': 'max-age=0, s-maxage=0',
             },
           }
         );

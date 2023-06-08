@@ -5,7 +5,8 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "cross-env NODE_ENV=production netlify dev",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "format": "npx prettier --write ."
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -38,6 +39,7 @@
     "flowbite-react": "^0.3.8",
     "framer-motion": "^10.10.0",
     "isbot": "^3.6.8",
+    "prettier-plugin-tailwindcss": "^0.3.0",
     "prisma": "^4.12.0",
     "prosemirror-model": "^1.19.0",
     "prosemirror-state": "^1.4.2",
@@ -69,6 +71,7 @@
     "@types/react-dom": "^18.0.11",
     "@types/uuid": "^9.0.1",
     "eslint": "^8.38.0",
+    "prettier": "^2.8.8",
     "typescript": "^4.9.5"
   },
   "engines": {

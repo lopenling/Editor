@@ -1,5 +1,5 @@
 function findStringOccurrences(text, searchString) {
-  const regex = new RegExp(searchString, "gi");
+  const regex = new RegExp(searchString, 'gi');
   const matches = text.matchAll(regex);
   const indices = [];
   for (const match of matches) {
@@ -14,7 +14,7 @@ function searchSingleText(fullText, searchString) {
     return {
       start: l,
       length: searchString.length,
-      text: "",
+      text: '',
       index: index + 1,
       searchString: searchString,
     };

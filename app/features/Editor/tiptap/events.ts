@@ -1,7 +1,7 @@
 const handleDOMEvents = {
   keydown: (v, event) => {
     let charCode = String.fromCharCode(event.which).toLowerCase();
-    let copyPressed = (event.ctrlKey || event.metaKey) && charCode === "c";
+    let copyPressed = (event.ctrlKey || event.metaKey) && charCode === 'c';
     if (![37, 38, 39, 40].includes(event.keyCode) && !copyPressed) {
       event.preventDefault();
     }
@@ -24,7 +24,7 @@ const handleDOMEvents = {
 const editorProps = {
   handleDOMEvents: handleDOMEvents,
   attributes: {
-    inputmode: "none",
+    inputmode: 'none',
   },
 };
 export default editorProps;

@@ -1,6 +1,6 @@
 // find text by textId
 
-import { db } from "~/services/db.server";
+import { db } from '~/services/db.server';
 // get all text
 
 export async function findAllText(id = true, name = true, content = false) {
@@ -9,14 +9,13 @@ export async function findAllText(id = true, name = true, content = false) {
       select: {
         id,
         name,
-        content,
         userId: true,
         author: true,
       },
     });
     return text;
   } catch (e: any) {
-    throw new Error("fetching text error" + e.message);
+    throw new Error('fetching text error' + e.message);
   }
 }
 
@@ -31,10 +30,10 @@ export async function findTextByPageId(pageId: string) {
         content: true,
       },
     });
-    if (text === null) throw new Error("text not available");
+    if (text === null) throw new Error('text not available');
     return text;
   } catch (e: any) {
-    throw new Error("cannot find text with error " + e.message);
+    throw new Error('cannot find text with error ' + e.message);
   }
 }
 
@@ -50,7 +49,7 @@ export async function createText(name: string, content: string, id: string) {
     });
     return res;
   } catch (e: any) {
-    throw new Error("create text error" + e.message);
+    throw new Error('create text error' + e.message);
   }
 }
 //delete text
@@ -63,6 +62,6 @@ export async function deleteText(id: string) {
     });
     return res;
   } catch (e: any) {
-    throw new Error("delete text error" + e.message);
+    throw new Error('delete text error' + e.message);
   }
 }

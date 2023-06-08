@@ -1,18 +1,18 @@
-import { Editor } from "@tiptap/react";
-import { Suspense, memo } from "react";
-import Post from "./Post.client";
-import { useRecoilValue } from "recoil";
-import { filterDataState, showLatest } from "~/states";
-import { FilterType, PostType, ReplyType, UserType } from "~/model/type";
-import Filter from "./Filter";
-import { Skeleton } from "~/component/UI";
-import { ClientOnly } from "remix-utils";
+import { Editor } from '@tiptap/react';
+import { Suspense, memo } from 'react';
+import Post from './Post';
+import { useRecoilValue } from 'recoil';
+import { filterDataState, showLatest } from '~/states';
+import { FilterType, PostType, ReplyType, UserType } from '~/model/type';
+import Filter from './Filter';
+import { Skeleton } from '~/component/UI';
+import { ClientOnly } from 'remix-utils';
 
 type PostPropsType = {
-  editor: Editor;
+  posts: any[];
 };
 
-function Posts({ editor, posts }: PostPropsType) {
+function Posts({ posts }: PostPropsType) {
   let filters = useRecoilValue(filterDataState);
   let isLatest = useRecoilValue(showLatest);
   if (!posts) {
@@ -23,42 +23,34 @@ function Posts({ editor, posts }: PostPropsType) {
     <>
       <ClientOnly fallback={<></>}>{() => <Filter />}</ClientOnly>
       <div
-        className=" flex flex-col relative overflow-y-auto pr-3 "
         style={{
-          height: "min-content",
-          maxHeight: "80vh",
-          fontFamily: "sans-serif",
+          fontFamily: 'sans-serif',
         }}
+        className=" relative flex flex-col pr-3 overflow-x-hidden"
       >
-        <Suspense fallback="loading">
-          <ClientOnly>
-            {() => {
-              return lists?.length > 0 ? (
-                lists?.map((post: PostType) => {
-                  return (
-                    <Post key={post.id} post={post} isOptimistic={false} />
-                  );
-                })
-              ) : (
-                <div className="text-center">
-                  <p>No post available</p>
-                  Feel free to be the first one to ask Question !
-                </div>
-              );
-            }}
-          </ClientOnly>
-        </Suspense>
+        {lists?.length > 0 ? (
+          lists?.map((post: PostType, index: number) => {
+            return (
+              <>
+                <Post key={post.id} post={post} isOptimistic={false} />
+                {lists.length > index + 1 && <hr className="my-5" />}
+              </>
+            );
+          })
+        ) : (
+          <div className="text-center">
+            <p>No post available</p>
+            Feel free to be the first one to ask Question !
+          </div>
+        )}
+     
       </div>
     </>
   );
 }
 
-const applyFilter = <T extends PostType>(
-  list: T[],
-  filter: FilterType,
-  isLatest: boolean
-) => {
-  if (filter.type && filter.type !== "all")
+const applyFilter = <T extends PostType>(list: T[], filter: FilterType, isLatest: boolean) => {
+  if (filter.type && filter.type !== 'all')
     list = list.filter((l) => {
       return l.type === filter.type;
     });
@@ -68,12 +60,8 @@ const applyFilter = <T extends PostType>(
     });
   if (filter.date.startDate)
     list = list.filter((l) => {
-      const startDate = filter.date.startDate
-        ? new Date(filter.date.startDate)
-        : null;
-      const endDate = filter.date.endDate
-        ? new Date(filter.date.endDate)
-        : null;
+      const startDate = filter.date.startDate ? new Date(filter.date.startDate) : null;
+      const endDate = filter.date.endDate ? new Date(filter.date.endDate) : null;
 
       if (startDate && endDate) {
         const createdAt = new Date(l.created_at);
@@ -82,9 +70,9 @@ const applyFilter = <T extends PostType>(
 
       return false;
     });
-  if (filter.solved && filter.solved !== "both")
+  if (filter.solved && filter.solved !== 'both')
     list = list.filter((l) => {
-      return l.isSolved === (filter.solved === "solved");
+      return l.isSolved === (filter.solved === 'solved');
     });
   if (list.length > 0) {
     list.sort(function (a, b) {
