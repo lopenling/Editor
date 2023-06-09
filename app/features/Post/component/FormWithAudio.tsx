@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button, TextArea } from '~/component/UI';
 import { AudioPlayer, AudioRecorder } from '~/features/Media';
 import { PostType } from '~/model/type';
+import TiptapInstance from '~/component/UI/TiptapInstance';
 type FormWithAudioProps = {
   fetcher: any;
   type: 'post' | 'update';
@@ -23,8 +24,9 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
   const [error, setError] = useState('');
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const data = useLoaderData();
-  let isFormEmpty = body.length < 5;
+  let isFormEmpty = body.length < 5 || body==='<p></p>';
   const { editor }: { editor: Editor } = useOutletContext();
+  
   useEffect(() => {
     setBody(content ? content : '');
     setAudio({ tempUrl: audioUrl ? audioUrl : '', blob: null });
@@ -108,7 +110,7 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
   }
   return (
     <fetcher.Form className="flex flex-col gap-3 ">
-      <TextArea placeholder="what are your thoughts?" value={body} onChange={(e) => setBody(e.target.value)} />
+      <TiptapInstance placeholder="what are your thoughts?" value={body} onChange={(value: string) => setBody(value)} />
       {audio.tempUrl !== '' ? (
         <>
           <div className="flex w-full items-center gap-3 ">
@@ -139,9 +141,10 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
               setSelection({ ...selection, type: '' });
               onClose();
             }}
+            style={{ borderRadius: 24 }}
             label="cancel"
           />
-          <Button onClick={handleSubmit} type="submit" label="post" />
+          <Button style={{ borderRadius: 24, opacity: isFormEmpty?0.3:1 }} disabled={isFormEmpty} onClick={handleSubmit} type="submit" label="Respond" />
         </div>
       </div>
     </fetcher.Form>

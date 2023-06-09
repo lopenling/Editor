@@ -196,20 +196,23 @@ export default function Page() {
       editor?.commands.setTextSelection(0);
     }
   }, [showPostSide]);
-
-  if (!editor) return null;
+  const topDistance = 62;
   return (
     <>
       <Header editor={editor} />
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
-      <div style={{ height: 70 }}></div>
+      <div
+        style={{
+          height: topDistance,
+        }}
+      ></div>
       <div className="relative flex h-min justify-between gap-4 transition-all">
         <div
-          className="hidden w-fit md:block" 
+          className="hidden w-fit md:block"
           style={{
             zIndex: 1,
             position: 'sticky',
-            top: 70,
+            top: topDistance,
             overflowY: 'scroll',
             height: '80vh',
           }}
@@ -227,7 +230,7 @@ export default function Page() {
               x: showTable ? 0 : '-100vw',
             }}
             transition={{ duration: 0.3 }}
-            className='rounded-2xl'
+            className="rounded-2xl"
           >
             <TableOfContents onClose={() => setShowTable(false)} />
           </motion.div>
@@ -243,17 +246,18 @@ export default function Page() {
           id="textEditorContainer"
         >
           <Pagination pageCount={data.pageCount} />
-          <EditorContainer editor={editor} isSaving={false} order={data.page.order} content={content} />
+          {editor && <EditorContainer editor={editor} isSaving={false} order={data.page.order} content={content} />}
         </div>
 
         <div
-          className="hidden min-w-[350px] md:block"
+          className=" hidden md:block "
           style={{
             zIndex: 1,
             position: 'sticky',
-            top: 70,
-            overflowX: 'hidden',
-            height: '90vh',
+            top: topDistance,
+            width: 400,
+            overflow: 'hidden',
+            height: '92vh',
           }}
           id="postContent"
         >
@@ -277,8 +281,9 @@ export default function Page() {
                 x: showPostSide ? 0 : '100%',
               }}
               transition={{ duration: 0.3 }}
-              className={`hidden max-h-[50%]  md:max-h-max min-w-[450px] flex-1 bg-white pt-3  dark:bg-gray-700  md:block md:w-1/4 lg:sticky lg:top-0 lg:h-screen`}
-            >
+              className={`hidden min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
+              style={{flexDirection:'column'}}
+              >
               <PostSidebar
                 page={data.page}
                 user={user}
@@ -293,8 +298,13 @@ export default function Page() {
       </div>
       {/* for mobile devicess */}
       <Modal
-        isOpen={showPostSide || suggestionSelected?.id || openSuggestion}
-        onRequestClose={() => setShowPostSide(false)}
+        isOpen={showPostSide || !!suggestionSelected?.id || openSuggestion}
+        onRequestClose={() => {
+          setShowPostSide(false);
+          setOpenSuggestion(false);
+          suggestionSelector({ id: '' });
+        }}
+        ariaHideApp={false}
         className="modal-content w-full md:hidden"
         overlayClassName="modal-overlay md:hidden"
       >
@@ -308,21 +318,20 @@ export default function Page() {
             ></SuggestionSidebar>
           </div>
         ) : (
-            <div style={
-              {
-                maxHeight: '50dvh',
-                overflowY:'scroll'
-              }
-            }>
-
-          <PostSidebar
-            page={data.page}
-            user={user}
-            id={selectedPost.id}
-            type={selection.type}
-            showPostSide={showPostSide}
-            editor={editor}
-          />
+          <div
+            style={{
+              maxHeight: '50dvh',
+              overflowY: 'scroll',
+            }}
+          >
+            <PostSidebar
+              page={data.page}
+              user={user}
+              id={selectedPost.id}
+              type={selection.type}
+              showPostSide={showPostSide}
+              editor={editor}
+            />
           </div>
         )}
       </Modal>

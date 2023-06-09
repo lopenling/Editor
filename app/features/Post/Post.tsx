@@ -6,7 +6,7 @@ import ReplyForm from './ReplyForm';
 import { useRecoilState } from 'recoil';
 import { selectedPostThread } from '~/states';
 import { Editor } from '@tiptap/react';
-import { AudioPlayer } from '../Media';
+import { AudioPlayer } from '~/features/Media';
 import { removeMark } from '~/features/Editor/tiptap/markAction';
 import { PostType } from '~/model/type';
 import copyToClipboard from '~/lib/copyToClipboard';
@@ -16,11 +16,10 @@ import { useDetectClickOutside } from 'react-detect-click-outside';
 type PostPropType = {
   isOptimistic: boolean;
   post: PostType;
+  showDivider: boolean;
 };
-interface DeleteResponse {
-  deleted: PostType;
-}
-function Post({ isOptimistic, post }: PostPropType) {
+
+function Post({ isOptimistic, post,showDivider }: PostPropType) {
   const {
     id,
     creatorUser,
@@ -33,6 +32,7 @@ function Post({ isOptimistic, post }: PostPropType) {
     isSolved,
     threadId,
     audioUrl,
+    selection
   } = post!;
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -81,11 +81,13 @@ function Post({ isOptimistic, post }: PostPropType) {
       );
     }
   }
-
-  async function deletePost(): Promise<void> {
+  async function deletePost() {
     let decision = confirm('do you want to delete the post');
+    setTimeout(() => {
+      removeMark(editor, threadId);
+    },0)
     if (decision) {
-      let res: DeleteResponse | undefined = await fetcher.submit(
+      let res:any =await fetcher.submit(
         {
           id,
         },
@@ -93,13 +95,8 @@ function Post({ isOptimistic, post }: PostPropType) {
           action: 'api/post',
           method: 'DELETE',
         }
-      );
-      if (typeof res !== 'undefined' && 'deleted' in res) {
-        const { deleted } = res as DeleteResponse;
-        if (deleted.threadId) {
-          removeMark(editor, deleted.threadId);
-        }
-      }
+        )
+        
     } else {
       console.log('cancelled');
     }
@@ -119,18 +116,26 @@ function Post({ isOptimistic, post }: PostPropType) {
     onTriggered: () => setOpenEditMenu(false),
   });
   return (
-    <div className={`${fetcher.formMethod === 'DELETE' && 'hidden'} `} id={`p_${threadId}`}>
+    <div
+      className={`${fetcher.formMethod === 'DELETE' && 'hidden'}  `}
+      style={{ paddingInline: 24 }}
+      id={`p_${threadId}`}
+    >
       <div
-        className={`mb-1 ml-2 rounded-md px-2 py-3 shadow-md  ${
-          isSelected ? 'bg-yellow-50 dark:bg-gray-500 ' : 'bg-gray-50 dark:bg-gray-700'
-        } `}
+        className="rounded-md font-sans"
         onClick={() => handleSelectPost(threadId)}
+        style={{ paddingTop: 25, paddingBottom: 16 }}
       >
-        <div className="inline-flex w-full items-center justify-start">
+        <div className="inline-flex w-full items-center justify-between">
           <div className="flex items-center justify-start space-x-3">
-            <img className="h-6 w-6 rounded-full" src={creatorUser?.avatarUrl} alt="Extra small avatar"></img>
-            <div className="text-base font-medium leading-tight text-gray-900 dark:text-gray-200">
-              {creatorUser?.name}
+            <img className="h-8 w-8 rounded-full" src={creatorUser?.avatarUrl} alt="Extra small avatar"></img>
+            <div className="flex flex-col items-start">
+              <div className="font-serif text-sm font-medium leading-tight text-gray-900 dark:text-gray-200">
+                {creatorUser?.name}
+              </div>
+              <p className="flex-1 text-right text-sm leading-tight text-gray-500 dark:text-gray-200">
+                {timeAgo(created_at)!}
+              </p>
             </div>
             {isSolved && (
               <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,9 +148,7 @@ function Post({ isOptimistic, post }: PostPropType) {
               </svg>
             )}
           </div>
-          <p className="flex-1 text-right text-sm leading-tight text-gray-500 dark:text-gray-200">
-            {timeAgo(created_at)!}
-          </p>
+
           <div className="relative ml-3" ref={ref}>
             <button
               className=" inline-flex items-center rounded-lg text-center text-sm font-medium  text-gray-400  focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-700 dark:focus:ring-gray-600 dark:hover:bg-gray-600"
@@ -197,27 +200,56 @@ function Post({ isOptimistic, post }: PostPropType) {
                     Report
                   </div>
                 </li>
+                <li>
+                  <a
+                    href={`https://lopenling.org/t/${topicId}`}
+                    target="_blank"
+                    className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Forum
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-start justify-start space-y-4">
-          <div className=" w-full text-base leading-normal text-gray-500 dark:text-gray-100">
+        <div className="flex flex-col items-start justify-start">
+          <div className=" w-full text-base leading-normal  dark:text-gray-100">
             <div className="flex w-full items-center justify-end text-xs font-light uppercase italic">{type}</div>
+            {selection && (
+              <div
+                className={`bg-white shadow ${isSelected ? 'font-bold dark:bg-gray-500 ' : ' dark:bg-gray-700'}`}
+                style={{
+                  borderRadius: '3px',
+                  fontSize: 20,
+                  padding: 10,
+                }}
+              >
+                {selection}
+              </div>
+            )}
             {edit ? (
               <FormWithAudio post={post} type="update" fetcher={fetcher} onClose={() => setEdit(false)} />
             ) : (
-              <a href={`https://lopenling.org/t/${topicId}`} target="_blank" className="block w-fit">
-                <p>{content}</p>
-              </a>
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: content,
+                }}
+                className="mt-1 "
+              ></p>
             )}
           </div>
           {audioUrl && audioUrl?.length > 0 && !edit && <AudioPlayer src={audioUrl} />}
           {isOptimistic ? (
             <div className="font-sans text-sm text-gray-300">posting ...</div>
           ) : (
-            <div className="flex w-full flex-1 items-center justify-between ">
-              <div className="flex h-full w-64 items-center justify-start gap-4">
+            <div
+              className="flex w-full flex-1 items-center justify-between"
+              style={{
+                marginBlock: 14,
+              }}
+            >
+              <div className="flex h-full items-center justify-start gap-4">
                 <button
                   disabled={!user || fetcher.formMethod === 'PATCH'}
                   className={`${effect && 'animate-wiggle'} flex cursor-pointer items-center justify-start gap-1 `}
@@ -307,7 +339,7 @@ function Post({ isOptimistic, post }: PostPropType) {
         />
       )}
       {showReplies && (
-        <div className="ml-3 mt-3">
+        <div className=" mt-3">
           <Replies
             postId={id}
             topicId={topicId}
@@ -318,6 +350,7 @@ function Post({ isOptimistic, post }: PostPropType) {
           />
         </div>
       )}
+      {!showDivider && <hr />}
     </div>
   );
 }

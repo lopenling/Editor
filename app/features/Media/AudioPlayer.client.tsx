@@ -7,7 +7,6 @@ const AudioPlayer = ({ src }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-
   const [audio] = useState(() => new Audio(src));
 
   const togglePlay = () => {
@@ -77,7 +76,7 @@ const AudioPlayer = ({ src }) => {
   };
   if (!src || src === undefined) return null;
   return (
-    <div className="flex w-full items-center">
+    <div className="flex w-full items-center py-3">
       <button
         onClick={togglePlay}
         type="button"

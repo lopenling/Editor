@@ -5,7 +5,10 @@ import Bold from '@tiptap/extension-bold';
 import HardBreak from '@tiptap/extension-hard-break';
 import Highlight from '@tiptap/extension-highlight';
 import TextStyle from '@tiptap/extension-text-style';
-import FontFamily from '@tiptap/extension-font-family';
+import FontFamily from '@tiptap/extension-font-family'
+  import Underline from '@tiptap/extension-underline';
+import Placeholder from '@tiptap/extension-placeholder';
+import Italic from '@tiptap/extension-italic'
 import { Suggestion } from '~/features/Editor/tiptap/tiptap-extension/suggestion';
 import PostMark from '~/features/Editor/tiptap/tiptap-extension/postMark';
 import { SearchAndReplace } from '~/features/Editor/tiptap/tiptap-extension/searchAndReplace';
@@ -23,4 +26,7 @@ export {
   PostMark,
   SearchAndReplace,
   editorProps,
+  Placeholder,
+  Italic,
+  Underline
 };

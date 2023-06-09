@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import { Button, TextArea } from '~/component/UI';
 import { AudioRecorder, AudioPlayer } from '../Media';
 import { v4 as uuidv4 } from 'uuid';
+import TiptapInstance from '~/component/UI/TiptapInstance';
 
 type ReplyFormPropsType = {
   closeReply: () => void;
@@ -45,34 +46,29 @@ export default function ReplyForm({ closeReply, topicId, updateReplyCount }: Rep
       encType: 'multipart/form-data',
     });
   };
-
+  let emptyTextField = textArea === '' || postFetcher.state !== 'idle' || textArea === '<p></p>';
   return (
-    <div className="mt-1 flex justify-between">
+    <div className="mt-1 flex justify-between" >
       <div
         style={{
-          borderLeft: '4px solid #e5e7eb',
-          height: 180,
+          borderLeft: '4px solid #e5e7eb'
         }}
       ></div>
       <form
         onSubmit={handleSubmit}
-        className="flex w-11/12 flex-col justify-center"
+        className="flex w-11/12 flex-col justify-center shadow-md "
         style={{
           opacity: postFetcher.state !== 'idle' ? 0.5 : 1,
           cursor: postFetcher.state !== 'idle' ? 'not-allowed' : 'auto',
+          minHeight: 100,
+          padding:14
         }}
       >
-        <TextArea
-          name="postString"
-          required={true}
+        <TiptapInstance
           placeholder="Write your reply here ..."
-          style={{ maxHeight: 108 }}
-          autoFocus
-          id="textArea"
-          ref={(ref) => (textareaRef.current = ref)}
-          value={textArea}
-          onChange={(e) => setTextArea(e.target.value)}
+          onChange={setTextArea}
         />
+        <input  id="textArea" name='postString' value={textArea} hidden required/>
         {audio.tempUrl !== '' ? (
           <>
             <div className="mt-2 flex w-full items-center gap-3 ">
@@ -97,7 +93,10 @@ export default function ReplyForm({ closeReply, topicId, updateReplyCount }: Rep
             <Button
               type="submit"
               onClick={handleSubmit}
-              disabled={textArea === '' || postFetcher.state !== 'idle'}
+              style={{
+                opacity:emptyTextField?0.3:1
+              }}
+              disabled={emptyTextField}
               label={
                 postFetcher.state === 'submitting'
                   ? 'submiting'

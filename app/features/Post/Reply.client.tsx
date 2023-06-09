@@ -10,9 +10,10 @@ type ReplyPropType = {
   isCreator: boolean;
   postId: string;
   type: 'question' | 'comment';
+  showDivider: boolean;
 };
 
-function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
+function Reply({ reply, isCreator, postId, type, showDivider }: ReplyPropType) {
   const replyLikeFetcher = useFetcher();
   const approvedFetcher = useFetcher();
   const [effect, setEffect] = useState(false);
@@ -36,12 +37,12 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
     const audioElement = doc.querySelector('audio');
     const sourceElement = audioElement?.querySelector('source');
     let sourceURL = sourceElement?.getAttribute('src');
-    let text = doc?.querySelector('p')?.textContent?.trim();
-    if (!sourceURL) return { text };
-    if (sourceURL.startsWith('/') || text.startsWith('/')) {
+    if (!sourceURL) return { text: html };
+      let textElement = doc.querySelectorAll('p');
+      let text=textElement[1].textContent
+
+    if (sourceURL.startsWith('/') ) {
       sourceURL = 'https://lopenling.org' + sourceURL;
-      let textElement = doc.querySelector('p').lastChild;
-      text = textElement.textContent.trim();
     }
     return {
       source: sourceURL,
@@ -105,9 +106,10 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
         </div>
         <div className=" text-right text-sm  text-gray-500 dark:text-gray-200">{timeAgo(reply?.created_at)}</div>
       </div>
-      <p className=" max-w-full py-3 text-base leading-normal text-gray-500 dark:text-gray-100">
-        {extractAudioInfo(reply.cooked).text}
-      </p>
+      <div
+        dangerouslySetInnerHTML={{ __html: extractAudioInfo(reply.cooked).text }}
+        className=" max-w-full py-3 text-base leading-normal text-gray-500 dark:text-gray-100"
+      ></div>
       <AudioPlayer src={extractAudioInfo(reply.cooked)?.source} />
       <div className="mb-2 mt-3 flex justify-between">
         <div className="flex gap-2">
@@ -187,7 +189,7 @@ function Reply({ reply, isCreator, postId, type }: ReplyPropType) {
           </div>
         )}
       </div>
-      <hr />
+      {showDivider && <hr />}
     </div>
   );
 }

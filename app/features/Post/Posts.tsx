@@ -26,15 +26,14 @@ function Posts({ posts }: PostPropsType) {
         style={{
           fontFamily: 'sans-serif',
         }}
-        className=" relative flex flex-col pr-3 overflow-x-hidden"
+        className=" relative flex flex-col h-full overflow-y-scroll flex-1 "
       >
         {lists?.length > 0 ? (
           lists?.map((post: PostType, index: number) => {
             return (
-              <>
-                <Post key={post.id} post={post} isOptimistic={false} />
-                {lists.length > index + 1 && <hr className="my-5" />}
-              </>
+              <div key={post.id}>
+                <Post key={post.id} post={post} isOptimistic={false} showDivider={lists.length <= index + 1} />
+              </div>
             );
           })
         ) : (

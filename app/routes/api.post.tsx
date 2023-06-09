@@ -59,7 +59,8 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
           pageId,
           Obj.body as string,
           user.id,
-          audioUrl
+          audioUrl,
+          Obj.selectionSegment as string
         );
 
         return createPost;
@@ -76,9 +77,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
     let id = Obj.id as string;
     let res = await deletePost(id);
     let deleteDiscourse = await deleteDiscourseTopic(user.username, res.topic_id);
-    return {
-      deleted: res,
-    };
+    return res;
   }
   if (request.method === 'PATCH') {
     const formData = await parseMultipartFormData(request, uploadHandler);

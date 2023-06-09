@@ -6,6 +6,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'sohne';
+  src: url('/font/sohne.woff') format('woff');
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --headerHeight: 72px;
   --suggestion-marker-insertion-background: rgba(102, 229, 119, 0.35);
@@ -198,11 +205,17 @@ select:focus {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
   cursor: row-resize;
 }
-
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
 /* react-transistion-group */
 .modal-overlay {
-  /* background-color: rgba(0, 0, 0, 0.2); */
-  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  /* pointer-events: none; */
   position: fixed;
   top: 0;
   left: 0;

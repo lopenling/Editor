@@ -13,7 +13,8 @@ export async function createPost(
   pageId: string,
   content: string,
   creatorUser_id: string,
-  audioUrl: string
+  audioUrl: string,
+  selectionContent:string
 ) {
   try {
     const createPost = await db.post.create({
@@ -28,9 +29,9 @@ export async function createPost(
         textId: textId,
         pageId: pageId,
         audioUrl: audioUrl,
+        selection:selectionContent
       },
     });
-    console.log(createPost);
     return createPost;
   } catch (e) {
     console.log(e);
