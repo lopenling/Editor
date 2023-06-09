@@ -2,7 +2,11 @@ generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
-
+generator erd {
+  provider = "prisma-erd-generator"
+  output = "../schema.pdf"
+    erdDebug = true
+}
 datasource db {
   provider = "postgres"
   url      = env("DATABASE_URL")
