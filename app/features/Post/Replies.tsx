@@ -60,7 +60,16 @@ function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }
   return (
     <>
       {postdata.map((reply: any, index: number) => {
-        return <Reply key={reply.id} reply={reply} isCreator={isCreator} postId={postId} type={type} />;
+        return (
+          <Reply
+            key={reply.id}
+            reply={reply}
+            isCreator={isCreator}
+            postId={postId}
+            type={type}
+            showDivider={postdata.length <= index + 1}
+          />
+        );
       })}
     </>
   );

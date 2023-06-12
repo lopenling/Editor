@@ -65,6 +65,9 @@ export default function Index() {
   const translation: any = uselitteraTranlation();
   const [params] = useSearchParams();
   const [searchInput, setSearchInput] = useState('');
+  useEffect(() => {
+    if (AutoSuggestControl) new AutoSuggestControl('inputText');
+  },[])
 
   useEffect(() => {
     let p = params.get('search');
@@ -76,7 +79,6 @@ export default function Index() {
   }, [params]);
   const lists = data.textList;
   const isLoading = navigation.formData?.get('search') && navigation.state === 'loading';
-  console.log(lists);
   if (lists?.message) return <div className="text-red-400">{lists?.message}</div>;
   return (
     <motion.div
@@ -95,6 +97,7 @@ export default function Index() {
                 name="search"
                 placeholder={translation.searchText}
                 value={searchInput}
+                id="inputText"
                 onChange={(e) => setSearchInput(e.target.value)}
                 type="search"
                 required

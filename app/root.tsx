@@ -90,6 +90,7 @@ function App() {
         <Meta />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
         <Links />
+        <script src='./js/auto.js'/>
       </head>
       <body className="relative max-h-[100vh] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={['en_US', 'bo_TI']}>
@@ -108,7 +109,7 @@ function App() {
         <LiveReload />
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-
+             
         <Scripts />
       </body>
     </html>

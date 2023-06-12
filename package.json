@@ -62,6 +62,7 @@
     "recoil": "^0.7.7",
     "remix-utils": "^6.0.0",
     "tailwind-scrollbar": "^3.0.0",
+    "textcomplete": "^0.18.2",
     "tiptap-extension-font-size": "^1.2.0",
     "tiptap-extensions": "^1.35.2",
     "uuid": "^9.0.0"
