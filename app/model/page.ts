@@ -53,6 +53,7 @@ export async function searchPages(search_term = '') {
         groupedData.push({
           textId: textId,
           results: [item],
+          textName:item.name
         });
       }
     }

@@ -19,6 +19,21 @@ export async function findAllText(id = true, name = true, content = false) {
   }
 }
 
+export async function findAllTextWithDetail() {
+  try {
+    let text = await db.text.findMany({
+      include:{
+        author: true,
+        Page:true
+      }
+    });
+    return text;
+  } catch (e: any) {
+    throw new Error('fetching text error' + e.message);
+  }
+}
+
+
 // find text by textId
 export async function findTextByPageId(pageId: string) {
   try {

@@ -7,6 +7,7 @@ import DiffMatchPatch from 'diff-match-patch';
 import { isMobile, isTablet } from 'react-device-detect';
 let isSmallScreen = isMobile || isTablet;
 import trigerUpdate from './trigetPusherUpdate.server';
+import { initializeTribute } from './tribute.client';
 import containTibetanletter from './containsTIbetanWord';
 export {
   copyToClipboard,
@@ -19,4 +20,5 @@ export {
   isSmallScreen,
   trigerUpdate,
   containTibetanletter,
+  initializeTribute,
 };

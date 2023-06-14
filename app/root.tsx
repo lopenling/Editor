@@ -15,6 +15,7 @@ import ErrorPage from './component/Layout/ErrorPage';
 import { getUserSession } from './services/session.server';
 import globalStyle from './styles/globalStyle.css';
 import tailwindStyle from './styles/tailwind.css';
+import tributeStyle from './styles/tribute.css';
 import { LitteraProvider } from '@assembless/react-littera';
 import { RecoilRoot } from 'recoil';
 import { AnimatePresence } from 'framer-motion';
@@ -52,6 +53,7 @@ export function links() {
     { rel: 'stylesheet', href: tailwindStyle, as: 'style' },
     { rel: 'stylesheet', href: globalStyle, as: 'style' },
     { rel: 'stylesheet', href: notificationStyle, as: 'style' },
+    { rel: 'stylesheet', href: tributeStyle, as: 'style' },
   ];
 }
 
@@ -81,7 +83,9 @@ export function ErrorBoundary() {
 function App() {
   const data = useLoaderData();
   const navigation = useNavigation();
-  let routeChanged = navigation.state === 'loading' && !navigation.location?.pathname.includes('/text');
+  let routeChanged =
+    navigation.state === 'loading' &&
+    navigation.location?.pathname.includes('/page') 
 
   return (
     <html className={data.user?.preference?.theme || 'light'}>
@@ -90,7 +94,6 @@ function App() {
         <Meta />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
         <Links />
-        <script src='./js/auto.js'/>
       </head>
       <body className="relative max-h-[100vh] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={['en_US', 'bo_TI']}>
