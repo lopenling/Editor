@@ -24,8 +24,7 @@ export default function List() {
     const indexOfFirstText = indexOfLastText - textsPerPage;
     const currentTexts = textList.slice(indexOfFirstText, indexOfLastText);
     const totalPages = Math.ceil(textList.length / textsPerPage);
-   console.log(textList)
-    const goToPage = (page) => {
+    const goToPage = (page:number) => {
       setCurrentPage(page);
     };
 

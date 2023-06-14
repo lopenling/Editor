@@ -32,3 +32,6 @@
 .tribute-container .menu-highlighted {
   font-weight: bold;
 }
+.tribute-no-match{
+  padding:4px;
+}

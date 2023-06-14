@@ -1,13 +1,26 @@
 import Tribute from 'tributejs';
-import collection from './tibuteCollection';
 
-export  function initializeTribute(id:string,value:string) {
+export  function initializeTribute(id:string) {
   if (typeof window !== 'undefined') {
     const tribute = new Tribute({
-      values:[{key:'item',value:'item'}],
+      values: function (text, callback) {
+        // Make an asynchronous request to retrieve the suggestions from an API
+        fetch('/api/text/?search=' + text)
+          .then((response) => response.json())
+          .then((data) => {
+            let newData = data.map((item: any) => ({ key: item.name, value: item.name }));
+            // Pass the retrieved suggestions to the callback function
+            callback(newData);
+          })
+          .catch((error) => {
+            console.error('Error retrieving suggestions:', error);
+            callback([]);
+          });
+      },
       autocompleteMode: true,
+      trigger:'་',
       noMatchTemplate() {
-        return `<span class="tribute-no-match"></span>`;
+        return `<span class="tribute-no-match">མིན་འདུག</span>`;
       },
     });
 
@@ -19,8 +32,3 @@ export  function initializeTribute(id:string,value:string) {
   return null;
 }
 
-function convertArrayOfStringToKeyValue(array:string[]) {
-  return array.map((item) => {
-    return { key: item, value: item };
-  });
-}
