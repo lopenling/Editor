@@ -7,15 +7,17 @@ interface AvatarType {
 }
 
 export function Avatar({ title, alt, img, rounded, size }: AvatarType) {
-  let px = 8;
+  let px = 29;
   switch (size) {
     case 'sm':
-      px = 8;
+      px = 29;
       break;
     case 'md':
-      px = 10;
+      px = 40;
       break;
   }
 
-  return <img className={`w-${px} h-${px} p-1 ${rounded && 'rounded-full'}`} src={img} alt={alt} title={title} />;
+  return <img className={`${rounded && 'rounded-full'}`} src={img} alt={alt} title={title}
+  style={{width:px,height:px}} 
+  />;
 }

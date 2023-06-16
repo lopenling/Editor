@@ -72,21 +72,20 @@ function Header({ editor }: HeaderProps) {
       }
     );
   };
-
   useEffect(() => {
     let timeout: NodeJS.Timeout;
+    let main = document.querySelector('body');
+const handleScroll = () => {
+  if (timeout) clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    var scrollTopValue = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    const shouldShowTextName = scrollTopValue! > 10 && redirectTo.includes('text');
+    setTextNameOnHeader(shouldShowTextName);
+  }, 10);
+};
 
-    let editorElement = document.getElementById('textEditorContainer');
-    const handleScroll = () => {
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        const shouldShowTextName = editorElement?.scrollTop! > 10 && redirectTo.includes('text');
-        setTextNameOnHeader(shouldShowTextName);
-      }, 10);
-    };
-
-    editorElement?.addEventListener('scroll', handleScroll);
-    return () => editorElement?.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window?.addEventListener('scroll', handleScroll);
   }, [redirectTo, textName]);
   let darkMode = user?.preference?.theme === 'dark';
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -184,7 +183,7 @@ function Header({ editor }: HeaderProps) {
                   onClick={() => setShowUserMenu((prev) => !prev)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  <Avatar alt={user.name} img={user.avatarUrl} rounded={true} size="md" title={user?.name} />
+                  <Avatar alt={user.name} img={user.avatarUrl} rounded={true} title={user?.name} size='sm' />
                 </button>
                 {showUserMenu && (
                   <div

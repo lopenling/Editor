@@ -91,16 +91,17 @@ export default function Index() {
       key={useLocation().pathname}
       initial={{ x: '5%', opacity: 0 }}
       animate={{ x: '0%', opacity: 1 }}
-        exit={{ x: '5%', opacity: 0 }}
-        style={{position:'relative',minHeight:'100vh'}}
+      exit={{ x: '5%', opacity: 0 }}
+      style={{ position: 'relative', minHeight: '100vh' }}
     >
       <Header editor={null} />
-      <div style={{ height: HEADER_HEIGHT }}/>
-      <div className=" mx-auto max-w-2xl " >
+      <div style={{ height: HEADER_HEIGHT }} />
+      <div className=" mx-auto max-w-2xl ">
         <div className="flex w-full flex-col items-center justify-center  px-3 pt-24 md:px-1.5  ">
           <Form method="GET" className="w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
               <TextInput
+                autoComplete="off"
                 name="search"
                 placeholder={translation.searchText}
                 value={searchInput}
@@ -127,8 +128,8 @@ export default function Index() {
               </Button>
             </div>
           </Form>
-          <Link to="/list" className="pt-5 text-sm font-light text-gray-800 transition-colors underline  ">
-              List of all Pechas
+          <Link to="/list" className="pt-5 text-sm font-light text-gray-800 underline transition-colors  ">
+            List of all Pechas
           </Link>
         </div>
         <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">

@@ -6,11 +6,11 @@ import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
 import { isSmallScreen } from '~/lib';
 import { Editor } from '@tiptap/react';
 import { useLoaderData } from '@remix-run/react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { showImageState } from '~/states';
 
 export default function EditorSetting({ editor }: { editor: Editor }) {
-  const setShowImage = useSetRecoilState(showImageState);
+  const [showImage,setShowImage] = useRecoilState(showImageState);
   const data = useLoaderData();
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
@@ -41,7 +41,13 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
             <li className="flex items-center px-4 py-2">
-              <input id="imageToggle" type="checkbox" className="mb-2 mr-2 cursor-pointer" onChange={toggleImage} />
+              <input
+                checked={showImage}
+                id="imageToggle"
+                type="checkbox"
+                className="mb-2 mr-2 cursor-pointer"
+                onChange={toggleImage}
+              />
               <label htmlFor="imageToggle" className="mb-2 cursor-pointer">
                 show Image
               </label>

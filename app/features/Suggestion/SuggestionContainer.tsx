@@ -10,7 +10,6 @@ function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestio
   let list = suggestions.filter((sug) => {
     return sug.threadId === suggestionThread.id;
   });
-
   let groupedSuggestion = transformObjectsByNewValue(list);
   return (
     <div
@@ -20,7 +19,7 @@ function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestio
       <div className="flex flex-col  gap-2 ">
         <h2 className="text-lg font-bold text-gray-900 dark:text-white lg:text-2xl">Suggestion</h2>
         {groupedSuggestion.map((suggest) => {
-          return <Suggestion optimistic={false} editor={editor} suggest={suggest} key={suggest.id} />;
+          return <Suggestion optimistic={false} editor={editor} suggest={suggest} key={suggest.id}  />;
         })}
       </div>
     </div>

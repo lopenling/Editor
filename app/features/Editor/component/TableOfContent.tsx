@@ -1,7 +1,13 @@
+import { Editor } from '@tiptap/react';
 import React, { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 
-const TableOfContents = ({ onClose }) => {
+type tableProps = {
+  onClose: () => void;
+  editor: Editor | null;
+}
+
+const TableOfContents = ({ onClose,editor }:tableProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDropdownToggle = () => {
@@ -11,9 +17,11 @@ const TableOfContents = ({ onClose }) => {
   const handleClose = () => {
     onClose();
   };
-
+  const handleJump = (start: number) => { 
+    editor?.chain().setTextSelection(start).focus().scrollIntoView().run();
+  }
   return (
-    <div className="w-64 bg-gray-100 p-4">
+    <div className="w-full bg-gray-100 p-4 z-50">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold">Table of Contents</h2>
 
@@ -40,9 +48,9 @@ const TableOfContents = ({ onClose }) => {
           </button>
           {isOpen && (
             <ul className="ml-4 cursor-pointer">
-              <li>Section 1.1</li>
-              <li>Section 1.2</li>
-              <li>Section 1.3</li>
+              <li onClick={() => handleJump(45)}>Section 1.1</li>
+              <li onClick={() => handleJump(1845)}>Section 1.2</li>
+              <li onClick={() => handleJump(4445)}>Section 1.3</li>
             </ul>
           )}
         </li>

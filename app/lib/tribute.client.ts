@@ -19,9 +19,7 @@ export  function initializeTribute(id:string) {
       },
       autocompleteMode: true,
       trigger:'་',
-      noMatchTemplate() {
-        return `<span class="tribute-no-match">མིན་འདུག</span>`;
-      },
+      noMatchTemplate() { return null }
     });
 
     tribute.attach(document.getElementById(id));

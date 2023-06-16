@@ -27,6 +27,7 @@ import Pagination from '~/component/UI/Pagination';
 import { FaListUl, FaRegComments } from 'react-icons/fa';
 import TableOfContents from '~/features/Editor/component/TableOfContent';
 import Modal from 'react-modal';
+import { HEADER_HEIGHT } from '~/constants';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   let textId = params.textId as string;
   let order = params.pageId as string;
@@ -56,24 +57,19 @@ function PostSidebar(props: { id: any; showPostSide: any; type: string; user: an
 }
 
 function SuggestionSidebar(props: {
-  openSuggestion: any;
   suggestionSelected: { id: any };
   editor: Editor | null;
   suggestions: any;
 }) {
   return (
-    <motion.div
-      animate={{
-        x: props.openSuggestion || props.suggestionSelected?.id ? 0 : '100%',
-      }}
-    >
+    <div className='z-20 w-full'>
       <SuggestionForm editor={props.editor} />
       <Suspense fallback={<div>loading</div>}>
         <Await resolve={props.suggestions}>
           {(data) => <SuggestionContainer editor={props.editor} suggestions={data} />}
         </Await>
       </Suspense>
-    </motion.div>
+    </div>
   );
 }
 
@@ -183,12 +179,12 @@ export default function Page() {
     []
   );
   useEffect(() => {
-    if (selectedPost.id || selection.type !== '') {
+    if (!!selectedPost.id || selection.type !== '' || !!suggestionSelected?.id || openSuggestion) {
       setShowPostSide(true);
     } else {
       setShowPostSide(false);
     }
-  }, [selectedPost.id, selection.type]);
+  }, [selectedPost.id, selection.type, suggestionSelected?.id, openSuggestion]);
 
   useEffect(() => {
     if (!showPostSide) {
@@ -196,7 +192,10 @@ export default function Page() {
       editor?.commands.setTextSelection(0);
     }
   }, [showPostSide]);
-  const topDistance = 62;
+  const topDistance = HEADER_HEIGHT;
+  const tableSidebarWidth = 272;
+  const postSidebarWidth = 400;
+
   return (
     <>
       <Header editor={editor} />
@@ -206,18 +205,18 @@ export default function Page() {
           height: topDistance,
         }}
       ></div>
+
       <div className="relative flex h-min justify-between gap-4 transition-all">
         <div
-          className="hidden w-fit md:block"
           style={{
-            zIndex: 1,
-            position: 'sticky',
+            width: showTable ? tableSidebarWidth : 0,
             top: topDistance,
-            overflowY: 'scroll',
-            height: '80vh',
+            transition: 'all ease 0.4s',
           }}
           id="tableContent"
+          className="sticky hidden md:flex"
         >
+          {' '}
           <button
             className="absolute rounded-full "
             style={{ top: 20, left: 20, background: '#eee', padding: 10 }}
@@ -230,60 +229,47 @@ export default function Page() {
               x: showTable ? 0 : '-100vw',
             }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl"
+            className="w-full rounded-2xl"
           >
-            <TableOfContents onClose={() => setShowTable(false)} />
+            <TableOfContents editor={editor} onClose={() => setShowTable(false)} />
           </motion.div>
         </div>
-
         <div
           className="max-w-3xl justify-self-center p-2"
           style={{
             overflowX: 'hidden',
             scrollbarWidth: 'none',
-            width: '100%',
+            flex: 1,
           }}
           id="textEditorContainer"
         >
           <Pagination pageCount={data.pageCount} />
           {editor && <EditorContainer editor={editor} isSaving={false} order={data.page.order} content={content} />}
         </div>
-
         <div
-          className=" hidden md:block "
           style={{
-            zIndex: 1,
-            position: 'sticky',
+            width: showPostSide ? postSidebarWidth : 0,
             top: topDistance,
-            width: 400,
-            overflow: 'hidden',
-            height: '92vh',
+            transition: 'all ease 0.4s',
+            zIndex: 100,
           }}
+          className="sticky hidden w-full md:flex "
           id="postContent"
         >
           <button
-            className="absolute rounded-full hover:bg-gray-300"
-            style={{ top: 20, right: 20, background: '#eee', padding: 10, zIndex: '-1' }}
+            className="absolute rounded-full"
+            style={{ top: 20, right: 20, background: '#eee', padding: 10 }}
             onClick={() => setShowPostSide((p) => !p)}
           >
             <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
           </button>
           {suggestionSelected?.id || openSuggestion ? (
-            <SuggestionSidebar
-              suggestions={data.suggestions}
-              suggestionSelected={suggestionSelected}
-              openSuggestion={openSuggestion}
-              editor={editor}
-            ></SuggestionSidebar>
+            <SuggestionSidebar suggestions={data.suggestions} suggestionSelected={suggestionSelected} editor={editor} />
           ) : (
-            <motion.div
-              animate={{
-                x: showPostSide ? 0 : '100%',
-              }}
-              transition={{ duration: 0.3 }}
-              className={`hidden min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
-              style={{flexDirection:'column'}}
-              >
+            <div
+              className={`hidden w-full min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
+              style={{ flexDirection: 'column' }}
+            >
               <PostSidebar
                 page={data.page}
                 user={user}
@@ -292,7 +278,7 @@ export default function Page() {
                 showPostSide={showPostSide}
                 editor={editor}
               />
-            </motion.div>
+            </div>
           )}
         </div>
       </div>
@@ -306,14 +292,13 @@ export default function Page() {
         }}
         ariaHideApp={false}
         className="modal-content w-full md:hidden"
-        overlayClassName="modal-overlay md:hidden"
+        overlayClassName="modal-overlay md:hidden "
       >
         {suggestionSelected?.id || openSuggestion ? (
-          <div className="absolute bottom-0">
+          <div className="absolute bottom-0 w-full bg-white " style={{ maxHeight: '50dvh', overflow: 'scroll' }}>
             <SuggestionSidebar
               suggestions={data.suggestions}
               suggestionSelected={suggestionSelected}
-              openSuggestion={openSuggestion}
               editor={editor}
             ></SuggestionSidebar>
           </div>
