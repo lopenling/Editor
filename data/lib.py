@@ -1,15 +1,13 @@
 import io
 import json
 import yaml
-
-file_name = 'O0A4F0B4F'
-base_name = 7367
-
+import os
+file_path='./opfs/'
 
 def get_meta_data(file_name):
-    file_path = f'./{file_name}/{file_name}.opf/meta.yml'
+    file_paths = f'{file_path}/{file_name}/{file_name}.opf/meta.yml'
     try:
-        with io.open(file_path, 'r', encoding='utf-8') as meta_file:
+        with io.open(file_paths, 'r', encoding='utf-8') as meta_file:
             yaml_data = yaml.safe_load(meta_file)
             return yaml_data
     except Exception as e:
@@ -17,10 +15,10 @@ def get_meta_data(file_name):
         return None
 
 
-def fetchText(file_name, base_name):
-    file_path = f'./{file_name}/base/{base_name}.txt'
+def fetch_text(file_name, base_name):
+    file_paths = f'{file_path}{file_name}/base/{base_name}'
     try:
-        with io.open(file_path, 'r', encoding='utf-8') as textFile:
+        with io.open(file_paths, 'r', encoding='utf-8') as textFile:
             file_contents = textFile.read()
             return file_contents
 
@@ -32,8 +30,8 @@ def fetchText(file_name, base_name):
         return None
 
 
-def fetch_annotation(base_name):
-    yaml_file_path = f'./{file_name}/layers/{base_name}/Durchen.yml'
+def fetch_annotation(file_name,base_name):
+    yaml_file_path = f'{file_path}/{file_name}/layers/{base_name}/Durchen.yml'
     try:
         with io.open(yaml_file_path, 'r', encoding='utf-8') as yaml_file:
             yaml_data = yaml.safe_load(yaml_file)
@@ -68,17 +66,6 @@ def extract_annotations_array(json_data):
 
     return span_array
 
-
-def create_json_file(data, file_path):
-    formatted_json = json.dumps(
-        data, indent=4, sort_keys=True, ensure_ascii=False)
-    with io.open(file_path, 'w', encoding='utf-8') as file:
-        file.write(formatted_json)
-
-
-def create_txt_file(data, file_path):
-    with io.open(file_path, "w", encoding='utf-8') as file:
-        file.write(data)
 
 
 def applyAnnotation(text, annotation):
@@ -135,8 +122,8 @@ def generate_merged_array(pages, annotations):
     return pages
 
 
-def generate_paginated_text():
-    yaml_file_path = f'./{file_name}/layers/{base_name}/pagination.yml'
+def generate_paginated_text(file_name, base_name,text):
+    yaml_file_path = f'{file_path}{file_name}/layers/{base_name}/pagination.yml'
     try:
         with io.open(yaml_file_path, 'r', encoding='utf-8') as yaml_file:
             yaml_data = yaml.safe_load(yaml_file)
@@ -149,8 +136,6 @@ def generate_paginated_text():
                 paginatedText['content'] = ''
                 paginatedText['order'] = order
                 pagination_data.append(paginatedText)
-
-            text = fetchText(file_name, base_name)
             paginated_text = cut_text_by_pagination(text, pagination_data)
             return paginated_text
 
@@ -164,16 +149,18 @@ def generate_paginated_text():
         print(f"An error occurred: {e}")
         return None
 
+def get_data(file_name, base_name,content):
+ 
+    text = generate_paginated_text(file_name, base_name,content)
+    annotation = extract_annotations_array(fetch_annotation(file_name,base_name))    
+    datas = generate_merged_array(text, annotation)
+    output = {}
+    for data in datas:
+      data['content'] = applyAnnotation(data['content'], data['annotation'])
+      output['data'] = datas
+    return output
 
-text = generate_paginated_text()
-annotation = extract_annotations_array(fetch_annotation(base_name))
-datas = generate_merged_array(text, annotation)
-meta = get_meta_data(file_name)
-output = {}
-for data in datas:
-    data['content'] = applyAnnotation(data['content'], data['annotation'])
-
-output['data'] = datas
-output['meta'] = meta['source_metadata']
-output['base'] = meta['bases']
-d = create_json_file(output, './data.json')
+def list_folders():
+    directory_path = './opfs'
+    folders = [folder for folder in os.listdir(directory_path) if os.path.isdir(os.path.join(directory_path, folder))]
+    return folders

@@ -74,7 +74,6 @@ function Header({ editor }: HeaderProps) {
   };
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    let main = document.querySelector('body');
 const handleScroll = () => {
   if (timeout) clearTimeout(timeout);
   timeout = setTimeout(() => {
@@ -87,6 +86,7 @@ const handleScroll = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window?.addEventListener('scroll', handleScroll);
   }, [redirectTo, textName]);
+  
   let darkMode = user?.preference?.theme === 'dark';
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);

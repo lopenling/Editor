@@ -7,7 +7,7 @@ import { useDetectClickOutside } from 'react-detect-click-outside';
 import { Button, TextArea } from '~/component/UI';
 import { AudioPlayer, AudioRecorder } from '../Media';
 import { v4 as uuidv4 } from 'uuid';
-import { useFetcherWithPromise } from '~/lib';
+import { containTibetanletter, useFetcherWithPromise } from '~/lib';
 import { replaceMarkContent } from '~/features/Editor/tiptap/markAction';
 import Comment from './Comment';
 
@@ -42,6 +42,7 @@ export default function Suggestion({ editor, suggest, optimistic = false,  }: Su
     if (likeFetcher.state === 'submitting') likeCount--;
   }
   const handleLike = async (id: string) => {
+    if (!user) return;
     setEffect(true);
     const res = await likeFetcher.submit(
       {
@@ -78,6 +79,16 @@ export default function Suggestion({ editor, suggest, optimistic = false,  }: Su
       editor?.commands.unsetSuggestion();
     }
   }
+  function checkPendetaName(val: string) {
+    let value= val.toLowerCase();
+    switch (value) {
+      case 'derge': return 'སྡེ་དགེ';
+      case 'narthang': return 'སྣར་ཐང༌།';
+      case 'peking': return 'པེ་ཅིན།';
+      case 'chone': return 'ཆོ་གནས།';
+      default: 'other';
+    }
+  }
   return (
     <div key={suggest.id} className={`${deleteFetcher.formData && 'hidden'} p-3 `}>
       <div className="relative mb-2 flex justify-between">
@@ -97,9 +108,11 @@ export default function Suggestion({ editor, suggest, optimistic = false,  }: Su
               </div>
               <div className="flex gap-1 text-base font-medium leading-tight text-gray-900 dark:text-gray-200 ">
                 {suggest.user?.map((item, index) => (
-                  <div key={item.id + index} className="capitalize">
-                    {item.username}
-                    {index !== suggest.user.length - 1 && <span>,</span>}
+                  <div key={item.id + index} className="font-bold capitalize">
+                    {checkPendetaName(item.username)}
+                    {index !== suggest.user.length - 1  && (
+                      <span> | </span>
+                    )}
                   </div>
                 ))}
               </div>
