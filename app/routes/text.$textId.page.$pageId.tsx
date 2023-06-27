@@ -14,7 +14,7 @@ import {
   textInfo,
 } from '~/states';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
 import Header from '~/component/Layout/Header';
 
 import { EditorContainer } from '~/features/Editor';
@@ -28,6 +28,7 @@ import { FaListUl, FaRegComments } from 'react-icons/fa';
 import TableOfContents from '~/features/Editor/component/TableOfContent';
 import Modal from 'react-modal';
 import { HEADER_HEIGHT } from '~/constants';
+import { DiffMatchPatch } from '~/lib';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   let textId = params.textId as string;
   let order = params.pageId as string;
@@ -107,12 +108,25 @@ export default function Page() {
     data.pusher_env.cluster,
     data.user
   );
-
-  const saveData = async (text: string) => {
+ const getQuery = useCallback(
+   (newContent: string) => {
+     let oldContent = data.page.content;
+     const dmp = new DiffMatchPatch();
+     if (oldContent !== newContent) {
+       const changes = dmp.diff_main(oldContent, newContent);
+       const patch = dmp.patch_make(changes);
+       let query = dmp.patch_toText(patch);
+       return query;
+     }
+     return null;
+   },
+   [data.page.content]
+ );
+  const saveData = async (patch: string) => {
     const formData = new FormData();
     formData.append('textId', data.text?.id);
     formData.append('pageId', data.page?.id);
-    formData.append('text', text);
+     formData.append('patch', JSON.stringify(patch));
     saveTextFetcher.submit(formData, {
       method: 'POST',
       action: '/api/text',
@@ -170,7 +184,9 @@ export default function Page() {
       },
       onUpdate: async ({ editor }) => {
         let newContent = editor.getHTML();
-        if (newContent.length > 10 && user) saveData(newContent);
+        let query = getQuery(newContent);
+        console.log(query)
+        //  if (query && newContent.length > 100 && user) saveData(query);
       },
       onCreate: async ({ editor }) => {
         setTextName({ name: data?.text.name, id: data?.text.id });
@@ -235,7 +251,7 @@ export default function Page() {
           </motion.div>
         </div>
         <div
-          className="max-w-3xl justify-self-center p-2"
+          className="max-w-4xl justify-self-center p-2"
           style={{
             overflowX: 'hidden',
             scrollbarWidth: 'none',
@@ -251,7 +267,7 @@ export default function Page() {
             width: showPostSide ? postSidebarWidth : 0,
             top: topDistance,
             transition: 'all ease 0.4s',
-            zIndex: 100,
+            zIndex: 1,
           }}
           className="sticky hidden w-full md:flex "
           id="postContent"
@@ -292,7 +308,7 @@ export default function Page() {
         }}
         ariaHideApp={false}
         className="modal-content w-full md:hidden"
-        overlayClassName="modal-overlay md:hidden "
+        overlayClassName="modal-overlay hidden "
       >
         {suggestionSelected?.id || openSuggestion ? (
           <div className="absolute bottom-0 w-full bg-white " style={{ maxHeight: '50dvh', overflow: 'scroll' }}>

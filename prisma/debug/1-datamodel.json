@@ -228,6 +228,7 @@
             "relationToFields": [
               "id"
             ],
+            "relationOnDelete": "Cascade",
             "isGenerated": false,
             "isUpdatedAt": false
           },
@@ -482,6 +483,36 @@
             "relationToFields": [],
             "isGenerated": false,
             "isUpdatedAt": false
+          },
+          {
+            "name": "createdAt",
+            "kind": "scalar",
+            "isList": false,
+            "isRequired": false,
+            "isUnique": false,
+            "isId": false,
+            "isReadOnly": false,
+            "hasDefaultValue": true,
+            "type": "DateTime",
+            "default": {
+              "name": "now",
+              "args": []
+            },
+            "isGenerated": false,
+            "isUpdatedAt": false
+          },
+          {
+            "name": "updatedAt",
+            "kind": "scalar",
+            "isList": false,
+            "isRequired": false,
+            "isUnique": false,
+            "isId": false,
+            "isReadOnly": false,
+            "hasDefaultValue": false,
+            "type": "DateTime",
+            "isGenerated": false,
+            "isUpdatedAt": true
           }
         ],
         "primaryKey": null,
@@ -527,6 +558,7 @@
             "relationToFields": [
               "id"
             ],
+            "relationOnDelete": "Cascade",
             "isGenerated": false,
             "isUpdatedAt": false
           },
@@ -779,6 +811,7 @@
             "relationToFields": [
               "id"
             ],
+            "relationOnDelete": "Cascade",
             "isGenerated": false,
             "isUpdatedAt": false
           },
@@ -799,6 +832,7 @@
             "relationToFields": [
               "id"
             ],
+            "relationOnDelete": "Cascade",
             "isGenerated": false,
             "isUpdatedAt": false
           },
@@ -1246,6 +1280,7 @@
             "relationToFields": [
               "id"
             ],
+            "relationOnDelete": "Cascade",
             "isGenerated": false,
             "isUpdatedAt": false
           },

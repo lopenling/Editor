@@ -61,7 +61,7 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
 
   return (
     <div className=" relative mb-4  shadow-sm">
-      <div className=" text-light z-10 flex  items-center  justify-between  bg-white px-2 py-4  text-3xl font-bold text-gray-900  dark:bg-gray-700 dark:text-white">
+      <div className=" text-light z-10 flex  items-center  justify-between   px-2 py-4  text-3xl font-bold ">
         <h3 className="textname flex gap-2 text-2xl">
           <div className="flex items-center gap-2">
             {data.text.name} {order>1 && order}{isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}

@@ -18,7 +18,23 @@ export async function findAllText(id = true, name = true, content = false) {
     throw new Error('fetching text error' + e.message);
   }
 }
-
+export async function findLatestText() {
+  try {
+    let text = await db.text.findMany({
+      select: {
+        id: true,
+        name: true,
+        Page: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return text.slice(0, 5);
+  } catch (e) {
+    throw new Error('fetching text error' + e.message);
+  };
+}
 export async function findAllTextWithDetail() {
   try {
     let text = await db.text.findMany({

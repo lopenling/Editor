@@ -25,16 +25,27 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
   };
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [fontSize, setFontSize] = useState(isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE);
+
+  let themes = [
+    { background: 'white', text: 'black' },
+    { background: '#C4E0A6', text: 'black' },
+    { background: '#B9F3DD', text: 'black' },
+    { background: '#5A5A5C', text: 'white' },
+  ];
+  const changeTheme = (theme) => { 
+    document.documentElement.style.setProperty('--background-text-editor', theme.background);
+    document.documentElement.style.setProperty('--text-text-editor', theme.text);
+  }
   return (
-    <div className="mr-2 mt-2 ">
+    <div className="mr-2 mt-2">
       <button type="button" onClick={() => setOpenEditMenu((p) => !p)}>
         <FaBars color="inherit" className="fill-gray-400 hover:text-gray-600 " size={24} />
       </button>
       {openEditMenu && (
         <div
           ref={ref}
-          className="
-        absolute right-0 top-[100%] z-10 w-36 divide-y divide-gray-100 rounded bg-white shadow dark:divide-gray-600 dark:bg-gray-700"
+          style={{ top: '100%', right: '5%' }}
+          className="absolute  z-50 w-36 divide-y divide-gray-100 rounded bg-white shadow dark:divide-gray-600 dark:bg-gray-700"
         >
           <ul
             className="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -84,6 +95,20 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
                 style={{ border: 0, padding: 0 }}
                 onChange={handleFontSizeChange}
               />
+            </li>
+            <li className="flex  items-center gap-2 px-4 py-2">
+              <div className="flex gap-2">
+                {themes.map((theme) => {
+                  return <div
+                     key={theme.background}
+                    className="h-5 w-5 cursor-pointer rounded-full border-2 hover:border-gray-400"
+                    title={theme.background}
+                    style={{ backgroundColor: theme.background }}
+                    onClick={()=>changeTheme(theme)}
+                   ></div>;
+                })}
+               
+              </div>
             </li>
             <li className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
               Report

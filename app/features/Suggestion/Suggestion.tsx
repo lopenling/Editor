@@ -86,7 +86,7 @@ export default function Suggestion({ editor, suggest, optimistic = false,  }: Su
       case 'narthang': return 'སྣར་ཐང༌།';
       case 'peking': return 'པེ་ཅིན།';
       case 'chone': return 'ཆོ་གནས།';
-      default: 'other';
+      default: return val;
     }
   }
   return (
@@ -108,7 +108,7 @@ export default function Suggestion({ editor, suggest, optimistic = false,  }: Su
               </div>
               <div className="flex gap-1 text-base font-medium leading-tight text-gray-900 dark:text-gray-200 ">
                 {suggest.user?.map((item, index) => (
-                  <div key={item.id + index} className="font-bold capitalize">
+                  <div key={item.id + index} className="text-md capitalize">
                     {checkPendetaName(item.username)}
                     {index !== suggest.user.length - 1  && (
                       <span> | </span>

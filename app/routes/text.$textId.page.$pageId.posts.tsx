@@ -11,6 +11,7 @@ import { Editor } from '@tiptap/react';
 import { useLiveLoader } from '~/lib';
 import { Skeleton, Dropdown, DropdownItem } from '~/component/UI';
 import { getPage, getPageId } from '~/model/page';
+import { GrClose } from 'react-icons/gr';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId as string;
@@ -57,19 +58,20 @@ export default function PostContainer() {
     }
   }, []);
   const setOpenFilter = useSetRecoilState(openFilterState);
-  const translation = uselitteraTranlation();
+  const setOpenContent = useSetRecoilState(showPostContent);
 
+  const translation = uselitteraTranlation();
+  const handleClose = () => { 
+    setOpenContent(false);
+  }
   return (
     <>
-     
       <PostForm />
 
       <div className="sticky top-0 z-50  flex  w-full items-center justify-between gap-2 bg-white ">
         <div className="z-30 flex flex-1 items-center  justify-between  py-2">
-          <div>
+          <div className="flex">
             <LatestFilter />
-          </div>
-          <div>
             <button
               id="filterButton"
               onClick={() => setOpenFilter((prev) => !prev)}
@@ -88,6 +90,9 @@ export default function PostContainer() {
               </span>
             </button>
           </div>
+          <button onClick={handleClose} className="mr-2">
+            <GrClose size={14} className="cursor-pointer text-gray-500" />
+          </button>
         </div>
       </div>
       <hr />

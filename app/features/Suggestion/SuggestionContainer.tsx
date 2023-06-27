@@ -1,12 +1,16 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { selectedSuggestionThread, selectedTextOnEditor } from '~/states';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { selectedSuggestionThread, selectedTextOnEditor, showPostContent } from '~/states';
 import { Editor } from '@tiptap/react';
-
+import { GrClose } from 'react-icons/gr';
 import Suggestion from './Suggestion';
 import { SuggestionType } from '~/model/type';
 function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestions: SuggestionType[] }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
+  const setOpenContent = useSetRecoilState(showPostContent);
 
+ const handleClose = () => {
+   setOpenContent(false);
+ };
   let list = suggestions.filter((sug) => {
     return sug.threadId === suggestionThread.id;
   });
@@ -17,9 +21,14 @@ function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestio
       style={{ minWidth: 350, fontFamily: 'sans-serif' }}
     >
       <div className="flex flex-col  gap-2 ">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white lg:text-2xl">Suggestion</h2>
+        <div className="flex justify-between">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white lg:text-2xl">Suggestion</h2>
+          <button onClick={handleClose} className="mr-2">
+            <GrClose size={14} className="cursor-pointer text-gray-500" />
+          </button>
+        </div>
         {groupedSuggestion.map((suggest) => {
-          return <Suggestion optimistic={false} editor={editor} suggest={suggest} key={suggest.id}  />;
+          return <Suggestion optimistic={false} editor={editor} suggest={suggest} key={suggest.id} />;
         })}
       </div>
     </div>

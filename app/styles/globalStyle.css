@@ -36,6 +36,8 @@
 
   --headerHeight: 56px;
   --sidebarHeight: calc(100vh - var(--headerHeight));
+  --background-text-editor: #fff;
+  --text-text-editor:black;
 }
 *,
 html {
@@ -153,6 +155,9 @@ nav > div {
 #textEditorContainer {
   font-family: 'Monlam', serif;
   line-height: 1.5;
+  background-color:var(--background-text-editor);
+  color:var(--text-text-editor);
+  transition:all ease-in 0.3s;
 }
 button,
 ::placeholder {
@@ -221,8 +226,8 @@ select:focus {
 }
 /* react-transistion-group */
 .modal-overlay {
-  background-color: rgba(0, 0, 0, 0.1);
-  /* pointer-events: none; */
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  pointer-events: none;
   position: fixed;
   top: 0;
   left: 0;

@@ -27,7 +27,7 @@ model Post {
   selection      String?
   creatorUser    User     @relation("creatorPost", fields: [creatorUser_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   page           Page     @relation(fields: [pageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  text           Text     @relation(fields: [textId], references: [id])
+  text           Text     @relation(fields: [textId], references: [id],onDelete: Cascade, onUpdate: NoAction)
   reply          Reply[]
   likedBy        User[]   @relation("likedPost")
   textId         Int
@@ -49,11 +49,13 @@ model Text {
   Page       Page[]
   Suggestion Suggestion[]
   Post       Post[]
+  createdAt  DateTime?     @default(now())
+  updatedAt  DateTime?    @updatedAt
 }
 
 model Page {
   id         String       @id @unique @default(uuid())
-  text       Text         @relation(fields: [textId], references: [id])
+  text       Text         @relation(fields: [textId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   order      Int
   content    String
   textId     Int
@@ -73,8 +75,8 @@ model Suggestion {
   updated_at        DateTime?           @updatedAt
   audioUrl          String?
   version           String?
-  page              Page                @relation(fields: [pageId], references: [id])
-  text              Text                @relation(fields: [textId], references: [id])
+  page              Page                @relation(fields: [pageId], references: [id],onDelete: Cascade, onUpdate: NoAction)
+  text              Text                @relation(fields: [textId], references: [id],onDelete: Cascade, onUpdate: NoAction)
   user              User                @relation("suggestionCreator", fields: [userId], references: [id])
   SuggestionComment SuggestionComment[]
   likedBy           User[]              @relation("likedSuggestion")
@@ -108,7 +110,7 @@ model User {
   Suggestion        Suggestion[]        @relation("suggestionCreator")
   SuggestionComment SuggestionComment[]
   Text              Text[]
-  preference        UserPreference?     @relation(fields: [preferenceId], references: [id])
+  preference        UserPreference?     @relation(fields: [preferenceId], references: [id],onDelete: Cascade, onUpdate: NoAction)
   likedReply        Reply[]             @relation("ReplylikedUser")
   likedPost         Post[]              @relation("likedPost")
   likedSuggestion   Suggestion[]        @relation("likedSuggestion")
