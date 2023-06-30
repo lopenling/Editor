@@ -1,6 +1,25 @@
 import { fullSearch } from '~/lib';
 import { db } from '~/services/db.server';
 
+export async function getPageWithId(id: string) {
+  try {
+    let page = db.page.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        text: {
+          include: {
+            Page: true,
+          },
+        },
+      },
+    });
+    return page;
+  } catch (e) {
+    console.log(e);
+  }
+}
 export async function getPage(textId: number, order: number) {
   try {
     let page = db.page.findFirst({

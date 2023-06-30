@@ -28,7 +28,15 @@ function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestio
           </button>
         </div>
         {groupedSuggestion.map((suggest) => {
-          return <Suggestion optimistic={false} editor={editor} suggest={suggest} key={suggest.id} />;
+          return (
+            <Suggestion
+              optimistic={false}
+              editor={editor}
+              suggest={suggest}
+              key={suggest.id}
+              count={groupedSuggestion.length}
+            />
+          );
         })}
       </div>
     </div>

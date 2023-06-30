@@ -3,11 +3,11 @@ import { json } from 'react-router';
 import { findTextByPageId } from '~/model/text';
 
 import pusher from '~/services/pusher.server';
-import diffMatchPatch from 'diff-match-patch';
+import { DiffMatchPatch } from '~/lib';
 import { getUserSession } from '~/services/session.server';
 import { TextType } from '~/model/type';
 import { trigerUpdate } from '~/lib';
-import { searchPages, updatePage } from '~/model/page';
+import { getPageWithId, searchPages, updatePage } from '~/model/page';
 
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -33,12 +33,21 @@ export let loader: LoaderFunction = async ({ request }) => {
 export let action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
   const user = await getUserSession(request);
-  const newText = data.get('text') as string;
+  const patchText = data.get('patch') as string;
   const pageId = data.get('pageId') as string;
+  const page =await getPageWithId(pageId);
+  const content = page?.content;
+
+  const dmp = new DiffMatchPatch();
+  let patch = dmp.patch_fromText(patchText);
   try {
-    const res = await updatePage(pageId, newText);
+    const [text2, result] = dmp.patch_apply(patch, content);
+    if (result.every((r) => r === true)) {
+    const res = await updatePage(pageId, text2);
     await trigerUpdate(user, pageId);
     return res;
+    }
+   
   } catch (e) {
     return false;
   }

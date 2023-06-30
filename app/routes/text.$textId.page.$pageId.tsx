@@ -126,7 +126,7 @@ export default function Page() {
     const formData = new FormData();
     formData.append('textId', data.text?.id);
     formData.append('pageId', data.page?.id);
-     formData.append('patch', JSON.stringify(patch));
+     formData.append('patch',patch);
     saveTextFetcher.submit(formData, {
       method: 'POST',
       action: '/api/text',
@@ -185,8 +185,7 @@ export default function Page() {
       onUpdate: async ({ editor }) => {
         let newContent = editor.getHTML();
         let query = getQuery(newContent);
-        console.log(query)
-        //  if (query && newContent.length > 100 && user) saveData(query);
+         if (query && newContent.length > 100 && user) saveData(query);
       },
       onCreate: async ({ editor }) => {
         setTextName({ name: data?.text.name, id: data?.text.id });
@@ -211,7 +210,7 @@ export default function Page() {
   const topDistance = HEADER_HEIGHT;
   const tableSidebarWidth = 272;
   const postSidebarWidth = 400;
-
+const withImage=data.pageCount>1;
   return (
     <>
       <Header editor={editor} />
@@ -225,7 +224,7 @@ export default function Page() {
       <div className="relative flex h-min justify-between gap-4 transition-all">
         <div
           style={{
-            width: showTable ? tableSidebarWidth : 0,
+            width: showTable ? tableSidebarWidth : 50,
             top: topDistance,
             transition: 'all ease 0.4s',
           }}
@@ -235,23 +234,23 @@ export default function Page() {
           {' '}
           <button
             className="absolute rounded-full "
-            style={{ top: 20, left: 20, background: '#eee', padding: 10 }}
+            style={{ top: 10, left: 10, background: '#eee', padding: 10, height: 40, width: 40 }}
             onClick={() => setShowTable((p) => !p)}
           >
             <FaListUl size={22} className="cursor-pointer text-gray-500 " />
           </button>
           <motion.div
             animate={{
-              x: showTable ? 0 : '-100vw',
+              x: showTable ? 0 : '-50px',
             }}
             transition={{ duration: 0.3 }}
-            className="w-full rounded-2xl"
+            className="z-10 w-full overflow-hidden rounded-2xl"
           >
             <TableOfContents editor={editor} onClose={() => setShowTable(false)} />
           </motion.div>
         </div>
         <div
-          className="max-w-4xl justify-self-center p-2"
+          className={`${!withImage?"max-w-4xl":"w-full"} justify-self-center p-2`}
           style={{
             overflowX: 'hidden',
             scrollbarWidth: 'none',
@@ -259,8 +258,15 @@ export default function Page() {
           }}
           id="textEditorContainer"
         >
-          <Pagination pageCount={data.pageCount} />
-          {editor && <EditorContainer editor={editor} isSaving={false} order={data.page.order} content={content} />}
+          {editor && (
+            <EditorContainer
+              editor={editor}
+              isSaving={false}
+              order={data.page.order}
+              content={content}
+              pageCount={data.pageCount}
+            />
+          )}
         </div>
         <div
           style={{
@@ -272,19 +278,25 @@ export default function Page() {
           className="sticky hidden w-full md:flex "
           id="postContent"
         >
-          <button
-            className="absolute rounded-full"
-            style={{ top: 20, right: 20, background: '#eee', padding: 10 }}
-            onClick={() => setShowPostSide((p) => !p)}
-          >
-            <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
-          </button>
+          {data.pageCount === 1 && (
+            <button
+              className="absolute rounded-full"
+              style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
+              onClick={() => setShowPostSide((p) => !p)}
+            >
+              <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
+            </button>
+          )}
           {suggestionSelected?.id || openSuggestion ? (
             <SuggestionSidebar suggestions={data.suggestions} suggestionSelected={suggestionSelected} editor={editor} />
-          ) : (
+          ) : data.pageCount === 1 ? (
             <div
               className={`hidden w-full min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
-              style={{ flexDirection: 'column' }}
+              style={{
+                flexDirection: 'column',
+                opacity: showPostSide ? 1 : 0,
+                transition: 'opacity ease 0.4s',
+              }}
             >
               <PostSidebar
                 page={data.page}
@@ -295,7 +307,7 @@ export default function Page() {
                 editor={editor}
               />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
       {/* for mobile devicess */}

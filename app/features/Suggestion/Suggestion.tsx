@@ -15,9 +15,10 @@ type SuggestionProps = {
   editor: Editor | null;
   suggest: any;
   optimistic: boolean;
+  count: number;
 };
 
-export default function Suggestion({ editor, suggest, optimistic = false,  }: SuggestionProps) {
+export default function Suggestion({ editor, suggest, optimistic = false, count }: SuggestionProps) {
   const likeFetcher = useFetcherWithPromise();
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
@@ -61,6 +62,9 @@ export default function Suggestion({ editor, suggest, optimistic = false,  }: Su
   function deleteSuggestion(id: string) {
     let decision = confirm('do you want to delete the post');
     if (decision) {
+      if (count === 1) {
+      editor?.commands.unsetSuggestion();
+      }
       deleteFetcher.submit(
         {
           id,
@@ -72,11 +76,6 @@ export default function Suggestion({ editor, suggest, optimistic = false,  }: Su
       );
     } else {
       console.log('cancelled');
-    }
-  }
-  if (deleteFetcher.data) {
-    if (deleteFetcher.data?.remain === 0) {
-      editor?.commands.unsetSuggestion();
     }
   }
   function checkPendetaName(val: string) {

@@ -133,7 +133,7 @@ export default function Index() {
         
               {data.latestTexts.length > 0 &&
             data.latestTexts.map((text) => {
-              let pageWithPost = text.Page.length > 1;
+              let pageWithPost = text.Page.length === 1;
               if(text.Page.length < 1) return null    
               return (
                 <div key={text.id} className="flex w-full justify-between border-b dark:border-gray-700">

@@ -8,11 +8,14 @@ import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
 import { openSuggestionState, selectedPostThread, selectedTextOnEditor, showImageState } from '~/states';
 import { isSmallScreen } from '~/lib';
 import { scrollThreadIntoView } from '../lib';
+import Pagination from '~/component/UI/Pagination';
+import { TransformWrapper, TransformComponent, useControls } from 'react-zoom-pan-pinch';
 type EditorContainerProps = {
   editor: Editor;
   isSaving: boolean;
   order: number;
   content: string;
+  pageCount: number;
 };
 function EditorContainer({ editor, isSaving, order, content }: EditorContainerProps) {
   const data = useLoaderData();
@@ -20,7 +23,6 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
-
   useEffect(() => {
     let d = scrollThreadIntoView(thread.id, `p_${thread.id}`);
   }, [thread.id]);
@@ -57,27 +59,43 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
     }, 100);
   }, [content, editor]);
 
-  const showImage = useRecoilValue(showImageState);
-
+  const showImage = useRecoilValue(showImageState); 
+  const isPostAllowed = data.pageCount===1;
   return (
     <div className=" relative mb-4  shadow-sm">
-      <div className=" text-light z-10 flex  items-center  justify-between   px-2 py-4  text-3xl font-bold ">
-        <h3 className="textname flex gap-2 text-2xl">
-          <div className="flex items-center gap-2">
-            {data.text.name} {order>1 && order}{isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
-          </div>
-        </h3>
-      </div>
       <div className="flex w-full max-w-full justify-center">
         {showImage && (
-          <img
-            alt="Text Image"
-            src={'https://lopenling.org/uploads/default/original/1X/481de39a3a7e504767bbce6443099766a149d260.jpeg'}
-            className="object-contain p-2"
-            style={{ border: '1px solid gray' }}
-          />
+          <TransformWrapper>
+            {(utils) => (
+              <>
+                <Controls {...utils} />
+                <TransformComponent>
+                  <img
+                    alt="Text Image"
+                    src={
+                      'https://lopenling.org/uploads/default/original/1X/481de39a3a7e504767bbce6443099766a149d260.jpeg'
+                    }
+                    className="text-image object-contain"
+                    style={{ border: '1px solid gray' }}
+                  />
+                </TransformComponent>
+              </>
+            )}
+          </TransformWrapper>
         )}
       </div>
+      <div className=" text-light z-10 flex  items-center  justify-between   px-2 py-4  ">
+        <div className=" flex w-full items-center justify-between gap-2">
+          <div className="textname text-2xl  font-bold">
+            {data.text.name} {order > 1 && order}
+            {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
+          </div>
+          <div>
+            <Pagination pageCount={data.pageCount} />
+          </div>
+        </div>
+      </div>
+
       {!editor ? (
         <div className="flex h-[400px] w-full animate-pulse justify-center">
           <div className="mr-2 h-full flex-1 bg-gray-300 dark:bg-gray-700"></div>
@@ -133,22 +151,26 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
                     onClick={() => handleSuggestionClick()}
                     label="Suggestion"
                   />
-                  <Button
-                    title="comment"
-                    color="gray"
-                    className=" border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900  focus:z-10  focus:ring-2 focus:ring-blue-700 hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:focus:ring-blue-500 dark:hover:bg-gray-600 dark:hover:text-white "
-                    onClick={() => handleBubbleClick('comment')}
-                    label="Comment"
-                    type="button"
-                  />
-                  <Button
-                    type="button"
-                    title="question"
-                    color="gray"
-                    className="rounded-r-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10  focus:ring-2 hover:bg-gray-100   dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:focus:ring-blue-500 dark:hover:bg-gray-600 dark:hover:text-white "
-                    onClick={() => handleBubbleClick('question')}
-                    label="Question"
-                  />
+                  {isPostAllowed && (
+                    <>
+                      <Button
+                        title="comment"
+                        color="gray"
+                        className=" border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900  focus:z-10  focus:ring-2 focus:ring-blue-700 hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:focus:ring-blue-500 dark:hover:bg-gray-600 dark:hover:text-white "
+                        onClick={() => handleBubbleClick('comment')}
+                        label="Comment"
+                        type="button"
+                      />
+                      <Button
+                        type="button"
+                        title="question"
+                        color="gray"
+                        className="rounded-r-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10  focus:ring-2 hover:bg-gray-100   dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:focus:ring-blue-500 dark:hover:bg-gray-600 dark:hover:text-white "
+                        onClick={() => handleBubbleClick('question')}
+                        label="Question"
+                      />
+                    </>
+                  )}
                 </>
               )
             ) : data?.user?.admin === 'true' || data.text.userId == user?.id ? (
@@ -167,5 +189,20 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
     </div>
   );
 }
+
+
+const Controls = ({ zoomIn, zoomOut, resetTransform }) => (
+  <div className="absolute right-3 top-0 z-10 flex gap-3">
+    <button className="tool-image" onClick={() => zoomIn()}>
+     Zoom In +
+    </button>
+    <button className="tool-image" onClick={() => zoomOut()}>
+     Zoom Out -
+    </button>
+    <button className="tool-image" onClick={() => resetTransform()}>
+      reset
+    </button>
+  </div>
+);
 
 export default EditorContainer;

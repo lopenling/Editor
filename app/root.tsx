@@ -99,7 +99,7 @@ function App() {
         <LitteraProvider locales={['en_US', 'bo_TI']}>
           <AnimatePresence mode="wait" initial={false}>
             {routeChanged ? (
-              <div style={{ height: '100vh' }} className="flex w-full items-center justify-center">
+              <div style={{ height: '100dvh' }} className="flex w-full items-center justify-center">
                 <Loader />
               </div>
             ) : (
