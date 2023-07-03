@@ -227,8 +227,8 @@ const withImage=data.pageCount>1;
           style={{
             top: topDistance,
             width: showTable ? tableSidebarWidth : 50,
-            height:100
           }}
+          id="tableContent"
           className="sticky hidden md:flex"
         >
           <button
@@ -240,7 +240,7 @@ const withImage=data.pageCount>1;
           </button>
           <motion.div
             initial={{ x: '-100%' }}
-            animate={{ x: showTable? 0 :'-100%' }}
+            animate={{ x: showTable ? 0 : '-100%' }}
             transition={{ duration: 0.5 }}
             className="z-10 w-full overflow-hidden rounded-2xl"
           >

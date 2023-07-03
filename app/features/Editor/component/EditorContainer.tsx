@@ -24,7 +24,8 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
   useEffect(() => {
-    let d = scrollThreadIntoView(thread.id, `p_${thread.id}`);
+    let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
+    return () => { if (timer) clearTimeout(timer) }
   }, [thread.id]);
 
   const handleBubbleClick = (type: string) => {
@@ -54,9 +55,10 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
     editor.commands.setTextSelection(0);
   }
   useEffect(() => {
-    setTimeout(() => {
+      let timer= setTimeout(() => {
       editor?.commands.setContent(content);
     }, 100);
+    return ()=> clearTimeout(timer)
   }, [content, editor]);
 
   const showImage = useRecoilValue(showImageState); 

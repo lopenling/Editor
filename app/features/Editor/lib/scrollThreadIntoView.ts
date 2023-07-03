@@ -2,11 +2,12 @@ export function scrollThreadIntoView(thread: string, thread2: string) {
   if (!thread || !thread2) return null;
   let doc = document.getElementById(thread);
   let doc2 = document.getElementById(thread2);
+  let timer;
   if (doc && doc2)
-    setTimeout(() => {
+   timer= setTimeout(() => {
       scrollElementsIntoView(doc, doc2);
     },400)
-  return doc;
+  return timer;
 }
 
 function scrollElementsIntoView(element1: HTMLElement, element2: HTMLElement) {
