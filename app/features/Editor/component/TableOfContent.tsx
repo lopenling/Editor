@@ -22,7 +22,7 @@ const TableOfContents = ({ onClose,editor }:tableProps) => {
   }
   return (
     <div className="w-full bg-gray-100 p-4 z-50">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 gap-3 flex items-center justify-between">
         <h2 className="text-lg font-bold">Table of Contents</h2>
 
         <button onClick={handleClose} className="mr-2">

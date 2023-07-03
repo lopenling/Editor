@@ -1,23 +1,23 @@
 import { LoaderArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import Header from "~/component/Layout/Header";
 import {useState} from 'react'
 import { findAllTextWithDetail } from "~/model/text";
 import { Avatar } from "~/component/UI";
+import { getUserSession } from "~/services/session.server";
+import { TextType } from "~/model/type";
 export const loader = async ({ request }: LoaderArgs) => { 
-     let textList = await findAllTextWithDetail();
-    return {
-        textList,
-        status: 200,
-        headers: {
-        'Content-Type': 'application/json',
-        },
+  let textList = await findAllTextWithDetail();
+  let user = await getUserSession(request);
+  return {
+    textList,
+    isAdmin: user?.admin==='true'
     };
 }
 
 export default function List() {
-
-    const { textList } = useLoaderData();
+  const fetcher = useFetcher();
+    const { textList,isAdmin } = useLoaderData();
     const [currentPage, setCurrentPage] = useState(1);
     const textsPerPage = 20;
     const indexOfLastText = currentPage * textsPerPage;
@@ -26,7 +26,22 @@ export default function List() {
     const totalPages = Math.ceil(textList.length / textsPerPage);
     const goToPage = (page:number) => {
       setCurrentPage(page);
-    };
+  };
+  
+  const deleteText = (textId: number) => {
+    let i=confirm('Are you sure you want to delete this text?')
+   
+    if (i) {
+      fetcher.submit({ textId:textId.toString() }, {
+        method: 'DELETE',
+        action: `/api/text`,
+      })
+    } else {
+      console.log('cancelled')
+    }
+    
+  }
+
 
     return (
       <div>
@@ -46,20 +61,27 @@ export default function List() {
             </tr>
           </thead>
           <tbody>
-            {currentTexts.map((text) => (
+            {currentTexts.map((text: TextType) => (
               <tr key={text.id} className="w-full border-b dark:border-gray-700">
-                <th scope="col" className="flex gap-1 items-center px-4 py-4" style={{ fontFamily: 'monlam' }}>
+                <th scope="col" className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
                   <Avatar
-                    title={text.author.name}
-                    alt={text.author.name}
-                    img={text.author.avatarUrl}
+                    title={text?.author.name}
+                    alt={text?.author.name}
+                    img={text?.author.avatarUrl}
                     rounded={true}
                     size="sm"
                   />
                   <Link to={`/text/${text.id}/page/1/posts`}>{text.name}</Link>
                 </th>
-                <td scope="col" className="px-4 py-4">
-                  {text.Page.length}
+                <td scope="col" className=" px-4 py-4">
+                  <div className="flex gap-2">
+                    <div>{text.Page.length}</div>
+                    {isAdmin && (
+                      <div onClick={() => deleteText(text.id)} className="cursor-pointer">
+                        delete
+                      </div>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

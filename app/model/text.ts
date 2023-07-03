@@ -30,7 +30,10 @@ export async function findLatestText() {
         createdAt: 'desc',
       },
     });
-    return text.slice(0, 5);
+    return {
+      count: text.length,
+      textList: text.slice(0, 4),
+    };
   } catch (e) {
     throw new Error('fetching text error' + e.message);
   };
@@ -68,25 +71,11 @@ export async function findTextByPageId(pageId: string) {
   }
 }
 
-//create text
-export async function createText(name: string, content: string, id: string) {
-  try {
-    let res = await db.text.create({
-      data: {
-        name,
-        content,
-        userId: id,
-      },
-    });
-    return res;
-  } catch (e: any) {
-    throw new Error('create text error' + e.message);
-  }
-}
+
 //delete text
 export async function deleteText(id: string) {
   try {
-    let res = db.text.delete({
+    let res =await db.text.delete({
       where: {
         id: parseInt(id),
       },

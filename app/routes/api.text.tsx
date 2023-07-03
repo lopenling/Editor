@@ -1,6 +1,6 @@
 import { LoaderFunction, ActionFunction } from '@remix-run/server-runtime';
 import { json } from 'react-router';
-import { findTextByPageId } from '~/model/text';
+import { deleteText, findTextByPageId } from '~/model/text';
 
 import pusher from '~/services/pusher.server';
 import { DiffMatchPatch } from '~/lib';
@@ -32,23 +32,32 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 export let action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
-  const user = await getUserSession(request);
-  const patchText = data.get('patch') as string;
-  const pageId = data.get('pageId') as string;
-  const page =await getPageWithId(pageId);
-  const content = page?.content;
+  
 
-  const dmp = new DiffMatchPatch();
-  let patch = dmp.patch_fromText(patchText);
-  try {
-    const [text2, result] = dmp.patch_apply(patch, content);
-    if (result.every((r) => r === true)) {
-    const res = await updatePage(pageId, text2);
-    await trigerUpdate(user, pageId);
+
+  if (request.method === 'DELETE') { 
+    const textId = data.get('textId') as string;
+    const res = await deleteText(textId);
     return res;
-    }
+  }
+  if (request.method === 'POST') {
+    const dmp = new DiffMatchPatch();
+    const user = await getUserSession(request);
+    const patchText = data.get('patch') as string;
+    const pageId = data.get('pageId') as string;
+    const page =await getPageWithId(pageId);
+    const content = page?.content;
+    let patch = dmp.patch_fromText(patchText);
+    try {
+      const [text2, result] = dmp.patch_apply(patch, content);
+      if (result.every((r) => r === true)) {
+        const res = await updatePage(pageId, text2);
+        await trigerUpdate(user, pageId);
+        return res;
+      }
    
-  } catch (e) {
-    return false;
+    } catch (e) {
+      return false;
+    }
   }
 };

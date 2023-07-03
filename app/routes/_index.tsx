@@ -13,10 +13,11 @@ import { Skeleton } from '~/component/UI';
 import { HEADER_HEIGHT } from '~/constants';
 import { initializeTribute } from '~/lib';
 import { findLatestText } from '~/model/text';
+import { TextType } from '~/model/type';
 
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get('search')?.trim();
-  const latestTexts = await findLatestText();
+  const {textList,count} = await findLatestText();
   let headers = {
     'Cache-Control': 'max-age=15,stale-while-revalidate=60',
   };
@@ -37,7 +38,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       }
     );
   }
-  return { textList: null, search: null, latestTexts };
+  return { textList: null, search: null,latestTexts:{textList,count} };
 };
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -100,7 +101,7 @@ export default function Index() {
       <div style={{ height: HEADER_HEIGHT }} />
       <div className=" mx-auto max-w-2xl ">
         <div className="flex w-full flex-col items-center justify-center  px-3 pt-24 md:px-1.5  ">
-          <Form method="GET" className="w-full max-w-2xl mb-3">
+          <Form method="GET" className="mb-3 w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
               <TextInput
                 autoComplete="off"
@@ -130,15 +131,15 @@ export default function Index() {
               </Button>
             </div>
           </Form>
-        
-              {data.latestTexts.length > 0 &&
-            data.latestTexts.map((text) => {
+
+          {data?.latestTexts?.textList.length > 0 &&
+            data.latestTexts.textList.map((text: TextType) => {
               let pageWithPost = text.Page.length === 1;
-              if(text.Page.length < 1) return null    
+              if (text.Page.length < 1) return null;
               return (
                 <div key={text.id} className="flex w-full justify-between border-b dark:border-gray-700">
                   <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
-                    <Link to={`/text/${text.id}/page/1/${pageWithPost?"posts":''}`}>{text.name}</Link>
+                    <Link to={`/text/${text.id}/page/1/${pageWithPost ? 'posts' : ''}`}>{text.name}</Link>
                   </div>
                   <div className="px-4 py-4 font-light text-gray-300">
                     {text.Page.length} page{text.Page.length > 1 && 's'}
@@ -146,9 +147,9 @@ export default function Index() {
                 </div>
               );
             })}
-           
-          <Link to="/list" className="pt-5 text-sm font-light text-gray-800 underline transition-colors mb-3">
-            List all Pechas
+
+          <Link to="/list" className="mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors">
+            List all ({data?.latestTexts.count}) Pechas
           </Link>
         </div>
         <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">

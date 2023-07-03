@@ -221,17 +221,15 @@ const withImage=data.pageCount>1;
         }}
       ></div>
 
-      <div className="relative flex h-min justify-between gap-4 transition-all">
+      <div className="relative flex justify-between gap-4 transition-all">
         <div
           style={{
-            width: showTable ? tableSidebarWidth : 50,
             top: topDistance,
-            transition: 'all ease 0.4s',
+            width: showTable ? tableSidebarWidth : 50,
+            height:100
           }}
-          id="tableContent"
           className="sticky hidden md:flex"
         >
-          {' '}
           <button
             className="absolute rounded-full "
             style={{ top: 10, left: 10, background: '#eee', padding: 10, height: 40, width: 40 }}
@@ -240,17 +238,16 @@ const withImage=data.pageCount>1;
             <FaListUl size={22} className="cursor-pointer text-gray-500 " />
           </button>
           <motion.div
-            animate={{
-              x: showTable ? 0 : '-50px',
-            }}
-            transition={{ duration: 0.3 }}
+            initial={{ x: '-100%' }}
+            animate={{ x: showTable? 0 :'-100%' }}
+            transition={{ duration: 0.5 }}
             className="z-10 w-full overflow-hidden rounded-2xl"
           >
             <TableOfContents editor={editor} onClose={() => setShowTable(false)} />
           </motion.div>
         </div>
         <div
-          className={`${!withImage?"max-w-4xl":"w-full"} justify-self-center p-2`}
+          className={`${!withImage ? 'max-w-4xl' : 'w-full'} justify-self-center p-2`}
           style={{
             overflowX: 'hidden',
             scrollbarWidth: 'none',

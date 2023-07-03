@@ -88,12 +88,26 @@ export interface FilterType {
   solved: 'both' | 'solved';
 }
 
+
 export interface TextType {
   id: number;
   name: string;
-  author?: any;
-  content?: string;
-  Post?: PostType[];
-  Suggestion?: SuggestionType[];
-  userId?: string | null;
+  userId: string;
+  author: UserType;
+  Page: PageType[];
+  Suggestion: SuggestionType[];
+  Post: PostType[];
+  createdAt?: string | null;
+  updatedAt?: string | null;
+}
+
+export interface PageType {
+  id: string;
+  text: Text;
+  order: number;
+  content: string;
+  textId: number;
+  Post: PostType[];
+  Suggestion: SuggestionType[];
+  imageUrl: string;
 }

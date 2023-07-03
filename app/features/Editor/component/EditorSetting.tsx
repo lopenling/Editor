@@ -55,6 +55,7 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
               <input
                 checked={showImage}
                 id="imageToggle"
+                disabled={!data.page.imageUrl}
                 type="checkbox"
                 className="mb-2 mr-2 cursor-pointer"
                 onChange={toggleImage}
@@ -99,15 +100,16 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
             <li className="flex  items-center gap-2 px-4 py-2">
               <div className="flex gap-2">
                 {themes.map((theme) => {
-                  return <div
-                     key={theme.background}
-                    className="h-5 w-5 cursor-pointer rounded-full border-2 hover:border-gray-400"
-                    title={theme.background}
-                    style={{ backgroundColor: theme.background }}
-                    onClick={()=>changeTheme(theme)}
-                   ></div>;
+                  return (
+                    <div
+                      key={theme.background}
+                      className="h-5 w-5 cursor-pointer rounded-full border-2 hover:border-gray-400"
+                      title={theme.background}
+                      style={{ backgroundColor: theme.background }}
+                      onClick={() => changeTheme(theme)}
+                    ></div>
+                  );
                 })}
-               
               </div>
             </li>
             <li className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
