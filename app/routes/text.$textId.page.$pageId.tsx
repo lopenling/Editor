@@ -101,6 +101,7 @@ export default function Page() {
     postSelector({
       id: id,
     });
+    
   }
   const { onlineMembers } = usePusherPresence(
     `presence-text_${data?.page?.id}`,

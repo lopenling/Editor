@@ -17,6 +17,7 @@ export async function createPost(
   selectionContent:string
 ) {
   try {
+    console.log(creatorUser_id)
     const createPost = await db.post.create({
       data: {
         type: type,

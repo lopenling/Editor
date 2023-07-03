@@ -56,6 +56,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
       setSelectedThreadId({
         id,
       });
+     
     },
     [threadId]
   );
@@ -271,7 +272,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
                 </button>
 
                 <div
-                  className={`${ReplyCount < 1 && 'hidden'} flex items-center justify-start`}
+                  className={`${ReplyCount! < 1 && 'hidden'} flex items-center justify-start`}
                   onClick={() => setShowReplies((prev) => !prev)}
                 >
                   <svg
@@ -289,7 +290,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
                   </svg>
 
                   <button className={`text-sm font-medium lowercase leading-tight text-gray-500 dark:text-gray-100`}>
-                    <span className="ml-2">{showReplies ? 'hide' : ReplyCount}</span>
+                    <span className="ml-2">{showReplies ? 'hide' : ReplyCount ? ReplyCount:0}</span>
                   </button>
                 </div>
 
