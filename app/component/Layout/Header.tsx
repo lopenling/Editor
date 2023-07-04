@@ -18,7 +18,7 @@ import EditorSetting from '~/features/Editor/component/EditorSetting';
 import { FaUserAlt } from 'react-icons/fa';
 const Logo = () => (
   <img
-    src={'https://lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
+    src={'https://forum.lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
     alt="logo"
     className="block max-h-[37px] object-contain "
   />
