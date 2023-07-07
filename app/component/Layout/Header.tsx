@@ -9,7 +9,7 @@ import { Editor } from '@tiptap/react';
 import { SearchString } from '~/features/Editor';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { HEADER_HEIGHT } from '~/constants';
-import { Progress as ProgressBar, Avatar } from '~/component/UI';
+import { Avatar } from '~/component/UI';
 import { containTibetanletter, isSmallScreen } from '~/lib';
 import { UserType } from '~/model/type';
 import { FaSearch, FaSignOutAlt } from 'react-icons/fa';
@@ -146,7 +146,7 @@ const handleScroll = () => {
           <div className="flex w-full items-center justify-between gap-2 pt-3 md:p-0">
             {!user && (
               <div className="flex gap-2" id="user-menu-button">
-                <a href={'https://lopenling.org/signup'} id="signup" className="loginButton">
+                <a href={'https://forum.lopenling.org/signup'} id="signup" className="loginButton">
                   {translation.signup}
                 </a>
                 <loginFetcher.Form method="POST" id="login" action="/auth/login" className="mr-2 flex items-center">
@@ -296,7 +296,6 @@ const handleScroll = () => {
           </div>
         </div>
       </div>
-      <ProgressBar />
     </nav>
   );
 }

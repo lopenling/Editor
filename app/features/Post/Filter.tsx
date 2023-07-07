@@ -21,6 +21,7 @@ function Filter({}: FilterProps) {
 
   const handleTypeCheck = (e) => {
     let solved = e.target.value === 'comment' ? 'both' : filterData.solved;
+    console.log(solved,e.target.value)
     setFilterData((prevData) => ({
       ...prevData,
       type: e.target.value,
@@ -59,6 +60,7 @@ function Filter({}: FilterProps) {
       user: [],
       solved: 'both',
     });
+    setOpenFilter(false);
   }
   const translation = uselitteraTranlation();
 
@@ -82,25 +84,29 @@ function Filter({}: FilterProps) {
                 { value: 'all', label: 'All' },
                 { value: 'comment', label: 'Comments only' },
                 { value: 'question', label: 'Questions only' },
-              ].map(({ value, label }) => (
-                <div key={value} className="flex py-2">
-                  <input
-                    id={`${typeId}-${value}`}
-                    type="radio"
-                    onChange={handleTypeCheck}
-                    checked={filterData.type === value}
-                    value={value}
-                    name="filter-type"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                  />
-                  <label
-                    htmlFor={`${typeId}-${value}`}
-                    className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
-                  >
-                    {label}
-                  </label>
-                </div>
-              ))}
+              ].map(({ value, label }) => {
+                let isChecked = filterData.type == value;
+                return (
+                  <div key={value} className="flex py-2">
+                    <input
+                      id={`${typeId}-${value}`}
+                      type="radio"
+                      onChange={handleTypeCheck}
+                      defaultChecked={isChecked}
+                      value={value}
+                      name="filter-type"
+                      className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    />
+                    <label
+                      htmlFor={`${typeId}-${value}`}
+                      className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300"
+                    >
+                      {label}
+                    </label>
+                  </div>
+                );
+              }
+              )}
             </div>
           </div>
           {/* DateFilter */}
@@ -215,7 +221,7 @@ function Filter({}: FilterProps) {
                       type="radio"
                       value={value}
                       onChange={handleSolvedChange}
-                      checked={filterData.solved === value}
+                      defaultChecked={filterData.solved === value}
                       name="filter-solved"
                       className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                     />

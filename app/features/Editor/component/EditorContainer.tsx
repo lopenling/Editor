@@ -27,7 +27,7 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     return () => { if (timer) clearTimeout(timer) }
   }, [thread.id]);
-
+  
   const handleBubbleClick = (type: string) => {
     if (selection.start)
       setSelectionRange({
@@ -55,8 +55,9 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
     editor.commands.setTextSelection(0);
   }
   useEffect(() => {
-      let timer= setTimeout(() => {
-      editor?.commands.setContent(content);
+    let timer = setTimeout(() => {
+        let newContent=content.replace(/[\r\n]+/g, "<br/>")
+        editor?.commands.setContent(newContent);
     }, 100);
     return ()=> clearTimeout(timer)
   }, [content, editor]);
@@ -75,7 +76,7 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
                   <img
                     alt="Text Image"
                     src={
-                      'https://lopenling.org/uploads/default/original/1X/481de39a3a7e504767bbce6443099766a149d260.jpeg'
+                      'https://forum.lopenling.org/uploads/default/original/1X/481de39a3a7e504767bbce6443099766a149d260.jpeg'
                     }
                     className="text-image object-contain"
                     style={{ border: '1px solid gray' }}

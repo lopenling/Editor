@@ -3,7 +3,6 @@ import { GlobalLoading } from './globalLoader';
 import HighlightedString from './HighlightString';
 import Loader from './Loader';
 import MustLoggedIn from './MustLoggedIn';
-import Progress from './Progress';
 import Skeleton from './Skeleton';
 import Spinner from './Spinner';
 import TextArea from './TextArea';
@@ -16,7 +15,6 @@ export {
   HighlightedString,
   Loader,
   MustLoggedIn,
-  Progress,
   Skeleton,
   Spinner,
   TextArea,

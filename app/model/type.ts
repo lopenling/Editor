@@ -69,6 +69,7 @@ export interface PostType {
   likedBy: UserType[];
   replyCount?: number;
   isSolved: boolean;
+  selection?: string;
 }
 
 export interface ReplyType {
