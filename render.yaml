@@ -3,6 +3,7 @@ services:
     name: lopenling-editor
     env: node
     plan: free
+    Region: singapore
     # Update the following line with your Strapi GitHub repo
     repo: https://github.com/OpenPecha/Lopenling-App
     branch: main
