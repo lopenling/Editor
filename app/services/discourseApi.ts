@@ -5,7 +5,7 @@ class DiscourseApi {
   apiKey: string;
   username: string;
   category: string | undefined;
-  categoryName: string;
+  categoryName: string | undefined;
   origin: string | undefined;
   constructor(username: string = '') {
     if (!process.env.DISCOURSE_API_KEY || !process.env.DISCOURSE_SITE) throw new Error('asign api and url  in env');
@@ -14,7 +14,7 @@ class DiscourseApi {
     this.apiKey = process.env.DISCOURSE_API_KEY;
     this.username = username;
     this.category = process.env.DISCOURSE_QA_CATEGORY_ID;
-    this.categoryName = 'test';
+    this.categoryName = process.env.DISCOURSE_QA_CATEGORY_NAME;
     this.origin = process.env.ORIGIN_LOCATION;
   }
 
@@ -89,12 +89,14 @@ class DiscourseApi {
   ) {
     let auth_headers = this.authHeader();
     let url = `${this.origin}/text/${textId}/page/${order}/posts?thread=${threadId}`;
-    let bodyContentWithLink = addLinktoQuestion(bodyContent, url);
+    let TopicWithLink = addLinktoQuestion(topic_name, url);
     let post_text = `
-<p>${bodyContentWithLink}</p>
+<p>
+<blockquote>${TopicWithLink}</blockquote>
+${bodyContent}</p>
 `;
     if (audioUrl && audioUrl !== '') {
-      post_text = `<p>${bodyContentWithLink}</p><audio controls><source src="${audioUrl}" type="audio/webm"></audio>`;
+      post_text += `<audio controls><source src="${audioUrl}" type="audio/webm"></audio>`;
     }
 
     let new_Topic_data = {
@@ -250,7 +252,7 @@ export async function createThread(
   return topic;
 }
 
-function addLinktoQuestion(question: string, url: string) {
+function addLinktoQuestion(question: string | FormDataEntryValue, url: string) {
   return `<a href="${url}" target='_blank'>${question}</a>`;
 }
 export async function deleteDiscourseTopic(userName: string, topicId: number) {
