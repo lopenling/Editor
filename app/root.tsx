@@ -76,7 +76,7 @@ export function ErrorBoundary() {
       </div>
     );
   } else {
-    return <h1>Unknown  Error</h1>;
+    return <h1>Unknown Error</h1>;
   }
 }
 
