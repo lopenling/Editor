@@ -9,8 +9,10 @@ CREATE TABLE "Post" (
     "audioUrl" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "creatorUser_id" TEXT NOT NULL,
-    "textId" INTEGER NOT NULL,
+    "pageId" TEXT NOT NULL,
     "threadId" TEXT NOT NULL,
+    "selection" TEXT,
+    "textId" INTEGER NOT NULL,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
@@ -28,23 +30,37 @@ CREATE TABLE "Reply" (
 CREATE TABLE "Text" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "content" TEXT NOT NULL,
     "userId" TEXT,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "Text_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "Page" (
+    "id" TEXT NOT NULL,
+    "order" INTEGER NOT NULL,
+    "content" TEXT NOT NULL,
+    "textId" INTEGER NOT NULL,
+    "imageUrl" TEXT,
+
+    CONSTRAINT "Page_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Suggestion" (
     "id" TEXT NOT NULL,
-    "textId" INTEGER NOT NULL,
-    "oldValue" TEXT NOT NULL,
+    "pageId" TEXT NOT NULL,
+    "oldValue" TEXT,
     "newValue" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "threadId" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
     "audioUrl" TEXT,
+    "version" TEXT,
+    "textId" INTEGER NOT NULL,
 
     CONSTRAINT "Suggestion_pkey" PRIMARY KEY ("id")
 );
@@ -112,6 +128,9 @@ CREATE UNIQUE INDEX "Reply_id_key" ON "Reply"("id");
 CREATE UNIQUE INDEX "Text_id_key" ON "Text"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Page_id_key" ON "Page"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Suggestion_id_key" ON "Suggestion"("id");
 
 -- CreateIndex
@@ -151,6 +170,9 @@ CREATE INDEX "_likedSuggestion_B_index" ON "_likedSuggestion"("B");
 ALTER TABLE "Post" ADD CONSTRAINT "Post_creatorUser_id_fkey" FOREIGN KEY ("creatorUser_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
+ALTER TABLE "Post" ADD CONSTRAINT "Post_pageId_fkey" FOREIGN KEY ("pageId") REFERENCES "Page"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_textId_fkey" FOREIGN KEY ("textId") REFERENCES "Text"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
@@ -160,7 +182,13 @@ ALTER TABLE "Reply" ADD CONSTRAINT "Reply_post_id_fkey" FOREIGN KEY ("post_id") 
 ALTER TABLE "Text" ADD CONSTRAINT "Text_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Suggestion" ADD CONSTRAINT "Suggestion_textId_fkey" FOREIGN KEY ("textId") REFERENCES "Text"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Page" ADD CONSTRAINT "Page_textId_fkey" FOREIGN KEY ("textId") REFERENCES "Text"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "Suggestion" ADD CONSTRAINT "Suggestion_pageId_fkey" FOREIGN KEY ("pageId") REFERENCES "Page"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "Suggestion" ADD CONSTRAINT "Suggestion_textId_fkey" FOREIGN KEY ("textId") REFERENCES "Text"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "Suggestion" ADD CONSTRAINT "Suggestion_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -172,7 +200,7 @@ ALTER TABLE "SuggestionComment" ADD CONSTRAINT "SuggestionComment_suggestionId_f
 ALTER TABLE "SuggestionComment" ADD CONSTRAINT "SuggestionComment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_preferenceId_fkey" FOREIGN KEY ("preferenceId") REFERENCES "UserPreference"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_preferenceId_fkey" FOREIGN KEY ("preferenceId") REFERENCES "UserPreference"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "_likedPost" ADD CONSTRAINT "_likedPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
