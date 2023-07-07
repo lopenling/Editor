@@ -8,7 +8,7 @@ import { textInfo } from '~/states';
 import { Editor } from '@tiptap/react';
 import { SearchString } from '~/features/Editor';
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import { HEADER_HEIGHT } from '~/constants';
+import { ForumLink, HEADER_HEIGHT } from '~/constants';
 import { Avatar } from '~/component/UI';
 import { containTibetanletter, isSmallScreen } from '~/lib';
 import { UserType } from '~/model/type';
@@ -18,7 +18,7 @@ import EditorSetting from '~/features/Editor/component/EditorSetting';
 import { FaUserAlt } from 'react-icons/fa';
 const Logo = () => (
   <img
-    src={'https://forum.lopenling.org/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
+    src={ForumLink+'/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
     alt="logo"
     className="block max-h-[37px] object-contain "
   />
@@ -146,7 +146,7 @@ const handleScroll = () => {
           <div className="flex w-full items-center justify-between gap-2 pt-3 md:p-0">
             {!user && (
               <div className="flex gap-2" id="user-menu-button">
-                <a href={'https://forum.lopenling.org/signup'} id="signup" className="loginButton">
+                <a href={ForumLink+'/signup'} id="signup" className="loginButton">
                   {translation.signup}
                 </a>
                 <loginFetcher.Form method="POST" id="login" action="/auth/login" className="mr-2 flex items-center">
@@ -197,7 +197,7 @@ const handleScroll = () => {
                       <span className="block truncate  text-sm text-gray-500 dark:text-gray-400">
                         <a
                           target={'_self'}
-                          href={`https://lopenling.org/u/${user?.username}/summary`}
+                          href={ForumLink+`/u/${user?.username}/summary`}
                           className="block truncate text-sm font-medium"
                         >
                           {user?.email}
@@ -246,7 +246,7 @@ const handleScroll = () => {
                       <div>
                         <a
                           target={'_blank'}
-                          href={`https://lopenling.org/u/${user?.username}/preferences/account`}
+                          href={ForumLink+`/u/${user?.username}/preferences/account`}
                           className=" flex gap-2 truncate px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           <svg

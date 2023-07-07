@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { AudioPlayer } from '../Media';
 import { useRecoilValue } from 'recoil';
 import { UserType } from '~/model/type';
+import { ForumLink } from '~/constants';
 type ReplyPropType = {
   reply: any;
   isCreator: boolean;
@@ -42,7 +43,7 @@ function Reply({ reply, isCreator, postId, type, showDivider }: ReplyPropType) {
       let text=textElement[1].textContent
 
     if (sourceURL.startsWith('/') ) {
-      sourceURL = 'https://lopenling.org' + sourceURL;
+      sourceURL = ForumLink + sourceURL;
     }
     return {
       source: sourceURL,
@@ -50,7 +51,7 @@ function Reply({ reply, isCreator, postId, type, showDivider }: ReplyPropType) {
     };
   };
 
-  let avatar_img = ('https://lopenling.org' + reply?.avatar_template).replace('{size}', '30');
+  let avatar_img = (ForumLink + reply?.avatar_template).replace('{size}', '30');
 
   function handleAproved() {
     approvedFetcher.submit(

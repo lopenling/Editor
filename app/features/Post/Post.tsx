@@ -13,6 +13,7 @@ import copyToClipboard from '~/lib/copyToClipboard';
 import { FormWithAudio } from './component/FormWithAudio';
 import { timeAgo, useFetcherWithPromise } from '~/lib';
 import { useDetectClickOutside } from 'react-detect-click-outside';
+import { ForumLink } from '~/constants';
 type PostPropType = {
   isOptimistic: boolean;
   post: PostType;
@@ -203,7 +204,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
                 </li>
                 <li>
                   <a
-                    href={`https://forum.lopenling.org/t/${topicId}`}
+                    href={ForumLink+`/t/${topicId}`}
                     target="_blank"
                     className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >

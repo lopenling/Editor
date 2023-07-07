@@ -1,6 +1,7 @@
 import { ActionFunction, LoaderFunction, redirect } from '@remix-run/server-runtime';
 import { commitSession, destroyUserSession, getSession, getUserSession, login } from '~/services/session.server';
 import { createUserInDB, isUserPresent } from '~/model/user';
+import { ForumLink } from '~/constants';
 export let loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get('Cookie'));
 
@@ -25,7 +26,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         let url = process.env.DISCOURSE_SITE + `/u/${username}.json`;
         let result = await fetch(url);
         let res = await result.json();
-        avatarUrl = 'https://lopenling.org' + res?.user?.avatar_template.replace('{size}', '30');
+        avatarUrl = ForumLink + res?.user?.avatar_template.replace('{size}', '30');
       }
 
       if (!email || !name || !username) {

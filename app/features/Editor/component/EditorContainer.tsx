@@ -4,7 +4,7 @@ import { useEffect} from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 // import EditorSettings from "./EditorSettings";
 import { Button } from '~/component/UI';
-import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
+import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE, ForumLink } from '~/constants';
 import { openSuggestionState, selectedPostThread, selectedTextOnEditor, showImageState } from '~/states';
 import { isSmallScreen } from '~/lib';
 import { scrollThreadIntoView } from '../lib';
@@ -76,7 +76,7 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
                   <img
                     alt="Text Image"
                     src={
-                      'https://forum.lopenling.org/uploads/default/original/1X/481de39a3a7e504767bbce6443099766a149d260.jpeg'
+                      ForumLink+'/uploads/default/original/1X/481de39a3a7e504767bbce6443099766a149d260.jpeg'
                     }
                     className="text-image object-contain"
                     style={{ border: '1px solid gray' }}
