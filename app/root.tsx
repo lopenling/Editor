@@ -22,6 +22,7 @@ import { AnimatePresence } from 'framer-motion';
 import { getUser } from './model/user';
 import { Loader, GlobalLoading } from './component/UI';
 import notificationStyle from 'react-notifications-component/dist/theme.css';
+import client, { getSchema } from './services/terminusDP';
 
 export function meta() {
   return [
@@ -41,6 +42,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   let userSession = await getUserSession(request);
   if (!userSession) return { user: null };
   let user = await getUser(userSession.username);
+  
+  // console.log(result_patch)
   return { user };
 };
 export function links() {
@@ -86,7 +89,6 @@ function App() {
   let routeChanged =
     navigation.state === 'loading' &&
     navigation.location?.pathname.includes('/page') 
-
   return (
     <html className={data.user?.preference?.theme || 'light'}>
       <head>

@@ -32,7 +32,7 @@ export async function findLatestText() {
     });
     return {
       count: text.length,
-      textList: text.slice(0, 4),
+      latestTexts: text.slice(0, 4),
     };
   } catch (e) {
     throw new Error('fetching text error' + e.message);

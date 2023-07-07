@@ -76,7 +76,10 @@ export async function searchPages(search_term = '') {
         });
       }
     }
-    return groupedData;
+    return Object.values(groupedData).map((value) => ({
+      results: value.results,
+      textId: value.textId,
+    }));
   } catch (e: any) {
     throw new Error('error finding text with name' + e.message);
   }

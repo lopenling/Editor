@@ -1,44 +1,36 @@
 import { Link, Form, useSearchParams } from '@remix-run/react';
-import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, V2_MetaArgs, MetaFunction } from '@remix-run/node';
 import { Button, Card, TextInput } from 'flowbite-react';
 import FooterContainer from '~/component/Layout/Footer';
-import { json } from '@remix-run/node';
+import { defer } from '@remix-run/node';
 import { searchPages } from '~/model/page';
 import { useLocation, useLoaderData, useNavigation } from '@remix-run/react';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import { motion } from 'framer-motion';
 import Header from '~/component/Layout/Header';
-import { useState, useEffect ,useRef} from 'react';
+import { useState, useEffect ,ChangeEvent} from 'react';
 import { Skeleton } from '~/component/UI';
 import { HEADER_HEIGHT } from '~/constants';
 import { initializeTribute } from '~/lib';
 import { findLatestText } from '~/model/text';
 import { TextType } from '~/model/type';
 
+
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get('search')?.trim();
-  const {textList,count} = await findLatestText();
+  const {latestTexts,count} = await findLatestText();
   let headers = {
     'Cache-Control': 'max-age=15,stale-while-revalidate=60',
   };
-  if (searchText) {
-    let obj = await searchPages(searchText);
-    let textList = Object.keys(obj).map((key) => ({
-      name: obj[key].name,
-      results: obj[key].results,
-      order: obj[key].order,
-      total: obj[key].total,
-      extra: obj[key].extra,
-      textId: obj[key].textId,
-    }));
-    return json(
-      { textList, search: searchText,latestTexts:[]},
-      {
-        headers,
-      }
-    );
-  }
-  return { textList: null, search: null,latestTexts:{textList,count} };
+  if (!searchText) return { textList: null, search: null, latestTexts: {list:latestTexts, count } };
+
+  return defer(
+    { textList: await searchPages(searchText), search: searchText, latestTexts: null },
+    {
+      headers,
+    }
+  );
+  
 };
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -47,7 +39,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   };
 }
 
-export function meta({ data }) {
+export function meta({ data }: V2_MetaArgs) {
   let title = data?.search ? `${data?.search} - Lopenling Search` : 'Lopenling App';
   return [
     {
@@ -72,11 +64,11 @@ export default function Index() {
   const [searchInput, setSearchInput] = useState('');
   
   useEffect(() => {
-    let tribute = initializeTribute('inputText');
+  initializeTribute('inputText');
    },[])
-    const handleInputChange = (event) => {
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
       const inputValue = event.target.value;
-      setSearchInput(inputValue);      
+      setSearchInput(inputValue);
     };
   useEffect(() => {
     let p = params.get('search');
@@ -132,25 +124,27 @@ export default function Index() {
             </div>
           </Form>
 
-          {data?.latestTexts?.textList.length > 0 &&
-            data.latestTexts.textList.map((text: TextType) => {
-              let pageWithPost = text.Page.length === 1;
-              if (text.Page.length < 1) return null;
-              return (
-                <div key={text.id} className="flex w-full justify-between border-b dark:border-gray-700">
-                  <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
-                    <Link to={`/text/${text.id}/page/1/${pageWithPost ? 'posts' : ''}`}>{text.name}</Link>
+          {data?.latestTexts && (
+            <>
+              {data.latestTexts.list.map((text: TextType) => {
+                let pageWithPost = text.Page.length === 1;
+                if (text.Page.length < 1) return null;
+                return (
+                  <div key={text.id} className="flex w-full justify-between border-b dark:border-gray-700">
+                    <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
+                      <Link to={`/text/${text.id}/page/1/${pageWithPost ? 'posts' : ''}`}>{text.name}</Link>
+                    </div>
+                    <div className="px-4 py-4 font-light text-gray-300">
+                      {text.Page.length} page{text.Page.length > 1 && 's'}
+                    </div>
                   </div>
-                  <div className="px-4 py-4 font-light text-gray-300">
-                    {text.Page.length} page{text.Page.length > 1 && 's'}
-                  </div>
-                </div>
-              );
-            })}
-
-          <Link to="/list" className="mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors">
-            List all ({data?.latestTexts.count}) Pechas
-          </Link>
+                );
+              })}
+              <Link to="/list" className="mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors">
+                List all ({data?.latestTexts?.count}) Pechas
+              </Link>
+            </>
+          )}
         </div>
         <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">
           {isLoading && <Skeleton height={125} number={3} />}
@@ -173,11 +167,7 @@ export default function Index() {
                 (
                   list: {
                     textId: number;
-                    extra: boolean;
-                    total: number;
-                    results: [];
-                    name: string;
-                    order: number;
+                    results: any;
                   },
                   index: number
                 ) => {
