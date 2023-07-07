@@ -227,14 +227,16 @@ select:focus {
 /* react-transistion-group */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset:0;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding-top:40px;
+}
+@media (min-width: 767px) {
+  .modal-overlay {
+    pointer-events: none;
+  }
 }
 .modal-content {
   background-color: #fff;

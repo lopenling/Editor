@@ -319,7 +319,7 @@ const withImage=data.pageCount>1;
         shouldCloseOnOverlayClick={false}
         ariaHideApp={false}
         className="modal-content pointer-events: auto; z-50 w-full overflow-y-scroll md:hidden"
-        overlayClassName="modal-overlay hidden "
+        overlayClassName="modal-overlay"
       >
         {suggestionSelected?.id || openSuggestion ? (
           <div className="absolute bottom-0 w-full bg-white " style={{ maxHeight: '50dvh', overflow: 'scroll' }}>
