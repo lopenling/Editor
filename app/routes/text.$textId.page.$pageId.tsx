@@ -316,8 +316,9 @@ const withImage=data.pageCount>1;
           setOpenSuggestion(false);
           suggestionSelector({ id: '' });
         }}
+        shouldCloseOnOverlayClick={false}
         ariaHideApp={false}
-        className="modal-content w-full md:hidden"
+        className="modal-content pointer-events: auto; z-50 w-full overflow-y-scroll md:hidden"
         overlayClassName="modal-overlay hidden "
       >
         {suggestionSelected?.id || openSuggestion ? (
