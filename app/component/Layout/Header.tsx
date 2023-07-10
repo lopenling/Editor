@@ -15,7 +15,8 @@ import { UserType } from '~/model/type';
 import { FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import { AiOutlineTranslation } from 'react-icons/ai';
 import EditorSetting from '~/features/Editor/component/EditorSetting';
-import { FaUserAlt } from 'react-icons/fa';
+import { FaUserAlt, FaBars } from 'react-icons/fa';
+
 const Logo = () => (
   <img
     src={ForumLink+'/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
@@ -122,19 +123,7 @@ const handleScroll = () => {
           aria-expanded="false"
         >
           <span className="sr-only">Open main menu</span>
-          <svg
-            className="h-6 w-6"
-            aria-hidden="true"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clipRule="evenodd"
-            ></path>
-          </svg>
+          <FaBars color="inherit" className="fill-gray-400 hover:text-gray-600 " size={24} />
         </button>
         <div
           ref={headermenuref}
@@ -145,7 +134,7 @@ const handleScroll = () => {
           <div className="flex w-full items-center justify-between gap-2 pt-3 md:p-0">
             {!user && (
               <div className="flex gap-2" id="user-menu-button">
-                <a href={ForumLink+'/signup'} id="signup" className="loginButton">
+                <a href={ForumLink + '/signup'} id="signup" className="loginButton">
                   {translation.signup}
                 </a>
                 <loginFetcher.Form method="POST" id="login" action="/auth/login" className="mr-2 flex items-center">
@@ -158,7 +147,7 @@ const handleScroll = () => {
               </div>
             )}
             {editor && (
-              <>
+              <div className="flex gap-3">
                 <div className="mr-2 mt-2 " ref={searchRef}>
                   <button onClick={() => setShowSearch((p) => !p)}>
                     <FaSearch className="text-gray-400 hover:text-gray-600 " size={24} />
@@ -170,7 +159,7 @@ const handleScroll = () => {
                   )}
                 </div>
                 <EditorSetting editor={editor} />
-              </>
+              </div>
             )}
 
             {user && (
@@ -182,7 +171,7 @@ const handleScroll = () => {
                   onClick={() => setShowUserMenu((prev) => !prev)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  <Avatar alt={user.name} img={user.avatarUrl} rounded={true} title={user?.name} size='sm' />
+                  <Avatar alt={user.name} img={user.avatarUrl} rounded={true} title={user?.name} size="sm" />
                 </button>
                 {showUserMenu && (
                   <div
@@ -196,7 +185,7 @@ const handleScroll = () => {
                       <span className="block truncate  text-sm text-gray-500 dark:text-gray-400">
                         <a
                           target={'_self'}
-                          href={ForumLink+`/u/${user?.username}/summary`}
+                          href={ForumLink + `/u/${user?.username}/summary`}
                           className="block truncate text-sm font-medium"
                         >
                           {user?.email}
@@ -245,7 +234,7 @@ const handleScroll = () => {
                       <div>
                         <a
                           target={'_blank'}
-                          href={ForumLink+`/u/${user?.username}/preferences/account`}
+                          href={ForumLink + `/u/${user?.username}/preferences/account`}
                           className=" flex gap-2 truncate px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           <svg
