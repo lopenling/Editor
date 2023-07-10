@@ -27,8 +27,13 @@ class DiscourseApi {
   }
   async fetchCategoryData() {
     let url = `${this.DiscourseUrl}/c/${this.categoryName}/${this.category}.json`;
-    const res = await fetch(url);
-    return await res.json();
+    try {
+      const res = await fetch(url);
+      return await res.json();
+    }
+    catch (e) {
+      throw new Error('discource category Api not working, check if the disource forum works properly')
+    }
   }
   async fetchCategoryList(id: string | undefined) {
     const res = await fetch(`${this.DiscourseUrl}/categories.json?include_subcategories=true`);

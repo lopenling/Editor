@@ -4,7 +4,7 @@ import { Await, useOutletContext, useSearchParams } from '@remix-run/react';
 import Posts from '~/features/Post/Posts';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { openFilterState, selectedPostThread as selectedPostThreadState, selectedTextOnEditor, showLatest, showPostContent } from '~/states';
+import { openFilterState, selectedPostThread as selectedPostThreadState, selectedTextOnEditor, showLatest, showSidebar } from '~/states';
 import { findPostByTextIdAndPage } from '~/model/post';
 import { LoaderFunction, defer, redirect } from '@remix-run/node';
 import { Editor } from '@tiptap/react';
@@ -18,7 +18,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const order = params.pageId as string;
   const threadId = new URL(request.url).searchParams.get('thread') ?? '';
   let page = await getPage(parseInt(textId), parseInt(order));
-
   const posts = await findPostByTextIdAndPage(parseInt(textId), page?.id);
   return defer({ text: { id: textId }, posts, threadId, page });
 };
@@ -58,12 +57,13 @@ export default function PostContainer() {
     }
   }, []);
   const setOpenFilter = useSetRecoilState(openFilterState);
-  const setOpenContent = useSetRecoilState(showPostContent);
+  const setOpenContent = useSetRecoilState(showSidebar);
 
   const translation = uselitteraTranlation();
   const handleClose = () => { 
     setOpenContent(false);
   }
+  if (data.posts?.error) return <div className='p-3 mt-2 text-red-700'>Error:{data.posts.error}</div>
   return (
     <>
       <PostForm />

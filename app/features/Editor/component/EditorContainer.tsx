@@ -1,16 +1,17 @@
-import { useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { BubbleMenu, Editor, EditorContent } from '@tiptap/react';
-import { useEffect} from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useEffect,useCallback} from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 // import EditorSettings from "./EditorSettings";
 import { Button } from '~/component/UI';
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE, ForumLink } from '~/constants';
-import { openSuggestionState, selectedPostThread, selectedTextOnEditor, showImageState } from '~/states';
-import { isSmallScreen } from '~/lib';
+import { openSuggestionState, selectedPostThread, selectedTextOnEditor, showImageState, textInfo } from '~/states';
+import { DiffMatchPatch, isSmallScreen } from '~/lib';
 import { scrollThreadIntoView } from '../lib';
 import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent, useControls } from 'react-zoom-pan-pinch';
 type EditorContainerProps = {
+  pageId: string;
   editor: Editor;
   isSaving: boolean;
   order: number;
@@ -18,17 +19,51 @@ type EditorContainerProps = {
   pageCount: number;
   imageUrl: string;
 };
-function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorContainerProps) {
+function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
+  const saveTextFetcher = useFetcher();
+
+  const getQuery = (newContent: string) => {
+    let oldContent = content;
+    const dmp = new DiffMatchPatch();
+    if (oldContent !== newContent) {
+      const changes = dmp.diff_main(oldContent, newContent);
+      const patch = dmp.patch_make(changes);
+      let query = dmp.patch_toText(patch);
+      return query;
+    }
+    return null;
+  };
+  const saveData = async (patch: string) => {
+    const formData = new FormData();
+    formData.append('textId', data.text?.id);
+    formData.append('pageId', pageId);
+    formData.append('patch', patch);
+    saveTextFetcher.submit(formData, {
+      method: 'POST',
+      action: '/api/text',
+    });
+  };
+
+  useEffect(() => {
+    editor.on('update', async ({ editor }) => {
+      let newContent = editor.getHTML();
+      let query = getQuery(newContent);
+      if (query && newContent.length > 100 && user) saveData(query);
+    });
+  }, []);
+
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
-    return () => { if (timer) clearTimeout(timer) }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [thread.id]);
-  
+
   const handleBubbleClick = (type: string) => {
     if (selection.start)
       setSelectionRange({
@@ -57,19 +92,15 @@ function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorCo
   }
   useEffect(() => {
     let timer = setTimeout(() => {
-        let newContent=content.replace(/[\r\n]+/g, "<br/>")
-        editor?.commands.setContent(newContent);
+      let newContent = content.replace(/[\r\n]+/g, '<br/>');
+      editor?.commands.setContent(newContent);
     }, 100);
-    return ()=> clearTimeout(timer)
+    return () => clearTimeout(timer);
   }, [content, editor]);
 
-  const showImage = useRecoilValue(showImageState); 
+  const showImage = useRecoilValue(showImageState);
   const isPostAllowed = data.pageCount === 1;
-  
 
-  const handleQrClick = () => {
-    navigator.clipboard.writeText(window.location.href);
-  }
 
   return (
     <div className=" relative mb-4  shadow-sm">
@@ -97,7 +128,6 @@ function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorCo
           <div className="textname flex items-center gap-2  text-2xl font-bold">
             {data.text.name} {order > 1 && order}
             {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
-            
           </div>
           <div>
             <Pagination pageCount={data.pageCount} />
@@ -156,7 +186,7 @@ function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorCo
                     color="gray"
                     className={`${
                       openSuggestion ? 'bg-green-400 text-white' : 'bg-white '
-                    } rounded-l-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10  focus:ring-2 focus:ring-blue-700 hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:focus:ring-blue-500 dark:hover:bg-gray-600 dark:hover:text-white `}
+                    } rounded-l-lg ${!isPostAllowed && 'rounded-r-lg'} border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10    hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white  dark:hover:bg-gray-600 dark:hover:text-white `}
                     onClick={() => handleSuggestionClick()}
                     label="Suggestion"
                   />
@@ -165,7 +195,7 @@ function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorCo
                       <Button
                         title="comment"
                         color="gray"
-                        className=" border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900  focus:z-10  focus:ring-2 focus:ring-blue-700 hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:focus:ring-blue-500 dark:hover:bg-gray-600 dark:hover:text-white "
+                        className=" border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900  focus:z-10   hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:hover:bg-gray-600 dark:hover:text-white "
                         onClick={() => handleBubbleClick('comment')}
                         label="Comment"
                         type="button"
@@ -174,7 +204,7 @@ function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorCo
                         type="button"
                         title="question"
                         color="gray"
-                        className="rounded-r-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10  focus:ring-2 hover:bg-gray-100   dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white dark:focus:ring-blue-500 dark:hover:bg-gray-600 dark:hover:text-white "
+                        className="rounded-r-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10  focus:ring-2 hover:bg-gray-100   dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white  dark:hover:bg-gray-600 dark:hover:text-white "
                         onClick={() => handleBubbleClick('question')}
                         label="Question"
                       />
@@ -182,7 +212,7 @@ function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorCo
                   )}
                 </>
               )
-            ) : data?.user?.admin === 'true' || data.text.userId == user?.id ? (
+            ) : user.admin === 'true' || data.text.userId == user?.id ? (
               <Button
                 title="delete"
                 type="button"

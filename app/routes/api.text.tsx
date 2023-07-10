@@ -33,8 +33,6 @@ export let loader: LoaderFunction = async ({ request }) => {
 export let action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
   
-
-
   if (request.method === 'DELETE') { 
     const textId = data.get('textId') as string;
     const res = await deleteText(textId);
@@ -45,7 +43,7 @@ export let action: ActionFunction = async ({ request }) => {
     const user = await getUserSession(request);
     const patchText = data.get('patch') as string;
     const pageId = data.get('pageId') as string;
-    const page =await getPageWithId(pageId);
+    const page = await getPageWithId(pageId);
     const content = page?.content;
     let patch = dmp.patch_fromText(patchText);
     try {
@@ -55,7 +53,7 @@ export let action: ActionFunction = async ({ request }) => {
         await trigerUpdate(user, pageId);
         return res;
       }
-   
+      return true;
     } catch (e) {
       return false;
     }

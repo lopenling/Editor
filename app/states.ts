@@ -17,9 +17,9 @@ export const showTableContent = atom({
   default: false,
   key: 'tableOfContent',
 });
-export const showPostContent = atom({
+export const showSidebar = atom({
   default: false,
-  key: 'postContent',
+  key: 'sidebar',
 });
 //textName
 

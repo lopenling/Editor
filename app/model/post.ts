@@ -48,7 +48,7 @@ export async function findPostByUser(userId) {
         creatorUser: { id: userId },
       },
       include: {
-        Reply: true,
+        reply: true,
       },
     });
     return posts;
@@ -63,7 +63,7 @@ export async function findPostByTopicId(TopicId: number) {
         topic_id: TopicId,
       },
       include: {
-        Reply: true,
+        reply: true,
       },
     });
     return posts;
@@ -72,9 +72,9 @@ export async function findPostByTopicId(TopicId: number) {
   }
 }
 export async function findPostByTextIdAndPage(textId: number, pageId: string) {
-  const Categories = await fetchCategoryData();
-  const topicList = Categories.topic_list.topics;
   try {
+    const Categories = await fetchCategoryData();
+    const topicList = Categories.topic_list.topics;
     let posts = await db.post.findMany({
       include: {
         creatorUser: true,
@@ -100,7 +100,7 @@ export async function findPostByTextIdAndPage(textId: number, pageId: string) {
     );
     return postWithReply.filter(Boolean);
   } catch (e) {
-    console.log(e.message);
+    return { error: e.message };
   }
 }
 

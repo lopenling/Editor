@@ -10,6 +10,7 @@ import {
   useNavigation,
   isRouteErrorResponse,
   useRouteError,
+  useFetchers
 } from '@remix-run/react';
 import ErrorPage from './component/Layout/ErrorPage';
 import { getUserSession } from './services/session.server';
@@ -22,8 +23,9 @@ import { AnimatePresence } from 'framer-motion';
 import { getUser } from './model/user';
 import { Loader, GlobalLoading } from './component/UI';
 import notificationStyle from 'react-notifications-component/dist/theme.css';
-import client, { getSchema } from './services/terminusDP';
-
+import nProgressStyles from 'nprogress/nprogress.css';
+import { useEffect,useMemo } from 'react'
+import NProgress from 'nprogress';
 export function meta() {
   return [
     { title: 'Lopenling App' },
@@ -57,6 +59,7 @@ export function links() {
     { rel: 'stylesheet', href: globalStyle, as: 'style' },
     { rel: 'stylesheet', href: notificationStyle, as: 'style' },
     { rel: 'stylesheet', href: tributeStyle, as: 'style' },
+    { rel: 'stylesheet', href: nProgressStyles },
   ];
 }
 
@@ -86,9 +89,21 @@ export function ErrorBoundary() {
 function App() {
   const data = useLoaderData();
   const navigation = useNavigation();
-  let routeChanged =
-    navigation.state === 'loading' &&
-    navigation.location?.pathname.includes('/page') 
+  let fetchers = useFetchers();
+
+let state = useMemo<'idle' | 'loading'>(
+  function getGlobalState() {
+    let states = [navigation.state, ...fetchers.map((fetcher) => fetcher.state)];
+    if (states.every((state) => state === 'idle')) return 'idle';
+    return 'loading';
+  },
+  [navigation.state, fetchers]
+);
+useEffect(() => {
+  if (state === 'loading') NProgress.start();
+  if (state === 'idle') NProgress.done();
+}, [navigation.state]);
+  
   return (
     <html className={data.user?.preference?.theme || 'light'}>
       <head>
@@ -100,13 +115,8 @@ function App() {
       <body className="relative max-h-[100vh] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={['en_US', 'bo_TI']}>
           <AnimatePresence mode="wait" initial={false}>
-            {routeChanged ? (
-              <div style={{ height: '100dvh' }} className="flex w-full items-center justify-center">
-                <Loader />
-              </div>
-            ) : (
+           
               <Outlet context={{ user: data.user }} />
-            )}
           </AnimatePresence>
         </LitteraProvider>
         <GlobalLoading />

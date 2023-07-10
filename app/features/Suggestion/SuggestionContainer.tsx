@@ -1,12 +1,12 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectedSuggestionThread, selectedTextOnEditor, showPostContent } from '~/states';
+import { selectedSuggestionThread, selectedTextOnEditor, showSidebar } from '~/states';
 import { Editor } from '@tiptap/react';
 import { GrClose } from 'react-icons/gr';
 import Suggestion from './Suggestion';
 import { SuggestionType } from '~/model/type';
 function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestions: SuggestionType[] }) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
-  const setOpenContent = useSetRecoilState(showPostContent);
+  const setOpenContent = useSetRecoilState(showSidebar);
 
  const handleClose = () => {
    setOpenContent(false);

@@ -25,14 +25,24 @@ export async function getPage(textId: number, order: number) {
     let page = db.page.findFirst({
       where: {
         textId,
-        order,
+        order
       },
       include: {
         text: {
           include: {
-            Page: true,
+            Page: {
+              select: {
+                id: true,
+                order: true,
+             }
+            },
           },
         },
+        Post: {
+          select: {
+           id: true,
+          }
+        }
       },
     });
     return page;

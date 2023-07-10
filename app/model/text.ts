@@ -2,7 +2,23 @@
 
 import { db } from '~/services/db.server';
 // get all text
-
+export async function getText(id: string) {
+  try {
+    let text = await db.text.findUnique({
+      where: {
+        id:parseInt(id),
+      },
+      select: {
+        id: true,
+        name: true,
+      }
+    });
+    return text;
+  }
+  catch (e: any) { 
+    throw new Error('fetching text error' + e.message);
+  }
+}
 export async function findAllText(id = true, name = true, content = false) {
   try {
     let text = await db.text.findMany({

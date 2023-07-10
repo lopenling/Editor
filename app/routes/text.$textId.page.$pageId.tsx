@@ -1,6 +1,6 @@
 import { LoaderArgs, LoaderFunction, defer } from '@remix-run/node';
 import { Await, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
-import { Editor, useEditor } from '@tiptap/react';
+import { Editor,  useEditor } from '@tiptap/react';
 import { getPage } from '~/model/page';
 import * as Extension from '~/features/Editor/tiptap';
 import { motion } from 'framer-motion';
@@ -9,12 +9,12 @@ import {
   selectedPostThread,
   selectedSuggestionThread,
   selectedTextOnEditor,
-  showPostContent,
+  showSidebar,
   showTableContent,
   textInfo,
 } from '~/states';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Suspense, useCallback, useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import Header from '~/component/Layout/Header';
 
 import { EditorContainer } from '~/features/Editor';
@@ -29,19 +29,20 @@ import TableOfContents from '~/features/Editor/component/TableOfContent';
 import Modal from 'react-modal';
 import { HEADER_HEIGHT } from '~/constants';
 import { DiffMatchPatch } from '~/lib';
+import { getText } from '~/model/text';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
-  let textId = params.textId as string;
-  let order = params.pageId as string;
-  let page = await getPage(parseInt(textId), parseInt(order));
-  let user = await getUserSession(request);
-  const suggestions = await findAllSuggestionByPageId(page?.id!);
+  const textId = params.textId as string;
+  const order = params.pageId as string;
+  const text = await getText(textId);
+  const page = getPage(parseInt(textId), parseInt(order));
+  const user = await getUserSession(request);
+  const suggestions = await findAllSuggestionByPageId(page?.id);
   return defer({
     page,
-    text: page?.text,
-    pageCount: page?.text.Page.length,
     user,
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
+    text,
   });
 };
 
@@ -76,22 +77,15 @@ function SuggestionSidebar(props: {
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  if (!data.page)
-    return (
-      <div>
-        no page exist <Link to="/">go to home</Link>
-      </div>
-    );
   const user = data.user;
-  let content = data.page.content;
   const [suggestionSelected, suggestionSelector] = useRecoilState(selectedSuggestionThread);
   const [selectedPost, postSelector] = useRecoilState(selectedPostThread);
-  const setTextName = useSetRecoilState(textInfo);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   const [showTable, setShowTable] = useRecoilState(showTableContent);
-  const [showPostSide, setShowPostSide] = useRecoilState(showPostContent);
+  const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
-  const saveTextFetcher = useFetcher();
+  const setTextName = useSetRecoilState(textInfo);
+
   function suggestionSetter(id: string) {
     suggestionSelector({
       id: id,
@@ -109,30 +103,8 @@ export default function Page() {
     data.pusher_env.cluster,
     data.user
   );
- const getQuery = useCallback(
-   (newContent: string) => {
-     let oldContent = data.page.content;
-     const dmp = new DiffMatchPatch();
-     if (oldContent !== newContent) {
-       const changes = dmp.diff_main(oldContent, newContent);
-       const patch = dmp.patch_make(changes);
-       let query = dmp.patch_toText(patch);
-       return query;
-     }
-     return null;
-   },
-   [data.page.content]
- );
-  const saveData = async (patch: string) => {
-    const formData = new FormData();
-    formData.append('textId', data.text?.id);
-    formData.append('pageId', data.page?.id);
-     formData.append('patch',patch);
-    saveTextFetcher.submit(formData, {
-      method: 'POST',
-      action: '/api/text',
-    });
-  };
+ 
+ 
   let editor = useEditor(
     {
       extensions: [
@@ -182,11 +154,6 @@ export default function Page() {
         setOpenSuggestion(false);
         if (!editor.isActive('suggestion')) suggestionSelector({ id: '' });
         if (!editor.isActive('post')) postSelector({ id: '' });
-      },
-      onUpdate: async ({ editor }) => {
-        let newContent = editor.getHTML();
-        let query = getQuery(newContent);
-         if (query && newContent.length > 100 && user) saveData(query);
       },
       onCreate: async ({ editor }) => {
         setTextName({ name: data?.text.name, id: data?.text.id });
@@ -255,17 +222,22 @@ const withImage=data.pageCount>1;
             flex: 1,
           }}
           id="textEditorContainer"
-        >
-          {editor && (
-            <EditorContainer
-              editor={editor}
-              isSaving={false}
-              order={data.page.order}
-              content={content}
-              pageCount={data.pageCount}
-              imageUrl={data.page.imageUrl}
-            />
-          )}
+        >{editor &&
+            <Suspense fallback={<div>loading</div>}>
+              <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
+                {(page) =>
+                  <EditorContainer
+                    editor={editor!}
+                    isSaving={false}
+                    order={page.order}
+                    content={page.content}
+                    pageCount={page?.text.Page.length}
+                    imageUrl={page.imageUrl}
+                    pageId={page.id}
+                  />
+                }
+              </Await>
+            </Suspense>}
         </div>
         <div
           style={{
@@ -277,18 +249,23 @@ const withImage=data.pageCount>1;
           className="sticky hidden w-full md:flex "
           id="postContent"
         >
-          {data.pageCount === 1 && (
-            <button
-              className="absolute rounded-full"
-              style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
-              onClick={() => setShowPostSide((p) => !p)}
-            >
-              <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
-            </button>
-          )}
+             <Suspense fallback={<div>loading</div>}>
+              <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
+              {(page) => {
+               if (page.Post.length<1 || !page.Post) return null;
+                return <button
+                  className="absolute rounded-full"
+                  style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
+                  onClick={() => setShowPostSide((p) => !p)}
+                >
+                  <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
+                </button>
+              }}
+            </Await>
+            </Suspense>
           {suggestionSelected?.id || openSuggestion ? (
             <SuggestionSidebar suggestions={data.suggestions} suggestionSelected={suggestionSelected} editor={editor} />
-          ) : data.pageCount === 1 ? (
+          ) :
             <div
               className={`hidden w-full min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
               style={{
@@ -306,7 +283,7 @@ const withImage=data.pageCount>1;
                 editor={editor}
               />
             </div>
-          ) : null}
+          }
         </div>
       </div>
       {/* for mobile devicess */}
