@@ -3882,7 +3882,7 @@ __export(text_textId_page_pageId_exports, {
 });
 var import_node4 = require("@remix-run/node"), import_react42 = require("@remix-run/react"), import_react43 = require("@tiptap/react");
 var import_framer_motion2 = require("framer-motion");
-var import_recoil13 = require("recoil"), import_react44 = require("react");
+var import_recoil14 = require("recoil"), import_react44 = require("react");
 
 // app/component/Layout/Header.tsx
 var import_react30 = require("@remix-run/react");
@@ -3892,6 +3892,7 @@ var logo_default = "/build/_assets/logo-M44S4BEM.png";
 
 // app/component/Layout/Header.tsx
 var import_react_littera3 = require("@assembless/react-littera"), import_react31 = require("react");
+var import_recoil11 = require("recoil");
 
 // app/features/Editor/component/EditorContainer.tsx
 var import_react25 = require("@remix-run/react"), import_react26 = require("@tiptap/react"), import_react27 = require("react"), import_recoil9 = require("recoil");
@@ -4524,7 +4525,7 @@ var import_fa4 = require("react-icons/fa"), import_jsx_dev_runtime22 = require("
     columnNumber: 3
   },
   this
-), LogoWithTextName = ({ textName }) => ((textName == null ? void 0 : textName.length) > 20 && isSmallScreen && (textName = textName.slice(0, 25) + "..."), /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "flex items-center gap-1", children: [
+), LogoWithTextName = ({ textName }) => (textName.length > 20 && isSmallScreen && (textName = textName.slice(0, 25) + "..."), /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "flex items-center gap-1", children: [
   /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_react30.Link, { to: "/", children: [
     " ",
     /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("img", { src: logo_default, alt: "logo", className: "block object-contain", style: { maxHeight: "37px" } }, void 0, !1, {
@@ -4567,7 +4568,7 @@ var import_fa4 = require("react-icons/fa"), import_jsx_dev_runtime22 = require("
 }, this));
 function Header({ editor }) {
   var _a, _b, _c;
-  let loginFetcher = (0, import_react30.useFetcher)(), themeFetcher = (0, import_react30.useFetcher)(), translation = uselitteraTranlation(), data = (0, import_react30.useLoaderData)(), redirectTo = (0, import_react30.useLocation)().pathname, [TextNameOnHeader, setTextNameOnHeader] = (0, import_react31.useState)(!1), textName = data.text.name, { user } = (0, import_react30.useOutletContext)(), changeTheme = () => {
+  let loginFetcher = (0, import_react30.useFetcher)(), themeFetcher = (0, import_react30.useFetcher)(), translation = uselitteraTranlation(), redirectTo = (0, import_react30.useLocation)().pathname, [TextNameOnHeader, setTextNameOnHeader] = (0, import_react31.useState)(!1), { name: textName } = (0, import_recoil11.useRecoilValue)(textInfo), { user } = (0, import_react30.useOutletContext)(), changeTheme = () => {
     var _a2;
     themeFetcher.submit(
       {
@@ -4608,15 +4609,15 @@ function Header({ editor }) {
       children: /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: " mx-auto flex flex-wrap items-center justify-between p-2", children: [
         TextNameOnHeader ? /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(LogoWithTextName, { textName }, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 113,
+          lineNumber: 112,
           columnNumber: 11
         }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_react30.NavLink, { to: "/", prefetch: "intent", className: "flex w-auto items-center", children: /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(Logo, {}, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 116,
+          lineNumber: 115,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 115,
+          lineNumber: 114,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
@@ -4629,7 +4630,7 @@ function Header({ editor }) {
             children: [
               /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("span", { className: "sr-only", children: "Open main menu" }, void 0, !1, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 125,
+                lineNumber: 124,
                 columnNumber: 11
               }, this),
               /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
@@ -4651,7 +4652,7 @@ function Header({ editor }) {
                     !1,
                     {
                       fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 133,
+                      lineNumber: 132,
                       columnNumber: 13
                     },
                     this
@@ -4661,7 +4662,7 @@ function Header({ editor }) {
                 !1,
                 {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 126,
+                  lineNumber: 125,
                   columnNumber: 11
                 },
                 this
@@ -4672,7 +4673,7 @@ function Header({ editor }) {
           !0,
           {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 119,
+            lineNumber: 118,
             columnNumber: 9
           },
           this
@@ -4686,70 +4687,70 @@ function Header({ editor }) {
               !user && /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "flex gap-2", id: "user-menu-button", children: [
                 /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("a", { href: ForumLink + "/signup", id: "signup", className: "loginButton", children: translation.signup }, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 149,
+                  lineNumber: 148,
                   columnNumber: 17
                 }, this),
                 /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(loginFetcher.Form, { method: "POST", id: "login", action: "/auth/login", className: "mr-2 flex items-center", children: [
                   /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("input", { type: "hidden", name: "redirectTo", defaultValue: redirectTo }, void 0, !1, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 153,
+                    lineNumber: 152,
                     columnNumber: 19
                   }, this),
                   /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("button", { type: "submit", name: "_action", value: "login", className: "loginButton flex items-center gap-1", children: [
                     /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_fa4.FaUserAlt, {}, void 0, !1, {
                       fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 155,
+                      lineNumber: 154,
                       columnNumber: 21
                     }, this),
                     translation.login
                   ] }, void 0, !0, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 154,
+                    lineNumber: 153,
                     columnNumber: 19
                   }, this)
                 ] }, void 0, !0, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 152,
+                  lineNumber: 151,
                   columnNumber: 17
                 }, this)
               ] }, void 0, !0, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 148,
+                lineNumber: 147,
                 columnNumber: 15
               }, this),
               editor && /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_jsx_dev_runtime22.Fragment, { children: [
                 /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "mr-2 mt-2 ", ref: searchRef, children: [
                   /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("button", { onClick: () => setShowSearch((p) => !p), children: /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_fa3.FaSearch, { className: "text-gray-400 hover:text-gray-600 ", size: 24 }, void 0, !1, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 165,
+                    lineNumber: 164,
                     columnNumber: 21
                   }, this) }, void 0, !1, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 164,
+                    lineNumber: 163,
                     columnNumber: 19
                   }, this),
                   showSearch && /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "absolute right-0 top-[100%] mt-2 bg-white", style: { width: 515, maxWidth: "50vw" }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_SearchString.default, { editor }, void 0, !1, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 169,
+                    lineNumber: 168,
                     columnNumber: 23
                   }, this) }, void 0, !1, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 168,
+                    lineNumber: 167,
                     columnNumber: 21
                   }, this)
                 ] }, void 0, !0, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 163,
+                  lineNumber: 162,
                   columnNumber: 17
                 }, this),
                 /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(EditorSetting, { editor }, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 173,
+                  lineNumber: 172,
                   columnNumber: 17
                 }, this)
               ] }, void 0, !0, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 162,
+                lineNumber: 161,
                 columnNumber: 15
               }, this),
               user && /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_jsx_dev_runtime22.Fragment, { children: [
@@ -4763,12 +4764,12 @@ function Header({ editor }) {
                     children: [
                       /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("span", { className: "sr-only", children: "Open user menu" }, void 0, !1, {
                         fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 185,
+                        lineNumber: 184,
                         columnNumber: 19
                       }, this),
                       /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(Avatar, { alt: user.name, img: user.avatarUrl, rounded: !0, title: user == null ? void 0 : user.name, size: "sm" }, void 0, !1, {
                         fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 186,
+                        lineNumber: 185,
                         columnNumber: 19
                       }, this)
                     ]
@@ -4777,7 +4778,7 @@ function Header({ editor }) {
                   !0,
                   {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 179,
+                    lineNumber: 178,
                     columnNumber: 17
                   },
                   this
@@ -4793,7 +4794,7 @@ function Header({ editor }) {
                       /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "px-4 py-3", children: [
                         /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("span", { className: "block text-sm text-gray-900 dark:text-white", children: user.name }, void 0, !1, {
                           fileName: "app/component/Layout/Header.tsx",
-                          lineNumber: 196,
+                          lineNumber: 195,
                           columnNumber: 23
                         }, this),
                         /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("span", { className: "block truncate  text-sm text-gray-500 dark:text-gray-400", children: /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
@@ -4808,24 +4809,24 @@ function Header({ editor }) {
                           !1,
                           {
                             fileName: "app/component/Layout/Header.tsx",
-                            lineNumber: 198,
+                            lineNumber: 197,
                             columnNumber: 25
                           },
                           this
                         ) }, void 0, !1, {
                           fileName: "app/component/Layout/Header.tsx",
-                          lineNumber: 197,
+                          lineNumber: 196,
                           columnNumber: 23
                         }, this)
                       ] }, void 0, !0, {
                         fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 195,
+                        lineNumber: 194,
                         columnNumber: 21
                       }, this),
                       /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: " flex flex-col justify-center", "aria-labelledby": "user-menu-button ", children: [
                         /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(Translation, {}, void 0, !1, {
                           fileName: "app/component/Layout/Header.tsx",
-                          lineNumber: 208,
+                          lineNumber: 207,
                           columnNumber: 23
                         }, this),
                         /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
@@ -4853,7 +4854,7 @@ function Header({ editor }) {
                                     !1,
                                     {
                                       fileName: "app/component/Layout/Header.tsx",
-                                      lineNumber: 223,
+                                      lineNumber: 222,
                                       columnNumber: 31
                                     },
                                     this
@@ -4863,7 +4864,7 @@ function Header({ editor }) {
                                 !1,
                                 {
                                   fileName: "app/component/Layout/Header.tsx",
-                                  lineNumber: 216,
+                                  lineNumber: 215,
                                   columnNumber: 29
                                 },
                                 this
@@ -4871,7 +4872,7 @@ function Header({ editor }) {
                               "Light mode"
                             ] }, void 0, !0, {
                               fileName: "app/component/Layout/Header.tsx",
-                              lineNumber: 215,
+                              lineNumber: 214,
                               columnNumber: 27
                             }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "flex gap-2", children: [
                               /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
@@ -4884,7 +4885,7 @@ function Header({ editor }) {
                                   className: `${((_c = themeFetcher.formData) == null ? void 0 : _c.get("theme")) && "animate-spin"} h-5 w-5`,
                                   children: /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("path", { d: "M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" }, void 0, !1, {
                                     fileName: "app/component/Layout/Header.tsx",
-                                    lineNumber: 240,
+                                    lineNumber: 239,
                                     columnNumber: 31
                                   }, this)
                                 },
@@ -4892,7 +4893,7 @@ function Header({ editor }) {
                                 !1,
                                 {
                                   fileName: "app/component/Layout/Header.tsx",
-                                  lineNumber: 233,
+                                  lineNumber: 232,
                                   columnNumber: 29
                                 },
                                 this
@@ -4900,7 +4901,7 @@ function Header({ editor }) {
                               "Dark mode"
                             ] }, void 0, !0, {
                               fileName: "app/component/Layout/Header.tsx",
-                              lineNumber: 232,
+                              lineNumber: 231,
                               columnNumber: 27
                             }, this)
                           },
@@ -4908,7 +4909,7 @@ function Header({ editor }) {
                           !1,
                           {
                             fileName: "app/component/Layout/Header.tsx",
-                            lineNumber: 210,
+                            lineNumber: 209,
                             columnNumber: 23
                           },
                           this
@@ -4940,7 +4941,7 @@ function Header({ editor }) {
                                     !1,
                                     {
                                       fileName: "app/component/Layout/Header.tsx",
-                                      lineNumber: 259,
+                                      lineNumber: 258,
                                       columnNumber: 29
                                     },
                                     this
@@ -4950,7 +4951,7 @@ function Header({ editor }) {
                                 !1,
                                 {
                                   fileName: "app/component/Layout/Header.tsx",
-                                  lineNumber: 252,
+                                  lineNumber: 251,
                                   columnNumber: 27
                                 },
                                 this
@@ -4962,13 +4963,13 @@ function Header({ editor }) {
                           !0,
                           {
                             fileName: "app/component/Layout/Header.tsx",
-                            lineNumber: 247,
+                            lineNumber: 246,
                             columnNumber: 25
                           },
                           this
                         ) }, void 0, !1, {
                           fileName: "app/component/Layout/Header.tsx",
-                          lineNumber: 246,
+                          lineNumber: 245,
                           columnNumber: 23
                         }, this),
                         /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
@@ -4990,7 +4991,7 @@ function Header({ editor }) {
                                 !1,
                                 {
                                   fileName: "app/component/Layout/Header.tsx",
-                                  lineNumber: 275,
+                                  lineNumber: 274,
                                   columnNumber: 25
                                 },
                                 this
@@ -5005,7 +5006,7 @@ function Header({ editor }) {
                                   children: [
                                     /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_fa3.FaSignOutAlt, {}, void 0, !1, {
                                       fileName: "app/component/Layout/Header.tsx",
-                                      lineNumber: 287,
+                                      lineNumber: 286,
                                       columnNumber: 27
                                     }, this),
                                     translation.logout
@@ -5015,7 +5016,7 @@ function Header({ editor }) {
                                 !0,
                                 {
                                   fileName: "app/component/Layout/Header.tsx",
-                                  lineNumber: 281,
+                                  lineNumber: 280,
                                   columnNumber: 25
                                 },
                                 this
@@ -5026,14 +5027,14 @@ function Header({ editor }) {
                           !0,
                           {
                             fileName: "app/component/Layout/Header.tsx",
-                            lineNumber: 270,
+                            lineNumber: 269,
                             columnNumber: 23
                           },
                           this
                         )
                       ] }, void 0, !0, {
                         fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 207,
+                        lineNumber: 206,
                         columnNumber: 21
                       }, this)
                     ]
@@ -5042,19 +5043,19 @@ function Header({ editor }) {
                   !0,
                   {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 189,
+                    lineNumber: 188,
                     columnNumber: 19
                   },
                   this
                 )
               ] }, void 0, !0, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 178,
+                lineNumber: 177,
                 columnNumber: 15
               }, this)
             ] }, void 0, !0, {
               fileName: "app/component/Layout/Header.tsx",
-              lineNumber: 146,
+              lineNumber: 145,
               columnNumber: 11
             }, this)
           },
@@ -5062,14 +5063,14 @@ function Header({ editor }) {
           !1,
           {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 140,
+            lineNumber: 139,
             columnNumber: 9
           },
           this
         )
       ] }, void 0, !0, {
         fileName: "app/component/Layout/Header.tsx",
-        lineNumber: 111,
+        lineNumber: 110,
         columnNumber: 7
       }, this)
     },
@@ -5077,7 +5078,7 @@ function Header({ editor }) {
     !1,
     {
       fileName: "app/component/Layout/Header.tsx",
-      lineNumber: 104,
+      lineNumber: 103,
       columnNumber: 5
     },
     this
@@ -5088,7 +5089,7 @@ function Translation() {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("div", { className: "flex  items-center justify-start space-x-0.5 px-4", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(import_ai.AiOutlineTranslation, {}, void 0, !1, {
       fileName: "app/component/Layout/Header.tsx",
-      lineNumber: 309,
+      lineNumber: 308,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
@@ -5100,7 +5101,7 @@ function Translation() {
         className: "border-transparent bg-transparent text-gray-500 focus:border-transparent focus:outline-none  focus:ring-0 focus:ring-gray-100 dark:border-gray-600  dark:bg-transparent dark:text-white dark:focus:ring-gray-700",
         children: translationCodes.map((code) => /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)("option", { value: code.code, className: "bg-white dark:bg-slate-600 ", children: code.name }, code.code, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 315,
+          lineNumber: 314,
           columnNumber: 11
         }, this))
       },
@@ -5108,21 +5109,21 @@ function Translation() {
       !1,
       {
         fileName: "app/component/Layout/Header.tsx",
-        lineNumber: 310,
+        lineNumber: 309,
         columnNumber: 7
       },
       this
     )
   ] }, void 0, !0, {
     fileName: "app/component/Layout/Header.tsx",
-    lineNumber: 308,
+    lineNumber: 307,
     columnNumber: 5
   }, this);
 }
 var Header_default = (0, import_react31.memo)(Header);
 
 // app/features/Suggestion/SuggestionContainer.tsx
-var import_recoil11 = require("recoil");
+var import_recoil12 = require("recoil");
 var import_gr3 = require("react-icons/gr");
 
 // app/features/Suggestion/Suggestion.tsx
@@ -6091,7 +6092,7 @@ function oo_oo10(i, ...v) {
 // app/features/Suggestion/SuggestionContainer.tsx
 var import_jsx_dev_runtime25 = require("react/jsx-dev-runtime");
 function Suggestions({ editor, suggestions }) {
-  let suggestionThread = (0, import_recoil11.useRecoilValue)(selectedSuggestionThread), setOpenContent = (0, import_recoil11.useSetRecoilState)(showSidebar), handleClose = () => {
+  let suggestionThread = (0, import_recoil12.useRecoilValue)(selectedSuggestionThread), setOpenContent = (0, import_recoil12.useSetRecoilState)(showSidebar), handleClose = () => {
     setOpenContent(!1);
   }, list = suggestions.filter((sug) => sug.threadId === suggestionThread.id), groupedSuggestion = transformObjectsByNewValue(list);
   return /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(
@@ -6174,12 +6175,12 @@ function transformObjectsByNewValue(objects) {
 }
 
 // app/features/Suggestion/SuggestionForm.tsx
-var import_react36 = require("@remix-run/react"), import_react37 = require("react"), import_recoil12 = require("recoil");
+var import_react36 = require("@remix-run/react"), import_react37 = require("react"), import_recoil13 = require("recoil");
 var import_uuid4 = require("uuid");
 var import_jsx_dev_runtime26 = require("react/jsx-dev-runtime");
 function SuggestionForm({ editor }) {
   var _a, _b, _c, _d, _e, _f;
-  let data = (0, import_react36.useLoaderData)(), { user } = data, [suggestionInput, setSuggestionInput] = (0, import_react37.useState)(""), [error, setError] = (0, import_react37.useState)(null), addSuggestion = useFetcherWithPromise(), setSelectedSuggestion = (0, import_recoil12.useSetRecoilState)(selectedSuggestionThread), setOpenSuggestion = (0, import_recoil12.useSetRecoilState)(openSuggestionState), [audio, setAudio] = (0, import_react37.useState)({ tempUrl: "", blob: null }), handleSuggestionSubmit = async () => {
+  let data = (0, import_react36.useLoaderData)(), { user } = data, [suggestionInput, setSuggestionInput] = (0, import_react37.useState)(""), [error, setError] = (0, import_react37.useState)(null), addSuggestion = useFetcherWithPromise(), setSelectedSuggestion = (0, import_recoil13.useSetRecoilState)(selectedSuggestionThread), setOpenSuggestion = (0, import_recoil13.useSetRecoilState)(openSuggestionState), [audio, setAudio] = (0, import_react37.useState)({ tempUrl: "", blob: null }), handleSuggestionSubmit = async () => {
     var _a2;
     if (suggestionInput === "")
       return setError("suggestion cannot be empty"), null;
@@ -6868,7 +6869,7 @@ function SuggestionSidebar(props) {
 }
 function Page() {
   var _a;
-  let data = (0, import_react42.useLoaderData)(), user = data.user, [suggestionSelected, suggestionSelector] = (0, import_recoil13.useRecoilState)(selectedSuggestionThread), [selectedPost, postSelector] = (0, import_recoil13.useRecoilState)(selectedPostThread), [selection, setSelectionRange] = (0, import_recoil13.useRecoilState)(selectedTextOnEditor), [showTable, setShowTable] = (0, import_recoil13.useRecoilState)(showTableContent), [showPostSide, setShowPostSide] = (0, import_recoil13.useRecoilState)(showSidebar), [openSuggestion, setOpenSuggestion] = (0, import_recoil13.useRecoilState)(openSuggestionState), setTextName = (0, import_recoil13.useSetRecoilState)(textInfo);
+  let data = (0, import_react42.useLoaderData)(), user = data.user, [suggestionSelected, suggestionSelector] = (0, import_recoil14.useRecoilState)(selectedSuggestionThread), [selectedPost, postSelector] = (0, import_recoil14.useRecoilState)(selectedPostThread), [selection, setSelectionRange] = (0, import_recoil14.useRecoilState)(selectedTextOnEditor), [showTable, setShowTable] = (0, import_recoil14.useRecoilState)(showTableContent), [showPostSide, setShowPostSide] = (0, import_recoil14.useRecoilState)(showSidebar), [openSuggestion, setOpenSuggestion] = (0, import_recoil14.useRecoilState)(openSuggestionState), setTextName = (0, import_recoil14.useSetRecoilState)(textInfo);
   function suggestionSetter(id) {
     suggestionSelector({
       id
@@ -8545,7 +8546,7 @@ function oo_oo16(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { version: "36bdfacf", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-V45SCVBZ.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-MX2TIMT4.js", imports: ["/build/_shared/chunk-AE7XUWHN.js", "/build/_shared/chunk-RSUHW4GH.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-ADD6FPFT.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-NTSRPAXX.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-RSUHW4GH.js", "/build/_shared/chunk-ADD6FPFT.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-DLNRKSEV.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-RSUHW4GH.js", "/build/_shared/chunk-B6F2YH37.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-ADD6FPFT.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-O2XMUU2G.js", imports: ["/build/_shared/chunk-AE7XUWHN.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-36BDFACF.js" };
+var assets_manifest_default = { version: "aa1500b1", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-V45SCVBZ.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-ZDA4YPVE.js", imports: ["/build/_shared/chunk-AE7XUWHN.js", "/build/_shared/chunk-FFCH6W3P.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-ADD6FPFT.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-J77CSW7J.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-FFCH6W3P.js", "/build/_shared/chunk-ADD6FPFT.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-GTDJ54A3.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-FFCH6W3P.js", "/build/_shared/chunk-B6F2YH37.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-ADD6FPFT.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-O2XMUU2G.js", imports: ["/build/_shared/chunk-AE7XUWHN.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-AA1500B1.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var assetsBuildDirectory = "public/build", future = { unstable_cssModules: !1, unstable_cssSideEffectImports: !1, unstable_dev: !1, unstable_postcss: !1, unstable_tailwind: !1, unstable_vanillaExtract: !1, v2_errorBoundary: !0, v2_meta: !0, v2_normalizeFormMethod: !0, v2_routeConvention: !0 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

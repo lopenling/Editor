@@ -24,7 +24,7 @@ const Logo = () => (
   />
 );
 const LogoWithTextName = ({ textName }: { textName: string }) => {
-  if (textName?.length > 20 && isSmallScreen) {
+  if (textName.length > 20 && isSmallScreen) {
     textName = textName.slice(0, 25) + '...';
   }
   return (
@@ -56,10 +56,9 @@ function Header({ editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation: any = uselitteraTranlation();
-  const data = useLoaderData();
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
-  const textName = data.text.name;
+  const { name: textName } = useRecoilValue(textInfo);
   let { user }: { user: UserType } = useOutletContext();
 
   const changeTheme = () => {
