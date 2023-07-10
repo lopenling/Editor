@@ -32,7 +32,7 @@ import { getText } from '~/model/text';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
-  const text = await getText(textId);
+  const text = getText(textId);
   const page = await getPage(parseInt(textId), parseInt(order));
   const user = await getUserSession(request);
   const suggestions = await findAllSuggestionByPageId(page?.id);
