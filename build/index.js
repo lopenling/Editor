@@ -4272,7 +4272,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
           fileName: "app/features/Editor/component/EditorContainer.tsx",
           lineNumber: 182,
           columnNumber: 17
-        }, this) : user.admin === "true" || data.text.userId == (user == null ? void 0 : user.id) ? /* @__PURE__ */ (0, import_jsx_dev_runtime21.jsxDEV)(
+        }, this) : (user == null ? void 0 : user.admin) === "true" || data.text.userId == (user == null ? void 0 : user.id) ? /* @__PURE__ */ (0, import_jsx_dev_runtime21.jsxDEV)(
           Button,
           {
             title: "delete",
@@ -6825,7 +6825,8 @@ async function getText(id) {
       select: {
         id: !0,
         name: !0,
-        allow_post: !0
+        allow_post: !0,
+        userId: !0
       }
     });
   } catch (e) {
@@ -6901,7 +6902,7 @@ function PostSidebar(props) {
     !1,
     {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 51,
+      lineNumber: 50,
       columnNumber: 5
     },
     this
@@ -6911,29 +6912,29 @@ function SuggestionSidebar(props) {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)("div", { className: "z-20 w-full", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(SuggestionForm, { editor: props.editor }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 68,
+      lineNumber: 67,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_react45.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)("div", { children: "loading" }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 69,
+      lineNumber: 68,
       columnNumber: 27
     }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_react43.Await, { resolve: props.suggestions, children: (data) => /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(SuggestionContainer_default, { editor: props.editor, suggestions: data }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 71,
+      lineNumber: 70,
       columnNumber: 22
     }, this) }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 70,
+      lineNumber: 69,
       columnNumber: 9
     }, this) }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 69,
+      lineNumber: 68,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/text.$textId.page.$pageId.tsx",
-    lineNumber: 67,
+    lineNumber: 66,
     columnNumber: 5
   }, this);
 }
@@ -7016,12 +7017,12 @@ function Page() {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_jsx_dev_runtime29.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(Header_default, { editor }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 184,
+      lineNumber: 183,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(OnlineUserList_default, { onlineMembers, count: onlineMembers.length }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 185,
+      lineNumber: 184,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(
@@ -7035,7 +7036,7 @@ function Page() {
       !1,
       {
         fileName: "app/routes/text.$textId.page.$pageId.tsx",
-        lineNumber: 186,
+        lineNumber: 185,
         columnNumber: 7
       },
       this
@@ -7059,7 +7060,7 @@ function Page() {
                 onClick: () => setShowTable((p) => !p),
                 children: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_fa5.FaListUl, { size: 22, className: "cursor-pointer text-gray-500 " }, void 0, !1, {
                   fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                  lineNumber: 206,
+                  lineNumber: 205,
                   columnNumber: 13
                 }, this)
               },
@@ -7067,7 +7068,7 @@ function Page() {
               !1,
               {
                 fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                lineNumber: 201,
+                lineNumber: 200,
                 columnNumber: 11
               },
               this
@@ -7081,7 +7082,7 @@ function Page() {
                 className: "z-10 w-full overflow-hidden rounded-2xl",
                 children: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(TableOfContent_default, { editor, onClose: () => setShowTable(!1) }, void 0, !1, {
                   fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                  lineNumber: 214,
+                  lineNumber: 213,
                   columnNumber: 13
                 }, this)
               },
@@ -7089,7 +7090,7 @@ function Page() {
               !1,
               {
                 fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                lineNumber: 208,
+                lineNumber: 207,
                 columnNumber: 11
               },
               this
@@ -7100,7 +7101,7 @@ function Page() {
         !0,
         {
           fileName: "app/routes/text.$textId.page.$pageId.tsx",
-          lineNumber: 193,
+          lineNumber: 192,
           columnNumber: 9
         },
         this
@@ -7117,11 +7118,11 @@ function Page() {
           id: "textEditorContainer",
           children: editor && /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_react45.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)("div", { children: "loading" }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 226,
+            lineNumber: 225,
             columnNumber: 33
           }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_react43.Await, { resolve: data.page, errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 227,
+            lineNumber: 226,
             columnNumber: 56
           }, this), children: (page) => /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(
             EditorContainer_default,
@@ -7138,17 +7139,17 @@ function Page() {
             !1,
             {
               fileName: "app/routes/text.$textId.page.$pageId.tsx",
-              lineNumber: 229,
+              lineNumber: 228,
               columnNumber: 19
             },
             this
           ) }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 227,
+            lineNumber: 226,
             columnNumber: 15
           }, this) }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 226,
+            lineNumber: 225,
             columnNumber: 13
           }, this)
         },
@@ -7156,7 +7157,7 @@ function Page() {
         !1,
         {
           fileName: "app/routes/text.$textId.page.$pageId.tsx",
-          lineNumber: 217,
+          lineNumber: 216,
           columnNumber: 9
         },
         this
@@ -7175,11 +7176,11 @@ function Page() {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_react45.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)("div", { children: "loading" }, void 0, !1, {
               fileName: "app/routes/text.$textId.page.$pageId.tsx",
-              lineNumber: 252,
+              lineNumber: 251,
               columnNumber: 34
             }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_react43.Await, { resolve: data.page, errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
               fileName: "app/routes/text.$textId.page.$pageId.tsx",
-              lineNumber: 253,
+              lineNumber: 252,
               columnNumber: 56
             }, this), children: (page) => page.Post.length < 1 || !page.Post ? null : /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(
               "button",
@@ -7189,7 +7190,7 @@ function Page() {
                 onClick: () => setShowPostSide((p) => !p),
                 children: /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(import_fa5.FaRegComments, { size: 22, className: "cursor-pointer text-gray-500 " }, void 0, !1, {
                   fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                  lineNumber: 261,
+                  lineNumber: 260,
                   columnNumber: 19
                 }, this)
               },
@@ -7197,22 +7198,22 @@ function Page() {
               !1,
               {
                 fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                lineNumber: 256,
+                lineNumber: 255,
                 columnNumber: 24
               },
               this
             ) }, void 0, !1, {
               fileName: "app/routes/text.$textId.page.$pageId.tsx",
-              lineNumber: 253,
+              lineNumber: 252,
               columnNumber: 15
             }, this) }, void 0, !1, {
               fileName: "app/routes/text.$textId.page.$pageId.tsx",
-              lineNumber: 252,
+              lineNumber: 251,
               columnNumber: 14
             }, this),
             (suggestionSelected == null ? void 0 : suggestionSelected.id) || openSuggestion ? /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(SuggestionSidebar, { suggestions: data.suggestions, suggestionSelected, editor }, void 0, !1, {
               fileName: "app/routes/text.$textId.page.$pageId.tsx",
-              lineNumber: 267,
+              lineNumber: 266,
               columnNumber: 13
             }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(
               "div",
@@ -7237,7 +7238,7 @@ function Page() {
                   !1,
                   {
                     fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                    lineNumber: 277,
+                    lineNumber: 276,
                     columnNumber: 15
                   },
                   this
@@ -7247,7 +7248,7 @@ function Page() {
               !1,
               {
                 fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                lineNumber: 269,
+                lineNumber: 268,
                 columnNumber: 13
               },
               this
@@ -7258,14 +7259,14 @@ function Page() {
         !0,
         {
           fileName: "app/routes/text.$textId.page.$pageId.tsx",
-          lineNumber: 242,
+          lineNumber: 241,
           columnNumber: 9
         },
         this
       )
     ] }, void 0, !0, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 192,
+      lineNumber: 191,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(
@@ -7290,13 +7291,13 @@ function Page() {
           !1,
           {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 304,
+            lineNumber: 303,
             columnNumber: 13
           },
           this
         ) }, void 0, !1, {
           fileName: "app/routes/text.$textId.page.$pageId.tsx",
-          lineNumber: 303,
+          lineNumber: 302,
           columnNumber: 11
         }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime29.jsxDEV)(
           "div",
@@ -7319,7 +7320,7 @@ function Page() {
               !1,
               {
                 fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                lineNumber: 317,
+                lineNumber: 316,
                 columnNumber: 13
               },
               this
@@ -7329,7 +7330,7 @@ function Page() {
           !1,
           {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 311,
+            lineNumber: 310,
             columnNumber: 11
           },
           this
@@ -7339,14 +7340,14 @@ function Page() {
       !1,
       {
         fileName: "app/routes/text.$textId.page.$pageId.tsx",
-        lineNumber: 290,
+        lineNumber: 289,
         columnNumber: 7
       },
       this
     )
   ] }, void 0, !0, {
     fileName: "app/routes/text.$textId.page.$pageId.tsx",
-    lineNumber: 183,
+    lineNumber: 182,
     columnNumber: 5
   }, this);
 }
@@ -8616,7 +8617,7 @@ function oo_oo16(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { version: "d95546e0", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-3O2LIHSZ.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-IRDCJIAO.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-DFRPMESF.js", imports: ["/build/_shared/chunk-4OCVK35G.js", "/build/_shared/chunk-YKGU5C5B.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-QRJBXMYM.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-BVW6CAIS.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-YKGU5C5B.js", "/build/_shared/chunk-QRJBXMYM.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-CZWQYQFG.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-YKGU5C5B.js", "/build/_shared/chunk-4THISWRT.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-QRJBXMYM.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-26GNNOGC.js", imports: ["/build/_shared/chunk-4OCVK35G.js", "/build/_shared/chunk-IRDCJIAO.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-D95546E0.js" };
+var assets_manifest_default = { version: "197dc516", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-3O2LIHSZ.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-IRDCJIAO.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-QD54ACZ4.js", imports: ["/build/_shared/chunk-4OCVK35G.js", "/build/_shared/chunk-RP5NBKAX.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-QRJBXMYM.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-6XYBPLXB.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-RP5NBKAX.js", "/build/_shared/chunk-QRJBXMYM.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-ACSKK7ZW.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-RP5NBKAX.js", "/build/_shared/chunk-4THISWRT.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-QRJBXMYM.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-26GNNOGC.js", imports: ["/build/_shared/chunk-4OCVK35G.js", "/build/_shared/chunk-IRDCJIAO.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-197DC516.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var assetsBuildDirectory = "public/build", future = { unstable_cssModules: !1, unstable_cssSideEffectImports: !1, unstable_dev: !1, unstable_postcss: !1, unstable_tailwind: !1, unstable_vanillaExtract: !1, v2_errorBoundary: !0, v2_meta: !0, v2_normalizeFormMethod: !0, v2_routeConvention: !0 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

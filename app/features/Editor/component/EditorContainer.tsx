@@ -212,7 +212,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }:
                   )}
                 </>
               )
-            ) : user.admin === 'true' || data.text.userId == user?.id ? (
+            ) : user?.admin === 'true' || data.text.userId == user?.id ? (
               <Button
                 title="delete"
                 type="button"

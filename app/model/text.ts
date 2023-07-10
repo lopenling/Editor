@@ -11,7 +11,8 @@ export async function getText(id: string) {
       select: {
         id: true,
         name: true,
-        allow_post:true
+        allow_post: true,
+        userId:true
       }
     });
     return text;

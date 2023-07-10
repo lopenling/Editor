@@ -28,7 +28,6 @@ import { FaListUl, FaRegComments } from 'react-icons/fa';
 import TableOfContents from '~/features/Editor/component/TableOfContent';
 import Modal from 'react-modal';
 import { HEADER_HEIGHT } from '~/constants';
-import { DiffMatchPatch } from '~/lib';
 import { getText } from '~/model/text';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
