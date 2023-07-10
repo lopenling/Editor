@@ -1,4 +1,4 @@
-import { Form, Link, NavLink, useFetcher, useLocation, useOutletContext } from '@remix-run/react';
+import { Form, Link, NavLink, useFetcher, useLoaderData, useLocation, useOutletContext } from '@remix-run/react';
 import LogoOnly from '~/assets/logo.png';
 import { useLitteraMethods } from '@assembless/react-littera';
 import { useEffect, useState, memo } from 'react';
@@ -24,7 +24,7 @@ const Logo = () => (
   />
 );
 const LogoWithTextName = ({ textName }: { textName: string }) => {
-  if (textName.length > 20 && isSmallScreen) {
+  if (textName?.length > 20 && isSmallScreen) {
     textName = textName.slice(0, 25) + '...';
   }
   return (
@@ -56,9 +56,10 @@ function Header({ editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation: any = uselitteraTranlation();
+  const data = useLoaderData();
   const redirectTo = useLocation().pathname;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
-  const { name: textName } = useRecoilValue(textInfo);
+  const textName = data.text.name;
   let { user }: { user: UserType } = useOutletContext();
 
   const changeTheme = () => {
@@ -77,12 +78,11 @@ function Header({ editor }: HeaderProps) {
 const handleScroll = () => {
   if (timeout) clearTimeout(timeout);
   timeout = setTimeout(() => {
-    var scrollTopValue = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    var scrollTopValue = window.pageYOffset || document.documentElement?.scrollTop || document.body?.scrollTop;
     const shouldShowTextName = scrollTopValue! > 10 && redirectTo.includes('text');
     setTextNameOnHeader(shouldShowTextName);
   }, 10);
 };
-
     window.addEventListener('scroll', handleScroll);
     return () => window?.addEventListener('scroll', handleScroll);
   }, [redirectTo, textName]);

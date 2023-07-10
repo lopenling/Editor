@@ -21,7 +21,6 @@ import { LitteraProvider } from '@assembless/react-littera';
 import { RecoilRoot } from 'recoil';
 import { AnimatePresence } from 'framer-motion';
 import { getUser } from './model/user';
-import { Loader, GlobalLoading } from './component/UI';
 import notificationStyle from 'react-notifications-component/dist/theme.css';
 import nProgressStyles from 'nprogress/nprogress.css';
 import { useEffect,useMemo } from 'react'
@@ -115,11 +114,9 @@ useEffect(() => {
       <body className="relative max-h-[100vh] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={['en_US', 'bo_TI']}>
           <AnimatePresence mode="wait" initial={false}>
-           
               <Outlet context={{ user: data.user }} />
           </AnimatePresence>
         </LitteraProvider>
-        <GlobalLoading />
         <ScrollRestoration getKey={(location) => location.pathname} />
         <LiveReload />
 
