@@ -99,7 +99,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }:
   }, [content, editor]);
 
   const showImage = useRecoilValue(showImageState);
-  const isPostAllowed = data.pageCount === 1;
+  const isPostAllowed = data.text.allow_post;
 
 
   return (

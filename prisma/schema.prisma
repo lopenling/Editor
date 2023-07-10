@@ -42,6 +42,7 @@ model Text {
   name       String
   userId     String?
   author     User?        @relation(fields: [userId], references: [id])
+  allow_post Boolean? @default(true)
   Page       Page[]
   Suggestion Suggestion[]
   Post       Post[]
