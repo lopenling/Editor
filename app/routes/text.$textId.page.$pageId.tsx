@@ -263,6 +263,7 @@ const withImage=data.pageCount>1;
               order={data.page.order}
               content={content}
               pageCount={data.pageCount}
+              imageUrl={data.page.imageUrl}
             />
           )}
         </div>

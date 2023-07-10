@@ -16,8 +16,9 @@ type EditorContainerProps = {
   order: number;
   content: string;
   pageCount: number;
+  imageUrl: string;
 };
-function EditorContainer({ editor, isSaving, order, content }: EditorContainerProps) {
+function EditorContainer({ editor, isSaving, order, content,imageUrl }: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
@@ -63,7 +64,13 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
   }, [content, editor]);
 
   const showImage = useRecoilValue(showImageState); 
-  const isPostAllowed = data.pageCount===1;
+  const isPostAllowed = data.pageCount === 1;
+  
+
+  const handleQrClick = () => {
+    navigator.clipboard.writeText(window.location.href);
+  }
+
   return (
     <div className=" relative mb-4  shadow-sm">
       <div className="flex w-full max-w-full justify-center">
@@ -75,9 +82,7 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
                 <TransformComponent>
                   <img
                     alt="Text Image"
-                    src={
-                      ForumLink+'/uploads/default/original/1X/481de39a3a7e504767bbce6443099766a149d260.jpeg'
-                    }
+                    src={imageUrl}
                     className="text-image object-contain"
                     style={{ border: '1px solid gray' }}
                   />
@@ -89,9 +94,10 @@ function EditorContainer({ editor, isSaving, order, content }: EditorContainerPr
       </div>
       <div className=" text-light z-10 flex  items-center  justify-between   px-2 py-4  ">
         <div className=" flex w-full items-center justify-between gap-2">
-          <div className="textname text-2xl  font-bold">
+          <div className="textname flex items-center gap-2  text-2xl font-bold">
             {data.text.name} {order > 1 && order}
             {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
+            
           </div>
           <div>
             <Pagination pageCount={data.pageCount} />
