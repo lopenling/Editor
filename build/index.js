@@ -98,7 +98,7 @@ function handleBotRequest(request, responseStatusCode, responseHeaders, remixCon
           reject(error);
         },
         onError(error) {
-          responseStatusCode = 500, console.error(error);
+          responseStatusCode = 500, console.error(error, "how do i get here?");
         }
       }
     );

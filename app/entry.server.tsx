@@ -53,7 +53,7 @@ function handleBotRequest(
         },
         onError(error: unknown) {
           responseStatusCode = 500;
-          console.error(error);
+          console.error(error ,'how do i get here?');
         },
       }
     );
