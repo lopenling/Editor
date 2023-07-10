@@ -1,5 +1,4 @@
 import { MAX_CATEGORY_NAME_LENGTH } from '~/constants';
-import { isUserPresent } from '~/model/user';
 class DiscourseApi {
   DiscourseUrl: string;
   apiKey: string;
