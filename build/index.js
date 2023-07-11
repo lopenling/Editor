@@ -3932,42 +3932,42 @@ function scrollElementsIntoView(element1, element2) {
 // app/component/UI/Pagination.tsx
 var import_react24 = require("@remix-run/react"), import_fa = require("react-icons/fa"), import_jsx_dev_runtime19 = require("react/jsx-dev-runtime");
 function Pagination({ pageCount }) {
-  let data = (0, import_react24.useLoaderData)(), textId = data.text.id, order = data.page.order, PreviousLink = `/text/${textId}/page/${order - 1}`, nextLink = `/text/${textId}/page/${order + 1}`;
+  let data = (0, import_react24.useLoaderData)(), textId = data.text.id, order = parseInt(data.order), PreviousLink = `/text/${textId}/page/${order - 1}`, nextLink = `/text/${textId}/page/${order + 1}`;
   return /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)("div", { className: "flex justify-end gap-3", children: [
     order - 1 > 0 && /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_react24.Link, { to: PreviousLink, className: "mr-1 flex items-center gap-2 rounded  p-1", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_fa.FaArrowLeft, {}, void 0, !1, {
         fileName: "app/component/UI/Pagination.tsx",
-        lineNumber: 18,
+        lineNumber: 19,
         columnNumber: 11
       }, this),
       "previous"
     ] }, void 0, !0, {
       fileName: "app/component/UI/Pagination.tsx",
-      lineNumber: 17,
+      lineNumber: 18,
       columnNumber: 9
     }, this),
     order + 1 <= pageCount && /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_react24.Link, { to: nextLink, className: "mr-1 flex items-center gap-2 rounded  p-1", children: [
       "next",
       /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_fa.FaArrowRight, {}, void 0, !1, {
         fileName: "app/component/UI/Pagination.tsx",
-        lineNumber: 25,
+        lineNumber: 26,
         columnNumber: 11
       }, this)
     ] }, void 0, !0, {
       fileName: "app/component/UI/Pagination.tsx",
-      lineNumber: 23,
+      lineNumber: 24,
       columnNumber: 9
     }, this)
   ] }, void 0, !0, {
     fileName: "app/component/UI/Pagination.tsx",
-    lineNumber: 15,
+    lineNumber: 16,
     columnNumber: 5
   }, this);
 }
 
 // app/features/Editor/component/EditorContainer.tsx
 var import_react_zoom_pan_pinch = require("react-zoom-pan-pinch"), import_jsx_dev_runtime20 = require("react/jsx-dev-runtime");
-function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }) {
+function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl, pageCount }) {
   let data = (0, import_react25.useLoaderData)(), user = data.user, saveTextFetcher = (0, import_react25.useFetcher)(), getQuery = (newContent) => {
     let oldContent = content, dmp = new import_diff_match_patch.default();
     if (oldContent !== newContent) {
@@ -4023,7 +4023,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
     /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: "flex w-full max-w-full justify-center", children: showImage && /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(import_react_zoom_pan_pinch.TransformWrapper, { children: (utils) => /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(import_jsx_dev_runtime20.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(Controls, { ...utils }, void 0, !1, {
         fileName: "app/features/Editor/component/EditorContainer.tsx",
-        lineNumber: 112,
+        lineNumber: 111,
         columnNumber: 17
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(import_react_zoom_pan_pinch.TransformComponent, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(
@@ -4038,26 +4038,26 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
         !1,
         {
           fileName: "app/features/Editor/component/EditorContainer.tsx",
-          lineNumber: 114,
+          lineNumber: 113,
           columnNumber: 19
         },
         this
       ) }, void 0, !1, {
         fileName: "app/features/Editor/component/EditorContainer.tsx",
-        lineNumber: 113,
+        lineNumber: 112,
         columnNumber: 17
       }, this)
     ] }, void 0, !0, {
       fileName: "app/features/Editor/component/EditorContainer.tsx",
-      lineNumber: 111,
+      lineNumber: 110,
       columnNumber: 15
     }, this) }, void 0, !1, {
       fileName: "app/features/Editor/component/EditorContainer.tsx",
-      lineNumber: 109,
+      lineNumber: 108,
       columnNumber: 11
     }, this) }, void 0, !1, {
       fileName: "app/features/Editor/component/EditorContainer.tsx",
-      lineNumber: 107,
+      lineNumber: 106,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: " text-light z-10 flex  items-center  justify-between   px-2 py-4  ", children: /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: " flex w-full items-center justify-between gap-2", children: [
@@ -4067,30 +4067,26 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
         order > 1 && order,
         isSaving && /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("span", { className: "animate-pulse text-sm font-light", children: "saving..." }, void 0, !1, {
           fileName: "app/features/Editor/component/EditorContainer.tsx",
-          lineNumber: 130,
+          lineNumber: 129,
           columnNumber: 26
         }, this)
       ] }, void 0, !0, {
         fileName: "app/features/Editor/component/EditorContainer.tsx",
-        lineNumber: 128,
+        lineNumber: 127,
         columnNumber: 11
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(Pagination, { pageCount: data.pageCount }, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(Pagination, { pageCount }, void 0, !1, {
         fileName: "app/features/Editor/component/EditorContainer.tsx",
-        lineNumber: 133,
+        lineNumber: 131,
         columnNumber: 13
-      }, this) }, void 0, !1, {
-        fileName: "app/features/Editor/component/EditorContainer.tsx",
-        lineNumber: 132,
-        columnNumber: 11
       }, this)
     ] }, void 0, !0, {
       fileName: "app/features/Editor/component/EditorContainer.tsx",
-      lineNumber: 127,
+      lineNumber: 126,
       columnNumber: 9
     }, this) }, void 0, !1, {
       fileName: "app/features/Editor/component/EditorContainer.tsx",
-      lineNumber: 126,
+      lineNumber: 125,
       columnNumber: 7
     }, this),
     editor ? /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(
@@ -4107,17 +4103,17 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
       !1,
       {
         fileName: "app/features/Editor/component/EditorContainer.tsx",
-        lineNumber: 143,
+        lineNumber: 140,
         columnNumber: 9
       },
       this
     ) : /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: "flex h-[400px] w-full animate-pulse justify-center", children: /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: "mr-2 h-full flex-1 bg-gray-300 dark:bg-gray-700" }, void 0, !1, {
       fileName: "app/features/Editor/component/EditorContainer.tsx",
-      lineNumber: 140,
+      lineNumber: 137,
       columnNumber: 11
     }, this) }, void 0, !1, {
       fileName: "app/features/Editor/component/EditorContainer.tsx",
-      lineNumber: 139,
+      lineNumber: 136,
       columnNumber: 9
     }, this),
     editor && /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(
@@ -4147,7 +4143,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
             !1,
             {
               fileName: "app/features/Editor/component/EditorContainer.tsx",
-              lineNumber: 183,
+              lineNumber: 180,
               columnNumber: 19
             },
             this
@@ -4167,7 +4163,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
               !1,
               {
                 fileName: "app/features/Editor/component/EditorContainer.tsx",
-                lineNumber: 195,
+                lineNumber: 192,
                 columnNumber: 23
               },
               this
@@ -4186,19 +4182,19 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
               !1,
               {
                 fileName: "app/features/Editor/component/EditorContainer.tsx",
-                lineNumber: 203,
+                lineNumber: 200,
                 columnNumber: 23
               },
               this
             )
           ] }, void 0, !0, {
             fileName: "app/features/Editor/component/EditorContainer.tsx",
-            lineNumber: 194,
+            lineNumber: 191,
             columnNumber: 21
           }, this)
         ] }, void 0, !0, {
           fileName: "app/features/Editor/component/EditorContainer.tsx",
-          lineNumber: 182,
+          lineNumber: 179,
           columnNumber: 17
         }, this) : (user == null ? void 0 : user.admin) === "true" || data.text.userId == (user == null ? void 0 : user.id) ? /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(
           Button,
@@ -4214,13 +4210,13 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
           !1,
           {
             fileName: "app/features/Editor/component/EditorContainer.tsx",
-            lineNumber: 216,
+            lineNumber: 213,
             columnNumber: 15
           },
           this
         ) : null }, void 0, !1, {
           fileName: "app/features/Editor/component/EditorContainer.tsx",
-          lineNumber: 178,
+          lineNumber: 175,
           columnNumber: 11
         }, this)
       },
@@ -4228,36 +4224,36 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl })
       !1,
       {
         fileName: "app/features/Editor/component/EditorContainer.tsx",
-        lineNumber: 154,
+        lineNumber: 151,
         columnNumber: 9
       },
       this
     )
   ] }, void 0, !0, {
     fileName: "app/features/Editor/component/EditorContainer.tsx",
-    lineNumber: 106,
+    lineNumber: 105,
     columnNumber: 5
   }, this);
 }
 var Controls = ({ zoomIn, zoomOut, resetTransform }) => /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: "absolute right-3 top-0 z-10 flex gap-3", children: [
   /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("button", { className: "tool-image", onClick: () => zoomIn(), children: "Zoom In +" }, void 0, !1, {
     fileName: "app/features/Editor/component/EditorContainer.tsx",
-    lineNumber: 235,
+    lineNumber: 232,
     columnNumber: 5
   }, this),
   /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("button", { className: "tool-image", onClick: () => zoomOut(), children: "Zoom Out -" }, void 0, !1, {
     fileName: "app/features/Editor/component/EditorContainer.tsx",
-    lineNumber: 238,
+    lineNumber: 235,
     columnNumber: 5
   }, this),
   /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("button", { className: "tool-image", onClick: () => resetTransform(), children: "reset" }, void 0, !1, {
     fileName: "app/features/Editor/component/EditorContainer.tsx",
-    lineNumber: 241,
+    lineNumber: 238,
     columnNumber: 5
   }, this)
 ] }, void 0, !0, {
   fileName: "app/features/Editor/component/EditorContainer.tsx",
-  lineNumber: 234,
+  lineNumber: 231,
   columnNumber: 3
 }, this), EditorContainer_default = EditorContainer;
 
@@ -8602,7 +8598,7 @@ function oo_oo16(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { version: "0d4be7d4", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-V45SCVBZ.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-UTSRQOUF.js", imports: ["/build/_shared/chunk-LS6LO3FA.js", "/build/_shared/chunk-EDPMBUKK.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-BU65GCU4.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-W2IFQU2K.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-EDPMBUKK.js", "/build/_shared/chunk-BU65GCU4.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-CKWTSPT7.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-EDPMBUKK.js", "/build/_shared/chunk-QJI2SL7N.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-BU65GCU4.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-4DFJ2GQV.js", imports: ["/build/_shared/chunk-LS6LO3FA.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-0D4BE7D4.js" };
+var assets_manifest_default = { version: "faf91f19", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-V45SCVBZ.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-S3TEFJZO.js", imports: ["/build/_shared/chunk-LS6LO3FA.js", "/build/_shared/chunk-7IT5WIOW.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-BU65GCU4.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-FMJ6IZ5Q.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-7IT5WIOW.js", "/build/_shared/chunk-BU65GCU4.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-CGLIA4YD.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-7IT5WIOW.js", "/build/_shared/chunk-QJI2SL7N.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-BU65GCU4.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-4DFJ2GQV.js", imports: ["/build/_shared/chunk-LS6LO3FA.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-FAF91F19.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var assetsBuildDirectory = "public/build", future = { unstable_cssModules: !1, unstable_cssSideEffectImports: !1, unstable_dev: !1, unstable_postcss: !1, unstable_tailwind: !1, unstable_vanillaExtract: !1, v2_errorBoundary: !0, v2_meta: !0, v2_normalizeFormMethod: !0, v2_routeConvention: !0 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

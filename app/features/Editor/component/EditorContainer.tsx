@@ -19,7 +19,7 @@ type EditorContainerProps = {
   pageCount: number;
   imageUrl: string;
 };
-function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }: EditorContainerProps) {
+function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pageCount }: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
   const saveTextFetcher = useFetcher();
@@ -101,7 +101,6 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }:
   const showImage = useRecoilValue(showImageState);
   const isPostAllowed = data.text.allow_post;
 
-
   return (
     <div className=" relative mb-4  shadow-sm">
       <div className="flex w-full max-w-full justify-center">
@@ -129,9 +128,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }:
             {data.text.name} {order > 1 && order}
             {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
           </div>
-          <div>
-            <Pagination pageCount={data.pageCount} />
-          </div>
+            <Pagination pageCount={pageCount} />
         </div>
       </div>
 
@@ -184,9 +181,9 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl }:
                     title="suggestion"
                     type="button"
                     color="gray"
-                    className={`${
-                      openSuggestion ? 'bg-green-400 text-white' : 'bg-white '
-                    } rounded-l-lg ${!isPostAllowed && 'rounded-r-lg'} border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10    hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white  dark:hover:bg-gray-600 dark:hover:text-white `}
+                    className={`${openSuggestion ? 'bg-green-400 text-white' : 'bg-white '} rounded-l-lg ${
+                      !isPostAllowed && 'rounded-r-lg'
+                    } border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10    hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white  dark:hover:bg-gray-600 dark:hover:text-white `}
                     onClick={() => handleSuggestionClick()}
                     label="Suggestion"
                   />

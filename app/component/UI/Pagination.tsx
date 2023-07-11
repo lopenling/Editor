@@ -8,7 +8,8 @@ type PaginationPropType = {
 export default function Pagination({ pageCount }: PaginationPropType) {
   let data = useLoaderData();
   let textId = data.text.id;
-  let order = data.page.order;
+  let order = parseInt(data.order);
+
   let PreviousLink = `/text/${textId}/page/${order - 1}`;
   let nextLink = `/text/${textId}/page/${order + 1}`;
   return (
