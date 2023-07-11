@@ -42,6 +42,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
     text,
+    order
   });
 };
 

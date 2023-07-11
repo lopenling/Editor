@@ -20,4 +20,4 @@ services:
 
 databases:
   - name: lopenling-pg
-    plan: free
+    plan: starter
