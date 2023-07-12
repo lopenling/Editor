@@ -8,8 +8,8 @@ export const audioPermission = atom({
   default: false,
 });
 
-export const showImageState = atom({
-  default: false,
+export const ImageState = atom({
+  default: {show: true, url: '',isPortrait:false},
   key: 'showImage',
 });
 

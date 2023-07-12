@@ -5,9 +5,7 @@ const PartnerSection = () => {
   return (
     <div className="mb-10">
       <div className="container mx-auto">
-        <h2 className="mb-8 text-center text-xl ">
-          We Work With the Best  <span className="font-bold">Partner</span>
-        </h2>
+       
         <div className="flex items-center justify-center ">
           <a href={"https://indrajala.org.tw/"} target="_blank" rel="noreferrer">
           <img

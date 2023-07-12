@@ -44,7 +44,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!userSession) return { user: null };
   let user = await getUser(userSession.username);
   
-  // console.log(result_patch)
   return { user };
 };
 export function links() {
@@ -85,7 +84,7 @@ export function ErrorBoundary() {
   }
 }
 
-function App() {
+export default function App() {
   const data = useLoaderData();
   const navigation = useNavigation();
   let fetchers = useFetchers();
@@ -114,23 +113,16 @@ useEffect(() => {
       <body className="relative max-h-[100vh] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={['en_US', 'bo_TI']}>
           <AnimatePresence mode="wait" initial={false}>
+            <RecoilRoot>
               <Outlet context={{ user: data.user }} />
+              </RecoilRoot>
           </AnimatePresence>
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />
         <LiveReload />
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-             
         <Scripts />
       </body>
     </html>
-  );
-}
-export default function AppContainer() {
-  return (
-    <RecoilRoot>
-      <App />
-    </RecoilRoot>
   );
 }

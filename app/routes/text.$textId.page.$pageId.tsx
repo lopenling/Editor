@@ -1,7 +1,7 @@
-import { LoaderArgs, LoaderFunction, defer } from '@remix-run/node';
+import { ActionFunction, LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
 import { Await, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
 import { Editor,  useEditor } from '@tiptap/react';
-import { getPage } from '~/model/page';
+import { getPage, getVersions } from '~/model/page';
 import * as Extension from '~/features/Editor/tiptap';
 import { motion } from 'framer-motion';
 import {
@@ -30,11 +30,14 @@ import Modal from 'react-modal';
 import { HEADER_HEIGHT } from '~/constants';
 import { getText } from '~/model/text';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
+  const url = new URL(request.url);
+  const version = url.searchParams.get('version');
   const textId = params.textId as string;
   const order = params.pageId as string;
   const text = await getText(textId);
-  const page =  getPage(parseInt(textId), parseInt(order));
+  const page = getPage(parseInt(textId), parseInt(order), version);
   const user = await getUserSession(request);
+  const versions = await getVersions(parseInt(textId), parseInt(order));
   const suggestions = await findAllSuggestionByPageId(page?.id);
   return defer({
     page,
@@ -42,10 +45,16 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     suggestions,
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
     text,
-    order
+    order,
+    versions
   });
 };
-
+export const action: ActionFunction = async ({ request, params }) => {
+  let formdata = await request.formData();
+  let url = formdata.get('url') as string;
+  console.log(url);
+  return redirect(url);
+};
 function PostSidebar(props: { id: any; showPostSide: any; type: string; user: any; editor: any; page: any }) {
   return (
     <Outlet
@@ -62,13 +71,14 @@ function SuggestionSidebar(props: {
   suggestionSelected: { id: any };
   editor: Editor | null;
   suggestions: any;
+  page: any;
 }) {
   return (
     <div className='z-20 w-full'>
-      <SuggestionForm editor={props.editor} />
+      <SuggestionForm editor={props.editor} page={props.page} />
       <Suspense fallback={<div>loading</div>}>
         <Await resolve={props.suggestions}>
-          {(data) => <SuggestionContainer editor={props.editor} suggestions={data} />}
+          {(data) => <SuggestionContainer editor={props.editor} suggestions={data}  />}
         </Await>
       </Suspense>
     </div>
@@ -168,7 +178,6 @@ export default function Page() {
       setShowPostSide(false);
     }
   }, [selectedPost.id, selection.type, suggestionSelected?.id, openSuggestion]);
-
   useEffect(() => {
     if (!showPostSide) {
       postSelector({ id: '' });
@@ -178,7 +187,7 @@ export default function Page() {
   const topDistance = HEADER_HEIGHT;
   const tableSidebarWidth = 272;
   const postSidebarWidth = 400;
-const withImage=data.pageCount>1;
+const withImage = !data.text.allow_post;
   return (
     <>
       <Header editor={editor} />
@@ -234,6 +243,7 @@ const withImage=data.pageCount>1;
                     pageCount={page?.text.Page.length}
                     imageUrl={page.imageUrl}
                     pageId={page.id}
+                    versions={data.versions}
                   />
                 }
               </Await>
@@ -252,42 +262,55 @@ const withImage=data.pageCount>1;
              <Suspense fallback={<div>loading</div>}>
               <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
               {(page) => {
-               if (page.Post.length<1 || !page.Post) return null;
-                return <button
-                  className="absolute rounded-full"
-                  style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
-                  onClick={() => setShowPostSide((p) => !p)}
-                >
-                  <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
-                </button>
+                return (
+                  <>
+                    <button
+                      className="absolute rounded-full"
+                      style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
+                      onClick={() => setShowPostSide((p) => !p)}
+                    >
+                      <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
+                    </button>
+                    {suggestionSelected?.id || openSuggestion ? (
+                      <SuggestionSidebar
+                        suggestions={data.suggestions}
+                        suggestionSelected={suggestionSelected}
+                        page={page}
+                        editor={editor}
+                      />
+                    ) : (
+                      <div
+                        className={`hidden w-full min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
+                        style={{
+                          flexDirection: 'column',
+                          opacity: showPostSide ? 1 : 0,
+                          transition: 'opacity ease 0.4s',
+                        }}
+                      >
+                        <PostSidebar
+                          page={page}
+                          user={user}
+                          id={selectedPost.id}
+                          type={selection.type}
+                          showPostSide={showPostSide}
+                          editor={editor}
+                        />
+                      </div>
+                    )}
+                  </>
+                );
+                
               }}
             </Await>
             </Suspense>
-          {suggestionSelected?.id || openSuggestion ? (
-            <SuggestionSidebar suggestions={data.suggestions} suggestionSelected={suggestionSelected} editor={editor} />
-          ) :
-            <div
-              className={`hidden w-full min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
-              style={{
-                flexDirection: 'column',
-                opacity: showPostSide ? 1 : 0,
-                transition: 'opacity ease 0.4s',
-              }}
-            >
-              <PostSidebar
-                page={data.page}
-                user={user}
-                id={selectedPost.id}
-                type={selection.type}
-                showPostSide={showPostSide}
-                editor={editor}
-              />
-            </div>
-          }
+        
         </div>
       </div>
       {/* for mobile devicess */}
-      <Modal
+        <Suspense fallback={<div>loading</div>}>
+              <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
+              {(page) => {
+             return <Modal
         isOpen={showPostSide || !!suggestionSelected?.id || openSuggestion}
         onRequestClose={() => {
           setShowPostSide(false);
@@ -305,6 +328,7 @@ const withImage=data.pageCount>1;
               suggestions={data.suggestions}
               suggestionSelected={suggestionSelected}
               editor={editor}
+              page={page}
             ></SuggestionSidebar>
           </div>
         ) : (
@@ -315,7 +339,7 @@ const withImage=data.pageCount>1;
             }}
           >
             <PostSidebar
-              page={data.page}
+              page={page}
               user={user}
               id={selectedPost.id}
               type={selection.type}
@@ -324,7 +348,10 @@ const withImage=data.pageCount>1;
             />
           </div>
         )}
-      </Modal>
+            </Modal>
+              }}
+            </Await>
+            </Suspense>
     </>
   );
 }

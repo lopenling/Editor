@@ -41,8 +41,10 @@ export let action: ActionFunction = async ({ request }: ActionArgs) => {
         threadId,
         audioUrl: filepath,
       });
+      console.log(responce)
       return { responce };
     } catch (e) {
+      console.log(e)
       return { message: e };
     }
   } else {

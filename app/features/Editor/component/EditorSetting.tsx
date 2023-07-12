@@ -8,11 +8,11 @@ import { isSmallScreen } from '~/lib';
 import { Editor } from '@tiptap/react';
 import { useLoaderData, useLocation } from '@remix-run/react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { showImageState, textInfo } from '~/states';
+import { ImageState, textInfo } from '~/states';
 import ImageWithPlaceholder from '~/component/UI/Image';
 
 export default function EditorSetting({ editor }: { editor: Editor }) {
-  const [showImage, setShowImage] = useRecoilState(showImageState);
+  const [image, setShowImage] = useRecoilState(ImageState);
   const data = useLoaderData();
   
   const imageUrl=data.page.imageUrl;
@@ -25,7 +25,7 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
     changeFont(value);
   };
   const toggleImage = (e) => {
-    setShowImage(e.target.checked);
+    setShowImage({...image, show: e.target.checked });
   };
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [openShare,setOpenShare]=useState(false);
@@ -69,10 +69,10 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
                 />
               </div>
             </li>
-            {imageUrl && (
+            {image.url && (
               <li className="flex items-center px-4 py-2">
                 <input
-                  checked={showImage}
+                  checked={image.show}
                   id="imageToggle"
                   type="checkbox"
                   className="mb-2 mr-2 cursor-pointer"

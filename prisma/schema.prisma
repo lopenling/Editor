@@ -59,6 +59,7 @@ model Page {
   Post       Post[]
   Suggestion Suggestion[]
   imageUrl   String?
+  version    Version?
 }
 
 model Suggestion {
@@ -120,4 +121,12 @@ model UserPreference {
   theme    String @default("light")
   language String @default("en")
   User     User?
+}
+
+enum Version{
+  collaboration
+  derge
+  chone
+  narthang
+  peking
 }

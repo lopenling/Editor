@@ -4,7 +4,7 @@ import { Editor } from '@tiptap/react';
 import { GrClose } from 'react-icons/gr';
 import Suggestion from './Suggestion';
 import { SuggestionType } from '~/model/type';
-function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestions: SuggestionType[] }) {
+function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestions: SuggestionType[]}) {
   const suggestionThread = useRecoilValue(selectedSuggestionThread);
   const setOpenContent = useSetRecoilState(showSidebar);
 

@@ -12,7 +12,7 @@ export async function getText(id: string) {
         id: true,
         name: true,
         allow_post: true,
-        userId:true
+        userId: true
       }
     });
     return text;

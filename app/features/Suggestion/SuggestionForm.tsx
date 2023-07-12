@@ -11,9 +11,10 @@ import { AudioPlayer, AudioRecorder } from '../Media';
 
 type SuggestionFormProps = {
   editor: Editor | null;
+  page: any;
 };
 
-export default function SuggestionForm({ editor }: SuggestionFormProps) {
+export default function SuggestionForm({ editor,page }: SuggestionFormProps) {
   const data = useLoaderData();
   let { user } = data;
   const [suggestionInput, setSuggestionInput] = useState('');
@@ -43,7 +44,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     let item = {
       oldValue: originalText,
       textId: data.text.id,
-      pageId: data.page.id,
+      pageId: page?.id,
       newValue: suggestionInput,
       userId: user?.id,
       threadId: id,
@@ -63,7 +64,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     });
     if (!awaitdata?.message) {
       editor.commands.setSuggestion({
-        id: id,
+        id,
         original: originalText,
       });
       setError(null);

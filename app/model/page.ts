@@ -20,18 +20,38 @@ export async function getPageWithId(id: string) {
     console.log(e);
   }
 }
-export async function getPage(textId: number, order: number) {
+export async function getVersions(textId: number, order: number) {
+  
   try {
-    let page = db.page.findFirst({
+    let page = db.page.findMany({
       where: {
         textId,
-        order
+        order,
       },
+      select: {
+        version: true,
+      },
+    });
+    let filterpage = await page;
+    if (filterpage.filter(l=>l.version!==null).length==0) return [];
+    return (await page).map(item=>item?.version);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getPage(textId: number, order: number,version:string|null) {
+  try {
+    let where = typeof version==='string' ? { textId, order, version } : { textId, order };
+    let pageWhere = version ? { version } : {};
+    let page = db.page.findFirst({
+      where,
       include: {
         text: {
           include: {
             Page: {
-              select: {
+              where: pageWhere,
+             select: {
                 id: true,
                 order: true,
              }
@@ -42,7 +62,7 @@ export async function getPage(textId: number, order: number) {
           select: {
            id: true,
           }
-        }
+        },
       },
     });
     return page;

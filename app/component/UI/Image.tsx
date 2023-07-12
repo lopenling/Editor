@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Spinner from './Spinner';
 
 const ImageWithPlaceholder = ({ src, alt,title='',onClick=()=>{} }) => {
   const [loading, setLoading] = useState(true);
@@ -32,11 +33,7 @@ const ImageWithPlaceholder = ({ src, alt,title='',onClick=()=>{} }) => {
             justifyContent: 'center',
           }}
         >
-          <img
-            src="loading-spinner.gif"
-            alt="Loading Spinner"
-            style={{ width: '50px' }} // Adjust the size of the loading spinner
-          />
+          <Spinner/>
         </div>
       )}
       <img
