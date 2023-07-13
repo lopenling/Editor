@@ -33,6 +33,7 @@ export async function getVersions(textId: number, order: number) {
     const versionCountMap: Record<string, number> = {};
 
     pages.forEach((page) => {
+      if(!page.version) return;
       if (versionCountMap.hasOwnProperty(page.version)) {
         versionCountMap[page.version]++;
       } else {
@@ -41,7 +42,6 @@ export async function getVersions(textId: number, order: number) {
     });
 
     const versionsWithCount = Object.entries(versionCountMap).map(([version, count]) => ({ version, count }));
-    console.log(versionsWithCount)
     return versionsWithCount;
   } catch (e) {
     console.log(e);
