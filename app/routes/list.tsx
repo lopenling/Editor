@@ -89,12 +89,12 @@ export default function List() {
                         )}
                       </div>
                     ) : (
-                                           <div className="flex gap-2">
-
+                        <div className="flex gap-2">
                         {Object.keys(groupedData).map((key) => {
                           let urlversion = url + '?version=' + key;
                           return (
                             <Link
+                              key={key}
                               to={urlversion}
                               className="cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black"
                             >
