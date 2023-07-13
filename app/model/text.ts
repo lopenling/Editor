@@ -43,11 +43,13 @@ export async function findLatestText() {
         id: true,
         name: true,
         Page: true,
+        allow_post:true,
       },
       orderBy: {
         createdAt: 'desc',
       },
     });
+
     return {
       count: text.length,
       latestTexts: text.slice(0, 4),

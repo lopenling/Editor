@@ -6,6 +6,7 @@ import { findAllTextWithDetail } from "~/model/text";
 import { Avatar } from "~/component/UI";
 import { getUserSession } from "~/services/session.server";
 import { TextType } from "~/model/type";
+import groupData from "~/lib/filterVersionFromText";
 export const loader = async ({ request }: LoaderArgs) => { 
   let textList = await findAllTextWithDetail();
   let user = await getUserSession(request);
@@ -61,30 +62,52 @@ export default function List() {
             </tr>
           </thead>
           <tbody>
-            {currentTexts.map((text: TextType) => (
-              <tr key={text.id} className="w-full border-b dark:border-gray-700">
-                <th scope="col" className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
-                  <Avatar
-                    title={text?.author.name}
-                    alt={text?.author.name}
-                    img={text?.author.avatarUrl}
-                    rounded={true}
-                    size="sm"
-                  />
-                  <Link to={`/text/${text.id}/page/1/posts`}>{text.name}</Link>
-                </th>
-                <td scope="col" className=" px-4 py-4">
-                  <div className="flex gap-2">
-                    <div>{text.Page.length}</div>
-                    {isAdmin && (
-                      <div onClick={() => deleteText(text.id)} className="cursor-pointer">
-                        delete
+            {currentTexts.map((text: TextType) => {
+              let { groupedData, isVersionAvailable } = groupData(text.Page);
+              let url = `/text/${text.id}/page/1/${text.allow_post ? 'posts' : ''}`;
+
+              return (
+                <tr key={text.id} className="w-full border-b dark:border-gray-700">
+                  <th scope="col" className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
+                    <Avatar
+                      title={text?.author.name}
+                      alt={text?.author.name}
+                      img={text?.author.avatarUrl}
+                      rounded={true}
+                      size="sm"
+                    />
+                    <Link to={url}>{text.name}</Link>
+                  </th>
+                  <td scope="col" className=" px-4 py-4">
+                    {!isVersionAvailable ? (
+                      <div className="flex gap-2">
+                        <div>{text.Page.length}</div>
+                        {isAdmin && (
+                          <div onClick={() => deleteText(text.id)} className="cursor-pointer">
+                            delete
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                                           <div className="flex gap-2">
+
+                        {Object.keys(groupedData).map((key) => {
+                          let urlversion = url + '?version=' + key;
+                          return (
+                            <Link
+                              to={urlversion}
+                              className="cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black"
+                            >
+                              {key}
+                            </Link>
+                          );
+                        })}
                       </div>
                     )}
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         <div className="mt-8 flex items-center justify-center">

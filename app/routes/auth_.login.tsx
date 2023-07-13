@@ -72,7 +72,6 @@ export let action: ActionFunction = async ({ request, context }) => {
   if (!redirectTo) {
     throw new Error('no redirect in form');
   }
-  redirectTo = redirectTo as string;
   if (_action === 'logout') {
     return redirect(redirectTo, {
       headers: {

@@ -57,7 +57,8 @@ function Header({ editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation: any = uselitteraTranlation();
-  const redirectTo = useLocation().pathname;
+  const {pathname,search} = useLocation();
+  const redirectTo = pathname + search;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
   const { name: textName } = useRecoilValue(textInfo);
   let { user }: { user: UserType } = useOutletContext();

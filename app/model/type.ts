@@ -100,6 +100,7 @@ export interface TextType {
   Post: PostType[];
   createdAt?: string | null;
   updatedAt?: string | null;
+  allow_post: boolean;
 }
 
 export interface PageType {
@@ -111,4 +112,5 @@ export interface PageType {
   Post: PostType[];
   Suggestion: SuggestionType[];
   imageUrl: string;
+  version: 'chone' | 'derge' | 'peking' | 'narthang' | 'collaboration';
 }
