@@ -52,7 +52,6 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
 export const action: ActionFunction = async ({ request, params }) => {
   let formdata = await request.formData();
   let url = formdata.get('url') as string;
-  console.log(url);
   return redirect(url);
 };
 function PostSidebar(props: { id: any; showPostSide: any; type: string; user: any; editor: any; page: any }) {
@@ -231,10 +230,18 @@ const withImage = !data.text.allow_post;
             flex: 1,
           }}
           id="textEditorContainer"
-        >{editor &&
+        >
+          {editor && (
             <Suspense fallback={<div>loading</div>}>
-              <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
-                {(page) =>
+              <Await
+                resolve={data.page}
+                errorElement={
+                  <div>
+                    page not Available <Link prefetch="intent" to={`/text/${data.text.id}/page/1`}> click here</Link>
+                  </div>
+                }
+              >
+                {(page) => (
                   <EditorContainer
                     editor={editor!}
                     isSaving={false}
@@ -245,9 +252,10 @@ const withImage = !data.text.allow_post;
                     pageId={page.id}
                     versions={data.versions}
                   />
-                }
+                )}
               </Await>
-            </Suspense>}
+            </Suspense>
+          )}
         </div>
         <div
           style={{
@@ -259,18 +267,18 @@ const withImage = !data.text.allow_post;
           className="sticky hidden w-full md:flex "
           id="postContent"
         >
-             <Suspense fallback={<div>loading</div>}>
-              <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
+          <Suspense fallback={<div>loading</div>}>
+            <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
               {(page) => {
                 return (
-                  <>
-                    <button
+                  <>{data.text.allow_post && <button
                       className="absolute rounded-full"
                       style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
                       onClick={() => setShowPostSide((p) => !p)}
                     >
                       <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
                     </button>
+                  }
                     {suggestionSelected?.id || openSuggestion ? (
                       <SuggestionSidebar
                         suggestions={data.suggestions}
@@ -299,59 +307,62 @@ const withImage = !data.text.allow_post;
                     )}
                   </>
                 );
-                
               }}
             </Await>
-            </Suspense>
-        
+          </Suspense>
         </div>
       </div>
       {/* for mobile devicess */}
-        <Suspense fallback={<div>loading</div>}>
-              <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
-              {(page) => {
-             return <Modal
-        isOpen={showPostSide || !!suggestionSelected?.id || openSuggestion}
-        onRequestClose={() => {
-          setShowPostSide(false);
-          setOpenSuggestion(false);
-          suggestionSelector({ id: '' });
-        }}
-        shouldCloseOnOverlayClick={false}
-        ariaHideApp={false}
-        className="modal-content pointer-events: auto; z-50 w-full overflow-y-scroll md:hidden"
-        overlayClassName="modal-overlay"
-      >
-        {suggestionSelected?.id || openSuggestion ? (
-          <div className="absolute bottom-0 w-full bg-white " style={{ maxHeight: '50dvh', overflow: 'scroll' }}>
-            <SuggestionSidebar
-              suggestions={data.suggestions}
-              suggestionSelected={suggestionSelected}
-              editor={editor}
-              page={page}
-            ></SuggestionSidebar>
-          </div>
-        ) : (
-          <div
-            style={{
-              maxHeight: '50dvh',
-              overflowY: 'scroll',
-            }}
-          >
-            <PostSidebar
-              page={page}
-              user={user}
-              id={selectedPost.id}
-              type={selection.type}
-              showPostSide={showPostSide}
-              editor={editor}
-            />
-          </div>
-        )}
-            </Modal>
-              }}
-            </Await>
-            </Suspense>
+      <Suspense fallback={<div>loading</div>}>
+        <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
+          {(page) => {
+            return (
+              <Modal
+                isOpen={showPostSide || !!suggestionSelected?.id || openSuggestion}
+                onRequestClose={() => {
+                  setShowPostSide(false);
+                  setOpenSuggestion(false);
+                  suggestionSelector({ id: '' });
+                }}
+                shouldCloseOnOverlayClick={false}
+                ariaHideApp={false}
+                className="modal-content pointer-events: auto; z-50 w-full overflow-y-scroll md:hidden"
+                overlayClassName="modal-overlay"
+              >
+                {suggestionSelected?.id || openSuggestion ? (
+                  <div
+                    className="absolute bottom-0 w-full bg-white "
+                    style={{ maxHeight: '50dvh', overflow: 'scroll' }}
+                  >
+                    <SuggestionSidebar
+                      suggestions={data.suggestions}
+                      suggestionSelected={suggestionSelected}
+                      editor={editor}
+                      page={page}
+                    ></SuggestionSidebar>
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      maxHeight: '50dvh',
+                      overflowY: 'scroll',
+                    }}
+                  >
+                    <PostSidebar
+                      page={page}
+                      user={user}
+                      id={selectedPost.id}
+                      type={selection.type}
+                      showPostSide={showPostSide}
+                      editor={editor}
+                    />
+                  </div>
+                )}
+              </Modal>
+            );
+          }}
+        </Await>
+      </Suspense>
     </>
   );
 }

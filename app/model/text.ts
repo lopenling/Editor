@@ -21,6 +21,7 @@ export async function getText(id: string) {
     throw new Error('fetching text error' + e.message);
   }
 }
+
 export async function findAllText(id = true, name = true, content = false) {
   try {
     let text = await db.text.findMany({

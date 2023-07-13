@@ -155,11 +155,6 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
             <div className="textname flex items-center gap-2  text-2xl font-bold">
               {data.text.name} {order > 1 && order}
               {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
-              <select className={`${(versions?.length==0 || !versions) && "hidden"}`} onChange={hangleVersionChange} defaultValue={params.get('version')!}>
-                {versions.map((version) => (
-                  <option value={version} key={version}>{version}</option>
-                ))}
-              </select>
             </div>
             <Pagination pageCount={pageCount} />
           </div>

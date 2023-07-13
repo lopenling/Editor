@@ -13,7 +13,7 @@ function groupData(data) {
       isVersionAvailable = false;
     }
   });
-
+ 
   return {
     groupedData,
     isVersionAvailable,
