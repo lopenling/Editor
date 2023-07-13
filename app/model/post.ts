@@ -2,6 +2,7 @@
 
 import { db } from '~/services/db.server';
 import { fetchCategoryData } from '~/services/discourseApi';
+import { getPage } from './page';
 
 export async function createPost(
   type: string,
@@ -71,10 +72,10 @@ export async function findPostByTopicId(TopicId: number) {
     return 'couldnot find the by TopicId' + e.message;
   }
 }
-export async function findPostByTextIdAndPage(textId: number, pageId: string) {
+export async function findPostByTextIdAndPage(textId:number, order: number,version:string|null) {
   try {
-    const Categories = await fetchCategoryData();
-    const topicList = Categories.topic_list.topics;
+    const page = await getPage(textId, order, version);
+    if(!page) throw new Error('page not found');
     let posts = await db.post.findMany({
       include: {
         creatorUser: true,
@@ -83,24 +84,23 @@ export async function findPostByTextIdAndPage(textId: number, pageId: string) {
       },
       where: {
         textId,
-        pageId,
+        pageId:page.id,
       },
     });
     const postWithReply = await Promise.all(
       posts.map(async (post) => {
-        const replies = topicList.find((l) => l.id === post.topic_id);
         const isSolved = post.reply.filter((l) => l.is_approved === true).length > 0;
 
         return {
           ...post,
-          replyCount: replies?.posts_count - 1, //-1 because the parent post is included here
+          replyCount: post.reply.length, //-1 because the parent post is included here
           isSolved,
         };
       })
     );
     return postWithReply.filter(Boolean);
   } catch (e) {
-    return { error: e.message };
+    return { error: e };
   }
 }
 

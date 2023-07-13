@@ -17,9 +17,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
   const threadId = new URL(request.url).searchParams.get('thread') ?? '';
-  let page = await getPage(parseInt(textId), parseInt(order));
-  const posts = await findPostByTextIdAndPage(parseInt(textId), page?.id);
-  return defer({ text: { id: textId }, posts, threadId, page });
+  const version= new URL(request.url).searchParams.get('version') ?? null;
+  const posts = await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version);
+  return defer({ text: { id: textId }, posts, threadId });
 };
 export const ErrorBoundary = ({ error }: { error: Error }) => {
   return <div>{error?.message}</div>;

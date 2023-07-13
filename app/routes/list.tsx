@@ -16,7 +16,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 }
 
 export default function List() {
-  const fetcher = useFetcher();
+    const fetcher = useFetcher();
     const { textList,isAdmin } = useLoaderData();
     const [currentPage, setCurrentPage] = useState(1);
     const textsPerPage = 20;
@@ -28,7 +28,7 @@ export default function List() {
       setCurrentPage(page);
   };
   
-  const deleteText = (textId: number) => {
+    const deleteText = (textId: number) => {
     let i=confirm('Are you sure you want to delete this text?')
    
     if (i) {
@@ -40,7 +40,7 @@ export default function List() {
       console.log('cancelled')
     }
     
-  }
+    }
 
 
     return (

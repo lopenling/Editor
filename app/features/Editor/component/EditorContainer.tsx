@@ -10,6 +10,7 @@ import { DiffMatchPatch, isSmallScreen } from '~/lib';
 import { scrollThreadIntoView } from '../lib';
 import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import Controls from './Controls';
 type EditorContainerProps = {
   pageId: string;
   editor: Editor;
@@ -25,9 +26,15 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   const user = data.user;
     let fetcher = useFetcher();
   const saveTextFetcher = useFetcher();
-  const [Image,setImage] = useRecoilState(ImageState);
-  const location = useLocation();
+  const [Image, setImage] = useRecoilState(ImageState);
+  const isPostAllowed = data.text.allow_post;
+  const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
+  const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
+  let thread = useRecoilValue(selectedPostThread);
   const [params,] = useSearchParams();
+  const location = useLocation();
+
+
   const getQuery = (newContent: string) => {
     let oldContent = content;
     const dmp = new DiffMatchPatch();
@@ -49,12 +56,6 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
       action: '/api/text',
     });
   };
-
-  
-
-  const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
-  const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
-  let thread = useRecoilValue(selectedPostThread);
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     editor.on('update', async ({ editor }) => {
@@ -104,14 +105,12 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
       clearTimeout(timer)
     };
   }, [content, editor]);
-
-  const isPostAllowed = data.text.allow_post;
-  const handleImageLoaded = (e) => {
+  const handleImageLoaded = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     let height = e.target.height;
     let width = e.target.width;
     setImage({ ...Image, isPortrait: height > width });
-  }
-  const hangleVersionChange = (e) => {
+  };
+  const hangleVersionChange = (e:{target:HTMLSelectElement}) => {
     let value = e.target.value;
     let url = location.pathname + '?version=' + value;
     fetcher.submit({url}, {
@@ -260,23 +259,5 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   );
 }
 
-
-const Controls = ({ zoomIn, zoomOut, resetTransform,url }:any) => {
-  useEffect(() => {
-    resetTransform();
-  },[url])
-  
-  return (<div className="absolute right-3 top-0 z-20 flex gap-3  " style={{float:'right'}}>
-    <button className="tool-image" onClick={() => zoomIn()}>
-     Zoom In +
-    </button>
-    <button className="tool-image" onClick={() => zoomOut()}>
-     Zoom Out -
-    </button>
-    <button className="tool-image" onClick={() => resetTransform()}>
-      reset
-    </button>
-  </div>
-)};
 
 export default EditorContainer;

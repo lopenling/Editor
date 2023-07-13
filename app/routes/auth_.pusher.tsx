@@ -5,8 +5,8 @@ import { getUserSession } from '~/services/session.server';
 export const action: ActionFunction = async ({ request }) => {
   let user = await getUserSession(request);
   let formData = await request.formData();
-  const socket_id = formData.get('socket_id');
-  const channel_name = formData.get('channel_name');
+  const socket_id = formData.get('socket_id') as string;
+  const channel_name = formData.get('channel_name') as string;
   if (user) {
     let presenceData = {
       user_id: user.id,

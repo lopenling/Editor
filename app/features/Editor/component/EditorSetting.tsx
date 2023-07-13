@@ -9,7 +9,7 @@ import { Editor } from '@tiptap/react';
 import { useLoaderData, useLocation } from '@remix-run/react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ImageState, textInfo } from '~/states';
-import ImageWithPlaceholder from '~/component/UI/Image';
+import ImageWithPlaceholder from '~/features/Media/Image';
 
 export default function EditorSetting({ editor }: { editor: Editor }) {
   const [image, setShowImage] = useRecoilState(ImageState);

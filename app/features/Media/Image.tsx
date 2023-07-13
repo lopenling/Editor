@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Spinner from './Spinner';
+import Spinner from '../../component/UI/Spinner';
 
 const ImageWithPlaceholder = ({ src, alt,title='',onClick=()=>{} }) => {
   const [loading, setLoading] = useState(true);
