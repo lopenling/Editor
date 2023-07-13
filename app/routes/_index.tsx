@@ -14,6 +14,7 @@ import { HEADER_HEIGHT } from '~/constants';
 import { initializeTribute } from '~/lib';
 import { findLatestText } from '~/model/text';
 import { TextType } from '~/model/type';
+import groupData from '~/lib/filterVersionFromText';
 
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -127,16 +128,34 @@ export default function Index() {
           {data?.latestTexts && (
             <>
               {data.latestTexts.list.map((text: TextType) => {
-                let pageWithPost = text.Page.length === 1;
-                if (text.Page.length < 1) return null;
+                let pageWithPost = text.allow_post;
+                let { groupedData, isVersionAvailable } = groupData(text.Page);
+                let url = `/text/${text.id}/page/1/${pageWithPost ? 'posts' : ''}`;
                 return (
                   <div key={text.id} className="flex w-full justify-between border-b dark:border-gray-700">
                     <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
-                      <Link to={`/text/${text.id}/page/1/${pageWithPost ? 'posts' : ''}`}>{text.name}</Link>
+                      <Link to={url}>{text.name}</Link>
                     </div>
-                    <div className="px-4 py-4 font-light text-gray-300">
-                      {text.Page.length} page{text.Page.length > 1 && 's'}
-                    </div>
+                    {
+                      <div className="px-4 py-4 font-light text-gray-300 flex gap-2">
+                        {!isVersionAvailable? (
+                          <>
+                           
+                          </>
+                        ) : (
+                          <>
+                              {Object.keys(groupedData).map(key => {
+                                let urlversion= url+'?version='+key
+                                return (
+                                  <Link to={urlversion} className='cursor-pointer capitalize rounded-md bg-yellow-300 text-black px-2'>
+                                    {key}
+                                  </Link>
+                                );
+                            })}
+                          </>
+                        )}
+                      </div>
+                    }
                   </div>
                 );
               })}
@@ -207,4 +226,6 @@ export default function Index() {
     </motion.div>
   );
 }
+
+
 
