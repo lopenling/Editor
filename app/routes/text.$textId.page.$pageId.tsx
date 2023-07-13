@@ -30,14 +30,19 @@ import Modal from 'react-modal';
 import { HEADER_HEIGHT } from '~/constants';
 import { getText } from '~/model/text';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
-  const url = new URL(request.url);
-  const version = url.searchParams.get('version');
   const textId = params.textId as string;
   const order = params.pageId as string;
+  const url = new URL(request.url);
+  const version = url.searchParams.get('version');
+  const versions = await getVersions(parseInt(textId), parseInt(order));
+  if (!version && versions.length > 0) {
+    if (!version) {
+      return redirect(`${request.url}?version=${versions[0].version}`)
+    }
+  }
   const text = await getText(textId);
   const page = getPage(parseInt(textId), parseInt(order), version);
   const user = await getUserSession(request);
-  const versions = await getVersions(parseInt(textId), parseInt(order));
   const suggestions = await findAllSuggestionByPageId(page?.id);
   return defer({
     page,
@@ -237,7 +242,7 @@ const withImage = !data.text.allow_post;
                 resolve={data.page}
                 errorElement={
                   <div>
-                    page not Available <Link prefetch="intent" to={`/text/${data.text.id}/page/1`}> click here</Link>
+                    page not Available <Link prefetch="intent" to={`/`}> click here</Link>
                   </div>
                 }
               >
