@@ -31,12 +31,11 @@ const LogoWithTextName = ({ textName }: { textName: string }) => {
   return (
     <div className="flex items-center gap-1">
       <Link to="/">
-        {' '}
         <img src={LogoOnly} alt="logo" className="block object-contain" style={{ maxHeight: '37px' }} />
       </Link>
       <h1
         onClick={() => {
-          let editorElement = document.getElementById('textEditorContainer');
+          let editorElement = document.documentElement;
           editorElement?.scrollTo({
             top: 0,
             behavior: 'smooth',

@@ -7,6 +7,7 @@ const usePusherPresence = (channelName, id, cluster, user) => {
   const { revalidate } = useRevalidator();
 
   useEffect(() => {
+    console.log(channelName);
     const pusher = new Pusher(id, {
       cluster,
       authEndpoint: '/auth/pusher', // Replace with your server's auth endpoint

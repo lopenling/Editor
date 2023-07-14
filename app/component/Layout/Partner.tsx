@@ -1,5 +1,4 @@
 import indrajalaLogo from '~/assets/indrajalaLogo.png';
-import React from 'react';
 
 const PartnerSection = () => {
   return (

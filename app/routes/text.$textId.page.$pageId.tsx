@@ -1,6 +1,6 @@
 import { ActionFunction, LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
 import { Await, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
-import { Editor,  useEditor } from '@tiptap/react';
+import { Editor, useEditor } from '@tiptap/react';
 import { getPage, getVersions } from '~/model/page';
 import * as Extension from '~/features/Editor/tiptap';
 import { motion } from 'framer-motion';
@@ -37,7 +37,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const versions = await getVersions(parseInt(textId), parseInt(order));
   if (!version && versions.length > 0) {
     if (!version) {
-      return redirect(`${request.url}?version=${versions[0].version}`)
+      return redirect(`${request.url}?version=${versions[0].version}`);
     }
   }
   const text = await getText(textId);
@@ -51,14 +51,10 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     pusher_env: { key: process.env.key, cluster: process.env.cluster },
     text,
     order,
-    versions
+    versions,
   });
 };
-export const action: ActionFunction = async ({ request, params }) => {
-  let formdata = await request.formData();
-  let url = formdata.get('url') as string;
-  return redirect(url);
-};
+
 function PostSidebar(props: { id: any; showPostSide: any; type: string; user: any; editor: any; page: any }) {
   return (
     <Outlet
@@ -78,11 +74,11 @@ function SuggestionSidebar(props: {
   page: any;
 }) {
   return (
-    <div className='z-20 w-full'>
+    <div className="z-20 w-full">
       <SuggestionForm editor={props.editor} page={props.page} />
       <Suspense fallback={<div>loading</div>}>
         <Await resolve={props.suggestions}>
-          {(data) => <SuggestionContainer editor={props.editor} suggestions={data}  />}
+          {(data) => <SuggestionContainer editor={props.editor} suggestions={data} />}
         </Await>
       </Suspense>
     </div>
@@ -105,20 +101,15 @@ export default function Page() {
       id: id,
     });
   }
+
   function postSetter(id: string) {
     postSelector({
       id: id,
     });
-    
   }
-  const { onlineMembers } = usePusherPresence(
-    `presence-text_${data?.page?.id}`,
-    data.pusher_env.key,
-    data.pusher_env.cluster,
-    data.user
-  );
+
  
- 
+
   let editor = useEditor(
     {
       extensions: [
@@ -189,13 +180,12 @@ export default function Page() {
     }
   }, [showPostSide]);
   const topDistance = HEADER_HEIGHT;
-  const tableSidebarWidth = 272;
-  const postSidebarWidth = 400;
-const withImage = !data.text.allow_post;
+  const LEFT_SIDEBAR_WIDTH = 272;
+  const RIGHT_SIDEBAR_WIDTH = 400;
+  const withImage = !data.text.allow_post;
   return (
     <>
       <Header editor={editor} />
-      <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       <div
         style={{
           height: topDistance,
@@ -206,7 +196,7 @@ const withImage = !data.text.allow_post;
         <div
           style={{
             top: topDistance,
-            width: showTable ? tableSidebarWidth : 50,
+            width: showTable ? LEFT_SIDEBAR_WIDTH : 50,
           }}
           id="tableContent"
           className="sticky hidden md:flex"
@@ -242,7 +232,11 @@ const withImage = !data.text.allow_post;
                 resolve={data.page}
                 errorElement={
                   <div>
-                    page not Available <Link prefetch="intent" to={`/`}> click here</Link>
+                    page not Available{' '}
+                    <Link prefetch="intent" to={`/`}>
+                      {' '}
+                      click here
+                    </Link>
                   </div>
                 }
               >
@@ -264,7 +258,7 @@ const withImage = !data.text.allow_post;
         </div>
         <div
           style={{
-            width: showPostSide ? postSidebarWidth : 0,
+            width: showPostSide ? RIGHT_SIDEBAR_WIDTH : 0,
             top: topDistance,
             transition: 'all ease 0.4s',
             zIndex: 1,
@@ -276,14 +270,16 @@ const withImage = !data.text.allow_post;
             <Await resolve={data.page} errorElement={<p>Error loading package location!</p>}>
               {(page) => {
                 return (
-                  <>{data.text.allow_post && <button
-                      className="absolute rounded-full"
-                      style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
-                      onClick={() => setShowPostSide((p) => !p)}
-                    >
-                      <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
-                    </button>
-                  }
+                  <>
+                    {data.text.allow_post && (
+                      <button
+                        className="absolute rounded-full"
+                        style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
+                        onClick={() => setShowPostSide((p) => !p)}
+                      >
+                        <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
+                      </button>
+                    )}
                     {suggestionSelected?.id || openSuggestion ? (
                       <SuggestionSidebar
                         suggestions={data.suggestions}

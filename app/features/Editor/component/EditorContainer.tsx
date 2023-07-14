@@ -3,7 +3,7 @@ import { BubbleMenu, Editor, EditorContent } from '@tiptap/react';
 import { useEffect,useCallback} from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 // import EditorSettings from "./EditorSettings";
-import { Button } from '~/component/UI';
+import { Button, OnlineUsers } from '~/component/UI';
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE, ForumLink, HEADER_HEIGHT } from '~/constants';
 import { openSuggestionState, selectedPostThread, selectedTextOnEditor, ImageState, textInfo } from '~/states';
 import { DiffMatchPatch, isSmallScreen } from '~/lib';
@@ -11,6 +11,7 @@ import { scrollThreadIntoView } from '../lib';
 import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import Controls from './Controls';
+import usePusherPresence from '~/component/hooks/usePusherPresence';
 type EditorContainerProps = {
   pageId: string;
   editor: Editor;
@@ -32,8 +33,12 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
   const [params,] = useSearchParams();
-  const location = useLocation();
-
+ const { onlineMembers } = usePusherPresence(
+   `presence-text_${pageId}`,
+   data.pusher_env.key,
+   data.pusher_env.cluster,
+   data.user
+ );
 
   const getQuery = (newContent: string) => {
     let oldContent = content;
@@ -110,15 +115,11 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
     let width = e.target.width;
     setImage({ ...Image, isPortrait: height > width });
   };
-  const hangleVersionChange = (e:{target:HTMLSelectElement}) => {
-    let value = e.target.value;
-    let url = location.pathname + '?version=' + value;
-    fetcher.submit({url}, {
-      method: 'post',
-    })
-  }
+
   return (
     <div className=" mb-4  flex  shadow-sm" style={{ flexDirection: Image.isPortrait ? 'row-reverse' : 'column' }}>
+      <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
+
       {Image.show && Image.url && (
         <div
           className=" relative flex w-full max-w-full justify-center bg-gray-100"
@@ -153,7 +154,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
         <div className=" text-light z-10 flex  items-center  justify-between   px-2 py-4  ">
           <div className=" flex w-full items-center justify-between gap-2">
             <div className="textname flex items-center gap-2  text-2xl font-bold">
-              {data.text.name} {order > 1 && order}
+              {data.text.name} {order > 1 && <span className="text-sm font-light text-gray-100"> page {order}</span>}
               {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
             </div>
             <Pagination pageCount={pageCount} />

@@ -60,9 +60,9 @@ export function meta({ data }: V2_MetaArgs) {
 export default function Index() {
   const data = useLoaderData<typeof loader>();
   const navigation = useNavigation();
-  const translation: any = uselitteraTranlation();
   const [params] = useSearchParams();
   const [searchInput, setSearchInput] = useState('');
+   const translation: any = uselitteraTranlation();
   
   useEffect(() => {
   initializeTribute('inputText');
@@ -129,7 +129,6 @@ export default function Index() {
             <>
               {data.latestTexts.list.map((text: TextType) => {
                 let pageWithPost = text.allow_post;
-                console.log(text.Page)
                 let { groupedData, isVersionAvailable } = groupData(text.Page);
                 let url = `/text/${text.id}/page/1/${pageWithPost ? 'posts' : ''}`;
                 return (
@@ -146,10 +145,10 @@ export default function Index() {
                         ) : (
                           <>
                               {Object.keys(groupedData).map(key => {
-                                let urlversion= url+'?version='+key
+                                let urlversion = url + '?version=' + key
                                 return (
                                   <Link key={key} to={urlversion} className='cursor-pointer capitalize rounded-md bg-yellow-300 text-black px-2'>
-                                    {key}
+                                    {translation[key]}
                                   </Link>
                                 );
                             })}

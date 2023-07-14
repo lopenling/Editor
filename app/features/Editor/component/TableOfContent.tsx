@@ -2,6 +2,7 @@ import { useLoaderData,Link, useLocation } from '@remix-run/react';
 import { Editor } from '@tiptap/react';
 import React, { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
+import uselitteraTranlation from '~/locales/useLitteraTranslations';
 
 type tableProps = {
   onClose: () => void;
@@ -12,7 +13,7 @@ const TableOfContents = ({ onClose,editor }:tableProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVersionOpen, setIsVersionOpen] = useState(true);
   const data = useLoaderData();
-
+   const translation: any = uselitteraTranlation();
   const handleDropdownToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -79,7 +80,7 @@ const TableOfContents = ({ onClose,editor }:tableProps) => {
         {isVersionOpen && data.versions.map(({ version, count }: any) => {
         return (
           <div className='mr-3'>
-            {version}
+            {translation[version]}
             <div className='flex gap-2'>
 
             {new Array(count).fill(0).map((_, index) => {
