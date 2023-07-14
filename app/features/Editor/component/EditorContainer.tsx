@@ -119,7 +119,6 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   return (
     <div className=" mb-4  flex  shadow-sm" style={{ flexDirection: Image.isPortrait ? 'row-reverse' : 'column' }}>
       <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
-
       {Image.show && Image.url && (
         <div
           className=" relative flex w-full max-w-full justify-center bg-gray-100"
@@ -153,7 +152,10 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
       <div style={{ zIndex: 0 }}>
         <div className=" text-light z-10 flex  items-center  justify-between   px-2 py-4  ">
           <div className=" flex w-full items-center justify-between gap-2">
-            <div className="textname flex items-center gap-2  text-2xl font-bold">
+            <div
+              className="textname flex items-center gap-2"
+              style={{ fontSize: 'clamp(18px, 24px, 2.2vw)', fontWeight: 'bold' }}
+            >
               {data.text.name} {order > 1 && <span className="text-sm font-light text-gray-100"> page {order}</span>}
               {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
             </div>

@@ -10,10 +10,9 @@ const OnlineUsers = ({ onlineMembers, count }: OnlineUsersPropsType) => {
     <>
       <ReactNotifications />
 
-      <div className="fixed bottom-2 right-2 z-50 rounded p-2">
+      <div className="fixed bottom-2 left-2 z-50 rounded p-2">
         {onlineMembers && (
           <div className="flex gap-2">
-            <div> online: {count}</div>
             <div className="flex -space-x-4">
               {onlineMembers.map(([id, info]) => {
                 return (

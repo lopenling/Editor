@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
 import { isSmallScreen } from '~/lib';
 import { Editor } from '@tiptap/react';
-import { useLoaderData, useLocation } from '@remix-run/react';
+import { useLoaderData, useLocation, useSearchParams } from '@remix-run/react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ImageState, textInfo } from '~/states';
 import ImageWithPlaceholder from '~/features/Media/Image';
@@ -14,8 +14,8 @@ import ImageWithPlaceholder from '~/features/Media/Image';
 export default function EditorSetting({ editor }: { editor: Editor }) {
   const [image, setShowImage] = useRecoilState(ImageState);
   const data = useLoaderData();
-  
-  const imageUrl=data.page.imageUrl;
+  let [searchParam,] = useSearchParams();
+  const version=searchParam.get('version')
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
@@ -28,9 +28,8 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
     setShowImage({...image, show: e.target.checked });
   };
   const [openEditMenu, setOpenEditMenu] = useState(false);
-  const [openShare,setOpenShare]=useState(false);
   const [fontSize, setFontSize] = useState(isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE);
-
+ 
   let themes = [
     { background: 'white', text: 'black' },
     { background: '#C4E0A6', text: 'black' },
@@ -42,7 +41,7 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
     document.documentElement.style.setProperty('--text-text-editor', theme.text);
   }
 
-
+ 
   return (
     <div className="mr-2 mt-2">
       <button type="button" onClick={() => setOpenEditMenu((p) => !p)}>
@@ -62,7 +61,7 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
             <li className="flex cursor-pointer flex-col gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
               <div className="flex flex-col items-center">
                 <ImageWithPlaceholder
-                  src={`https://opf.fi/image/${data.text.id}/${data.order}`}
+                  src={`https://opf.fi/image/${data.text.id}/${data.order}/${version}`}
                   alt={'qr'}
                   title="copy url"
                   onClick={() => navigator.clipboard.writeText(window.location.href)}
