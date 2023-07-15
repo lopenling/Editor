@@ -12,6 +12,8 @@ import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import Controls from './Controls';
 import usePusherPresence from '~/component/hooks/usePusherPresence';
+import checkAndRefresh from '../lib/checkunknown';
+import removeReplacementCharacter from '../lib/cleanText';
 type EditorContainerProps = {
   pageId: string;
   editor: Editor;
@@ -25,14 +27,12 @@ type EditorContainerProps = {
 function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pageCount,versions }: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
-    let fetcher = useFetcher();
   const saveTextFetcher = useFetcher();
   const [Image, setImage] = useRecoilState(ImageState);
   const isPostAllowed = data.text.allow_post;
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
-  const [params,] = useSearchParams();
  const { onlineMembers } = usePusherPresence(
    `presence-text_${pageId}`,
    data.pusher_env.key,
@@ -66,7 +66,6 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     editor.on('update', async ({ editor }) => {
       let newContent = editor.getHTML();
-      console.log(newContent)
       let query = getQuery(newContent);
       if (query && newContent.length > 100 && user) saveData(query);
     });
@@ -104,6 +103,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   useEffect(() => {
     let timer = setTimeout(() => {
       let newContent = content.replace(/[\r\n]+/g, '<br/>');
+      newContent= removeReplacementCharacter(newContent);
       editor?.commands.setContent(newContent);
     }, 100);
     setImage({ ...Image, url: imageUrl });
