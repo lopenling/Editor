@@ -103,7 +103,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   useEffect(() => {
     let timer = setTimeout(() => {
       let newContent = content.replace(/[\r\n]+/g, '<br/>');
-      newContent= removeReplacementCharacter(newContent);
+      checkAndRefresh(newContent);
       editor?.commands.setContent(newContent);
     }, 100);
     setImage({ ...Image, url: imageUrl });

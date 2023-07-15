@@ -3929,22 +3929,22 @@ __export(text_textId_page_pageId_exports, {
   default: () => Page,
   loader: () => loader3
 });
-var import_node4 = require("@remix-run/node"), import_react44 = require("@remix-run/react"), import_react45 = require("@tiptap/react");
+var import_node4 = require("@remix-run/node"), import_react45 = require("@remix-run/react"), import_react46 = require("@tiptap/react");
 var import_framer_motion2 = require("framer-motion");
-var import_recoil14 = require("recoil"), import_react46 = require("react");
+var import_recoil14 = require("recoil"), import_react47 = require("react");
 
 // app/component/Layout/Header.tsx
-var import_react34 = require("@remix-run/react");
+var import_react35 = require("@remix-run/react");
 
 // app/assets/logo.png
 var logo_default = "/build/_assets/logo-M44S4BEM.png";
 
 // app/component/Layout/Header.tsx
-var import_react_littera3 = require("@assembless/react-littera"), import_react35 = require("react");
+var import_react_littera3 = require("@assembless/react-littera"), import_react36 = require("react");
 var import_recoil11 = require("recoil");
 
 // app/features/Editor/component/EditorContainer.tsx
-var import_react28 = require("@remix-run/react"), import_react29 = require("@tiptap/react"), import_react30 = require("react"), import_recoil9 = require("recoil");
+var import_react29 = require("@remix-run/react"), import_react30 = require("@tiptap/react"), import_react31 = require("react"), import_recoil9 = require("recoil");
 
 // app/features/Editor/lib/changeFont.ts
 function changeFont(size) {
@@ -4078,17 +4078,20 @@ function oo_oo9(i, ...v) {
   return v;
 }
 
-// app/features/Editor/lib/cleanText.ts
-function removeReplacementCharacter(text) {
-  var cleanedText = text.replace(/\ufffd/g, "");
-  return cleanedText;
+// app/features/Editor/lib/checkunknown.ts
+var import_react28 = require("@remix-run/react");
+function checkAndRefresh(text) {
+  return text.includes("\uFFFD") ? (refreshData(), !0) : !1;
 }
-var cleanText_default = removeReplacementCharacter;
+function refreshData() {
+  (0, import_react28.useNavigate)()(".", { replace: !0 });
+}
+var checkunknown_default = checkAndRefresh;
 
 // app/features/Editor/component/EditorContainer.tsx
 var import_jsx_dev_runtime22 = require("react/jsx-dev-runtime");
 function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl, pageCount, versions }) {
-  let data = (0, import_react28.useLoaderData)(), user = data.user, saveTextFetcher = (0, import_react28.useFetcher)(), [Image2, setImage] = (0, import_recoil9.useRecoilState)(ImageState), isPostAllowed = data.text.allow_post, [openSuggestion, setOpenSuggestion] = (0, import_recoil9.useRecoilState)(openSuggestionState), [selection, setSelectionRange] = (0, import_recoil9.useRecoilState)(selectedTextOnEditor), thread = (0, import_recoil9.useRecoilValue)(selectedPostThread), { onlineMembers } = usePusherPresence_default(
+  let data = (0, import_react29.useLoaderData)(), user = data.user, saveTextFetcher = (0, import_react29.useFetcher)(), [Image2, setImage] = (0, import_recoil9.useRecoilState)(ImageState), isPostAllowed = data.text.allow_post, [openSuggestion, setOpenSuggestion] = (0, import_recoil9.useRecoilState)(openSuggestionState), [selection, setSelectionRange] = (0, import_recoil9.useRecoilState)(selectedTextOnEditor), thread = (0, import_recoil9.useRecoilValue)(selectedPostThread), { onlineMembers } = usePusherPresence_default(
     `presence-text_${pageId}`,
     data.pusher_env.key,
     data.pusher_env.cluster,
@@ -4108,7 +4111,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl, p
       action: "/api/text"
     });
   }, saving = saveTextFetcher.state !== "idle";
-  (0, import_react30.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     return editor.on("update", async ({ editor: editor2 }) => {
       let newContent = editor2.getHTML(), query = getQuery(newContent);
@@ -4132,10 +4135,10 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl, p
   function handleDeleteMark() {
     editor.isActive("post") && editor.commands.unsetPost(), editor.isActive("suggestion") && editor.commands.unsetSuggestion(), editor.commands.setTextSelection(0);
   }
-  (0, import_react30.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     let timer = setTimeout(() => {
       let newContent = content.replace(/[\r\n]+/g, "<br/>");
-      newContent = cleanText_default(newContent), editor == null || editor.commands.setContent(newContent);
+      checkunknown_default(newContent), editor == null || editor.commands.setContent(newContent);
     }, 100);
     return setImage({ ...Image2, url: imageUrl }), () => {
       clearTimeout(timer);
@@ -4267,7 +4270,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl, p
         columnNumber: 9
       }, this),
       editor ? /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
-        import_react29.EditorContent,
+        import_react30.EditorContent,
         {
           editor,
           className: "editor transition-all ",
@@ -4295,7 +4298,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl, p
         columnNumber: 11
       }, this),
       editor && /* @__PURE__ */ (0, import_jsx_dev_runtime22.jsxDEV)(
-        import_react29.BubbleMenu,
+        import_react30.BubbleMenu,
         {
           shouldShow: ({ editor: editor2 }) => {
             let postmarkType = editor2.schema.marks.post, suggestmarkType = editor2.schema.marks.suggestion, selection2 = editor2.state.selection;
@@ -4429,15 +4432,15 @@ var import_fa4 = require("react-icons/fa"), import_ai = require("react-icons/ai"
 
 // app/features/Editor/component/EditorSetting.tsx
 var import_react_detect_click_outside2 = require("react-detect-click-outside"), import_fa3 = require("react-icons/fa"), import_fc = require("react-icons/fc");
-var import_react32 = require("react");
-var import_react33 = require("@remix-run/react"), import_recoil10 = require("recoil");
+var import_react33 = require("react");
+var import_react34 = require("@remix-run/react"), import_recoil10 = require("recoil");
 
 // app/features/Media/Image.tsx
-var import_react31 = require("react");
+var import_react32 = require("react");
 var import_jsx_dev_runtime23 = require("react/jsx-dev-runtime"), ImageWithPlaceholder = ({ src, alt, title = "", onClick = () => {
 } }) => {
-  let [loading, setLoading] = (0, import_react31.useState)(!0);
-  return (0, import_react31.useEffect)(() => {
+  let [loading, setLoading] = (0, import_react32.useState)(!0);
+  return (0, import_react32.useEffect)(() => {
     let image = new Image();
     return image.src = src, image.onload = () => {
       setLoading(!1);
@@ -4504,14 +4507,14 @@ var import_jsx_dev_runtime23 = require("react/jsx-dev-runtime"), ImageWithPlaceh
 // app/features/Editor/component/EditorSetting.tsx
 var import_jsx_dev_runtime24 = require("react/jsx-dev-runtime");
 function EditorSetting({ editor }) {
-  let [image, setShowImage] = (0, import_recoil10.useRecoilState)(ImageState), data = (0, import_react33.useLoaderData)(), [searchParam] = (0, import_react33.useSearchParams)(), version = searchParam.get("version"), ref = (0, import_react_detect_click_outside2.useDetectClickOutside)({
+  let [image, setShowImage] = (0, import_recoil10.useRecoilState)(ImageState), data = (0, import_react34.useLoaderData)(), [searchParam] = (0, import_react34.useSearchParams)(), version = searchParam.get("version"), ref = (0, import_react_detect_click_outside2.useDetectClickOutside)({
     onTriggered: () => setOpenEditMenu(!1)
   }), handleFontSizeChange = (e) => {
     let value = e.target.value;
     setFontSize(parseInt(value)), changeFont(value);
   }, toggleImage = (e) => {
     setShowImage({ ...image, show: e.target.checked });
-  }, [openEditMenu, setOpenEditMenu] = (0, import_react32.useState)(!1), [fontSize, setFontSize] = (0, import_react32.useState)(isSmallScreen ? 16 : 20), themes = [
+  }, [openEditMenu, setOpenEditMenu] = (0, import_react33.useState)(!1), [fontSize, setFontSize] = (0, import_react33.useState)(isSmallScreen ? 16 : 20), themes = [
     { background: "white", text: "black" },
     { background: "#C4E0A6", text: "black" },
     { background: "#B9F3DD", text: "black" },
@@ -4759,7 +4762,7 @@ var import_fa5 = require("react-icons/fa"), import_jsx_dev_runtime25 = require("
   },
   this
 ), LogoWithTextName = ({ textName }) => (textName.length > 20 && isSmallScreen && (textName = textName.slice(0, 25) + "..."), /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)("div", { className: "flex items-center gap-1", children: [
-  /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(import_react34.Link, { to: "/", children: /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)("img", { src: logo_default, alt: "logo", className: "block object-contain", style: { maxHeight: "37px" } }, void 0, !1, {
+  /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(import_react35.Link, { to: "/", children: /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)("img", { src: logo_default, alt: "logo", className: "block object-contain", style: { maxHeight: "37px" } }, void 0, !1, {
     fileName: "app/component/Layout/Header.tsx",
     lineNumber: 34,
     columnNumber: 9
@@ -4798,7 +4801,7 @@ var import_fa5 = require("react-icons/fa"), import_jsx_dev_runtime25 = require("
 }, this));
 function Header({ editor }) {
   var _a, _b, _c;
-  let loginFetcher = (0, import_react34.useFetcher)(), themeFetcher = (0, import_react34.useFetcher)(), translation = uselitteraTranlation(), { pathname, search } = (0, import_react34.useLocation)(), redirectTo = pathname + search, [TextNameOnHeader, setTextNameOnHeader] = (0, import_react35.useState)(!1), { name: textName } = (0, import_recoil11.useRecoilValue)(textInfo), { user } = (0, import_react34.useOutletContext)(), changeTheme = () => {
+  let loginFetcher = (0, import_react35.useFetcher)(), themeFetcher = (0, import_react35.useFetcher)(), translation = uselitteraTranlation(), { pathname, search } = (0, import_react35.useLocation)(), redirectTo = pathname + search, [TextNameOnHeader, setTextNameOnHeader] = (0, import_react36.useState)(!1), { name: textName } = (0, import_recoil11.useRecoilValue)(textInfo), { user } = (0, import_react35.useOutletContext)(), changeTheme = () => {
     var _a2;
     themeFetcher.submit(
       {
@@ -4810,7 +4813,7 @@ function Header({ editor }) {
       }
     );
   };
-  (0, import_react35.useEffect)(() => {
+  (0, import_react36.useEffect)(() => {
     let timeout, handleScroll = () => {
       timeout && clearTimeout(timeout), timeout = setTimeout(() => {
         var _a2, _b2;
@@ -4821,7 +4824,7 @@ function Header({ editor }) {
     };
     return window.addEventListener("scroll", handleScroll), () => window == null ? void 0 : window.addEventListener("scroll", handleScroll);
   }, [redirectTo, textName]);
-  let darkMode = ((_a = user == null ? void 0 : user.preference) == null ? void 0 : _a.theme) === "dark", [showUserMenu, setShowUserMenu] = (0, import_react35.useState)(!1), [showHeaderMenu, setShowHeaderMenu] = (0, import_react35.useState)(!1), [showSearch, setShowSearch] = (0, import_react35.useState)(!1), ref = (0, import_react_detect_click_outside3.useDetectClickOutside)({
+  let darkMode = ((_a = user == null ? void 0 : user.preference) == null ? void 0 : _a.theme) === "dark", [showUserMenu, setShowUserMenu] = (0, import_react36.useState)(!1), [showHeaderMenu, setShowHeaderMenu] = (0, import_react36.useState)(!1), [showSearch, setShowSearch] = (0, import_react36.useState)(!1), ref = (0, import_react_detect_click_outside3.useDetectClickOutside)({
     onTriggered: () => setShowUserMenu(!1)
   }), searchRef = (0, import_react_detect_click_outside3.useDetectClickOutside)({
     onTriggered: () => setShowSearch(!1)
@@ -4841,7 +4844,7 @@ function Header({ editor }) {
           fileName: "app/component/Layout/Header.tsx",
           lineNumber: 113,
           columnNumber: 11
-        }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(import_react34.NavLink, { to: "/", prefetch: "intent", className: "flex w-auto items-center", children: /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(Logo, {}, void 0, !1, {
+        }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(import_react35.NavLink, { to: "/", prefetch: "intent", className: "flex w-auto items-center", children: /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(Logo, {}, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
           lineNumber: 116,
           columnNumber: 13
@@ -5174,7 +5177,7 @@ function Header({ editor }) {
                           columnNumber: 23
                         }, this),
                         /* @__PURE__ */ (0, import_jsx_dev_runtime25.jsxDEV)(
-                          import_react34.Form,
+                          import_react35.Form,
                           {
                             method: "POST",
                             action: "/auth/login",
@@ -5321,19 +5324,19 @@ function Translation() {
     columnNumber: 5
   }, this);
 }
-var Header_default = (0, import_react35.memo)(Header);
+var Header_default = (0, import_react36.memo)(Header);
 
 // app/features/Suggestion/SuggestionContainer.tsx
 var import_recoil12 = require("recoil");
 var import_gr3 = require("react-icons/gr");
 
 // app/features/Suggestion/Suggestion.tsx
-var import_react38 = require("@remix-run/react"), import_react39 = require("react");
+var import_react39 = require("@remix-run/react"), import_react40 = require("react");
 var import_react_detect_click_outside5 = require("react-detect-click-outside");
 var import_uuid3 = require("uuid");
 
 // app/features/Suggestion/Comment.tsx
-var import_react36 = require("react"), import_react_detect_click_outside4 = require("react-detect-click-outside"), import_react37 = require("@remix-run/react");
+var import_react37 = require("react"), import_react_detect_click_outside4 = require("react-detect-click-outside"), import_react38 = require("@remix-run/react");
 var import_jsx_dev_runtime26 = require("react/jsx-dev-runtime");
 function Comments({ comments }) {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(import_jsx_dev_runtime26.Fragment, { children: comments.length > 0 && comments.map((comment, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(Comment, { comment }, comment.id, !1, {
@@ -5348,9 +5351,9 @@ function Comments({ comments }) {
 }
 var Comment = ({ comment }) => {
   var _a, _b;
-  let [openEditMenu, setOpenEditMenu] = (0, import_react36.useState)(!1), [edit, setEdit] = (0, import_react36.useState)(!1), [newContent, setNewContent] = (0, import_react36.useState)(comment.text), [checked, setChecked] = (0, import_react36.useState)(comment.type === "support"), { user } = (0, import_react37.useOutletContext)(), ref = (0, import_react_detect_click_outside4.useDetectClickOutside)({
+  let [openEditMenu, setOpenEditMenu] = (0, import_react37.useState)(!1), [edit, setEdit] = (0, import_react37.useState)(!1), [newContent, setNewContent] = (0, import_react37.useState)(comment.text), [checked, setChecked] = (0, import_react37.useState)(comment.type === "support"), { user } = (0, import_react38.useOutletContext)(), ref = (0, import_react_detect_click_outside4.useDetectClickOutside)({
     onTriggered: () => setOpenEditMenu(!1)
-  }), color = comment.type === "support" ? "bg-green-100" : comment.type === "reject" ? "bg-red-100" : null, time = timeAgo(comment.createdAt), fetcher = (0, import_react37.useFetcher)(), handleEdit = () => {
+  }), color = comment.type === "support" ? "bg-green-100" : comment.type === "reject" ? "bg-red-100" : null, time = timeAgo(comment.createdAt), fetcher = (0, import_react38.useFetcher)(), handleEdit = () => {
     setEdit(!0);
   }, handleDelete = () => {
     confirm("do you want to delete the post") ? fetcher.submit(
@@ -5638,7 +5641,7 @@ function oo_oo10(i, ...v) {
 var import_jsx_dev_runtime27 = require("react/jsx-dev-runtime");
 function Suggestion2({ editor, suggest, optimistic = !1, count }) {
   var _a, _b, _c, _d, _e;
-  let likeFetcher = useFetcherWithPromise(), deleteFetcher = (0, import_react38.useFetcher)(), editFetcher = (0, import_react38.useFetcher)(), [effect, setEffect] = (0, import_react39.useState)(!1), [openEdit, setOpenEdit] = (0, import_react39.useState)(!1), [openComment, setOpenComment] = (0, import_react39.useState)(!1), [openEditMenu, setOpenEditMenu] = (0, import_react39.useState)(!1), { text, user } = (0, import_react38.useLoaderData)(), ref = (0, import_react_detect_click_outside5.useDetectClickOutside)({
+  let likeFetcher = useFetcherWithPromise(), deleteFetcher = (0, import_react39.useFetcher)(), editFetcher = (0, import_react39.useFetcher)(), [effect, setEffect] = (0, import_react40.useState)(!1), [openEdit, setOpenEdit] = (0, import_react40.useState)(!1), [openComment, setOpenComment] = (0, import_react40.useState)(!1), [openEditMenu, setOpenEditMenu] = (0, import_react40.useState)(!1), { text, user } = (0, import_react39.useLoaderData)(), ref = (0, import_react_detect_click_outside5.useDetectClickOutside)({
     onTriggered: () => setOpenEditMenu(!1)
   }), likedByMe = user ? suggest.likedBy.some((l) => (l == null ? void 0 : l.username) === user.username) : !1, likeInFetcher = (_a = likeFetcher == null ? void 0 : likeFetcher.formData) == null ? void 0 : _a.get("like"), likeCount = likeFetcher.data ? (_b = likeFetcher.data) == null ? void 0 : _b.likedBy.likedBy.length : suggest.likedBy.length;
   likeInFetcher === "true" && (likedByMe = !0, likeFetcher.state === "submitting" && likeCount++), likeInFetcher === "false" && (likedByMe = !1, likeFetcher.state === "submitting" && likeCount--);
@@ -6142,7 +6145,7 @@ function Suggestion2({ editor, suggest, optimistic = !1, count }) {
   }, this);
 }
 function CommentSection({ id, setOpenComment, comments, type }) {
-  let [commentText, setCommentText] = (0, import_react39.useState)(""), [audio, setAudio] = (0, import_react39.useState)({ tempUrl: "", blob: null }), data = (0, import_react38.useLoaderData)(), postCommentFetcher = (0, import_react38.useFetcher)();
+  let [commentText, setCommentText] = (0, import_react40.useState)(""), [audio, setAudio] = (0, import_react40.useState)({ tempUrl: "", blob: null }), data = (0, import_react39.useLoaderData)(), postCommentFetcher = (0, import_react39.useFetcher)();
   function postComment() {
     var _a;
     let item = {
@@ -6376,12 +6379,12 @@ function transformObjectsByNewValue(objects) {
 }
 
 // app/features/Suggestion/SuggestionForm.tsx
-var import_react40 = require("@remix-run/react"), import_react41 = require("react"), import_recoil13 = require("recoil");
+var import_react41 = require("@remix-run/react"), import_react42 = require("react"), import_recoil13 = require("recoil");
 var import_uuid4 = require("uuid");
 var import_jsx_dev_runtime29 = require("react/jsx-dev-runtime");
 function SuggestionForm({ editor, page }) {
   var _a, _b, _c, _d, _e, _f;
-  let data = (0, import_react40.useLoaderData)(), { user } = data, [suggestionInput, setSuggestionInput] = (0, import_react41.useState)(""), [error, setError] = (0, import_react41.useState)(null), addSuggestion = useFetcherWithPromise(), setSelectedSuggestion = (0, import_recoil13.useSetRecoilState)(selectedSuggestionThread), setOpenSuggestion = (0, import_recoil13.useSetRecoilState)(openSuggestionState), [audio, setAudio] = (0, import_react41.useState)({ tempUrl: "", blob: null }), handleSuggestionSubmit = async () => {
+  let data = (0, import_react41.useLoaderData)(), { user } = data, [suggestionInput, setSuggestionInput] = (0, import_react42.useState)(""), [error, setError] = (0, import_react42.useState)(null), addSuggestion = useFetcherWithPromise(), setSelectedSuggestion = (0, import_recoil13.useSetRecoilState)(selectedSuggestionThread), setOpenSuggestion = (0, import_recoil13.useSetRecoilState)(openSuggestionState), [audio, setAudio] = (0, import_react42.useState)({ tempUrl: "", blob: null }), handleSuggestionSubmit = async () => {
     var _a2;
     if (suggestionInput === "")
       return setError("suggestion cannot be empty"), null;
@@ -6743,9 +6746,9 @@ function oo_oo12(i, ...v) {
 var import_fa6 = require("react-icons/fa");
 
 // app/features/Editor/component/TableOfContent.tsx
-var import_react42 = require("@remix-run/react"), import_react43 = require("react"), import_gr4 = require("react-icons/gr");
+var import_react43 = require("@remix-run/react"), import_react44 = require("react"), import_gr4 = require("react-icons/gr");
 var import_jsx_dev_runtime30 = require("react/jsx-dev-runtime"), TableOfContents = ({ onClose, editor }) => {
-  let [isOpen, setIsOpen] = (0, import_react43.useState)(!1), [isVersionOpen, setIsVersionOpen] = (0, import_react43.useState)(!0), data = (0, import_react42.useLoaderData)(), translation = uselitteraTranlation(), handleDropdownToggle = () => {
+  let [isOpen, setIsOpen] = (0, import_react44.useState)(!1), [isVersionOpen, setIsVersionOpen] = (0, import_react44.useState)(!0), data = (0, import_react43.useLoaderData)(), translation = uselitteraTranlation(), handleDropdownToggle = () => {
     setIsOpen(!isOpen);
   }, handleVersionToggle = () => {
     setIsVersionOpen(!isVersionOpen);
@@ -6889,8 +6892,8 @@ var import_jsx_dev_runtime30 = require("react/jsx-dev-runtime"), TableOfContents
         ({ version, count }, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "mr-3", children: [
           translation[version],
           /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex gap-2", children: new Array(count).fill(0).map((_, index2) => {
-            let textId = (0, import_react42.useLocation)().pathname.split("/")[2], page = index2 + 1;
-            return /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "rounded-sm bg-slate-100 p-1 shadow hover:bg-yellow-200", children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_react42.Link, { to: `/text/${textId}/page/${page}/?version=${version}`, children: page }, void 0, !1, {
+            let textId = (0, import_react43.useLocation)().pathname.split("/")[2], page = index2 + 1;
+            return /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "rounded-sm bg-slate-100 p-1 shadow hover:bg-yellow-200", children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_react43.Link, { to: `/text/${textId}/page/${page}/?version=${version}`, children: page }, void 0, !1, {
               fileName: "app/features/Editor/component/TableOfContent.tsx",
               lineNumber: 92,
               columnNumber: 19
@@ -7006,7 +7009,7 @@ var import_jsx_dev_runtime31 = require("react/jsx-dev-runtime"), loader3 = async
 };
 function PostSidebar(props) {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(
-    import_react44.Outlet,
+    import_react45.Outlet,
     {
       context: {
         user: props.user,
@@ -7031,11 +7034,11 @@ function SuggestionSidebar(props) {
       lineNumber: 78,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react46.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
+    /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react47.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
       lineNumber: 79,
       columnNumber: 27
-    }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react44.Await, { resolve: props.suggestions, children: (data) => /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(SuggestionContainer_default, { editor: props.editor, suggestions: data }, void 0, !1, {
+    }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react45.Await, { resolve: props.suggestions, children: (data) => /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(SuggestionContainer_default, { editor: props.editor, suggestions: data }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
       lineNumber: 81,
       columnNumber: 22
@@ -7055,7 +7058,7 @@ function SuggestionSidebar(props) {
   }, this);
 }
 function Page() {
-  let data = (0, import_react44.useLoaderData)(), user = data.user, [suggestionSelected, suggestionSelector] = (0, import_recoil14.useRecoilState)(selectedSuggestionThread), [selectedPost, postSelector] = (0, import_recoil14.useRecoilState)(selectedPostThread), [selection, setSelectionRange] = (0, import_recoil14.useRecoilState)(selectedTextOnEditor), [showTable, setShowTable] = (0, import_recoil14.useRecoilState)(showTableContent), [showPostSide, setShowPostSide] = (0, import_recoil14.useRecoilState)(showSidebar), [openSuggestion, setOpenSuggestion] = (0, import_recoil14.useRecoilState)(openSuggestionState), setTextName = (0, import_recoil14.useSetRecoilState)(textInfo);
+  let data = (0, import_react45.useLoaderData)(), user = data.user, [suggestionSelected, suggestionSelector] = (0, import_recoil14.useRecoilState)(selectedSuggestionThread), [selectedPost, postSelector] = (0, import_recoil14.useRecoilState)(selectedPostThread), [selection, setSelectionRange] = (0, import_recoil14.useRecoilState)(selectedTextOnEditor), [showTable, setShowTable] = (0, import_recoil14.useRecoilState)(showTableContent), [showPostSide, setShowPostSide] = (0, import_recoil14.useRecoilState)(showSidebar), [openSuggestion, setOpenSuggestion] = (0, import_recoil14.useRecoilState)(openSuggestionState), setTextName = (0, import_recoil14.useSetRecoilState)(textInfo);
   function suggestionSetter(id) {
     suggestionSelector({
       id
@@ -7066,7 +7069,7 @@ function Page() {
       id
     });
   }
-  let editor = (0, import_react45.useEditor)(
+  let editor = (0, import_react46.useEditor)(
     {
       extensions: [
         import_extension_document.default,
@@ -7118,9 +7121,9 @@ function Page() {
     },
     []
   );
-  (0, import_react46.useEffect)(() => {
+  (0, import_react47.useEffect)(() => {
     !!selectedPost.id || selection.type !== "" || !!(suggestionSelected != null && suggestionSelected.id) || openSuggestion ? setShowPostSide(!0) : setShowPostSide(!1);
-  }, [selectedPost.id, selection.type, suggestionSelected == null ? void 0 : suggestionSelected.id, openSuggestion]), (0, import_react46.useEffect)(() => {
+  }, [selectedPost.id, selection.type, suggestionSelected == null ? void 0 : suggestionSelected.id, openSuggestion]), (0, import_react47.useEffect)(() => {
     showPostSide || (postSelector({ id: "" }), editor == null || editor.commands.setTextSelection(0));
   }, [showPostSide]);
   let topDistance = 56, LEFT_SIDEBAR_WIDTH = 272, RIGHT_SIDEBAR_WIDTH = 400, withImage = !data.text.allow_post;
@@ -7221,18 +7224,18 @@ function Page() {
             flex: 1
           },
           id: "textEditorContainer",
-          children: editor && /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react46.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
+          children: editor && /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react47.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
             lineNumber: 230,
             columnNumber: 33
           }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(
-            import_react44.Await,
+            import_react45.Await,
             {
               resolve: data.page,
               errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: [
                 "page not Available",
                 " ",
-                /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react44.Link, { prefetch: "intent", to: "/", children: [
+                /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react45.Link, { prefetch: "intent", to: "/", children: [
                   " ",
                   "click here"
                 ] }, void 0, !0, {
@@ -7301,11 +7304,11 @@ function Page() {
           },
           className: "sticky hidden w-full md:flex ",
           id: "postContent",
-          children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react46.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
+          children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react47.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
             lineNumber: 269,
             columnNumber: 31
-          }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react44.Await, { resolve: data.page, errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
+          }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react45.Await, { resolve: data.page, errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
             lineNumber: 270,
             columnNumber: 54
@@ -7413,11 +7416,11 @@ function Page() {
       lineNumber: 195,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react46.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
+    /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react47.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("div", { children: "loading" }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
       lineNumber: 317,
       columnNumber: 27
-    }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react44.Await, { resolve: data.page, errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
+    }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)(import_react45.Await, { resolve: data.page, errorElement: /* @__PURE__ */ (0, import_jsx_dev_runtime31.jsxDEV)("p", { children: "Error loading package location!" }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
       lineNumber: 318,
       columnNumber: 50
@@ -8152,7 +8155,7 @@ __export(index_exports, {
   loader: () => loader9,
   meta: () => meta2
 });
-var import_react47 = require("@remix-run/react"), import_flowbite_react2 = require("flowbite-react");
+var import_react48 = require("@remix-run/react"), import_flowbite_react2 = require("flowbite-react");
 
 // app/component/Layout/Footer.tsx
 var import_ai2 = require("react-icons/ai");
@@ -8284,9 +8287,9 @@ function FooterContainer() {
 
 // app/routes/_index.tsx
 var import_node10 = require("@remix-run/node");
-var import_react48 = require("@remix-run/react");
+var import_react49 = require("@remix-run/react");
 var import_framer_motion3 = require("framer-motion");
-var import_react49 = require("react");
+var import_react50 = require("react");
 
 // app/lib/filterVersionFromText.ts
 function groupData(data) {
@@ -8335,15 +8338,15 @@ function meta2({ data }) {
 }
 function Index() {
   var _a, _b;
-  let data = (0, import_react48.useLoaderData)(), navigation = (0, import_react48.useNavigation)(), [params] = (0, import_react47.useSearchParams)(), [searchInput, setSearchInput] = (0, import_react49.useState)(""), translation = uselitteraTranlation();
-  (0, import_react49.useEffect)(() => {
+  let data = (0, import_react49.useLoaderData)(), navigation = (0, import_react49.useNavigation)(), [params] = (0, import_react48.useSearchParams)(), [searchInput, setSearchInput] = (0, import_react50.useState)(""), translation = uselitteraTranlation();
+  (0, import_react50.useEffect)(() => {
     (0, import_tribute2.initializeTribute)("inputText");
   }, []);
   let handleInputChange = (event) => {
     let inputValue = event.target.value;
     setSearchInput(inputValue);
   };
-  (0, import_react49.useEffect)(() => {
+  (0, import_react50.useEffect)(() => {
     let p = params.get("search");
     setSearchInput(p || "");
   }, [params]);
@@ -8372,7 +8375,7 @@ function Index() {
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: " mx-auto max-w-2xl ", children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: "flex w-full flex-col items-center justify-center  px-3 pt-24 md:px-1.5  ", children: [
-            /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react47.Form, { method: "GET", className: "mb-3 w-full max-w-2xl", children: /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: "relative flex w-full space-x-3 ", children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react48.Form, { method: "GET", className: "mb-3 w-full max-w-2xl", children: /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: "relative flex w-full space-x-3 ", children: [
               /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(
                 import_flowbite_react2.TextInput,
                 {
@@ -8436,7 +8439,7 @@ function Index() {
               data.latestTexts.list.map((text) => {
                 let pageWithPost = text.allow_post, { groupedData, isVersionAvailable } = filterVersionFromText_default(text.Page), url = `/text/${text.id}/page/1/${pageWithPost ? "posts" : ""}`;
                 return /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: "flex w-full justify-between border-b dark:border-gray-700", children: [
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: "flex items-center gap-1 px-4 py-4", style: { fontFamily: "monlam" }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react47.Link, { to: url, children: text.name }, void 0, !1, {
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: "flex items-center gap-1 px-4 py-4", style: { fontFamily: "monlam" }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react48.Link, { to: url, children: text.name }, void 0, !1, {
                     fileName: "app/routes/_index.tsx",
                     lineNumber: 137,
                     columnNumber: 23
@@ -8447,7 +8450,7 @@ function Index() {
                   }, this),
                   /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)("div", { className: "px-4 py-4 font-light text-gray-300 flex gap-2", children: isVersionAvailable ? /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_jsx_dev_runtime34.Fragment, { children: Object.keys(groupedData).map((key) => {
                     let urlversion = url + "?version=" + key;
-                    return /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react47.Link, { to: urlversion, className: "cursor-pointer capitalize rounded-md bg-yellow-300 text-black px-2", children: translation[key] }, key, !1, {
+                    return /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react48.Link, { to: urlversion, className: "cursor-pointer capitalize rounded-md bg-yellow-300 text-black px-2", children: translation[key] }, key, !1, {
                       fileName: "app/routes/_index.tsx",
                       lineNumber: 150,
                       columnNumber: 35
@@ -8471,7 +8474,7 @@ function Index() {
                   columnNumber: 19
                 }, this);
               }),
-              /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react47.Link, { to: "/list", className: "mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors", children: [
+              /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(import_react48.Link, { to: "/list", className: "mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors", children: [
                 "List all (",
                 (_b = data == null ? void 0 : data.latestTexts) == null ? void 0 : _b.count,
                 ") Pechas"
@@ -8521,7 +8524,7 @@ function Index() {
                 (list, index) => {
                   let result = list.results[0];
                   return /* @__PURE__ */ (0, import_jsx_dev_runtime34.jsxDEV)(
-                    import_react47.Link,
+                    import_react48.Link,
                     {
                       to: `/text/${list.textId}/page/1/posts`,
                       className: "container w-full",
@@ -8603,7 +8606,7 @@ function Index() {
         }, this)
       ]
     },
-    (0, import_react48.useLocation)().pathname,
+    (0, import_react49.useLocation)().pathname,
     !0,
     {
       fileName: "app/routes/_index.tsx",
@@ -8620,8 +8623,8 @@ __export(list_exports, {
   default: () => List,
   loader: () => loader10
 });
-var import_react50 = require("@remix-run/react");
-var import_react51 = require("react");
+var import_react51 = require("@remix-run/react");
+var import_react52 = require("react");
 var import_jsx_dev_runtime35 = require("react/jsx-dev-runtime"), loader10 = async ({ request }) => {
   let textList = await findAllTextWithDetail(), user = await getUserSession(request);
   return {
@@ -8630,7 +8633,7 @@ var import_jsx_dev_runtime35 = require("react/jsx-dev-runtime"), loader10 = asyn
   };
 };
 function List() {
-  let fetcher = (0, import_react50.useFetcher)(), { textList, isAdmin } = (0, import_react50.useLoaderData)(), [currentPage, setCurrentPage] = (0, import_react51.useState)(1), textsPerPage = 20, indexOfLastText = currentPage * textsPerPage, indexOfFirstText = indexOfLastText - textsPerPage, currentTexts = textList.slice(indexOfFirstText, indexOfLastText), totalPages = Math.ceil(textList.length / textsPerPage), goToPage = (page) => {
+  let fetcher = (0, import_react51.useFetcher)(), { textList, isAdmin } = (0, import_react51.useLoaderData)(), [currentPage, setCurrentPage] = (0, import_react52.useState)(1), textsPerPage = 20, indexOfLastText = currentPage * textsPerPage, indexOfFirstText = indexOfLastText - textsPerPage, currentTexts = textList.slice(indexOfFirstText, indexOfLastText), totalPages = Math.ceil(textList.length / textsPerPage), goToPage = (page) => {
     setCurrentPage(page);
   }, deleteText2 = (textId) => {
     confirm("Are you sure you want to delete this text?") ? fetcher.submit({ textId: textId.toString() }, {
@@ -8697,7 +8700,7 @@ function List() {
               },
               this
             ),
-            /* @__PURE__ */ (0, import_jsx_dev_runtime35.jsxDEV)(import_react50.Link, { to: url, children: text.name }, void 0, !1, {
+            /* @__PURE__ */ (0, import_jsx_dev_runtime35.jsxDEV)(import_react51.Link, { to: url, children: text.name }, void 0, !1, {
               fileName: "app/routes/list.tsx",
               lineNumber: 79,
               columnNumber: 21
@@ -8710,7 +8713,7 @@ function List() {
           /* @__PURE__ */ (0, import_jsx_dev_runtime35.jsxDEV)("td", { scope: "col", className: " px-4 py-4", children: isVersionAvailable ? /* @__PURE__ */ (0, import_jsx_dev_runtime35.jsxDEV)("div", { className: "flex gap-2", children: Object.keys(groupedData).map((key) => {
             let urlversion = url + "?version=" + key;
             return /* @__PURE__ */ (0, import_jsx_dev_runtime35.jsxDEV)(
-              import_react50.Link,
+              import_react51.Link,
               {
                 to: urlversion,
                 className: "cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black",
@@ -8839,7 +8842,7 @@ function oo_oo18(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { version: "239b6c31", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-XVNXXHDN.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-ZXJWT7UL.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-HYWGIG4N.js", "/build/_shared/chunk-ZVPDQ4XQ.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-3BCE7YRV.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-UHXJJZ4J.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-ZVPDQ4XQ.js", "/build/_shared/chunk-3BCE7YRV.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-5E2RUYQH.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-ZVPDQ4XQ.js", "/build/_shared/chunk-LWYPGBAP.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-3BCE7YRV.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-KSZ4BPJ4.js", imports: ["/build/_shared/chunk-HYWGIG4N.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-239B6C31.js" };
+var assets_manifest_default = { version: "1c722212", entry: { module: "/build/entry.client-7QCT56QV.js", imports: ["/build/_shared/chunk-GP6SDGYH.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-YX5NLLK2.js", imports: ["/build/_shared/chunk-BL5UTBIA.js", "/build/_shared/chunk-I7RNAOYK.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-RO5J4XAC.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-SZH4CLE3.js", "/build/_shared/chunk-UBEQ65OM.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-776XRQGF.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-SQLHKUKL.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-UBEQ65OM.js", "/build/_shared/chunk-776XRQGF.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-3D2DEPEU.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-UBEQ65OM.js", "/build/_shared/chunk-YAYHVSTC.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-776XRQGF.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-4OV66FO2.js", imports: ["/build/_shared/chunk-SZH4CLE3.js", "/build/_shared/chunk-I7RNAOYK.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-1C722212.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var assetsBuildDirectory = "public/build", future = { unstable_cssModules: !1, unstable_cssSideEffectImports: !1, unstable_dev: !1, unstable_postcss: !1, unstable_tailwind: !1, unstable_vanillaExtract: !1, v2_errorBoundary: !0, v2_meta: !0, v2_normalizeFormMethod: !0, v2_routeConvention: !0 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
