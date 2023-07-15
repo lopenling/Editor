@@ -61,11 +61,12 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
       action: '/api/text',
     });
   };
+  let saving = saveTextFetcher.state !== 'idle';
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     editor.on('update', async ({ editor }) => {
-      
       let newContent = editor.getHTML();
+      console.log(newContent)
       let query = getQuery(newContent);
       if (query && newContent.length > 100 && user) saveData(query);
     });
@@ -173,6 +174,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
             style={{
               fontSize: isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE,
               pointerEvents: isSaving ? 'none' : 'all',
+              color: saving ? 'gray' : 'inherit'
             }}
           />
         )}
