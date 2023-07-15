@@ -77,9 +77,9 @@ const TableOfContents = ({ onClose,editor }:tableProps) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </button>
-        {isVersionOpen && data.versions.map(({ version, count }: any) => {
+        {isVersionOpen && data.versions.map(({ version, count }: any,index:number) => {
         return (
-          <div className='mr-3'>
+          <div className='mr-3' key={version+index}>
             {translation[version]}
             <div className='flex gap-2'>
 

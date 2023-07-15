@@ -25,6 +25,7 @@ const editorProps = {
   handleDOMEvents: handleDOMEvents,
   attributes: {
     inputmode: 'none',
+    'data-encoding': 'UTF-8',
   },
 };
 export default editorProps;
