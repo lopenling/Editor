@@ -1,7 +1,6 @@
 import { AiFillGithub, AiFillTwitterCircle } from 'react-icons/ai';
 import PartnerSection from './Partner';
 export default function FooterContainer() {
-
   let items = [
     {
       logo: 'https://openpecha.org/logo.png',
@@ -23,9 +22,7 @@ export default function FooterContainer() {
 
       <div className="mx-auto w-full ">
         <div className="bg-gray-100 px-4 py-6 dark:bg-gray-700 md:flex md:items-center md:justify-between">
-          <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
-            © 2023 <a href="https://flowbite.com/">Lopenling™</a>. All Rights Reserved.
-          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center"></span>
           <div className="mt-4 flex space-x-6 sm:justify-center md:mt-0">
             {items.map((item, index) => {
               return (
