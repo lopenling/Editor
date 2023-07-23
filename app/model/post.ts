@@ -1,7 +1,6 @@
 // create post
 
 import { db } from '~/services/db.server';
-import { fetchCategoryData } from '~/services/discourseApi';
 import { getPage } from './page';
 
 export async function createPost(
@@ -15,24 +14,25 @@ export async function createPost(
   content: string,
   creatorUser_id: string,
   audioUrl: string,
-  selectionContent:string
+  selectionContent: string
 ) {
   try {
-    console.log(creatorUser_id)
+    let data = {
+      type: type,
+      avatar: avatar,
+      topic_id: topic_id,
+      post_id: post_id,
+      content: content,
+      threadId,
+      creatorUser_id: creatorUser_id,
+      textId: textId,
+      pageId: pageId,
+      audioUrl: audioUrl,
+      selection: selectionContent,
+    };
+    console.log(data);
     const createPost = await db.post.create({
-      data: {
-        type: type,
-        avatar: avatar,
-        topic_id: topic_id,
-        post_id: post_id,
-        content: content,
-        threadId,
-        creatorUser_id: creatorUser_id,
-        textId: textId,
-        pageId: pageId,
-        audioUrl: audioUrl,
-        selection:selectionContent
-      },
+      data,
     });
     return createPost;
   } catch (e) {
@@ -72,10 +72,10 @@ export async function findPostByTopicId(TopicId: number) {
     return 'couldnot find the by TopicId' + e.message;
   }
 }
-export async function findPostByTextIdAndPage(textId:number, order: number,version:string|null) {
+export async function findPostByTextIdAndPage(textId: number, order: number, version: string | null) {
   try {
     const page = await getPage(textId, order, version);
-    if(!page) throw new Error('page not found');
+    if (!page) throw new Error('page not found');
     let posts = await db.post.findMany({
       include: {
         creatorUser: true,
@@ -84,7 +84,7 @@ export async function findPostByTextIdAndPage(textId:number, order: number,versi
       },
       where: {
         textId,
-        pageId:page.id,
+        pageId: page.id,
       },
     });
     const postWithReply = await Promise.all(

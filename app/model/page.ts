@@ -1,6 +1,6 @@
 import { fullSearch } from '~/lib';
 import { db } from '~/services/db.server';
-
+import {  Version } from '@prisma/client';
 export async function getPageWithId(id: string) {
   try {
     let page = db.page.findFirst({
@@ -49,7 +49,7 @@ export async function getVersions(textId: number, order: number) {
   }
 }
 
-export async function getPage(textId: number, order: number,version:string|null) {
+export async function getPage(textId: number, order: number,version:Version|null) {
   try {
     let where = typeof version==='string' ? { textId, order, version } : { textId, order };
     let pageWhere = version ? { version } : {};

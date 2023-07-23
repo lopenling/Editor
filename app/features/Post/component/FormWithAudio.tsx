@@ -24,9 +24,9 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
   const [error, setError] = useState('');
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const data = useLoaderData();
-  let isFormEmpty = body.length < 5 || body==='<p></p>';
+  let isFormEmpty = body.length < 5 || body === '<p></p>';
   const { editor }: { editor: Editor } = useOutletContext();
-  
+
   useEffect(() => {
     setBody(content ? content : '');
     setAudio({ tempUrl: audioUrl ? audioUrl : '', blob: null });
@@ -65,7 +65,7 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
       threadId: id,
       selectionSegment: selection.content,
       textId: data?.text?.id,
-      pageId: data?.page?.id,
+      pageId: data?.pageId,
       order: data?.page?.order,
       topic: textName,
       body: body,
@@ -144,7 +144,13 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
             style={{ borderRadius: 24 }}
             label="cancel"
           />
-          <Button style={{ borderRadius: 24, opacity: isFormEmpty?0.3:1 }} disabled={isFormEmpty} onClick={handleSubmit} type="submit" label="Respond" />
+          <Button
+            style={{ borderRadius: 24, opacity: isFormEmpty ? 0.3 : 1 }}
+            disabled={isFormEmpty}
+            onClick={handleSubmit}
+            type="submit"
+            label="Respond"
+          />
         </div>
       </div>
     </fetcher.Form>

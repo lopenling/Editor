@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from 'react';
 import PostForm from '~/features/Post/PostForm';
-import { Await,  useSearchParams } from '@remix-run/react';
+import { Await, useSearchParams } from '@remix-run/react';
 import Posts from '~/features/Post/Posts';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -11,16 +11,18 @@ import { useLiveLoader } from '~/lib';
 import { Skeleton } from '~/component/UI';
 import { GrClose } from 'react-icons/gr';
 import { FaFilter } from 'react-icons/fa';
+import { getPageId } from '~/model/page';
+import { parse } from 'uuid';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
   const threadId = new URL(request.url).searchParams.get('thread') ?? '';
-  const version= new URL(request.url).searchParams.get('version') ?? null;
+  const version = new URL(request.url).searchParams.get('version') ?? null;
   const posts = await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version);
-  return defer({ text: { id: textId }, posts, threadId });
+  const pageId = await getPageId(parseInt(textId), parseInt(order));
+  return defer({ text: { id: textId }, posts, threadId, pageId });
 };
-
 
 export const ErrorBoundary = ({ error }: { error: Error }) => {
   return <div>{error?.message}</div>;
@@ -61,10 +63,10 @@ export default function PostContainer() {
   const setOpenContent = useSetRecoilState(showSidebar);
 
   const translation = uselitteraTranlation();
-  const handleClose = () => { 
+  const handleClose = () => {
     setOpenContent(false);
-  }
-  if (data.posts?.error) return <div className='p-3 mt-2 text-red-700'>Error:{data.posts.error}</div>
+  };
+  if (data.posts?.error) return <div className="mt-2 p-3 text-red-700">Error:{data.posts.error}</div>;
   return (
     <>
       <PostForm />
@@ -78,7 +80,7 @@ export default function PostContainer() {
               onClick={() => setOpenFilter((prev) => !prev)}
               className="flex items-center justify-center space-x-2 rounded-lg border border-gray-200 px-3 py-2 filter"
             >
-              <FaFilter className='text-gray-500'/>
+              <FaFilter className="text-gray-500" />
               <span className="text-sm font-medium leading-tight text-gray-500 dark:text-gray-50">
                 {translation.filter}
               </span>
@@ -93,7 +95,7 @@ export default function PostContainer() {
       <Suspense
         fallback={
           <div className="mx-2">
-            <Skeleton height={90} number={5}/>
+            <Skeleton height={90} number={5} />
           </div>
         }
       >
@@ -105,12 +107,16 @@ export default function PostContainer() {
 
 const LatestFilter = () => {
   const [isLatest, setIsLatestPost] = useRecoilState(showLatest);
-  const options = ['Latest', 'Earliest']
-  const toggleLatest = () => { 
+  const options = ['Latest', 'Earliest'];
+  const toggleLatest = () => {
     setIsLatestPost((prev) => !prev);
-  }
-  return <div className="text-sm font-medium leading-tight text-gray-500 dark:text-gray-50 p-3 cursor-pointer" onClick={toggleLatest}>
-    {isLatest?options[0]:options[1]}
-  </div>;
+  };
+  return (
+    <div
+      className="cursor-pointer p-3 text-sm font-medium leading-tight text-gray-500 dark:text-gray-50"
+      onClick={toggleLatest}
+    >
+      {isLatest ? options[0] : options[1]}
+    </div>
+  );
 };
-

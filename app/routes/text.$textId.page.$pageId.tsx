@@ -21,9 +21,6 @@ import { EditorContainer } from '~/features/Editor';
 import { SuggestionContainer, SuggestionForm } from '~/features/Suggestion';
 import { getUserSession } from '~/services/session.server';
 import { findAllSuggestionByPageId } from '~/model/suggestion';
-import { OnlineUsers } from '~/component/UI';
-import usePusherPresence from '~/component/hooks/usePusherPresence';
-import Pagination from '~/component/UI/Pagination';
 import { FaListUl, FaRegComments } from 'react-icons/fa';
 import TableOfContents from '~/features/Editor/component/TableOfContent';
 import Modal from 'react-modal';
@@ -41,7 +38,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     }
   }
   const text = await getText(textId);
-  const page = getPage(parseInt(textId), parseInt(order), version);
+  const page = await getPage(parseInt(textId), parseInt(order), version);
   const user = await getUserSession(request);
   const suggestions = await findAllSuggestionByPageId(page?.id);
   return defer({
@@ -164,7 +161,7 @@ export default function Page() {
         setTextName({ name: data?.text.name, id: data?.text.id });
       },
     },
-    []
+    [data.page.content]
   );
   useEffect(() => {
     if (!!selectedPost.id || selection.type !== '' || !!suggestionSelected?.id || openSuggestion) {

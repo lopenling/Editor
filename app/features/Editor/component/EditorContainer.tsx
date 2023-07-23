@@ -1,19 +1,18 @@
-import { useFetcher, useLoaderData, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { BubbleMenu, Editor, EditorContent } from '@tiptap/react';
-import { useEffect,useCallback} from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useEffect, useMemo } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 // import EditorSettings from "./EditorSettings";
 import { Button, OnlineUsers } from '~/component/UI';
-import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE, ForumLink, HEADER_HEIGHT } from '~/constants';
-import { openSuggestionState, selectedPostThread, selectedTextOnEditor, ImageState, textInfo } from '~/states';
-import { DiffMatchPatch, isSmallScreen } from '~/lib';
-import { scrollThreadIntoView } from '../lib';
+import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
+import { openSuggestionState, selectedPostThread, selectedTextOnEditor, ImageState } from '~/states';
+import { isSmallScreen } from '~/lib';
+import { checkUnknown, scrollThreadIntoView } from '../lib';
 import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import Controls from './Controls';
 import usePusherPresence from '~/component/hooks/usePusherPresence';
-import checkAndRefresh from '../lib/checkunknown';
-import removeReplacementCharacter from '../lib/cleanText';
+import { getQuery, saveData } from '../lib/utils';
 type EditorContainerProps = {
   pageId: string;
   editor: Editor;
@@ -24,7 +23,16 @@ type EditorContainerProps = {
   imageUrl: string;
   versions: string[];
 };
-function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pageCount,versions }: EditorContainerProps) {
+function EditorContainer({
+  pageId,
+  editor,
+  isSaving,
+  order,
+  content,
+  imageUrl,
+  pageCount,
+  versions,
+}: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
   const saveTextFetcher = useFetcher();
@@ -33,46 +41,28 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
- const { onlineMembers } = usePusherPresence(
-   `presence-text_${pageId}`,
-   data.pusher_env.key,
-   data.pusher_env.cluster,
-   data.user
- );
+  const { onlineMembers } = usePusherPresence(
+    `presence-text_${pageId}`,
+    data.pusher_env.key,
+    data.pusher_env.cluster,
+    data.user
+  );
 
-  const getQuery = (newContent: string) => {
-    let oldContent = content;
-    const dmp = new DiffMatchPatch();
-    if (oldContent !== newContent) {
-      const changes = dmp.diff_main(oldContent, newContent);
-      const patch = dmp.patch_make(changes);
-      let query = dmp.patch_toText(patch);
-      return query;
-    }
-    return null;
-  };
-  const saveData = async (patch: string) => {
-    const formData = new FormData();
-    formData.append('textId', data.text?.id);
-    formData.append('pageId', pageId);
-    formData.append('patch', patch);
-    saveTextFetcher.submit(formData, {
-      method: 'POST',
-      action: '/api/text',
-    });
-  };
   let saving = saveTextFetcher.state !== 'idle';
+  let oldContent = useMemo(() => {
+    return content;
+  }, [editor, pageId, content]);
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
-    editor.on('update', async ({ editor }) => {
+    editor.on('update', async ({ editor, transaction }) => {
       let newContent = editor.getHTML();
-      let query = getQuery(newContent);
-      if (query && newContent.length > 100 && user) saveData(query);
+      let query = getQuery(newContent, oldContent);
+      if (query && newContent.length > 100 && user) saveData(query, pageId, saveTextFetcher);
     });
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [thread.id]);
+  }, [editor, thread.id]);
 
   const handleBubbleClick = (type: string) => {
     if (selection.start)
@@ -103,12 +93,12 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
   useEffect(() => {
     let timer = setTimeout(() => {
       let newContent = content.replace(/[\r\n]+/g, '<br/>');
-      checkAndRefresh(newContent);
+      checkUnknown(newContent);
       editor?.commands.setContent(newContent);
     }, 100);
     setImage({ ...Image, url: imageUrl });
     return () => {
-      clearTimeout(timer)
+      clearTimeout(timer);
     };
   }, [content, editor]);
   const handleImageLoaded = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -174,7 +164,7 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
             style={{
               fontSize: isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE,
               pointerEvents: isSaving ? 'none' : 'all',
-              color: saving ? 'gray' : 'inherit'
+              color: saving ? 'gray' : 'inherit',
             }}
           />
         )}
@@ -258,6 +248,5 @@ function EditorContainer({ pageId, editor, isSaving, order, content, imageUrl,pa
     </div>
   );
 }
-
 
 export default EditorContainer;

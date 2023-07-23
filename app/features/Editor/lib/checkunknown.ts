@@ -1,18 +1,13 @@
-import { useNavigate } from '@remix-run/react';
-
-function checkAndRefresh(text: string) {
-  if (text.includes('\ufffd')) {
+function checkUnknown(text: string) {
+  const replacementChar = '\ufffd';
+  if (text.includes(replacementChar)) {
+    const regex = new RegExp(replacementChar, 'g');
+    const newStr = text.replace(regex, '');
     // Refresh the data (e.g., reload it from a source)
-    refreshData();
-    return true; // Indicates that the data was refreshed
+    return newStr; // Indicates that the data was refreshed
   } else {
-    return false; // Indicates that the data was not refreshed
+    return text; // Indicates that the data was not refreshed
   }
 }
 
-function refreshData() {
-let navigate = useNavigate();
-  navigate('.', { replace: true });
-}
-  
-export default checkAndRefresh;
+export default checkUnknown;

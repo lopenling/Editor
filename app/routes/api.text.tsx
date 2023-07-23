@@ -48,12 +48,9 @@ export let action: ActionFunction = async ({ request }) => {
     let patch = dmp.patch_fromText(patchText);
     try {
       const [text2, result] = dmp.patch_apply(patch, content);
-      if (result.every((r) => r === true)) {
         const res = await updatePage(pageId, text2);
         await trigerUpdate(user, pageId);
         return res;
-      }
-      return true;
     } catch (e) {
       return false;
     }
