@@ -8,7 +8,7 @@ import { useLocation, useLoaderData, useNavigation } from '@remix-run/react';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import { motion } from 'framer-motion';
 import Header from '~/component/Layout/Header';
-import { useState, useEffect ,ChangeEvent} from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Skeleton } from '~/component/UI';
 import { HEADER_HEIGHT } from '~/constants';
 import { initializeTribute } from '~/lib';
@@ -16,14 +16,13 @@ import { findLatestText } from '~/model/text';
 import { TextType } from '~/model/type';
 import groupData from '~/lib/filterVersionFromText';
 
-
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get('search')?.trim();
-  const {latestTexts,count} = await findLatestText();
+  const { latestTexts, count } = await findLatestText();
   let headers = {
     'Cache-Control': 'max-age=15,stale-while-revalidate=60',
   };
-  if (!searchText) return { textList: null, search: null, latestTexts: {list:latestTexts, count } };
+  if (!searchText) return { textList: null, search: null, latestTexts: { list: latestTexts, count } };
 
   return defer(
     { textList: await searchPages(searchText), search: searchText, latestTexts: null },
@@ -31,7 +30,6 @@ export let loader: LoaderFunction = async ({ request }) => {
       headers,
     }
   );
-  
 };
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -62,15 +60,15 @@ export default function Index() {
   const navigation = useNavigation();
   const [params] = useSearchParams();
   const [searchInput, setSearchInput] = useState('');
-   const translation: any = uselitteraTranlation();
-  
+  const translation: any = uselitteraTranlation();
+
   useEffect(() => {
-  initializeTribute('inputText');
-   },[])
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-      const inputValue = event.target.value;
-      setSearchInput(inputValue);
-    };
+    initializeTribute('inputText');
+  }, []);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    setSearchInput(inputValue);
+  };
   useEffect(() => {
     let p = params.get('search');
     if (!p) {
@@ -137,20 +135,22 @@ export default function Index() {
                       <Link to={url}>{text.name}</Link>
                     </div>
                     {
-                      <div className="px-4 py-4 font-light text-gray-300 flex gap-2">
-                        {!isVersionAvailable? (
-                          <>
-                           
-                          </>
+                      <div className="flex gap-2 px-4 py-4 font-light text-gray-300">
+                        {!isVersionAvailable ? (
+                          <></>
                         ) : (
                           <>
-                              {Object.keys(groupedData).map(key => {
-                                let urlversion = url + '?version=' + key
-                                return (
-                                  <Link key={key} to={urlversion} className='cursor-pointer capitalize rounded-md bg-yellow-300 text-black px-2'>
-                                    {translation[key]}
-                                  </Link>
-                                );
+                            {Object.keys(groupedData).map((key) => {
+                              let urlversion = url + '?version=' + key;
+                              return (
+                                <Link
+                                  key={key}
+                                  to={urlversion}
+                                  className="cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black"
+                                >
+                                  {translation[key]}
+                                </Link>
+                              );
                             })}
                           </>
                         )}
@@ -159,7 +159,10 @@ export default function Index() {
                   </div>
                 );
               })}
-              <Link to="/list" className="mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors">
+              <Link
+                to="/list"
+                className="mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors dark:text-white"
+              >
                 List all ({data?.latestTexts?.count}) Pechas
               </Link>
             </>
@@ -226,6 +229,3 @@ export default function Index() {
     </motion.div>
   );
 }
-
-
-

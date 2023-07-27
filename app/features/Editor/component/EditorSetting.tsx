@@ -1,21 +1,23 @@
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { FaBars } from 'react-icons/fa';
-import {FcSettings} from 'react-icons/fc'
-import { changeFont, exportDoc, scrollThreadIntoView } from '../lib';
-import { useEffect, useMemo, useState } from 'react';
+import { FcSettings } from 'react-icons/fc';
+import { changeFont, exportDoc } from '../lib';
+import { useState } from 'react';
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
 import { isSmallScreen } from '~/lib';
 import { Editor } from '@tiptap/react';
-import { useLoaderData, useLocation, useSearchParams } from '@remix-run/react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { ImageState, textInfo } from '~/states';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
+import { useRecoilState } from 'recoil';
+import { ImageState } from '~/states';
 import ImageWithPlaceholder from '~/features/Media/Image';
+
+type theme = { background: string; text: string };
 
 export default function EditorSetting({ editor }: { editor: Editor }) {
   const [image, setShowImage] = useRecoilState(ImageState);
   const data = useLoaderData();
-  let [searchParam,] = useSearchParams();
-  const version=searchParam.get('version')
+  let [searchParam] = useSearchParams();
+  const version = searchParam.get('version');
   const ref = useDetectClickOutside({
     onTriggered: () => setOpenEditMenu(false),
   });
@@ -25,23 +27,22 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
     changeFont(value);
   };
   const toggleImage = (e) => {
-    setShowImage({...image, show: e.target.checked });
+    setShowImage({ ...image, show: e.target.checked });
   };
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [fontSize, setFontSize] = useState(isSmallScreen ? DEFAULT_FONT_SIZE_MOBILE : DEFAULT_FONT_SIZE);
- 
-  let themes = [
+
+  let themes: theme[] = [
     { background: 'white', text: 'black' },
     { background: '#C4E0A6', text: 'black' },
     { background: '#B9F3DD', text: 'black' },
     { background: '#5A5A5C', text: 'white' },
   ];
-  const changeTheme = (theme) => { 
+  const changeTheme = (theme: theme) => {
     document.documentElement.style.setProperty('--background-text-editor', theme.background);
     document.documentElement.style.setProperty('--text-text-editor', theme.text);
-  }
+  };
 
- 
   return (
     <div className="mr-2 mt-2">
       <button type="button" onClick={() => setOpenEditMenu((p) => !p)}>
@@ -52,13 +53,13 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
         <div
           ref={ref}
           style={{ top: '100%', right: '5%' }}
-          className="absolute  z-50 w-36 divide-y divide-gray-100 rounded bg-white shadow dark:divide-gray-600 dark:bg-gray-700"
+          className="absolute  z-50 w-36 divide-y divide-gray-100 rounded bg-white shadow dark:divide-gray-600"
         >
           <ul
-            className="py-1 text-sm text-gray-700 dark:text-gray-200"
+            className="py-1 text-sm text-gray-700 dark:bg-gray-600 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
-            <li className="flex cursor-pointer flex-col gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+            <li className="flex cursor-pointer flex-col gap-2 bg-gray-100 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:text-white">
               <div className="flex flex-col items-center">
                 <ImageWithPlaceholder
                   src={`https://opf.fi/image/${data.text.id}/${data.order}/${version}`}
@@ -112,7 +113,7 @@ export default function EditorSetting({ editor }: { editor: Editor }) {
                 value={fontSize}
                 size={2}
                 max={40}
-                style={{ border: 0, padding: 0, width: 40 }}
+                style={{ border: 0, padding: 0, width: 40, color: 'black' }}
                 onChange={handleFontSizeChange}
               />
             </li>

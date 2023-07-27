@@ -6,7 +6,6 @@ export const getQuery = (newContent: string, oldContent: string) => {
     const changes = dmp.diff_main(oldContent, newContent);
     const patch = dmp.patch_make(changes);
     let query = dmp.patch_toText(patch);
-    console.log(patch);
     return query;
   }
   return null;

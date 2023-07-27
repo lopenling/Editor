@@ -1,18 +1,18 @@
 import { Suspense, useEffect } from 'react';
 import PostForm from '~/features/Post/PostForm';
-import { Await, useSearchParams } from '@remix-run/react';
+import { Await, useLoaderData, useSearchParams } from '@remix-run/react';
 import Posts from '~/features/Post/Posts';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { openFilterState, selectedPostThread as selectedPostThreadState, showLatest, showSidebar } from '~/states';
 import { findPostByTextIdAndPage } from '~/model/post';
 import { LoaderFunction, defer } from '@remix-run/node';
-import { useLiveLoader } from '~/lib';
 import { Skeleton } from '~/component/UI';
 import { GrClose } from 'react-icons/gr';
 import { FaFilter } from 'react-icons/fa';
 import { getPageId } from '~/model/page';
 import { parse } from 'uuid';
+import { getText } from '~/model/text';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId as string;
@@ -20,8 +20,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const threadId = new URL(request.url).searchParams.get('thread') ?? '';
   const version = new URL(request.url).searchParams.get('version') ?? null;
   const posts = await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version);
+  const text = await getText(textId);
   const pageId = await getPageId(parseInt(textId), parseInt(order));
-  return defer({ text: { id: textId }, posts, threadId, pageId });
+  return defer({ text, posts, threadId, pageId, order });
 };
 
 export const ErrorBoundary = ({ error }: { error: Error }) => {
@@ -29,7 +30,7 @@ export const ErrorBoundary = ({ error }: { error: Error }) => {
 };
 
 export default function PostContainer() {
-  const data = useLiveLoader<typeof loader>();
+  const data = useLoaderData<typeof loader>();
   let [, setParams] = useSearchParams();
   let [selectedPostThread, setSelectedThread] = useRecoilState(selectedPostThreadState);
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function PostContainer() {
     <>
       <PostForm />
 
-      <div className="sticky top-0 z-50  flex  w-full items-center justify-between gap-2 bg-white ">
+      <div className="sticky top-0 z-50  flex  w-full items-center justify-between gap-2 bg-white dark:bg-gray-700 ">
         <div className="z-30 flex flex-1 items-center  justify-between  py-2">
           <div className="flex">
             <LatestFilter />
@@ -86,8 +87,8 @@ export default function PostContainer() {
               </span>
             </button>
           </div>
-          <button onClick={handleClose} className="mr-2">
-            <GrClose size={14} className="cursor-pointer text-gray-500" />
+          <button onClick={handleClose} className="mr-2 bg-white" style={{ padding: 10, borderRadius: 20 }}>
+            <GrClose size={14} className="cursor-pointer" />
           </button>
         </div>
       </div>

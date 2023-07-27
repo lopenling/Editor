@@ -11,16 +11,17 @@ import { removeMark } from '~/features/Editor/tiptap/markAction';
 import { PostType } from '~/model/type';
 import copyToClipboard from '~/lib/copyToClipboard';
 import { FormWithAudio } from './component/FormWithAudio';
-import { timeAgo, useFetcherWithPromise } from '~/lib';
+import { timeAgo } from '~/lib';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { ForumLink } from '~/constants';
+import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 type PostPropType = {
   isOptimistic: boolean;
   post: PostType;
   showDivider: boolean;
 };
 
-function Post({ isOptimistic, post,showDivider }: PostPropType) {
+function Post({ isOptimistic, post, showDivider }: PostPropType) {
   const {
     id,
     creatorUser,
@@ -33,7 +34,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
     isSolved,
     threadId,
     audioUrl,
-    selection
+    selection,
   } = post!;
   const [openReply, setOpenReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -57,7 +58,6 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
       setSelectedThreadId({
         id,
       });
-     
     },
     [threadId]
   );
@@ -87,9 +87,9 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
     let decision = confirm('do you want to delete the post');
     setTimeout(() => {
       removeMark(editor, threadId);
-    },0)
+    }, 0);
     if (decision) {
-      let res:any =await fetcher.submit(
+      let res: any = await fetcher.submit(
         {
           id,
         },
@@ -97,8 +97,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
           action: 'api/post',
           method: 'DELETE',
         }
-        )
-        
+      );
     } else {
       console.log('cancelled');
     }
@@ -120,7 +119,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
   return (
     <div
       className={`${fetcher.formMethod === 'DELETE' && 'hidden'}  `}
-      style={{ paddingInline: 24 }}
+      style={{ paddingInline: 24, backgroundColor: selectedThreadId?.id === threadId ? '#F3F4F6' : 'white' }}
       id={`p_${threadId}`}
     >
       <div
@@ -204,7 +203,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
                 </li>
                 <li>
                   <a
-                    href={ForumLink+`/t/${topicId}`}
+                    href={ForumLink + `/t/${topicId}`}
                     target="_blank"
                     className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
@@ -291,7 +290,7 @@ function Post({ isOptimistic, post,showDivider }: PostPropType) {
                   </svg>
 
                   <button className={`text-sm font-medium lowercase leading-tight text-gray-500 dark:text-gray-100`}>
-                    <span className="ml-2">{showReplies ? 'hide' : ReplyCount ? ReplyCount:0}</span>
+                    <span className="ml-2">{showReplies ? 'hide' : ReplyCount ? ReplyCount : 0}</span>
                   </button>
                 </div>
 

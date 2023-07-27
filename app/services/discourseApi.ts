@@ -29,9 +29,8 @@ class DiscourseApi {
     try {
       const res = await fetch(url);
       return await res.json();
-    }
-    catch (e) {
-      throw new Error('discource category Api not working, check if the disource forum works properly')
+    } catch (e) {
+      throw new Error('discource category Api not working, check if the disource forum works properly');
     }
   }
   async fetchCategoryList(id: string | undefined) {
@@ -235,13 +234,15 @@ export async function createThread(
   if (textTitle.length > 40) {
     textTitle = textTitle.substring(0, MAX_CATEGORY_NAME_LENGTH) + `_text_${textId}`;
   }
-  const category = categories.find((c: any) => c.name === textTitle.trim());
-  let categoryId: number;
-  if (category) {
-    categoryId = category.id;
-  } else {
+  let categoryId: number = 0;
+  if (!categories) {
     const newCategory = await api.addCategory(textTitle, parseInt(parentCategoryId));
     categoryId = newCategory.category.id;
+  } else {
+    const category = categories.find((c: any) => c.name === textTitle.trim());
+    if (category) {
+      categoryId = category.id;
+    }
   }
   let topic = await api.addTopic(
     threadId,

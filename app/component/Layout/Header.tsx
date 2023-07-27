@@ -4,7 +4,6 @@ import { useLitteraMethods } from '@assembless/react-littera';
 import { useEffect, useState, memo } from 'react';
 import uselitteraTranlation, { translationCodes } from '~/locales/useLitteraTranslations';
 import { useRecoilValue } from 'recoil';
-import { textInfo } from '~/states';
 import { Editor } from '@tiptap/react';
 import { SearchString } from '~/features/Editor';
 import { useDetectClickOutside } from 'react-detect-click-outside';
@@ -19,7 +18,7 @@ import { FaUserAlt, FaBars } from 'react-icons/fa';
 
 const Logo = () => (
   <img
-    src={ForumLink+'/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
+    src={ForumLink + '/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
     alt="logo"
     className="block max-h-[37px] object-contain "
   />
@@ -56,12 +55,11 @@ function Header({ editor }: HeaderProps) {
   const loginFetcher = useFetcher();
   const themeFetcher = useFetcher();
   const translation: any = uselitteraTranlation();
-  const {pathname,search} = useLocation();
+  const { pathname, search } = useLocation();
   const redirectTo = pathname + search;
   const [TextNameOnHeader, setTextNameOnHeader] = useState(false);
-  const { name: textName } = useRecoilValue(textInfo);
   let { user }: { user: UserType } = useOutletContext();
-
+  let { text } = useLoaderData();
   const changeTheme = () => {
     themeFetcher.submit(
       {
@@ -75,18 +73,18 @@ function Header({ editor }: HeaderProps) {
   };
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-const handleScroll = () => {
-  if (timeout) clearTimeout(timeout);
-  timeout = setTimeout(() => {
-    var scrollTopValue = window.pageYOffset || document.documentElement?.scrollTop || document.body?.scrollTop;
-    const shouldShowTextName = scrollTopValue! > 10 && redirectTo.includes('text');
-    setTextNameOnHeader(shouldShowTextName);
-  }, 10);
-};
+    const handleScroll = () => {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        var scrollTopValue = window.pageYOffset || document.documentElement?.scrollTop || document.body?.scrollTop;
+        const shouldShowTextName = scrollTopValue! > 10 && redirectTo.includes('text');
+        setTextNameOnHeader(shouldShowTextName);
+      }, 10);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window?.addEventListener('scroll', handleScroll);
-  }, [redirectTo, textName]);
-  
+  }, [redirectTo]);
+
   let darkMode = user?.preference?.theme === 'dark';
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
@@ -110,7 +108,7 @@ const handleScroll = () => {
     >
       <div className=" mx-auto flex flex-wrap items-center justify-between p-2">
         {TextNameOnHeader ? (
-          <LogoWithTextName textName={textName} />
+          <LogoWithTextName textName={text.name} />
         ) : (
           <NavLink to={'/'} prefetch="intent" className="flex w-auto items-center">
             <Logo />

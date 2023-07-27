@@ -30,7 +30,6 @@ export async function createPost(
       audioUrl: audioUrl,
       selection: selectionContent,
     };
-    console.log(data);
     const createPost = await db.post.create({
       data,
     });

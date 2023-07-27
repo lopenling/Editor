@@ -21,7 +21,6 @@ function Filter({}: FilterProps) {
 
   const handleTypeCheck = (e) => {
     let solved = e.target.value === 'comment' ? 'both' : filterData.solved;
-    console.log(solved,e.target.value)
     setFilterData((prevData) => ({
       ...prevData,
       type: e.target.value,
@@ -105,8 +104,7 @@ function Filter({}: FilterProps) {
                     </label>
                   </div>
                 );
-              }
-              )}
+              })}
             </div>
           </div>
           {/* DateFilter */}

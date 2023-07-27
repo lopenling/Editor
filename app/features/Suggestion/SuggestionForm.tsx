@@ -6,15 +6,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { Editor } from '@tiptap/react';
 import { Button, TextArea, MustLoggedIn as LogInMessage } from '~/component/UI';
 import Suggestion from './Suggestion';
-import { useFetcherWithPromise } from '~/lib';
 import { AudioPlayer, AudioRecorder } from '../Media';
+import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 
 type SuggestionFormProps = {
   editor: Editor | null;
   page: any;
 };
 
-export default function SuggestionForm({ editor,page }: SuggestionFormProps) {
+export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
   const data = useLoaderData();
   let { user } = data;
   const [suggestionInput, setSuggestionInput] = useState('');

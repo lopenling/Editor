@@ -10,7 +10,7 @@ import {
   useNavigation,
   isRouteErrorResponse,
   useRouteError,
-  useFetchers
+  useFetchers,
 } from '@remix-run/react';
 import ErrorPage from './component/Layout/ErrorPage';
 import { getUserSession } from './services/session.server';
@@ -23,7 +23,7 @@ import { AnimatePresence } from 'framer-motion';
 import { getUser } from './model/user';
 import notificationStyle from 'react-notifications-component/dist/theme.css';
 import nProgressStyles from 'nprogress/nprogress.css';
-import { useEffect,useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react';
 import NProgress from 'nprogress';
 export function meta() {
   return [
@@ -43,7 +43,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   let userSession = await getUserSession(request);
   if (!userSession) return { user: null };
   let user = await getUser(userSession.username);
-  
+
   return { user };
 };
 export function links() {
@@ -80,7 +80,7 @@ export function ErrorBoundary() {
       </div>
     );
   } else {
-    return <h1>Unknown  Error</h1>;
+    return <h1>Unknown Error</h1>;
   }
 }
 
@@ -89,19 +89,19 @@ export default function App() {
   const navigation = useNavigation();
   let fetchers = useFetchers();
 
-let state = useMemo<'idle' | 'loading'>(
-  function getGlobalState() {
-    let states = [navigation.state, ...fetchers.map((fetcher) => fetcher.state)];
-    if (states.every((state) => state === 'idle')) return 'idle';
-    return 'loading';
-  },
-  [navigation.state, fetchers]
-);
-useEffect(() => {
-  if (state === 'loading') NProgress.start();
-  if (state === 'idle') NProgress.done();
-}, [navigation.state]);
-  
+  let state = useMemo<'idle' | 'loading'>(
+    function getGlobalState() {
+      let states = [navigation.state, ...fetchers.map((fetcher) => fetcher.state)];
+      if (states.every((state) => state === 'idle')) return 'idle';
+      return 'loading';
+    },
+    [navigation.state, fetchers]
+  );
+  useEffect(() => {
+    if (state === 'loading') NProgress.start();
+    if (state === 'idle') NProgress.done();
+  }, [navigation.state]);
+
   return (
     <html className={data.user?.preference?.theme || 'light'}>
       <head>
@@ -115,7 +115,7 @@ useEffect(() => {
           <AnimatePresence mode="wait" initial={false}>
             <RecoilRoot>
               <Outlet context={{ user: data.user }} />
-              </RecoilRoot>
+            </RecoilRoot>
           </AnimatePresence>
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />

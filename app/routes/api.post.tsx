@@ -35,7 +35,6 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
     let textId = parseInt(Obj.textId as string);
     let pageId = Obj.pageId as string;
     let order = Obj.order as string;
-
     try {
       const data = await createThread(
         user.username,

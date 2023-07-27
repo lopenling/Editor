@@ -41,6 +41,7 @@ function EditorContainer({
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
+
   const { onlineMembers } = usePusherPresence(
     `presence-text_${pageId}`,
     data.pusher_env.key,
@@ -49,9 +50,11 @@ function EditorContainer({
   );
 
   let saving = saveTextFetcher.state !== 'idle';
+
   let oldContent = useMemo(() => {
     return content;
   }, [editor, pageId, content]);
+
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     editor.on('update', async ({ editor, transaction }) => {
@@ -63,6 +66,17 @@ function EditorContainer({
       if (timer) clearTimeout(timer);
     };
   }, [editor, thread.id]);
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      let newContent = content.replace(/[\r\n]+/g, '<br/>');
+      checkUnknown(newContent);
+      editor?.commands.setContent(newContent);
+    }, 100);
+    setImage({ ...Image, url: imageUrl });
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [content, editor]);
 
   const handleBubbleClick = (type: string) => {
     if (selection.start)
@@ -72,7 +86,6 @@ function EditorContainer({
       });
     setOpenSuggestion(false);
   };
-
   function handleSuggestionClick() {
     setOpenSuggestion(!openSuggestion);
     setSelectionRange({
@@ -90,17 +103,6 @@ function EditorContainer({
     }
     editor.commands.setTextSelection(0);
   }
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      let newContent = content.replace(/[\r\n]+/g, '<br/>');
-      checkUnknown(newContent);
-      editor?.commands.setContent(newContent);
-    }, 100);
-    setImage({ ...Image, url: imageUrl });
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [content, editor]);
   const handleImageLoaded = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     let height = e.target.height;
     let width = e.target.width;

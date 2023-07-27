@@ -1,46 +1,44 @@
-import { ActionFunction, LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
-import { Await, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
+import { LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
+import { Await, Link, Outlet, useLoaderData } from '@remix-run/react';
 import { Editor, useEditor } from '@tiptap/react';
 import { getPage, getVersions } from '~/model/page';
 import * as Extension from '~/features/Editor/tiptap';
-import { motion } from 'framer-motion';
 import {
   openSuggestionState,
   selectedPostThread,
   selectedSuggestionThread,
   selectedTextOnEditor,
   showSidebar,
-  showTableContent,
-  textInfo,
 } from '~/states';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Suspense, useEffect } from 'react';
 import Header from '~/component/Layout/Header';
-
+import TableContent from '~/features/TableOfContent';
 import { EditorContainer } from '~/features/Editor';
 import { SuggestionContainer, SuggestionForm } from '~/features/Suggestion';
 import { getUserSession } from '~/services/session.server';
 import { findAllSuggestionByPageId } from '~/model/suggestion';
-import { FaListUl, FaRegComments } from 'react-icons/fa';
-import TableOfContents from '~/features/Editor/component/TableOfContent';
+import { FaRegComments } from 'react-icons/fa';
 import Modal from 'react-modal';
-import { HEADER_HEIGHT } from '~/constants';
+import { HEADER_HEIGHT, RIGHT_SIDEBAR_WIDTH } from '~/constants';
 import { getText } from '~/model/text';
+import { Version } from '@prisma/client';
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
   const url = new URL(request.url);
-  const version = url.searchParams.get('version');
+  const version = url.searchParams.get('version') as Version;
   const versions = await getVersions(parseInt(textId), parseInt(order));
   if (!version && versions.length > 0) {
     if (!version) {
       return redirect(`${request.url}?version=${versions[0].version}`);
     }
   }
+
   const text = await getText(textId);
   const page = await getPage(parseInt(textId), parseInt(order), version);
   const user = await getUserSession(request);
-  const suggestions = await findAllSuggestionByPageId(page?.id);
+  const suggestions = await findAllSuggestionByPageId(page?.id!);
   return defer({
     page,
     user,
@@ -84,14 +82,12 @@ function SuggestionSidebar(props: {
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  const user = data.user;
+  const { user, order, text } = data;
   const [suggestionSelected, suggestionSelector] = useRecoilState(selectedSuggestionThread);
   const [selectedPost, postSelector] = useRecoilState(selectedPostThread);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
-  const [showTable, setShowTable] = useRecoilState(showTableContent);
   const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
-  const setTextName = useSetRecoilState(textInfo);
 
   function suggestionSetter(id: string) {
     suggestionSelector({
@@ -104,8 +100,6 @@ export default function Page() {
       id: id,
     });
   }
-
- 
 
   let editor = useEditor(
     {
@@ -157,11 +151,8 @@ export default function Page() {
         if (!editor.isActive('suggestion')) suggestionSelector({ id: '' });
         if (!editor.isActive('post')) postSelector({ id: '' });
       },
-      onCreate: async ({ editor }) => {
-        setTextName({ name: data?.text.name, id: data?.text.id });
-      },
     },
-    [data.page.content]
+    [order, text?.id]
   );
   useEffect(() => {
     if (!!selectedPost.id || selection.type !== '' || !!suggestionSelected?.id || openSuggestion) {
@@ -176,51 +167,15 @@ export default function Page() {
       editor?.commands.setTextSelection(0);
     }
   }, [showPostSide]);
-  const topDistance = HEADER_HEIGHT;
-  const LEFT_SIDEBAR_WIDTH = 272;
-  const RIGHT_SIDEBAR_WIDTH = 400;
   const withImage = !data.text.allow_post;
   return (
     <>
       <Header editor={editor} />
-      <div
-        style={{
-          height: topDistance,
-        }}
-      ></div>
 
-      <div className="relative flex justify-between gap-4 transition-all">
+      <div className="relative flex justify-between gap-4 transition-all" style={{ paddingTop: HEADER_HEIGHT }}>
+        <TableContent editor={editor} />
         <div
-          style={{
-            top: topDistance,
-            width: showTable ? LEFT_SIDEBAR_WIDTH : 50,
-          }}
-          id="tableContent"
-          className="sticky hidden md:flex"
-        >
-          <button
-            className="absolute rounded-full "
-            style={{ top: 10, left: 10, background: '#eee', padding: 10, height: 40, width: 40 }}
-            onClick={() => setShowTable((p) => !p)}
-          >
-            <FaListUl size={22} className="cursor-pointer text-gray-500 " />
-          </button>
-          <motion.div
-            initial={{ x: '-100%' }}
-            animate={{ x: showTable ? 0 : '-100%' }}
-            transition={{ duration: 0.5 }}
-            className="z-10 w-full overflow-hidden rounded-2xl"
-          >
-            <TableOfContents editor={editor} onClose={() => setShowTable(false)} />
-          </motion.div>
-        </div>
-        <div
-          className={`${!withImage ? 'max-w-4xl' : 'w-full'} justify-self-center p-2`}
-          style={{
-            overflowX: 'hidden',
-            scrollbarWidth: 'none',
-            flex: 1,
-          }}
+          className={`${!withImage ? 'max-w-4xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800`}
           id="textEditorContainer"
         >
           {editor && (
@@ -256,7 +211,7 @@ export default function Page() {
         <div
           style={{
             width: showPostSide ? RIGHT_SIDEBAR_WIDTH : 0,
-            top: topDistance,
+            top: HEADER_HEIGHT,
             transition: 'all ease 0.4s',
             zIndex: 1,
           }}
@@ -270,8 +225,8 @@ export default function Page() {
                   <>
                     {data.text.allow_post && (
                       <button
-                        className="absolute rounded-full"
-                        style={{ top: 20, opacity: 1, right: 20, background: '#eee', padding: 10 }}
+                        className="absolute rounded-full bg-gray-100 dark:bg-gray-700 dark:text-gray-300"
+                        style={{ top: 10, opacity: 1, right: 20, padding: 10 }}
                         onClick={() => setShowPostSide((p) => !p)}
                       >
                         <FaRegComments size={22} className="cursor-pointer text-gray-500 " />

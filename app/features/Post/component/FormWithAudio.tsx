@@ -18,12 +18,14 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
   let content = post?.content ?? '';
   let audioUrl = post?.audioUrl ?? '';
   const [audio, setAudio] = useState({ tempUrl: audioUrl, blob: null });
-  const { name: textName } = useRecoilValue(textInfo);
 
   const [body, setBody] = useState(content);
   const [error, setError] = useState('');
   const [selection, setSelection] = useRecoilState(selectedTextOnEditor);
   const data = useLoaderData();
+
+  let textName = data.text.name;
+  let order = data.order;
   let isFormEmpty = body.length < 5 || body === '<p></p>';
   const { editor }: { editor: Editor } = useOutletContext();
 
@@ -66,7 +68,7 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
       selectionSegment: selection.content,
       textId: data?.text?.id,
       pageId: data?.pageId,
-      order: data?.page?.order,
+      order: order,
       topic: textName,
       body: body,
       type: selection.type,

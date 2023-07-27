@@ -7,9 +7,9 @@ import { useDetectClickOutside } from 'react-detect-click-outside';
 import { Button, TextArea } from '~/component/UI';
 import { AudioPlayer, AudioRecorder } from '../Media';
 import { v4 as uuidv4 } from 'uuid';
-import { containTibetanletter, useFetcherWithPromise } from '~/lib';
 import { replaceMarkContent } from '~/features/Editor/tiptap/markAction';
 import Comment from './Comment';
+import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 
 type SuggestionProps = {
   editor: Editor | null;
@@ -53,9 +53,8 @@ export default function Suggestion({ editor, suggest, optimistic = false, count 
       },
       { method: 'POST', action: 'api/suggestion/like' }
     );
-      replaceMarkContent(editor, suggest.threadId, res?.highestLiked);
+    replaceMarkContent(editor, suggest.threadId, res?.highestLiked);
   };
-
 
   let time = timeAgo(suggest.created_at);
 
@@ -63,7 +62,7 @@ export default function Suggestion({ editor, suggest, optimistic = false, count 
     let decision = confirm('do you want to delete the post');
     if (decision) {
       if (count === 1) {
-      editor?.commands.unsetSuggestion();
+        editor?.commands.unsetSuggestion();
       }
       deleteFetcher.submit(
         {
@@ -79,13 +78,18 @@ export default function Suggestion({ editor, suggest, optimistic = false, count 
     }
   }
   function checkPendetaName(val: string) {
-    let value= val.toLowerCase();
+    let value = val.toLowerCase();
     switch (value) {
-      case 'derge': return 'སྡེ་དགེ';
-      case 'narthang': return 'སྣར་ཐང༌།';
-      case 'peking': return 'པེ་ཅིན།';
-      case 'chone': return 'ཆོ་གནས།';
-      default: return val;
+      case 'derge':
+        return 'སྡེ་དགེ';
+      case 'narthang':
+        return 'སྣར་ཐང༌།';
+      case 'peking':
+        return 'པེ་ཅིན།';
+      case 'chone':
+        return 'ཆོ་གནས།';
+      default:
+        return val;
     }
   }
   return (
@@ -109,9 +113,7 @@ export default function Suggestion({ editor, suggest, optimistic = false, count 
                 {suggest.user?.map((item, index) => (
                   <div key={item.id + index} className="text-md capitalize">
                     {checkPendetaName(item.username)}
-                    {index !== suggest.user.length - 1  && (
-                      <span> | </span>
-                    )}
+                    {index !== suggest.user.length - 1 && <span> | </span>}
                   </div>
                 ))}
               </div>
