@@ -21,6 +21,7 @@ type EditorContainerProps = {
   content: string;
   pageCount: number;
   imageUrl: string;
+  saveTextFetcher: any;
   versions: string[];
 };
 function EditorContainer({
@@ -32,10 +33,10 @@ function EditorContainer({
   imageUrl,
   pageCount,
   versions,
+  saveTextFetcher,
 }: EditorContainerProps) {
   const data = useLoaderData();
   const user = data.user;
-  const saveTextFetcher = useFetcher();
   const [Image, setImage] = useRecoilState(ImageState);
   const isPostAllowed = data.text.allow_post;
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);

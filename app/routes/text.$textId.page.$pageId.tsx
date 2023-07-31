@@ -1,5 +1,5 @@
 import { LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
-import { Await, Link, Outlet, useLoaderData } from '@remix-run/react';
+import { Await, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
 import { Editor, useEditor } from '@tiptap/react';
 import { getPage, getVersions } from '~/model/page';
 import * as Extension from '~/features/Editor/tiptap';
@@ -23,6 +23,9 @@ import Modal from 'react-modal';
 import { HEADER_HEIGHT, RIGHT_SIDEBAR_WIDTH } from '~/constants';
 import { getText } from '~/model/text';
 import { Version } from '@prisma/client';
+import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
+import { LineLoaderOverlay } from 'react-spinner-overlay';
+
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
@@ -50,13 +53,22 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   });
 };
 
-function PostSidebar(props: { id: any; showPostSide: any; type: string; user: any; editor: any; page: any }) {
+function PostSidebar(props: {
+  id: any;
+  showPostSide: any;
+  type: string;
+  user: any;
+  editor: any;
+  page: any;
+  createPost: any;
+}) {
   return (
     <Outlet
       context={{
         user: props.user,
         editor: props.editor,
         text: props.page,
+        createPost: props.createPost,
       }}
     />
   );
@@ -88,6 +100,8 @@ export default function Page() {
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
+  const createPost = useFetcherWithPromise();
+  const saveTextFetcher = useFetcher();
 
   function suggestionSetter(id: string) {
     suggestionSelector({
@@ -171,7 +185,7 @@ export default function Page() {
   return (
     <>
       <Header editor={editor} />
-
+      {(createPost.state !== 'idle' || saveTextFetcher.state !== 'idle') && <LineLoaderOverlay />}
       <div className="relative flex justify-between gap-4 transition-all" style={{ paddingTop: HEADER_HEIGHT }}>
         <TableContent editor={editor} />
         <div
@@ -202,6 +216,7 @@ export default function Page() {
                     imageUrl={page.imageUrl}
                     pageId={page.id}
                     versions={data.versions}
+                    saveTextFetcher={saveTextFetcher}
                   />
                 )}
               </Await>
@@ -255,6 +270,7 @@ export default function Page() {
                           type={selection.type}
                           showPostSide={showPostSide}
                           editor={editor}
+                          createPost={createPost}
                         />
                       </div>
                     )}
@@ -308,6 +324,7 @@ export default function Page() {
                       type={selection.type}
                       showPostSide={showPostSide}
                       editor={editor}
+                      createPost={createPost}
                     />
                   </div>
                 )}

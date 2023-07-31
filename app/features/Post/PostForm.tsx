@@ -8,11 +8,10 @@ import { GrClose } from 'react-icons/gr';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 
 const PostForm = () => {
-  const createPost = useFetcherWithPromise();
-  const { user }: { user: any } = useOutletContext();
+  const { user, createPost }: { user: any; createPost: any } = useOutletContext();
   const selection = useRecoilValue(selectedTextOnEditor);
   let isPosting = createPost.formData && createPost.formData.get('body') !== '';
-  const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
+  const [, setShowPostSide] = useRecoilState(showSidebar);
   if (selection.type === '') return null;
   if (isPosting) {
     return (
