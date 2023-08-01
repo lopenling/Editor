@@ -24,7 +24,7 @@ import { HEADER_HEIGHT, RIGHT_SIDEBAR_WIDTH } from '~/constants';
 import { getText } from '~/model/text';
 import { Version } from '@prisma/client';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
-import { LineLoaderOverlay } from 'react-spinner-overlay';
+import { LineLoaderOverlay, CircleSpinnerOverlay } from 'react-spinner-overlay';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
@@ -185,9 +185,12 @@ export default function Page() {
   return (
     <>
       <Header editor={editor} />
-      {(createPost.state !== 'idle' || saveTextFetcher.state !== 'idle') && <LineLoaderOverlay />}
       <div className="relative flex justify-between gap-4 transition-all" style={{ paddingTop: HEADER_HEIGHT }}>
         <TableContent editor={editor} />
+        <CircleSpinnerOverlay
+          message={'updating text'}
+          loading={createPost.state !== 'idle' || saveTextFetcher.state !== 'idle'}
+        />
         <div
           className={`${!withImage ? 'max-w-4xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800`}
           id="textEditorContainer"
