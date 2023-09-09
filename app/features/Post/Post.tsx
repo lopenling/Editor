@@ -337,16 +337,14 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
         />
       )}
       {showReplies && (
-        <div className=" mt-3">
-          <Replies
-            postId={id}
-            topicId={topicId}
-            isCreator={user?.username === creatorUser?.username}
-            type={type}
-            setReplyCount={setReplyCount}
-            replyCount={ReplyCount!}
-          />
-        </div>
+        <Replies
+          postId={id}
+          topicId={topicId}
+          isCreator={user?.username === creatorUser?.username}
+          type={type}
+          setReplyCount={setReplyCount}
+          replyCount={ReplyCount!}
+        />
       )}
       {!showDivider && <hr />}
     </div>

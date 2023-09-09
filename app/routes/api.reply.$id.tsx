@@ -19,6 +19,7 @@ export const loader: LoaderFunction = async ({ params }: LoaderArgs) => {
 };
 
 function combineArrays(array1: any[], array2: any[]): any[] {
+  if (array1.length < 1 || array2.length < 1) return array2 || [];
   const idMap = new Map(array1?.map((obj) => [String(obj.id), obj]));
   return array2
     .map((obj) => {

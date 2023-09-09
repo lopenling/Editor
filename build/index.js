@@ -794,24 +794,31 @@ function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }
   let data = postListFetcher.data;
   return (0, import_react5.useEffect)(() => {
     data && (setReplies(data.posts), setReplyCount(data.posts.length));
-  }, [data]), data ? /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(import_jsx_dev_runtime4.Fragment, { children: replies.map((reply, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(
-    import_Reply.default,
-    {
-      reply,
-      isCreator,
-      postId,
-      type,
-      showDivider: replies.length <= index + 1
-    },
-    reply.id,
-    !1,
-    {
+  }, [data]), data ? /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(import_jsx_dev_runtime4.Fragment, { children: [
+    replies.length < 1 && /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)("div", { className: "text-gray-500 text-sm mb-2 ", children: "no reply yet" }, void 0, !1, {
       fileName: "app/features/Post/Replies.tsx",
-      lineNumber: 36,
-      columnNumber: 11
-    },
-    this
-  )) }, void 0, !1, {
+      lineNumber: 34,
+      columnNumber: 30
+    }, this),
+    replies.map((reply, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime4.jsxDEV)(
+      import_Reply.default,
+      {
+        reply,
+        isCreator,
+        postId,
+        type,
+        showDivider: replies.length <= index + 1
+      },
+      reply.id,
+      !1,
+      {
+        fileName: "app/features/Post/Replies.tsx",
+        lineNumber: 37,
+        columnNumber: 11
+      },
+      this
+    ))
+  ] }, void 0, !0, {
     fileName: "app/features/Post/Replies.tsx",
     lineNumber: 33,
     columnNumber: 5
@@ -2148,7 +2155,7 @@ function Post({ isOptimistic, post, showDivider }) {
         }
       );
     } else
-      console.log(...oo_oo4("c78e3ee0_0", "cancelled"));
+      console.log(...oo_oo4("1c582a7e_0", "cancelled"));
   }
   function handleShare() {
     let url = window.location.href + "?thread=" + threadId;
@@ -2675,7 +2682,7 @@ function Post({ isOptimistic, post, showDivider }) {
           },
           this
         ),
-        showReplies && /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: " mt-3", children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(
+        showReplies && /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(
           Replies_default,
           {
             postId: id,
@@ -2689,18 +2696,14 @@ function Post({ isOptimistic, post, showDivider }) {
           !1,
           {
             fileName: "app/features/Post/Post.tsx",
-            lineNumber: 341,
-            columnNumber: 11
+            lineNumber: 340,
+            columnNumber: 9
           },
           this
-        ) }, void 0, !1, {
-          fileName: "app/features/Post/Post.tsx",
-          lineNumber: 340,
-          columnNumber: 9
-        }, this),
+        ),
         !showDivider && /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("hr", {}, void 0, !1, {
           fileName: "app/features/Post/Post.tsx",
-          lineNumber: 351,
+          lineNumber: 349,
           columnNumber: 24
         }, this)
       ]
@@ -7779,6 +7782,8 @@ var loader6 = async ({ params }) => {
   });
 };
 function combineArrays(array1, array2) {
+  if (array1.length < 1 || array2.length < 1)
+    return array2 || [];
   let idMap = new Map(array1 == null ? void 0 : array1.map((obj) => [String(obj.id), obj]));
   return array2.map((obj) => {
     let matchingObject = idMap.get(String(obj.id));
@@ -8771,7 +8776,7 @@ function oo_oo16(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { version: "21255255", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-TUM6ZGEN.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-UYSLGQTT.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-SO7QEOP3.js", "/build/_shared/chunk-D6R4KQ4Y.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-54LTEAND.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-4UNGQLQU.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-D6R4KQ4Y.js", "/build/_shared/chunk-54LTEAND.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-C5RT7Y6E.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-D6R4KQ4Y.js", "/build/_shared/chunk-K4Y5KWB6.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-54LTEAND.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-AJZNB4WM.js", imports: ["/build/_shared/chunk-SO7QEOP3.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-21255255.js" };
+var assets_manifest_default = { version: "c89f360b", entry: { module: "/build/entry.client-Q26TWDTR.js", imports: ["/build/_shared/chunk-SK3HEI5M.js", "/build/_shared/chunk-CUPSZOF3.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-TUM6ZGEN.js", imports: ["/build/_shared/chunk-OAYD255M.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-UYSLGQTT.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-SO7QEOP3.js", "/build/_shared/chunk-D6R4KQ4Y.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-54LTEAND.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-DEV6CUJQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-VEVE2QAO.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-4ZGGJPKD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-FS7N6R42.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-PE2IARVY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-6KWQTJA4.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-VZAWW3I5.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-DGEWOKOY.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-HNCIYD5V.js", imports: void 0, hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-B5UZITUB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/auth_.pusher": { id: "routes/auth_.pusher", parentId: "root", path: "auth/pusher", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.pusher-FG3CVP2Y.js", imports: void 0, hasAction: !0, hasLoader: !1, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-4UNGQLQU.js", imports: ["/build/_shared/chunk-2BKQOPGT.js", "/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-D6R4KQ4Y.js", "/build/_shared/chunk-54LTEAND.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-C5RT7Y6E.js", imports: ["/build/_shared/chunk-RBZQOWEE.js", "/build/_shared/chunk-D6R4KQ4Y.js", "/build/_shared/chunk-K4Y5KWB6.js", "/build/_shared/chunk-RPZPHA5M.js", "/build/_shared/chunk-54LTEAND.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId.posts": { id: "routes/text.$textId.page.$pageId.posts", parentId: "routes/text.$textId.page.$pageId", path: "posts", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId.posts-46WSAIOX.js", imports: ["/build/_shared/chunk-SO7QEOP3.js", "/build/_shared/chunk-2MY6XXGZ.js"], hasAction: !1, hasLoader: !0, hasCatchBoundary: !1, hasErrorBoundary: !0 } }, cssBundleHref: void 0, hmr: void 0, url: "/build/manifest-C89F360B.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var assetsBuildDirectory = "public/build", future = { unstable_cssModules: !1, unstable_cssSideEffectImports: !1, unstable_dev: !1, unstable_postcss: !1, unstable_tailwind: !1, unstable_vanillaExtract: !1, v2_errorBoundary: !0, v2_meta: !0, v2_normalizeFormMethod: !0, v2_routeConvention: !0 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

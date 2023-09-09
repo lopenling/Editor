@@ -31,6 +31,7 @@ function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }
   if (!data) return null;
   return (
     <>
+      {replies.length < 1 && <div className="text-gray-500 text-sm mb-2 ">no reply yet</div>}
       {replies.map((reply: any, index: number) => {
         return (
           <Reply
