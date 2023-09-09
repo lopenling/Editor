@@ -230,10 +230,8 @@ export default function Page() {
           style={{
             width: showPostSide ? RIGHT_SIDEBAR_WIDTH : 0,
             top: HEADER_HEIGHT,
-            transition: 'all ease 0.4s',
-            zIndex: 1,
           }}
-          className="sticky hidden w-full md:flex "
+          className="sticky hidden w-full md:flex transition-all duration-75 z-[1] "
           id="postContent"
         >
           <Suspense fallback={<div>loading</div>}>
@@ -250,7 +248,7 @@ export default function Page() {
                         <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
                       </button>
                     )}
-                    {suggestionSelected?.id || openSuggestion ? (
+                    {suggestionSelected?.id || openSuggestion? (
                       <SuggestionSidebar
                         suggestions={data.suggestions}
                         suggestionSelected={suggestionSelected}
@@ -259,9 +257,8 @@ export default function Page() {
                       />
                     ) : (
                       <div
-                        className={`hidden w-full min-w-[450px]  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
+                        className={`hidden w-full min-w-[450px] flex-col  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
                         style={{
-                          flexDirection: 'column',
                           opacity: showPostSide ? 1 : 0,
                           transition: 'opacity ease 0.4s',
                         }}
@@ -303,8 +300,7 @@ export default function Page() {
               >
                 {suggestionSelected?.id || openSuggestion ? (
                   <div
-                    className="absolute bottom-0 w-full bg-white "
-                    style={{ maxHeight: '50dvh', overflow: 'scroll' }}
+                    className="absolute bottom-0 w-full bg-white max-h-[50dvh] overflow-y-scroll "
                   >
                     <SuggestionSidebar
                       suggestions={data.suggestions}
@@ -314,11 +310,8 @@ export default function Page() {
                     ></SuggestionSidebar>
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      maxHeight: '50dvh',
-                      overflowY: 'scroll',
-                    }}
+                    <div
+                      className='max-h-[50dvh] overflow-y-scroll]'
                   >
                     <PostSidebar
                       page={page}

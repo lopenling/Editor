@@ -59,7 +59,7 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
         id,
       });
     },
-    [threadId]
+    [threadId],
   );
 
   let likeCount = fetcher.data ? fetcher.data?.length : likedBy.length;
@@ -79,7 +79,7 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
           userId: user.id,
           like: !likedByMe ? 'true' : 'false',
         },
-        { method: 'PATCH', action: 'api/post', encType: 'multipart/form-data' }
+        { method: 'PATCH', action: 'api/post', encType: 'multipart/form-data' },
       );
     }
   }
@@ -96,7 +96,7 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
         {
           action: 'api/post',
           method: 'DELETE',
-        }
+        },
       );
     } else {
       console.log('cancelled');
@@ -271,10 +271,7 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
                   </div>
                 </button>
 
-                <div
-                  className={`${ReplyCount! < 1 && 'hidden'} flex items-center justify-start`}
-                  onClick={() => setShowReplies((prev) => !prev)}
-                >
+                <div className={`flex items-center justify-start`} onClick={() => setShowReplies((prev) => !prev)}>
                   <svg
                     width="16"
                     height="14"
@@ -290,7 +287,7 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
                   </svg>
 
                   <button className={`text-sm font-medium lowercase leading-tight text-gray-500 dark:text-gray-100`}>
-                    <span className="ml-2">{showReplies ? 'hide' : ReplyCount ? ReplyCount : 0}</span>
+                    <span className="ml-2">{showReplies ? 'hide' : 'show'}</span>
                   </button>
                 </div>
 
@@ -344,10 +341,10 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
           <Replies
             postId={id}
             topicId={topicId}
-            isCreator={user?.username === creatorUser.username}
+            isCreator={user?.username === creatorUser?.username}
             type={type}
             setReplyCount={setReplyCount}
-            replyCount={ReplyCount}
+            replyCount={ReplyCount!}
           />
         </div>
       )}

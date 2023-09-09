@@ -53,7 +53,7 @@ export interface SuggestionCommentType {
 }
 export interface PostType {
   id: string;
-  type: string;
+  type: 'question' | 'comment';
   avatar: string;
   topic_id: number;
   postId: number;
@@ -88,7 +88,6 @@ export interface FilterType {
   user: string[];
   solved: 'both' | 'solved';
 }
-
 
 export interface TextType {
   id: number;

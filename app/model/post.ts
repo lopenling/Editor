@@ -14,7 +14,7 @@ export async function createPost(
   content: string,
   creatorUser_id: string,
   audioUrl: string,
-  selectionContent: string
+  selectionContent: string,
 ) {
   try {
     let data = {
@@ -92,10 +92,10 @@ export async function findPostByTextIdAndPage(textId: number, order: number, ver
 
         return {
           ...post,
-          replyCount: post.reply.length, //-1 because the parent post is included here
+          replyCount: 2, //-1 because the parent post is included here
           isSolved,
         };
-      })
+      }),
     );
     return postWithReply.filter(Boolean);
   } catch (e) {

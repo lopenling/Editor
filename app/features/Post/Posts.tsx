@@ -42,7 +42,6 @@ function Posts({ posts }: PostPropsType) {
             Feel free to be the first one to ask Question !
           </div>
         )}
-     
       </div>
     </>
   );
@@ -83,4 +82,4 @@ const applyFilter = <T extends PostType>(list: T[], filter: FilterType, isLatest
   return list;
 };
 
-export default memo(Posts);
+export default Posts;

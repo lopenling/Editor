@@ -8,10 +8,9 @@ export const loader: LoaderFunction = async ({ params }: LoaderArgs) => {
   const id = parseInt(params?.id!);
   const post = await findPostByTopicId(id);
   let posts: any[] = [];
-  const data = getposts(id);
-  const replyListPromise = findReplyByPostId(post?.id);
-  let [postsData, replyList] = await Promise.all([data, replyListPromise]);
-  let postsList = postsData.post_stream?.posts;
+  const postsData = await getposts(id);
+  const replyList = await findReplyByPostId(post?.id);
+  let postsList = postsData?.post_stream?.posts;
   posts = combineArrays(replyList, postsList);
 
   return json({
@@ -20,7 +19,7 @@ export const loader: LoaderFunction = async ({ params }: LoaderArgs) => {
 };
 
 function combineArrays(array1: any[], array2: any[]): any[] {
-  const idMap = new Map(array1.map((obj) => [String(obj.id), obj]));
+  const idMap = new Map(array1?.map((obj) => [String(obj.id), obj]));
   return array2
     .map((obj) => {
       const matchingObject = idMap.get(String(obj.id));

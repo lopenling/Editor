@@ -47,7 +47,11 @@ const PostForm = () => {
         </button>
       </div>
       <section className=" m-3 rounded py-3" style={{ boxShadow: 'rgba(0, 0, 0, 0.12) 0px 2px 8px 0px' }}>
-        <div className="flex items-start justify-between">
+
+       
+
+        {user ? (
+           <><div className="flex items-start justify-between">
           <div className="mb-1 flex items-center gap-2 px-4">
             <img className="h-8 w-8 rounded-full" src={user?.avatarUrl} alt="avatar"></img>
             <div className="font-serif text-sm font-medium leading-tight text-gray-900 dark:text-gray-200">
@@ -55,11 +59,10 @@ const PostForm = () => {
             </div>
           </div>
         </div>
-
-        {user ? (
           <div aria-label="Default tabs" className="px-4 pt-4" style={{ lineHeight: '14px' }}>
             <FormWithAudio fetcher={createPost} type="post" post={null} />
-          </div>
+            </div>
+            </>
         ) : (
           <LogInMessage />
         )}

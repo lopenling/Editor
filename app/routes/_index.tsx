@@ -89,8 +89,7 @@ export default function Index() {
       style={{ position: 'relative', minHeight: '100vh' }}
     >
       <Header editor={null} />
-      <div style={{ height: HEADER_HEIGHT }} />
-      <div className=" mx-auto max-w-2xl ">
+      <div className=" mx-auto max-w-2xl " style={{ paddingTop: HEADER_HEIGHT }}>
         <div className="flex w-full flex-col items-center justify-center  px-3 pt-24 md:px-1.5  ">
           <Form method="GET" className="mb-3 w-full max-w-2xl">
             <div className="relative flex w-full space-x-3 ">
@@ -102,7 +101,6 @@ export default function Index() {
                 id="inputText"
                 onChange={handleInputChange}
                 type="search"
-                required
                 style={{ height: '100%' }}
                 className="flex-1 text-gray-500"
                 icon={() => (
@@ -175,12 +173,7 @@ export default function Index() {
             <>
               {lists.length === 0 && (
                 <div
-                  className="text-xl font-extrabold capitalize text-gray-300"
-                  style={{
-                    fontSize: 20,
-                    fontFamily: 'Inter',
-                    lineHeight: '150%',
-                  }}
+                  className="text-xl font-extrabold capitalize text-gray-300 font-Inter leading-[150%]"
                 >
                   No result found
                 </div>
@@ -202,10 +195,7 @@ export default function Index() {
                       prefetch="intent"
                     >
                       <Card
-                        className="dark:bg-gray-500"
-                        style={{
-                          fontFamily: 'monlam',
-                        }}
+                        className="dark:bg-gray-500 font-monlam"
                       >
                         <div className="text-xl">{result.name}</div>
                         <div className="flex flex-wrap justify-between text-sm">

@@ -42,7 +42,7 @@ export default function LogInMessage() {
           value="login"
           className="text-sm font-medium capitalize leading-tight text-gray-900 dark:text-white"
         >
-          click to {translation.login}
+           {translation.login}
         </button>
       </loginFetcher.Form>
     </div>

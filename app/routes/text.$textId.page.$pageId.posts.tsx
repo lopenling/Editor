@@ -11,7 +11,6 @@ import { Skeleton } from '~/component/UI';
 import { GrClose } from 'react-icons/gr';
 import { FaFilter } from 'react-icons/fa';
 import { getPageId } from '~/model/page';
-import { parse } from 'uuid';
 import { getText } from '~/model/text';
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -93,15 +92,8 @@ export default function PostContainer() {
         </div>
       </div>
       <hr />
-      <Suspense
-        fallback={
-          <div className="mx-2">
-            <Skeleton height={90} number={5} />
-          </div>
-        }
-      >
-        <Await resolve={data.posts}>{(data) => <Posts posts={data} />}</Await>
-      </Suspense>
+
+      <Posts posts={data.posts} />
     </>
   );
 }

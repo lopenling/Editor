@@ -42,6 +42,7 @@ class DiscourseApi {
   }
   async fetchposts(topicId: number) {
     if (topicId) {
+      console.log(topicId);
       const res = await fetch(`${this.DiscourseUrl}/t/${topicId}/posts.json`);
       if (res.status !== 200) {
         return {};
@@ -61,7 +62,7 @@ class DiscourseApi {
     let authHeaders = this.authHeader(true);
     var randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
     let newCategoryData = {
-      name: categoryName,
+      name: categoryName.trim(),
       color: randomColor(),
       text_color: randomColor(),
       parent_category_id,
@@ -73,7 +74,6 @@ class DiscourseApi {
         headers: authHeaders,
       });
       let category = await response.json();
-      console.log('Created category:', category);
       return category;
     } catch (e) {
       console.error('Failed to create category:', e);
@@ -82,13 +82,12 @@ class DiscourseApi {
   }
   async addTopic(
     threadId: string,
-    username: string,
     category_id: number,
     topic_name: string | FormDataEntryValue,
     bodyContent: string,
     textId: number,
     order: number,
-    audioUrl: string | null
+    audioUrl: string | null,
   ) {
     let auth_headers = this.authHeader();
     let url = `${this.origin}/text/${textId}/page/${order}/posts?thread=${threadId}`;
@@ -226,7 +225,7 @@ export async function createThread(
   textId: number,
   order: number,
   audioUrl: string | null,
-  threadId: string
+  threadId: string,
 ) {
   if (!textTitle || !blockquoteArea || !postContent) throw new Error('failed to access Topic Id');
   const api: DiscourseApi = new DiscourseApi(userName);
@@ -235,25 +234,14 @@ export async function createThread(
     textTitle = textTitle.substring(0, MAX_CATEGORY_NAME_LENGTH) + `_text_${textId}`;
   }
   let categoryId: number = 0;
-  if (!categories) {
+  const category = categories.find((c: any) => c.name === textTitle.trim());
+  if (!category) {
     const newCategory = await api.addCategory(textTitle, parseInt(parentCategoryId));
     categoryId = newCategory.category.id;
   } else {
-    const category = categories.find((c: any) => c.name === textTitle.trim());
-    if (category) {
-      categoryId = category.id;
-    }
+    categoryId = category.id;
   }
-  let topic = await api.addTopic(
-    threadId,
-    userName,
-    categoryId,
-    blockquoteArea,
-    postContent as string,
-    textId,
-    order,
-    audioUrl
-  );
+  let topic = await api.addTopic(threadId, categoryId, blockquoteArea, postContent as string, textId, order, audioUrl);
   return topic;
 }
 
@@ -268,7 +256,7 @@ export async function deleteDiscourseTopic(userName: string, topicId: number) {
 
 export async function getposts(topicId: number) {
   const apiObj: DiscourseApi = new DiscourseApi();
-  const res = apiObj.fetchposts(topicId);
+  const res = await apiObj.fetchposts(topicId);
   return res;
 }
 export async function getpostreplies(topicId: number) {
@@ -287,7 +275,7 @@ export async function updateDiscoursePost(
   postId: number,
   newContent: string,
   audioUrl: string | null,
-  username: string
+  username: string,
 ) {
   const apiObj: DiscourseApi = new DiscourseApi(username);
   const res = apiObj.updatePost(postId, newContent, audioUrl);
