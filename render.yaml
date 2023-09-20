@@ -4,7 +4,7 @@ services:
     env: node
     plan: starter
     # Update the following line with your Strapi GitHub repo
-    repo: https://github.com/OpenPecha/Lopenling-App
+    repo: https://github.com/lopenling/editor
     branch: main
     buildCommand: npm ci --production=false && npm run build && npm prune --production
     startCommand: npx prisma migrate deploy && npm run start
@@ -17,7 +17,6 @@ services:
         fromDatabase:
           name: lopenling-pg
           property: connectionString
-
 
 databases:
   - name: lopenling-pg
