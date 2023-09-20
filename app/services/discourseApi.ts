@@ -259,6 +259,7 @@ export async function getposts(topicId: number) {
   const res = await apiObj.fetchposts(topicId);
   return res;
 }
+
 export async function getpostreplies(topicId: number) {
   const apiObj: DiscourseApi = new DiscourseApi();
   const res = apiObj.fetchPostReplies(topicId);
