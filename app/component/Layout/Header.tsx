@@ -68,7 +68,7 @@ function Header({ editor }: HeaderProps) {
       {
         action: '/api/user/preference/theme',
         method: 'POST',
-      }
+      },
     );
   };
   useEffect(() => {
