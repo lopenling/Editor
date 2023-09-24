@@ -2,7 +2,6 @@ import { LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
 import { Await, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
 import { Editor, useEditor } from '@tiptap/react';
 import { getPage, getVersions } from '~/model/page';
-import * as Extension from '~/features/Editor/tiptap';
 import {
   openSuggestionState,
   selectedPostThread,
@@ -25,6 +24,7 @@ import { getText } from '~/model/text';
 import { Version } from '@prisma/client';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 import { LineLoaderOverlay, CircleSpinnerOverlay } from 'react-spinner-overlay';
+import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
@@ -94,80 +94,17 @@ function SuggestionSidebar(props: {
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  const { user, order, text } = data;
+  const { user, order, text, page } = data;
   const [suggestionSelected, suggestionSelector] = useRecoilState(selectedSuggestionThread);
   const [selectedPost, postSelector] = useRecoilState(selectedPostThread);
-  const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
-  const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
+  const [selection] = useRecoilState(selectedTextOnEditor);
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
+  const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
   const createPost = useFetcherWithPromise();
   const saveTextFetcher = useFetcher();
 
-  function suggestionSetter(id: string) {
-    suggestionSelector({
-      id: id,
-    });
-  }
+  let editor = useEditorInstance(text?.id, order);
 
-  function postSetter(id: string) {
-    postSelector({
-      id: id,
-    });
-  }
-
-  let editor = useEditor(
-    {
-      extensions: [
-        Extension.Document,
-        Extension.Paragraph,
-        Extension.Text,
-        Extension.Bold,
-        Extension.FontFamily,
-        Extension.TextStyle,
-        Extension.SearchAndReplace.configure({
-          searchResultClass: 'search',
-          caseSensitive: false,
-          disableRegex: false,
-        }),
-        Extension.HardBreak.configure({
-          HTMLAttributes: {
-            class: 'pageBreak',
-          },
-        }),
-        Extension.Highlight.configure({
-          HTMLAttributes: {
-            class: 'highlight',
-          },
-        }),
-        Extension.Suggestion(suggestionSetter).configure({
-          HTMLAttributes: {
-            class: 'suggestion',
-          },
-        }),
-        Extension.PostMark(postSetter).configure({
-          HTMLAttributes: {
-            class: 'post',
-          },
-        }),
-      ],
-      editable: true,
-      editorProps: Extension.editorProps,
-      onSelectionUpdate: ({ editor }) => {
-        let from = editor.state.selection.from;
-        let to = editor.state.selection.to;
-        setSelectionRange({
-          type: '',
-          start: from,
-          end: to,
-          content: editor?.state.doc.textBetween(from, to, ''),
-        });
-        setOpenSuggestion(false);
-        if (!editor.isActive('suggestion')) suggestionSelector({ id: '' });
-        if (!editor.isActive('post')) postSelector({ id: '' });
-      },
-    },
-    [order, text?.id]
-  );
   useEffect(() => {
     if (!!selectedPost.id || selection.type !== '' || !!suggestionSelected?.id || openSuggestion) {
       setShowPostSide(true);
@@ -196,36 +133,20 @@ export default function Page() {
           id="textEditorContainer"
         >
           {editor && (
-            <Suspense fallback={<div>loading</div>}>
-              <Await
-                resolve={data.page}
-                errorElement={
-                  <div>
-                    page not Available{' '}
-                    <Link prefetch="intent" to={`/`}>
-                      {' '}
-                      click here
-                    </Link>
-                  </div>
-                }
-              >
-                {(page) => (
-                  <EditorContainer
-                    editor={editor!}
-                    isSaving={false}
-                    order={page.order}
-                    content={page.content}
-                    pageCount={page?.text.Page.length}
-                    imageUrl={page.imageUrl}
-                    pageId={page.id}
-                    versions={data.versions}
-                    saveTextFetcher={saveTextFetcher}
-                  />
-                )}
-              </Await>
-            </Suspense>
+            <EditorContainer
+              editor={editor!}
+              isSaving={false}
+              order={page.order}
+              content={page.content}
+              pageCount={page?.text.Page.length}
+              imageUrl={page.imageUrl}
+              pageId={page.id}
+              versions={data.versions}
+              saveTextFetcher={saveTextFetcher}
+            />
           )}
         </div>
+
         <div
           style={{
             width: showPostSide ? RIGHT_SIDEBAR_WIDTH : 0,
@@ -248,7 +169,7 @@ export default function Page() {
                         <FaRegComments size={22} className="cursor-pointer text-gray-500 " />
                       </button>
                     )}
-                    {suggestionSelected?.id || openSuggestion? (
+                    {suggestionSelected?.id || openSuggestion ? (
                       <SuggestionSidebar
                         suggestions={data.suggestions}
                         suggestionSelected={suggestionSelected}
@@ -299,9 +220,7 @@ export default function Page() {
                 overlayClassName="modal-overlay"
               >
                 {suggestionSelected?.id || openSuggestion ? (
-                  <div
-                    className="absolute bottom-0 w-full bg-white max-h-[50dvh] overflow-y-scroll "
-                  >
+                  <div className="absolute bottom-0 w-full bg-white max-h-[50dvh] overflow-y-scroll ">
                     <SuggestionSidebar
                       suggestions={data.suggestions}
                       suggestionSelected={suggestionSelected}
@@ -310,9 +229,7 @@ export default function Page() {
                     ></SuggestionSidebar>
                   </div>
                 ) : (
-                    <div
-                      className='max-h-[50dvh] overflow-y-scroll]'
-                  >
+                  <div className="max-h-[50dvh] overflow-y-scroll]">
                     <PostSidebar
                       page={page}
                       user={user}

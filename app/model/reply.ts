@@ -128,6 +128,6 @@ export async function updateIsAproved(id: string, is_approved: boolean) {
     });
     return res;
   } catch (e) {
-    throw new Error('updating approved error' + e.message);
+    throw new Error('updating approved error' + e);
   }
 }

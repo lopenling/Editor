@@ -1,9 +1,9 @@
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { BubbleMenu, Editor, EditorContent } from '@tiptap/react';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 // import EditorSettings from "./EditorSettings";
-import { Button, OnlineUsers } from '~/component/UI';
+import { Button } from '~/component/UI';
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
 import { openSuggestionState, selectedPostThread, selectedTextOnEditor, ImageState } from '~/states';
 import { isSmallScreen } from '~/lib';
@@ -11,8 +11,7 @@ import { checkUnknown, scrollThreadIntoView } from '../lib';
 import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import Controls from './Controls';
-import usePusherPresence from '~/component/hooks/usePusherPresence';
-import { getQuery, saveData } from '../lib/utils';
+import { saveData } from '../lib/utils';
 type EditorContainerProps = {
   pageId: string;
   editor: Editor;
@@ -43,25 +42,13 @@ function EditorContainer({
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   let thread = useRecoilValue(selectedPostThread);
 
-  const { onlineMembers } = usePusherPresence(
-    `presence-text_${pageId}`,
-    data.pusher_env.key,
-    data.pusher_env.cluster,
-    data.user
-  );
-
   let saving = saveTextFetcher.state !== 'idle';
-
-  let oldContent = useMemo(() => {
-    return content;
-  }, [editor, pageId, content]);
 
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     editor.on('update', async ({ editor, transaction }) => {
       let newContent = editor.getHTML();
-      let query = getQuery(newContent, oldContent);
-      if (query && newContent.length > 100 && user) saveData(query, pageId, saveTextFetcher);
+      if (newContent && newContent.length > 100 && user) saveData(newContent, pageId, saveTextFetcher);
     });
     return () => {
       if (timer) clearTimeout(timer);
@@ -112,7 +99,6 @@ function EditorContainer({
 
   return (
     <div className=" mb-4  flex  shadow-sm" style={{ flexDirection: Image.isPortrait ? 'row-reverse' : 'column' }}>
-      <OnlineUsers onlineMembers={onlineMembers} count={onlineMembers.length} />
       {Image.show && Image.url && (
         <div
           className=" relative flex w-full max-w-full justify-center bg-gray-100"
