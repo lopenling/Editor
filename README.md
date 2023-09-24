@@ -24,21 +24,22 @@ To set up the Remix app with Prisma, follow these steps:
    npm 
    ```
 3. set up .env file on root folder with env valiables
-
-    DATABASE_URL ,
-    DISCOURSE_SSO_REDIRECT ,
-    DISCOURSE_SSO_LOGIN_URL ,
-    DISCOURSE_SSO_SIGNUP_URL ,
-    ORIGIN_LOCATION ,
-    DISCOURSE_SITE ,
-    DISCOURSE_API_KEY ,
-    DISCOURSE_SYSTEM_USER ,
-    DISCOURSE_QA_TOPIC_ID ,
-    DISCOURSE_QA_CATEGORY_ID ,
-    BUCKET_NAME_PRODUCTION ,
-    AWS_ACCESS_KEY_ID_PRODUCTION ,
-    AWS_SECRET_ACCESS_KEY_PRODUCTION ,
-
+   ### Env Variables 
+    ```
+    DATABASE_URL="" ,
+    DISCOURSE_SSO_REDIRECT="" ,
+    DISCOURSE_SSO_LOGIN_URL="" ,
+    DISCOURSE_SSO_SIGNUP_URL="" ,
+    ORIGIN_LOCATION="" ,
+    DISCOURSE_SITE="" ,
+    DISCOURSE_API_KEY="" ,
+    DISCOURSE_SYSTEM_USER="" ,
+    DISCOURSE_QA_TOPIC_ID="" ,
+    DISCOURSE_QA_CATEGORY_ID="" ,
+    BUCKET_NAME_PRODUCTION="" ,
+    AWS_ACCESS_KEY_ID_PRODUCTION="" ,
+    AWS_SECRET_ACCESS_KEY_PRODUCTION="" ,
+   ```
 4. Migrate database  
    ```shell
    npx prisma migrate dev --name first-migration
