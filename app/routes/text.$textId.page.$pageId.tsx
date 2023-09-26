@@ -23,8 +23,9 @@ import { HEADER_HEIGHT, RIGHT_SIDEBAR_WIDTH } from '~/constants';
 import { getText } from '~/model/text';
 import { Version } from '@prisma/client';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
-import { LineLoaderOverlay, CircleSpinnerOverlay } from 'react-spinner-overlay';
+import { CircleSpinnerOverlay } from 'react-spinner-overlay';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
+import Tools from '~/features/Editor/tiptap/component/Tools';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
@@ -132,6 +133,7 @@ export default function Page() {
           className={`${!withImage ? 'max-w-4xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800`}
           id="textEditorContainer"
         >
+          <Tools editor={editor} />
           {editor && (
             <EditorContainer
               editor={editor!}

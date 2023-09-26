@@ -20,7 +20,7 @@ const Logo = () => (
   <img
     src={ForumLink + '/uploads/default/original/1X/0ac3db8e589f085c53c5ff8f36c17722888658ad.png'}
     alt="logo"
-    className="block max-h-[37px] object-contain "
+    className="block h-8 object-contain"
   />
 );
 const LogoWithTextName = ({ textName }: { textName: string }) => {

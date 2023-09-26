@@ -48,6 +48,8 @@ model Text {
   Post       Post[]
   createdAt  DateTime?     @default(now())
   updatedAt  DateTime?    @updatedAt
+  userText   UserText[]
+  translations Translation[]
 }
 
 model Page {
@@ -61,6 +63,27 @@ model Page {
   imageUrl   String?
   version    Version?
 }
+
+model Translation {
+  id       Int      @id @default(autoincrement())
+  userText UserText @relation(fields: [userTextId], references: [id])
+  userTextId Int
+  text Text @relation(fields: [textId], references: [id])
+  textId Int
+
+}
+
+model UserText {
+  id   Int      @id @default(autoincrement())
+  name String
+  text Text @relation(fields: [textId], references: [id])
+  textId Int
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  translations Translation[]
+  content String
+}
+
 
 model Suggestion {
   id                String              @id @unique @default(uuid())
@@ -112,7 +135,7 @@ model User {
   likedReply        Reply[]             @relation("ReplylikedUser")
   likedPost         Post[]              @relation("likedPost")
   likedSuggestion   Suggestion[]        @relation("likedSuggestion")
-
+  userText          UserText[]
   @@index([email, username])
 }
 

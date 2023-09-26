@@ -22,10 +22,17 @@ const useEditorInstance = (textId = null, order = null) => {
     {
       extensions: [
         Extension.Document,
+        Extension.Heading.configure({
+          levels: [1, 2, 3],
+        }),
         Extension.Paragraph.configure({}),
         Extension.Text,
         Extension.Bold,
         Extension.FontFamily,
+        Extension.History.configure({
+          newGroupDelay: 500,
+          depth: 100,
+        }),
         Extension.TextStyle,
         Extension.SearchAndReplace.configure({
           searchResultClass: 'search',
@@ -41,6 +48,7 @@ const useEditorInstance = (textId = null, order = null) => {
           HTMLAttributes: {
             class: 'highlight',
           },
+          multicolor: true,
         }),
         Extension.Suggestion(suggestionSetter).configure({
           HTMLAttributes: {

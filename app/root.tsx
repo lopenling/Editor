@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -15,15 +15,15 @@ import {
 import ErrorPage from './component/Layout/ErrorPage';
 import { getUserSession } from './services/session.server';
 import globalStyle from './styles/globalStyle.css';
-import tailwindStyle from './styles/tailwind.css';
 import tributeStyle from './styles/tribute.css';
+import tailwindStyle from './styles/tailwind.css';
 import { LitteraProvider } from '@assembless/react-littera';
 import { RecoilRoot } from 'recoil';
 import { AnimatePresence } from 'framer-motion';
 import { getUser } from './model/user';
 import notificationStyle from 'react-notifications-component/dist/theme.css';
 import nProgressStyles from 'nprogress/nprogress.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import NProgress from 'nprogress';
 export function meta({ matches }) {
   const rootMeta = matches[0].meta;

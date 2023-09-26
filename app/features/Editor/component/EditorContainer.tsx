@@ -56,7 +56,7 @@ function EditorContainer({
   }, [editor, thread.id]);
   useEffect(() => {
     let timer = setTimeout(() => {
-      let newContent = content.replace(/[\r\n]+/g, '<br/>');
+      let newContent = content.replace(/[\r\n]+/g, '<p/><p>');
       checkUnknown(newContent);
       editor?.commands.setContent(newContent);
     }, 100);
@@ -142,6 +142,7 @@ function EditorContainer({
             <Pagination pageCount={pageCount} />
           </div>
         </div>
+        {!user && <div>changes won't get saved if you are not logged in</div>}
         {!editor ? (
           <div className="flex h-[400px] w-full animate-pulse justify-center">
             <div className="mr-2 h-full flex-1 bg-gray-300 dark:bg-gray-700"></div>

@@ -7,7 +7,6 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { openFilterState, selectedPostThread as selectedPostThreadState, showLatest, showSidebar } from '~/states';
 import { findPostByTextIdAndPage } from '~/model/post';
 import { LoaderFunction, defer } from '@remix-run/node';
-import { Skeleton } from '~/component/UI';
 import { GrClose } from 'react-icons/gr';
 import { FaFilter } from 'react-icons/fa';
 import { getPageId } from '~/model/page';
