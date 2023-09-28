@@ -9,7 +9,7 @@ export const audioPermission = atom({
 });
 
 export const ImageState = atom({
-  default: {show: true, url: '',isPortrait:false},
+  default: { show: true, url: '', isPortrait: false },
   key: 'showImage',
 });
 
@@ -20,6 +20,11 @@ export const showTableContent = atom({
 export const showSidebar = atom({
   default: false,
   key: 'sidebar',
+});
+
+export const showTranslationState = atom({
+  key: 'showTranslation',
+  default: false,
 });
 //textName
 

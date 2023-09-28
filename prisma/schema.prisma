@@ -70,7 +70,8 @@ model Translation {
   userTextId Int
   text Text @relation(fields: [textId], references: [id])
   textId Int
-
+  content String
+  language String?
 }
 
 model UserText {
@@ -82,6 +83,7 @@ model UserText {
   userId String
   translations Translation[]
   content String
+  order Int?
 }
 
 

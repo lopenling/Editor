@@ -20,7 +20,6 @@ function TableContent({ editor }: TableContentProps) {
         top: HEADER_HEIGHT,
         width: showTable ? LEFT_SIDEBAR_WIDTH : 50,
       }}
-      id="tableContent"
       className="sticky hidden md:flex"
     >
       <button
