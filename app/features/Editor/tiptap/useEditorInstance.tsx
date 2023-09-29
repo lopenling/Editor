@@ -2,7 +2,7 @@ import * as Extension from '~/features/Editor/tiptap';
 import { useEditor } from '@tiptap/react';
 import { useRecoilState } from 'recoil';
 import { openSuggestionState, selectedPostThread, selectedSuggestionThread, selectedTextOnEditor } from '~/states';
-const useEditorInstance = (textId = null, order = null) => {
+const useEditorInstance = (content: string) => {
   const [selectedPost, postSelector] = useRecoilState(selectedPostThread);
   const [suggestionSelected, suggestionSelector] = useRecoilState(selectedSuggestionThread);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
@@ -77,7 +77,7 @@ const useEditorInstance = (textId = null, order = null) => {
         if (!editor.isActive('post')) postSelector({ id: '' });
       },
     },
-    [order, textId],
+    [content],
   );
   return editor;
 };

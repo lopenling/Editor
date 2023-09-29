@@ -54,7 +54,7 @@ function EditorContainer({
       let { text, annotations } = extractTextAndAnnotations(newContent);
       let save_fun = _.throttle(function () {
         if (text?.length > 100 && user) saveData(text, annotations, pageId, saveTextFetcher);
-      }, 2000);
+      }, 500);
       save_fun();
     });
     return () => {
@@ -93,7 +93,6 @@ function EditorContainer({
     if (editor.isActive('post')) {
       editor.commands.unsetPost();
     }
-
     if (editor.isActive('suggestion')) {
       editor.commands.unsetSuggestion();
     }
@@ -144,7 +143,6 @@ function EditorContainer({
               className="textname flex items-center gap-2"
               style={{ fontSize: 'clamp(18px, 24px, 2.2vw)', fontWeight: 'bold' }}
             >
-              {data.text.name} {order > 1 && <span className="text-sm font-light text-gray-100"> page {order}</span>}
               {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
             </div>
             <Pagination pageCount={pageCount} />

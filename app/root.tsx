@@ -117,7 +117,7 @@ export default function App() {
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
         <Links />
       </head>
-      <body className="relative max-h-[100vh] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
+      <body className="relative max-h-[100vh] max-w-[100vw] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={['en_US', 'bo_TI']}>
           <AnimatePresence mode="wait" initial={false}>
             <RecoilRoot>

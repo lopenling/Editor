@@ -1,5 +1,5 @@
 import { LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import { getPage, getVersions } from '~/model/page';
 import {
   openSuggestionState,
@@ -12,22 +12,19 @@ import {
 import { useRecoilState } from 'recoil';
 import { useEffect } from 'react';
 import Header from '~/component/Layout/Header';
-import TableContent from '~/features/TableOfContent';
+import TableContent from '~/component/menu/TableOfContent';
 import { EditorContainer } from '~/features/Editor';
 import { getUserSession } from '~/services/session.server';
 import { findAllSuggestionByPageId } from '~/model/suggestion';
-import { HEADER_HEIGHT } from '~/constants';
 import { getText } from '~/model/text';
 import { Version } from '@prisma/client';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 import { CircleSpinnerOverlay } from 'react-spinner-overlay';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
-import Tools from '~/features/Editor/tiptap/component/Tools';
-import Translations from '~/component/Layout/Translations';
-import PostContainer from '~/features/PostContainer';
-import { getAllTranslations } from '~/model/translation';
 import { getAnnotations } from '~/model/annotation';
-import { generateHtmlFromTextAndAnnotations } from '~/features/Editor/lib/htmlParser';
+import { getAllVersions } from '~/model/userText';
+import TextHeader from '~/component/Layout/TextHeader';
+import Menu from '~/component/menu/Menu';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
@@ -45,7 +42,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const page = await getPage(parseInt(textId), parseInt(order), version);
   const user = await getUserSession(request);
   const suggestions = await findAllSuggestionByPageId(page?.id!);
-  const translations = await getAllTranslations(textId, order);
+  const user_versions = await getAllVersions(textId, order);
   const annotations = await getAnnotations(page?.id);
   return defer({
     page,
@@ -55,24 +52,22 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     text,
     order,
     versions,
-    translations,
+    user_versions,
     annotations,
   });
 };
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  const { order, text, page } = data;
+  const { page } = data;
   const [suggestionSelected] = useRecoilState(selectedSuggestionThread);
   const [openSuggestion] = useRecoilState(openSuggestionState);
-  const [showTranslation] = useRecoilState(showTranslationState);
   const [selectedPost, postSelector] = useRecoilState(selectedPostThread);
   const [selection] = useRecoilState(selectedTextOnEditor);
   const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
-  const createPost = useFetcherWithPromise();
   const saveTextFetcher = useFetcher();
 
-  let editor = useEditorInstance(text?.id, order);
+  let editor = useEditorInstance(page?.content);
 
   useEffect(() => {
     if (!!selectedPost.id || selection.type !== '' || !!suggestionSelected?.id || openSuggestion) {
@@ -91,35 +86,38 @@ export default function Page() {
   return (
     <>
       <Header editor={editor} />
-      <div className="relative flex justify-between gap-4 transition-all" style={{ paddingTop: HEADER_HEIGHT }}>
-        <TableContent editor={editor} />
-        <CircleSpinnerOverlay
-          message={'updating text'}
-          loading={createPost.state !== 'idle' || saveTextFetcher.state !== 'idle'}
-        />
-        <div
-          className={`${!withImage ? 'max-w-4xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800`}
-          id="textEditorContainer"
-        >
-          <Tools editor={editor} />
-          {editor && (
-            <EditorContainer
-              editor={editor!}
-              isSaving={false}
-              order={page.order}
-              content={page.content}
-              pageCount={page?.text.Page.length}
-              imageUrl={page.imageUrl}
-              pageId={page.id}
-              versions={data.versions}
-              saveTextFetcher={saveTextFetcher}
-            />
-          )}
+      <div className="flex w-full">
+        <div className="flex-1">
+          <TextHeader />
+          <div className="relative flex justify-between gap-4 transition-all">
+            <CircleSpinnerOverlay message={'updating text'} loading={saveTextFetcher.state !== 'idle'} />
+
+            <div className="w-full flex gap-2">
+              <div
+                className={`${!withImage ? 'max-w-3xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800 mx-auto`}
+                id="textEditorContainer"
+              >
+                {editor && (
+                  <EditorContainer
+                    editor={editor!}
+                    isSaving={false}
+                    order={page.order}
+                    content={page.content}
+                    pageCount={page?.text.Page.length}
+                    imageUrl={page.imageUrl}
+                    pageId={page.id}
+                    versions={data.versions}
+                    saveTextFetcher={saveTextFetcher}
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* <PostContainer editor={editor} createPost={createPost} isMobile={false} /> */}
+          </div>
         </div>
-        {showTranslation && <Translations />}
-        <PostContainer editor={editor} createPost={createPost} isMobile={false} />
+        <Menu editor={editor} />
       </div>
-      <PostContainer editor={editor} createPost={createPost} isMobile={true} />
     </>
   );
 }

@@ -1,17 +1,6 @@
-import React from 'react';
 import ToolButton from './ToolButton';
-import { useLoaderData } from '@remix-run/react';
-import { useRecoilState } from 'recoil';
-import { showTranslationState } from '~/states';
 
 function Tools({ editor }: any) {
-  let { user, translations } = useLoaderData();
-  let [showTranslation, setShowTranslation] = useRecoilState(showTranslationState);
-  function viewTranslation() {
-    //open translation window
-    setShowTranslation((p) => !p);
-  }
-
   if (!editor) return null;
   return (
     <div className="flex flex-wrap justify-between bg-gray-200 border-2">
@@ -48,14 +37,6 @@ function Tools({ editor }: any) {
           redo
         </ToolButton>
       </div>
-      <ToolButton
-        onClick={viewTranslation}
-        disabled={!user}
-        title="must be a logged in user"
-        isActive={showTranslation}
-      >
-        translations
-      </ToolButton>
     </div>
   );
 }

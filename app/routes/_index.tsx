@@ -1,5 +1,5 @@
 import { Link, Form, useSearchParams } from '@remix-run/react';
-import type { LoaderFunction, V2_MetaArgs, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, V2_MetaArgs } from '@remix-run/node';
 import { Button, Card, TextInput } from 'flowbite-react';
 import FooterContainer from '~/component/Layout/Footer';
 import { defer } from '@remix-run/node';
@@ -28,7 +28,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     { textList: await searchPages(searchText), search: searchText, latestTexts: null },
     {
       headers,
-    }
+    },
   );
 };
 
@@ -172,9 +172,7 @@ export default function Index() {
           {lists && !isLoading && (
             <>
               {lists.length === 0 && (
-                <div
-                  className="text-xl font-extrabold capitalize text-gray-300 font-Inter leading-[150%]"
-                >
+                <div className="text-xl font-extrabold capitalize text-gray-300 font-Inter leading-[150%]">
                   No result found
                 </div>
               )}
@@ -184,7 +182,7 @@ export default function Index() {
                     textId: number;
                     results: any;
                   },
-                  index: number
+                  index: number,
                 ) => {
                   let result = list.results[0];
                   return (
@@ -194,9 +192,7 @@ export default function Index() {
                       className="container w-full"
                       prefetch="intent"
                     >
-                      <Card
-                        className="dark:bg-gray-500 font-monlam"
-                      >
+                      <Card className="dark:bg-gray-500 font-monlam">
                         <div className="text-xl">{result.name}</div>
                         <div className="flex flex-wrap justify-between text-sm">
                           {result && result[1]}
@@ -205,7 +201,7 @@ export default function Index() {
                       </Card>
                     </Link>
                   );
-                }
+                },
               )}
             </>
           )}

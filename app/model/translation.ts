@@ -32,20 +32,3 @@ export let createUserPage = async (textId: string, order: string, user: any) => 
   }
 };
 //get list of translations for a text
-export let getAllTranslations = async (textId: string, order: string) => {
-  try {
-    return await db.userText.findMany({
-      where: {
-        textId: parseInt(textId),
-        order: parseInt(order),
-      },
-      select: {
-        id: true,
-        name: true,
-        user: true,
-      },
-    });
-  } catch (e) {
-    throw new Error(e);
-  }
-};

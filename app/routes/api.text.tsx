@@ -38,10 +38,10 @@ export let action: ActionFunction = async ({ request }) => {
     const annotations = data.get('annotations') as string;
     const pageId = data.get('pageId') as string;
     try {
-      const res = await updatePage(pageId, newContent);
-      const res2 = await updateAnnotations(pageId, annotations);
+      const page_return = await updatePage(pageId, newContent);
+      const annotation_return = await updateAnnotations(pageId, annotations);
       await trigerUpdate(user, pageId);
-      return res;
+      return { page_return, annotation_return };
     } catch (e) {
       return false;
     }

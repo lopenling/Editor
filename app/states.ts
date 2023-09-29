@@ -22,10 +22,6 @@ export const showSidebar = atom({
   key: 'sidebar',
 });
 
-export const showTranslationState = atom({
-  key: 'showTranslation',
-  default: false,
-});
 //textName
 
 export const textInfo = atom({
