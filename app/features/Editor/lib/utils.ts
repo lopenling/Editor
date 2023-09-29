@@ -1,7 +1,15 @@
-export const saveData = async (newContent: string, pageId: string, saveTextFetcher: any) => {
+import { annotationType } from './htmlParser';
+
+export const saveData = async (
+  textContent: string,
+  annotations: annotationType[],
+  pageId: string,
+  saveTextFetcher: any,
+) => {
   const formData = new FormData();
   formData.append('pageId', pageId);
-  formData.append('newContent', newContent);
+  formData.append('content', textContent);
+  formData.append('annotations', JSON.stringify(annotations));
   saveTextFetcher.submit(formData, {
     method: 'POST',
     action: '/api/text',

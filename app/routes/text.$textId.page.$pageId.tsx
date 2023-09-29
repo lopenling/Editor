@@ -26,6 +26,8 @@ import Tools from '~/features/Editor/tiptap/component/Tools';
 import Translations from '~/component/Layout/Translations';
 import PostContainer from '~/features/PostContainer';
 import { getAllTranslations } from '~/model/translation';
+import { getAnnotations } from '~/model/annotation';
+import { generateHtmlFromTextAndAnnotations } from '~/features/Editor/lib/htmlParser';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
@@ -44,6 +46,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const user = await getUserSession(request);
   const suggestions = await findAllSuggestionByPageId(page?.id!);
   const translations = await getAllTranslations(textId, order);
+  const annotations = await getAnnotations(page?.id);
   return defer({
     page,
     user,
@@ -53,6 +56,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     order,
     versions,
     translations,
+    annotations,
   });
 };
 

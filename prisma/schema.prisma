@@ -62,6 +62,7 @@ model Page {
   Suggestion Suggestion[]
   imageUrl   String?
   version    Version?
+  annotations Annotations[] @relation("annotation")
 }
 
 model Translation {
@@ -85,7 +86,15 @@ model UserText {
   content String
   order Int?
 }
-
+model Annotations{
+  id String @id @unique @default(uuid())
+  content String
+  type   String
+  start Int
+  end    Int
+  page Page @relation("annotation",fields: [pageId], references: [id])
+  pageId String 
+}
 
 model Suggestion {
   id                String              @id @unique @default(uuid())

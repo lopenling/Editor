@@ -12,6 +12,8 @@ import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import Controls from './Controls';
 import { saveData } from '../lib/utils';
+import { extractTextAndAnnotations, generateHtmlFromTextAndAnnotations } from '../lib/htmlParser';
+import _ from 'lodash';
 type EditorContainerProps = {
   pageId: string;
   editor: Editor;
@@ -34,6 +36,7 @@ function EditorContainer({
   versions,
   saveTextFetcher,
 }: EditorContainerProps) {
+  const { annotations } = useLoaderData();
   const data = useLoaderData();
   const user = data.user;
   const [Image, setImage] = useRecoilState(ImageState);
@@ -46,9 +49,13 @@ function EditorContainer({
 
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
-    editor.on('update', async ({ editor, transaction }) => {
+    editor.on('update', async ({ editor }) => {
       let newContent = editor.getHTML();
-      if (newContent && newContent.length > 100 && user) saveData(newContent, pageId, saveTextFetcher);
+      let { text, annotations } = extractTextAndAnnotations(newContent);
+      let save_fun = _.throttle(function () {
+        if (text?.length > 100 && user) saveData(text, annotations, pageId, saveTextFetcher);
+      }, 2000);
+      save_fun();
     });
     return () => {
       if (timer) clearTimeout(timer);
@@ -58,7 +65,8 @@ function EditorContainer({
     let timer = setTimeout(() => {
       let newContent = content.replace(/[\r\n]+/g, '<p/><p>');
       checkUnknown(newContent);
-      editor?.commands.setContent(newContent);
+      content = generateHtmlFromTextAndAnnotations(newContent, annotations);
+      editor?.commands.setContent(content);
     }, 100);
     setImage({ ...Image, url: imageUrl });
     return () => {
