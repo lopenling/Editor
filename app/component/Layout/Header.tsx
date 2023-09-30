@@ -3,7 +3,6 @@ import LogoOnly from '~/assets/logo.png';
 import { useLitteraMethods } from '@assembless/react-littera';
 import { useEffect, useState, memo } from 'react';
 import uselitteraTranlation, { translationCodes } from '~/locales/useLitteraTranslations';
-import { useRecoilValue } from 'recoil';
 import { Editor } from '@tiptap/react';
 import { SearchString } from '~/features/Editor';
 import { useDetectClickOutside } from 'react-detect-click-outside';
@@ -100,7 +99,7 @@ function Header({ editor }: HeaderProps) {
   });
   return (
     <nav
-      className="header shadow-header fixed top-0 z-50 w-full border-gray-200 bg-white dark:bg-gray-900 "
+      className=" shadow-header   z-50 w-full border-gray-200 bg-white dark:bg-gray-900 "
       style={{
         height: showHeaderMenu ? 'min-content' : HEADER_HEIGHT,
         fontFamily: 'serif',

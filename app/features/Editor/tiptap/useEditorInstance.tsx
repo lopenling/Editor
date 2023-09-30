@@ -1,22 +1,26 @@
 import * as Extension from '~/features/Editor/tiptap';
 import { useEditor } from '@tiptap/react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { openSuggestionState, selectedPostThread, selectedSuggestionThread, selectedTextOnEditor } from '~/states';
+import { useSearchParams } from '@remix-run/react';
 const useEditorInstance = (content: string) => {
-  const [selectedPost, postSelector] = useRecoilState(selectedPostThread);
-  const [suggestionSelected, suggestionSelector] = useRecoilState(selectedSuggestionThread);
-  const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
-  const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
+  const postSelector = useSetRecoilState(selectedPostThread);
+  const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
+  const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
+  const setOpenSuggestion = useSetRecoilState(openSuggestionState);
+  const [, setSearchParams] = useSearchParams();
   function suggestionSetter(id: string) {
     suggestionSelector({
       id: id,
     });
+    setSearchParams({ with: 'Post' });
   }
 
   function postSetter(id: string) {
     postSelector({
       id: id,
     });
+    setSearchParams({ with: 'Post' });
   }
   let editor = useEditor(
     {

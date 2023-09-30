@@ -7,7 +7,6 @@ import {
   selectedSuggestionThread,
   selectedTextOnEditor,
   showSidebar,
-  showTranslationState,
 } from '~/states';
 import { useRecoilState } from 'recoil';
 import { useEffect } from 'react';
@@ -18,19 +17,21 @@ import { getUserSession } from '~/services/session.server';
 import { findAllSuggestionByPageId } from '~/model/suggestion';
 import { getText } from '~/model/text';
 import { Version } from '@prisma/client';
-import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 import { CircleSpinnerOverlay } from 'react-spinner-overlay';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import { getAnnotations } from '~/model/annotation';
 import { getAllVersions } from '~/model/userText';
 import TextHeader from '~/component/Layout/TextHeader';
 import Menu from '~/component/menu/Menu';
+import { findPostByTextIdAndPage } from '~/model/post';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
   const url = new URL(request.url);
   const version = url.searchParams.get('version') as Version;
+  const searchParamsWith = url.searchParams.get('with') as String;
+
   const versions = await getVersions(parseInt(textId), parseInt(order));
   if (!version && versions.length > 0) {
     if (!version) {
@@ -39,21 +40,27 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   }
 
   const text = await getText(textId);
-  const page = await getPage(parseInt(textId), parseInt(order), version);
+  const page = await getPage(textId, parseInt(order), version);
+  const pageId = page?.id;
+  const annotations = await getAnnotations(page?.id!);
   const user = await getUserSession(request);
-  const suggestions = await findAllSuggestionByPageId(page?.id!);
   const user_versions = await getAllVersions(textId, order);
-  const annotations = await getAnnotations(page?.id);
+  const threadId = new URL(request.url).searchParams.get('thread') ?? '';
+  const suggestions = searchParamsWith === 'Post' ? await findAllSuggestionByPageId(page?.id!) : [];
+  const posts =
+    searchParamsWith === 'Post' ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
   return defer({
     page,
     user,
     suggestions,
-    pusher_env: { key: process.env.key, cluster: process.env.cluster },
     text,
     order,
     versions,
     user_versions,
     annotations,
+    posts,
+    threadId,
+    pageId,
   });
 };
 
@@ -84,40 +91,27 @@ export default function Page() {
   }, [showPostSide]);
   const withImage = !data.text.allow_post;
   return (
-    <>
+    <div className="flex flex-col ">
       <Header editor={editor} />
-      <div className="flex w-full">
-        <div className="flex-1">
+      <div className="flex">
+        <div className="flex w-full flex-col  flex-1 " style={{ maxHeight: 'calc(100vh - 60px)' }}>
           <TextHeader />
-          <div className="relative flex justify-between gap-4 transition-all">
+          <div className=" flex justify-between gap-4 transition-all flex-1 overflow-y-auto ">
             <CircleSpinnerOverlay message={'updating text'} loading={saveTextFetcher.state !== 'idle'} />
-
-            <div className="w-full flex gap-2">
+            <div className="w-full flex gap-2 ">
               <div
-                className={`${!withImage ? 'max-w-3xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800 mx-auto`}
+                className={`${!withImage ? 'max-w-3xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800 mx-auto `}
                 id="textEditorContainer"
               >
                 {editor && (
-                  <EditorContainer
-                    editor={editor!}
-                    isSaving={false}
-                    order={page.order}
-                    content={page.content}
-                    pageCount={page?.text.Page.length}
-                    imageUrl={page.imageUrl}
-                    pageId={page.id}
-                    versions={data.versions}
-                    saveTextFetcher={saveTextFetcher}
-                  />
+                  <EditorContainer editor={editor!} isSaving={false} page={page} saveTextFetcher={saveTextFetcher} />
                 )}
               </div>
             </div>
-
-            {/* <PostContainer editor={editor} createPost={createPost} isMobile={false} /> */}
           </div>
         </div>
         <Menu editor={editor} />
       </div>
-    </>
+    </div>
   );
 }

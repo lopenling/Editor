@@ -126,7 +126,7 @@ export default function Index() {
               {data.latestTexts.list.map((text: TextType) => {
                 let pageWithPost = text.allow_post;
                 let { groupedData, isVersionAvailable } = groupData(text.Page);
-                let url = `/text/${text.id}/page/1/${pageWithPost ? 'posts' : ''}`;
+                let url = `/text/${text.id}/page/1/`;
                 return (
                   <div key={text.id} className="flex w-full justify-between border-b dark:border-gray-700">
                     <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>

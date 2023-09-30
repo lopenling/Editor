@@ -110,7 +110,7 @@ export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
       </div>
     );
   return (
-    <div className="mb-2 ml-2 bg-slate-50 p-2 shadow-md dark:bg-gray-700">
+    <div className=" bg-slate-50 p-2 shadow-md dark:bg-gray-700">
       {addSuggestion.data?.message && <div className="font-sm text-red-500">{addSuggestion.data?.message}</div>}
       <TextArea
         placeholder="any suggestion?"

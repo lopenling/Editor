@@ -2,7 +2,6 @@ import { LoaderFunction, ActionFunction } from '@remix-run/server-runtime';
 import { deleteText } from '~/model/text';
 
 import { getUserSession } from '~/services/session.server';
-import { trigerUpdate } from '~/lib';
 import { searchPages, updatePage } from '~/model/page';
 import { updateAnnotations } from '~/model/annotation';
 
@@ -40,7 +39,6 @@ export let action: ActionFunction = async ({ request }) => {
     try {
       const page_return = await updatePage(pageId, newContent);
       const annotation_return = await updateAnnotations(pageId, annotations);
-      await trigerUpdate(user, pageId);
       return { page_return, annotation_return };
     } catch (e) {
       return false;

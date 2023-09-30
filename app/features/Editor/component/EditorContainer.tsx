@@ -1,4 +1,4 @@
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import { BubbleMenu, Editor, EditorContent } from '@tiptap/react';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -15,27 +15,16 @@ import { saveData } from '../lib/utils';
 import { extractTextAndAnnotations, generateHtmlFromTextAndAnnotations } from '../lib/htmlParser';
 import _ from 'lodash';
 type EditorContainerProps = {
-  pageId: string;
   editor: Editor;
   isSaving: boolean;
-  order: number;
-  content: string;
-  pageCount: number;
-  imageUrl: string;
+  page: any;
   saveTextFetcher: any;
-  versions: string[];
 };
-function EditorContainer({
-  pageId,
-  editor,
-  isSaving,
-  order,
-  content,
-  imageUrl,
-  pageCount,
-  versions,
-  saveTextFetcher,
-}: EditorContainerProps) {
+function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorContainerProps) {
+  let content = page.content;
+  const imageUrl = page.imageUrl;
+  const pageCount = page?.text.Page.length;
+  const pageId = page.id;
   const { annotations } = useLoaderData();
   const data = useLoaderData();
   const user = data.user;
@@ -43,10 +32,11 @@ function EditorContainer({
   const isPostAllowed = data.text.allow_post;
   const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
+  const [searchParams, setSearchParams] = useSearchParams();
   let thread = useRecoilValue(selectedPostThread);
 
   let saving = saveTextFetcher.state !== 'idle';
-
+  let searchString = searchParams.get('s') || '';
   useEffect(() => {
     let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
     editor.on('update', async ({ editor }) => {
@@ -73,7 +63,11 @@ function EditorContainer({
       clearTimeout(timer);
     };
   }, [content, editor]);
-
+  useEffect(() => {
+    if (!searchString || searchString.length === 0) {
+      editor.commands.setSearchTerm('');
+    }
+  }, [searchString]);
   const handleBubbleClick = (type: string) => {
     if (selection.start)
       setSelectionRange({
@@ -81,6 +75,7 @@ function EditorContainer({
         type,
       });
     setOpenSuggestion(false);
+    setSearchParams({ with: 'Post' });
   };
   function handleSuggestionClick() {
     setOpenSuggestion(!openSuggestion);
@@ -88,6 +83,7 @@ function EditorContainer({
       ...selection,
       type: '',
     });
+    setSearchParams({ with: 'Post' });
   }
   function handleDeleteMark() {
     if (editor.isActive('post')) {

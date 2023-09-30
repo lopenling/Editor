@@ -4,7 +4,6 @@ import Header from '~/component/Layout/Header';
 import { HEADER_HEIGHT } from '~/constants';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import SourceEditor from '~/features/Translation/SourceEditor';
-import { createUserPage } from '~/model/translation';
 import { getUserPage } from '~/model/userText';
 import { getUserSession } from '~/services/session.server';
 
@@ -17,6 +16,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   let source = await getUserPage(user.id, versionId);
   return { source };
 };
+
 function Translation() {
   let { source } = useLoaderData();
   let editor = useEditorInstance(source?.id, source?.order);

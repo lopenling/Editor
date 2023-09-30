@@ -1,11 +1,9 @@
-import React, { Suspense } from 'react';
 import { useRecoilState } from 'recoil';
-import { HEADER_HEIGHT, RIGHT_SIDEBAR_WIDTH } from '~/constants';
 import { openSuggestionState, selectedPostThread, selectedSuggestionThread, selectedTextOnEditor } from '~/states';
-import { Await, Outlet, useLoaderData } from '@remix-run/react';
+import { Outlet, useLoaderData } from '@remix-run/react';
 import { Editor } from '@tiptap/react';
 import { SuggestionContainer, SuggestionForm } from '../Suggestion';
-
+import PostSidebar from './PostSidebar';
 type PropsType = {
   editor: Editor | null;
   createPost: any;
@@ -48,14 +46,7 @@ function PostContainer({ editor, createPost, isMobile }: PropsType) {
       </>
     );
   return (
-    <div
-      style={{
-        width: RIGHT_SIDEBAR_WIDTH,
-        top: HEADER_HEIGHT,
-      }}
-      className={`sticky hidden w-full md:flex transition-all duration-75 z-[1] `}
-      id="postContent"
-    >
+    <div className={` hidden w-full md:flex transition-all duration-75 z-[1] flex-1 `}>
       {suggestionSelected?.id || openSuggestion ? (
         <SuggestionSidebar
           suggestions={data.suggestions}
@@ -65,12 +56,13 @@ function PostContainer({ editor, createPost, isMobile }: PropsType) {
         />
       ) : (
         <div
-          className={`hidden w-full min-w-[450px] flex-col  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
+          className={`hidden w-full flex-col  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
           style={{
             transition: 'opacity ease 0.4s',
+            maxHeight: `calc(100vh - 120px)`,
           }}
         >
-          <PostSidebar
+          <PostSide
             page={page}
             user={user}
             id={selectedPost.id}
@@ -86,17 +78,8 @@ function PostContainer({ editor, createPost, isMobile }: PropsType) {
 
 export default PostContainer;
 
-function PostSidebar(props: { id: any; type: string; user: any; editor: any; page: any; createPost: any }) {
-  return (
-    <Outlet
-      context={{
-        user: props.user,
-        editor: props.editor,
-        text: props.page,
-        createPost: props.createPost,
-      }}
-    />
-  );
+function PostSide(props: { id: any; type: string; user: any; editor: any; page: any; createPost: any }) {
+  return <PostSidebar createPost={props.createPost} />;
 }
 
 function SuggestionSidebar(props: {
@@ -106,13 +89,9 @@ function SuggestionSidebar(props: {
   page: any;
 }) {
   return (
-    <div className="z-20 w-full">
+    <div className="z-20 w-full border-l">
       <SuggestionForm editor={props.editor} page={props.page} />
-      <Suspense fallback={<div>loading</div>}>
-        <Await resolve={props.suggestions}>
-          {(data) => <SuggestionContainer editor={props.editor} suggestions={data} />}
-        </Await>
-      </Suspense>
+      <SuggestionContainer editor={props.editor} suggestions={props.suggestions} />
     </div>
   );
 }

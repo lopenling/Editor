@@ -13,11 +13,11 @@ function Menu({ editor }: { editor: Editor | null }) {
   let menu = searchParams.get('with');
   if (!menu) return null;
   return (
-    <div className="w-full flex flex-col max-w-[30%]" style={{ marginTop: HEADER_HEIGHT }}>
+    <div className="w-full flex flex-col max-w-[30%]" style={{ maxHeight: 'calc(100vh - 60px)' }}>
       <MenuHeader />
       {menu === 'all' && <MenuHome />}
       {menu === 'TableOfContent' && <TableOfContents editor={null} />}
-      {menu === 'Search' && <Search />}
+      {menu === 'Search' && <Search editor={editor} />}
       {menu === 'Translations' && <Translations />}
       {menu === 'Post' && <Post editor={editor} />}
     </div>
