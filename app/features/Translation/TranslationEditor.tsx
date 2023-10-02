@@ -8,7 +8,7 @@ type SourceProps = {
   content: string;
 };
 
-function SourceEditor({ content }: SourceProps) {
+function TranslationEditor({ content }: SourceProps) {
   let editor = useEditorInstance(content, true);
   useEffect(() => {
     editor?.on('update', ({ editor }) => {
@@ -35,4 +35,4 @@ function SourceEditor({ content }: SourceProps) {
   );
 }
 
-export default SourceEditor;
+export default TranslationEditor;

@@ -1,9 +1,9 @@
 import * as Extension from '~/features/Editor/tiptap';
 import { useEditor } from '@tiptap/react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { openSuggestionState, selectedPostThread, selectedSuggestionThread, selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';
-const useEditorInstance = (content: string) => {
+const useEditorInstance = (content: string, isEditable: boolean) => {
   const postSelector = useSetRecoilState(selectedPostThread);
   const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
@@ -66,7 +66,7 @@ const useEditorInstance = (content: string) => {
         }),
       ],
       editable: true,
-      editorProps: Extension.editorProps,
+      editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
       onSelectionUpdate: ({ editor }) => {
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;

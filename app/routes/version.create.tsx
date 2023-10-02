@@ -5,7 +5,7 @@ import { HEADER_HEIGHT } from '~/constants';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import { createUserPage } from '~/model/translation';
 import { getUserSession } from '~/services/session.server';
-
+import { useEffect } from 'react';
 export const loader = async ({ request, params }: LoaderArgs) => {
   let url = new URL(request.url);
   let textId = url.searchParams.get('text') as string;
@@ -18,8 +18,12 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 };
 function Translation() {
   let { source } = useLoaderData();
-  let editor = useEditorInstance(source?.id, source?.order);
-
+  let editor = useEditorInstance(source?.content, true);
+  useEffect(() => {
+    editor?.on('update', () => {
+      console.log(editor?.getHTML());
+    });
+  }, [editor]);
   return (
     <>
       <Header editor={editor} />

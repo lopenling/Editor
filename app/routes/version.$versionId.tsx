@@ -4,9 +4,10 @@ import Header from '~/component/Layout/Header';
 import { HEADER_HEIGHT } from '~/constants';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import SourceEditor from '~/features/Translation/SourceEditor';
+import TranslationEditor from '~/features/Translation/TranslationEditor';
 import { getUserPage } from '~/model/userText';
 import { getUserSession } from '~/services/session.server';
-
+import { useEffect } from 'react';
 export const loader = async ({ request, params }: LoaderArgs) => {
   let url = new URL(request.url);
   let versionId = params.versionId as string;
@@ -19,21 +20,22 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
 function Translation() {
   let { source } = useLoaderData();
-  let editor = useEditorInstance(source?.id, source?.order);
 
   return (
     <>
-      <Header editor={editor} />
+      <Header editor={null} />
       <div
         style={{
           padding: HEADER_HEIGHT,
         }}
       >
-        <div className="flex p-2 border-2 xl:mx-10 h-[80vh]">
+        <div className="flex p-2 border-2 xl:mx-10 h-[80vh] gap-2">
           <div className="w-[50%]">
             <SourceEditor content={source?.content} />
           </div>
-          <div className="w-[50%]">translation</div>
+          <div className="w-[50%]">
+            <TranslationEditor content={source?.content} />
+          </div>
         </div>
       </div>
     </>

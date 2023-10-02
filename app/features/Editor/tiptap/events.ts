@@ -21,11 +21,19 @@ const handleDOMEvents = {
   },
 };
 
-const editorProps = {
+const noneditable = {
   handleDOMEvents: handleDOMEvents,
   attributes: {
     inputmode: 'none',
     'data-encoding': 'UTF-8',
   },
 };
-export default editorProps;
+
+const editable = {
+  handleDOMEvents: {},
+  attributes: {
+    inputmode: 'none',
+    'data-encoding': 'UTF-8',
+  },
+};
+export default { editable, noneditable };

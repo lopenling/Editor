@@ -74,7 +74,7 @@ export default function Page() {
   const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
   const saveTextFetcher = useFetcher();
 
-  let editor = useEditorInstance(page?.content);
+  let editor = useEditorInstance(page?.content, false);
 
   useEffect(() => {
     if (!!selectedPost.id || selection.type !== '' || !!suggestionSelected?.id || openSuggestion) {
