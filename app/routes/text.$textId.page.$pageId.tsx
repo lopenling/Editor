@@ -1,4 +1,4 @@
-import { LoaderArgs, LoaderFunction, defer, redirect } from '@remix-run/node';
+import { LoaderArgs, LoaderFunction, defer, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import { getPage, getVersions } from '~/model/page';
 import {
@@ -45,11 +45,10 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const annotations = await getAnnotations(page?.id!);
   const user = await getUserSession(request);
   const user_versions = await getAllVersions(textId, order);
-  const threadId = new URL(request.url).searchParams.get('thread') ?? '';
-  const suggestions = searchParamsWith === 'Post' ? await findAllSuggestionByPageId(page?.id!) : [];
+  const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!) : [];
   const posts =
     searchParamsWith === 'Post' ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
-  return defer({
+  return json({
     page,
     user,
     suggestions,
@@ -59,7 +58,6 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     user_versions,
     annotations,
     posts,
-    threadId,
     pageId,
   });
 };
@@ -67,28 +65,10 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
 export default function Page() {
   const data = useLoaderData<typeof loader>();
   const { page } = data;
-  const [suggestionSelected] = useRecoilState(selectedSuggestionThread);
-  const [openSuggestion] = useRecoilState(openSuggestionState);
-  const [selectedPost, postSelector] = useRecoilState(selectedPostThread);
-  const [selection] = useRecoilState(selectedTextOnEditor);
-  const [showPostSide, setShowPostSide] = useRecoilState(showSidebar);
   const saveTextFetcher = useFetcher();
 
-  let editor = useEditorInstance(page?.content, false);
+  let editor = useEditorInstance('', false);
 
-  useEffect(() => {
-    if (!!selectedPost.id || selection.type !== '' || !!suggestionSelected?.id || openSuggestion) {
-      setShowPostSide(true);
-    } else {
-      setShowPostSide(false);
-    }
-  }, [selectedPost.id, selection.type, suggestionSelected?.id, openSuggestion]);
-  useEffect(() => {
-    if (!showPostSide) {
-      postSelector({ id: '' });
-      editor?.commands.setTextSelection(0);
-    }
-  }, [showPostSide]);
   const withImage = !data.text.allow_post;
   return (
     <div className="flex flex-col ">

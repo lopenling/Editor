@@ -23,7 +23,7 @@ function MenuHome() {
         </li>
         <li className={li_className}>
           <button type="button" onClick={() => setSearchParams({ with: 'Post' })}>
-            Post / Suggestions
+            Post
           </button>
         </li>
       </ul>

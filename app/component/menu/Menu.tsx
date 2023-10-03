@@ -7,6 +7,7 @@ import Search from './Search';
 import Translations from './Translations';
 import Post from './Post';
 import { Editor } from '@tiptap/react';
+import Suggestion from './Suggestion';
 
 function Menu({ editor }: { editor: Editor | null }) {
   let [searchParams] = useSearchParams();
@@ -20,6 +21,7 @@ function Menu({ editor }: { editor: Editor | null }) {
       {menu === 'Search' && <Search editor={editor} />}
       {menu === 'Translations' && <Translations />}
       {menu === 'Post' && <Post editor={editor} />}
+      {menu === 'Suggestion' && editor && <Suggestion editor={editor} />}
     </div>
   );
 }

@@ -3,12 +3,13 @@ import { selectedSuggestionThread, selectedTextOnEditor, showSidebar } from '~/s
 import { Editor } from '@tiptap/react';
 import { GrClose } from 'react-icons/gr';
 import Suggestion from './Suggestion';
-import { SuggestionType } from '~/model/type';
-function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestions: SuggestionType[] }) {
-  const suggestionThread = useRecoilValue(selectedSuggestionThread);
-
+import { useLoaderData, useSearchParams } from '@remix-run/react';
+function Suggestions({ editor }: { editor: Editor | null }) {
+  const [searchParams] = useSearchParams();
+  const { suggestions } = useLoaderData();
+  let threadId = searchParams.get('thread');
   let list = suggestions.filter((sug) => {
-    return sug.threadId === suggestionThread.id;
+    return sug.threadId === threadId;
   });
   let groupedSuggestion = transformObjectsByNewValue(list);
   return (

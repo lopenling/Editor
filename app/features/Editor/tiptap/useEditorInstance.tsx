@@ -10,17 +10,11 @@ const useEditorInstance = (content: string, isEditable: boolean) => {
   const setOpenSuggestion = useSetRecoilState(openSuggestionState);
   const [, setSearchParams] = useSearchParams();
   function suggestionSetter(id: string) {
-    suggestionSelector({
-      id: id,
-    });
-    setSearchParams({ with: 'Post' });
+    setSearchParams({ with: 'Suggestion', thread: id });
   }
 
   function postSetter(id: string) {
-    postSelector({
-      id: id,
-    });
-    setSearchParams({ with: 'Post' });
+    setSearchParams({ with: 'Post', thread: id });
   }
   let editor = useEditor(
     {
@@ -77,8 +71,9 @@ const useEditorInstance = (content: string, isEditable: boolean) => {
           content: editor?.state.doc.textBetween(from, to, ''),
         });
         setOpenSuggestion(false);
-        if (!editor.isActive('suggestion')) suggestionSelector({ id: '' });
-        if (!editor.isActive('post')) postSelector({ id: '' });
+        if (!editor.isActive('suggestion') && !editor.isActive('post')) {
+          setSearchParams({ with: 'all' });
+        }
       },
     },
     [content],

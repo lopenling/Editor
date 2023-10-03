@@ -42,19 +42,15 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
     editor.on('update', async ({ editor }) => {
       let newContent = editor.getHTML();
       let { text, annotations } = extractTextAndAnnotations(newContent);
-      let save_fun = _.throttle(function () {
-        if (text?.length > 100 && user) saveData(text, annotations, pageId, saveTextFetcher);
-      }, 500);
-      save_fun();
+      if (text?.length > 100 && user) saveData(text, annotations, pageId, saveTextFetcher);
     });
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [editor, thread.id]);
+  }, [editor]);
   useEffect(() => {
     let timer = setTimeout(() => {
-      let newContent = content.replace(/[\r\n]+/g, '<p/><p>');
-      checkUnknown(newContent);
+      let newContent = checkUnknown(content.replace(/[\r\n]+/g, '<p/><p>'));
       content = generateHtmlFromTextAndAnnotations(newContent, annotations);
       editor?.commands.setContent(content);
     }, 100);
@@ -74,16 +70,14 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
         ...selection,
         type,
       });
-    setOpenSuggestion(false);
     setSearchParams({ with: 'Post' });
   };
   function handleSuggestionClick() {
-    setOpenSuggestion(!openSuggestion);
     setSelectionRange({
       ...selection,
       type: '',
     });
-    setSearchParams({ with: 'Post' });
+    setSearchParams({ with: 'Suggestion' });
   }
   function handleDeleteMark() {
     if (editor.isActive('post')) {
@@ -195,7 +189,7 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
                       title="suggestion"
                       type="button"
                       color="gray"
-                      className={`${openSuggestion ? 'bg-green-400 text-white' : 'bg-white '} rounded-l-lg ${
+                      className={`${openSuggestion ? 'bg-green-400 text-gray-400' : 'bg-white '} rounded-l-lg ${
                         !isPostAllowed && 'rounded-r-lg'
                       } border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10    hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white  dark:hover:bg-gray-600 dark:hover:text-white `}
                       onClick={() => handleSuggestionClick()}

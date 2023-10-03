@@ -6,7 +6,7 @@ import { MustLoggedIn as LogInMessage } from '~/component/UI';
 import { FormWithAudio } from './component/FormWithAudio';
 import { GrClose } from 'react-icons/gr';
 
-const PostForm = ({ createPost }: any) => {
+const PostForm = ({ createPost, editor }: any) => {
   const { user } = useLoaderData();
   const selection = useRecoilValue(selectedTextOnEditor);
   let isPosting = createPost.formData && createPost.formData.get('body') !== '';
@@ -57,7 +57,7 @@ const PostForm = ({ createPost }: any) => {
               </div>
             </div>
             <div aria-label="Default tabs" className="px-4 pt-4" style={{ lineHeight: '14px' }}>
-              <FormWithAudio fetcher={createPost} type="post" post={null} />
+              <FormWithAudio fetcher={createPost} type="post" post={null} editor={editor} />
             </div>
           </>
         ) : (

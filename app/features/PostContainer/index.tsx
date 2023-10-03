@@ -46,52 +46,13 @@ function PostContainer({ editor, createPost, isMobile }: PropsType) {
       </>
     );
   return (
-    <div className={` hidden w-full md:flex transition-all duration-75 z-[1] flex-1 `}>
-      {suggestionSelected?.id || openSuggestion ? (
-        <SuggestionSidebar
-          suggestions={data.suggestions}
-          suggestionSelected={suggestionSelected}
-          page={page}
-          editor={editor}
-        />
-      ) : (
-        <div
-          className={`hidden w-full flex-col  bg-white  shadow-md dark:bg-gray-700  md:flex   md:h-full md:max-h-full  lg:sticky lg:top-0 lg:h-screen`}
-          style={{
-            transition: 'opacity ease 0.4s',
-            maxHeight: `calc(100vh - 120px)`,
-          }}
-        >
-          <PostSide
-            page={page}
-            user={user}
-            id={selectedPost.id}
-            type={selection.type}
-            editor={editor}
-            createPost={createPost}
-          />
-        </div>
-      )}
+    <div
+      className={` hidden w-full md:flex transition-all duration-75 z-[1] `}
+      style={{ maxHeight: 'calc(100% - 60px)' }}
+    >
+      <PostSidebar createPost={createPost} editor={editor} />;
     </div>
   );
 }
 
 export default PostContainer;
-
-function PostSide(props: { id: any; type: string; user: any; editor: any; page: any; createPost: any }) {
-  return <PostSidebar createPost={props.createPost} />;
-}
-
-function SuggestionSidebar(props: {
-  suggestionSelected: { id: any };
-  editor: Editor | null;
-  suggestions: any;
-  page: any;
-}) {
-  return (
-    <div className="z-20 w-full border-l">
-      <SuggestionForm editor={props.editor} page={props.page} />
-      <SuggestionContainer editor={props.editor} suggestions={props.suggestions} />
-    </div>
-  );
-}

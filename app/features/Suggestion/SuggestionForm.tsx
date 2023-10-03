@@ -1,4 +1,4 @@
-import { useFetcher, useLoaderData, useOutlet, useOutletContext } from '@remix-run/react';
+import { useFetcher, useLoaderData, useOutlet, useOutletContext, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { openSuggestionState, selectedSuggestionThread } from '~/states';
@@ -11,17 +11,15 @@ import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 
 type SuggestionFormProps = {
   editor: Editor | null;
-  page: any;
 };
 
-export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
-  const data = useLoaderData();
-  let { user } = data;
+export default function SuggestionForm({ editor }: SuggestionFormProps) {
+  let { user, page } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [suggestionInput, setSuggestionInput] = useState('');
   const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
   const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
-  const setOpenSuggestion = useSetRecoilState(openSuggestionState);
   const [audio, setAudio] = useState({ tempUrl: '', blob: null });
   const handleSuggestionSubmit = async () => {
     if (suggestionInput === '') {
@@ -76,10 +74,7 @@ export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
     }
   };
   const handleSuggestionCancel = () => {
-    setSelectedSuggestion({
-      id: '',
-    });
-    setOpenSuggestion(false);
+    setSearchParams({ with: 'all' });
   };
   let isPosting = addSuggestion.formData;
   if (!user) return <LogInMessage />;
