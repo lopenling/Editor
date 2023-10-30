@@ -113,7 +113,6 @@ export default function Index() {
           {data?.latestTexts && (
             <>
               {data.latestTexts.list.map((text: TextType) => {
-                let pageWithPost = text.allow_post;
                 let { groupedData, isVersionAvailable } = groupData(text.Page);
                 let url = `/text/${text.id}/page/1/`;
                 return (
@@ -176,7 +175,7 @@ export default function Index() {
                   let result = list.results[0];
                   return (
                     <Link
-                      to={`/text/${list.textId}/page/1/posts`}
+                      to={`/text/${list.textId}/page/1`}
                       key={'id' + index}
                       className="container w-full"
                       prefetch="intent"

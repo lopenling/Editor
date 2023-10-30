@@ -1,17 +1,8 @@
-import { LoaderArgs, LoaderFunction, defer, json, redirect } from '@remix-run/node';
+import { LoaderArgs, LoaderFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import { getPage, getVersions } from '~/model/page';
-import {
-  openSuggestionState,
-  selectedPostThread,
-  selectedSuggestionThread,
-  selectedTextOnEditor,
-  showSidebar,
-} from '~/states';
-import { useRecoilState } from 'recoil';
-import { useEffect } from 'react';
+
 import Header from '~/component/Layout/Header';
-import TableContent from '~/component/menu/TableOfContent';
 import { EditorContainer } from '~/features/Editor';
 import { getUserSession } from '~/services/session.server';
 import { findAllSuggestionByPageId } from '~/model/suggestion';
@@ -20,10 +11,11 @@ import { Version } from '@prisma/client';
 import { CircleSpinnerOverlay } from 'react-spinner-overlay';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import { getAnnotations } from '~/model/annotation';
-import { getAllVersions } from '~/model/userText';
+import { listUserText } from '~/model/userText';
 import TextHeader from '~/component/Layout/TextHeader';
 import Menu from '~/component/menu/Menu';
 import { findPostByTextIdAndPage } from '~/model/post';
+import { listTranslations } from '~/model/translation';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
@@ -44,7 +36,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const pageId = page?.id;
   const annotations = await getAnnotations(page?.id!);
   const user = await getUserSession(request);
-  const user_versions = await getAllVersions(textId, order);
+  const translations = searchParamsWith === 'Translations' ? await listTranslations(textId, pageId) : [];
   const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!) : [];
   const posts =
     searchParamsWith === 'Post' ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
@@ -55,7 +47,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
     text,
     order,
     versions,
-    user_versions,
+    translations,
     annotations,
     posts,
     pageId,

@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 // import EditorSettings from "./EditorSettings";
 import { Button } from '~/component/UI';
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
-import { openSuggestionState, selectedPostThread, selectedTextOnEditor, ImageState } from '~/states';
+import { selectedTextOnEditor, ImageState } from '~/states';
 import { isSmallScreen } from '~/lib';
 import { checkUnknown, scrollThreadIntoView } from '../lib';
 import Pagination from '~/component/UI/Pagination';
@@ -21,24 +21,19 @@ type EditorContainerProps = {
   saveTextFetcher: any;
 };
 function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorContainerProps) {
-  let content = page.content;
   const imageUrl = page.imageUrl;
   const pageCount = page?.text.Page.length;
   const pageId = page.id;
-  const { annotations } = useLoaderData();
-  const data = useLoaderData();
-  const user = data.user;
+  const { annotations, user, text } = useLoaderData();
   const [Image, setImage] = useRecoilState(ImageState);
-  const isPostAllowed = data.text.allow_post;
-  const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
+  const isPostAllowed = text.allow_post;
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
   const [searchParams, setSearchParams] = useSearchParams();
-  let thread = useRecoilValue(selectedPostThread);
-
-  let saving = saveTextFetcher.state !== 'idle';
   let searchString = searchParams.get('s') || '';
+  let thread = searchParams.get('thread') || '';
+  let saving = saveTextFetcher.state !== 'idle';
   useEffect(() => {
-    let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
+    let timer = scrollThreadIntoView(thread, `p_${thread}`);
     editor.on('update', async ({ editor }) => {
       let newContent = editor.getHTML();
       let { text, annotations } = extractTextAndAnnotations(newContent);
@@ -47,18 +42,18 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [editor]);
+  }, [editor, thread]);
   useEffect(() => {
     let timer = setTimeout(() => {
-      let newContent = checkUnknown(content.replace(/[\r\n]+/g, '<p/><p>'));
-      content = generateHtmlFromTextAndAnnotations(newContent, annotations);
+      let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
+      let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
       editor?.commands.setContent(content);
     }, 100);
     setImage({ ...Image, url: imageUrl });
     return () => {
       clearTimeout(timer);
     };
-  }, [content, editor]);
+  }, [page?.content, editor]);
   useEffect(() => {
     if (!searchString || searchString.length === 0) {
       editor.commands.setSearchTerm('');
@@ -189,7 +184,7 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
                       title="suggestion"
                       type="button"
                       color="gray"
-                      className={`${openSuggestion ? 'bg-green-400 text-gray-400' : 'bg-white '} rounded-l-lg ${
+                      className={`bg-white rounded-l-lg ${
                         !isPostAllowed && 'rounded-r-lg'
                       } border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10    hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white  dark:hover:bg-gray-600 dark:hover:text-white `}
                       onClick={() => handleSuggestionClick()}
@@ -217,7 +212,7 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
                     )}
                   </>
                 )
-              ) : user?.admin === 'true' || data.text.userId == user?.id ? (
+              ) : user?.admin === 'true' || text.userId == user?.id ? (
                 <Button
                   title="delete"
                   type="button"

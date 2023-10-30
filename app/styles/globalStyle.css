@@ -68,6 +68,7 @@ main {
 #tableContent {
   max-height: var(--sidebarHeight);
 }
+
 .loginButton {
   font-family: Arial, Helvetica, sans-serif;
   text-transform: capitalize;

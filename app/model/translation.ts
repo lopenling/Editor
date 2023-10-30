@@ -1,34 +1,66 @@
 import { db } from '~/services/db.server';
 import { getText } from './text';
-import { getPage } from './page';
+import { getPage, getPageContent } from './page';
+import { createUserText } from './userText';
+import { languageOptionsType } from '~/constants';
 
-export let createUserPage = async (textId: string, order: string, user: any) => {
-  let text = await getText(textId);
-  let page = await getPage(textId, parseInt(order), {});
-
-  let check = await db.userText.findFirst({
+//get list of translations for a text
+export let listTranslations = async (textId: string, pageId: string) => {
+  return await db.translation.findMany({
     where: {
-      textId: parseInt(text?.id),
-      name: text.name,
-      userId: user.id,
-      order: parseInt(order),
+      textId: parseInt(textId),
+      pageId,
+    },
+    include: {
+      userText: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
-  if (check) return check;
-
-  try {
-    let created_page = await db.userText.create({
-      data: {
-        content: page?.content,
-        name: text?.name,
-        textId: parseInt(text?.id),
-        userId: user.id,
-        order: parseInt(order),
-      },
-    });
-    return created_page;
-  } catch (e) {
-    console.log(e);
-  }
 };
-//get list of translations for a text
+
+export let getTranslation = async (id: number) => {
+  return await db.translation.findUnique({
+    where: {
+      id,
+    },
+  });
+};
+
+//create translation
+export let createTranslation = async (
+  textId: string,
+  order: string,
+  language: languageOptionsType,
+  content: string,
+  userId: string,
+  name: string,
+) => {
+  let page = await getPageContent(textId, parseInt(order));
+  //generate a copy of text/page in userText
+
+  let new_userPage = await createUserText(textId, page?.id, userId, page?.content, name);
+  //link it to Translation when creating
+
+  let new_translation = await db.translation.create({
+    data: {
+      language,
+      content,
+      userTextId: new_userPage.id,
+      textId,
+      pageId: page?.id,
+    },
+  });
+  return new_translation;
+};
+
+export let deleteTranslation = async (id: number) => {
+  let deleted = await db.translation.delete({
+    where: { id },
+  });
+  return await db.userText.delete({
+    where: { id: deleted.userTextId },
+  });
+};

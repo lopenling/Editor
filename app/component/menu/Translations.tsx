@@ -1,20 +1,115 @@
-import { Link, useLoaderData } from '@remix-run/react';
-import React from 'react';
+import { Link, useFetcher, useLoaderData } from '@remix-run/react';
+import { useState } from 'react';
+import { LANGUAGE_OPTION_TRANSLATION } from '~/constants';
 
 function Translations() {
-  let { text, page, user_versions } = useLoaderData();
-  let createUrl = `/version/create?text=${text.id}&page=${page.order}`;
+  let { text, page, translations } = useLoaderData();
+  const [fileContent, setFileContent] = useState('');
+
+  const [upload, setUpload] = useState(false);
+  const [title, setTitle] = useState('');
+  const [language, setLanguage] = useState('english');
+  let fetcher = useFetcher();
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const text = event.target.result;
+        setFileContent(text);
+      };
+
+      reader.readAsText(file);
+    }
+  };
+  let handleSubmit = () => {
+    fetcher.submit(
+      {
+        content: fileContent,
+        textId: text.id,
+        pageId: page.order,
+        name: title,
+        language,
+      },
+      {
+        method: 'POST',
+        action: '/api/translation',
+      },
+    );
+    setFileContent('');
+    setTitle('');
+    setUpload(false);
+  };
+  let handleDelete = (id) => {
+    fetcher.submit(
+      { id },
+      {
+        method: 'DELETE',
+        action: '/api/translation',
+      },
+    );
+  };
   return (
     <div>
-      <Link to={createUrl} className="bg-gray-300 text-center float-right px-2 py-1 m-2 rounded">
-        create +
-      </Link>
-      <div>
-        {user_versions?.map((version) => {
-          let versionUrl = `/version/${version.id}`;
+      <div className="fixed bottom-5 right-10">
+        {upload ? (
+          <div className="flex flex-col">
+            <input type="file" accept=".txt" onChange={handleFileUpload}></input>
+            {fileContent !== '' && (
+              <>
+                <input type="text" placeholder="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <div className="flex flex-col  gap-3">
+                  <label
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    htmlFor="selectionLanguage"
+                  >
+                    choose translation language
+                  </label>
+                  <select
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    id="selectionLanguage"
+                    placeholder="language"
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                  >
+                    {LANGUAGE_OPTION_TRANSLATION.map((option) => {
+                      return (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="bg-green-400 rounded shadow-sm p-2 text-white hover:bg-green-500"
+                >
+                  upload translation
+                </button>
+              </>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setUpload(true)}
+            className="bg-green-400 rounded shadow-sm p-2 text-white hover:bg-green-500"
+          >
+            + upload
+          </button>
+        )}
+      </div>
+      <div className="mt-3">
+        {translations?.map((translation, index) => {
+          let url = `/text/${text.id}/page/${page.order}/translation/${translation.id}`;
           return (
-            <Link to={versionUrl} key={version.id + version.user.id}>
-              {version?.name} - {version.user.username}
+            <Link to={url} key={'translation-' + index} className="flex justify-around">
+              {translation?.language} - {translation.userText.name}
+              <button onClick={() => handleDelete(translation.id)}>delete</button>
             </Link>
           );
         })}

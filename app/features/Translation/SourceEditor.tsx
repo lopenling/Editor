@@ -3,25 +3,34 @@ import useEditorInstance from '../Editor/tiptap/useEditorInstance';
 import { EditorContent } from '@tiptap/react';
 import { generateHtmlFromTextAndAnnotations } from '../Editor/lib/htmlParser';
 import Tools from '../Editor/tiptap/component/Tools';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
-type SourceProps = {
-  content: string;
-};
-
-function SourceEditor({ content }: SourceProps) {
+function SourceEditor() {
+  let { source } = useLoaderData();
+  let content = source.content;
   let editor = useEditorInstance(content, true);
+  let saveFetcher = useFetcher();
   useEffect(() => {
     editor?.on('update', ({ editor }) => {
-      console.log(editor.getHTML());
-      // The content has changed.
+      let text = editor.getHTML();
+      if (text.length > 200)
+        saveFetcher.submit(
+          {
+            action_: 'updateSource',
+            id: source.id,
+            content: text.trim(),
+          },
+          {
+            method: 'POST',
+          },
+        );
     });
   }, [editor]);
+
   useEffect(() => {
     let timer = setTimeout(() => {
       let newContent = content.replace(/[\r\n]+/g, '<p/><p>');
-      let annotations = [];
-      content = generateHtmlFromTextAndAnnotations(newContent, annotations);
-      editor?.commands.setContent(content);
+      editor?.commands.setContent(newContent);
     }, 100);
     return () => {
       clearTimeout(timer);

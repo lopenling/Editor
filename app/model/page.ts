@@ -48,7 +48,19 @@ export async function getVersions(textId: number, order: number) {
     return []; // Return an empty array if an error occurs
   }
 }
-
+export async function getPageContent(textId: string, order: number) {
+  let page = await getPage(textId, order, null);
+  let data = await db.page.findFirst({
+    where: {
+      id: page?.id,
+    },
+    select: {
+      id: true,
+      content: true,
+    },
+  });
+  return { id: data?.id, content: data?.content };
+}
 export async function getPage(textId: string, order: number, version: Version | null) {
   try {
     let Id = parseInt(textId);

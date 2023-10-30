@@ -1,7 +1,6 @@
 import { useFetcher, useLoaderData, useOutlet, useOutletContext, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { openSuggestionState, selectedSuggestionThread } from '~/states';
 import { v4 as uuidv4 } from 'uuid';
 import { Editor } from '@tiptap/react';
 import { Button, TextArea, MustLoggedIn as LogInMessage } from '~/component/UI';
@@ -14,12 +13,11 @@ type SuggestionFormProps = {
 };
 
 export default function SuggestionForm({ editor }: SuggestionFormProps) {
-  let { user, page } = useLoaderData();
+  let { user, page, text } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const [suggestionInput, setSuggestionInput] = useState('');
   const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
-  const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
   const [audio, setAudio] = useState({ tempUrl: '', blob: null });
   const handleSuggestionSubmit = async () => {
     if (suggestionInput === '') {
@@ -36,12 +34,10 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     } else {
       id = editor.getAttributes('suggestion').id;
     }
-    setSelectedSuggestion({
-      id: id,
-    });
+
     let item = {
       oldValue: originalText,
-      textId: data.text.id,
+      textId: text.id,
       pageId: page?.id,
       newValue: suggestionInput,
       userId: user?.id,
@@ -50,7 +46,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     let blob = audio.blob;
     var form_data = new FormData();
     if (blob) {
-      form_data.append('file', blob, `text-${data?.text?.id}-${uuidv4()}.wav`);
+      form_data.append('file', blob, `text-${text?.id}-${uuidv4()}.wav`);
     }
     for (var key in item) {
       form_data.append(key, item[key]);

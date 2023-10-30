@@ -1,6 +1,6 @@
 import { useLoaderData, useOutletContext } from '@remix-run/react';
 import Post from './Post';
-import { selectedTextOnEditor, showSidebar } from '~/states';
+import { selectedTextOnEditor } from '~/states';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { MustLoggedIn as LogInMessage } from '~/component/UI';
 import { FormWithAudio } from './component/FormWithAudio';
@@ -10,7 +10,6 @@ const PostForm = ({ createPost, editor }: any) => {
   const { user } = useLoaderData();
   const selection = useRecoilValue(selectedTextOnEditor);
   let isPosting = createPost.formData && createPost.formData.get('body') !== '';
-  const [, setShowPostSide] = useRecoilState(showSidebar);
   if (selection.type === '') return null;
   if (isPosting) {
     return (
@@ -41,9 +40,6 @@ const PostForm = ({ createPost, editor }: any) => {
         >
           {selection.type === 'question' ? 'ask question' : 'new comment'}
         </div>
-        <button onClick={() => setShowPostSide(false)} className="mr-2">
-          <GrClose size={14} className="cursor-pointer text-gray-500" />
-        </button>
       </div>
       <section className=" m-3 rounded py-3" style={{ boxShadow: 'rgba(0, 0, 0, 0.12) 0px 2px 8px 0px' }}>
         {user ? (

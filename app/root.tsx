@@ -127,7 +127,6 @@ export default function App() {
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />
         <LiveReload />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
         <Scripts />
       </body>
     </html>

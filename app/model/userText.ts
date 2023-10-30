@@ -1,17 +1,20 @@
 import { db } from '~/services/db.server';
 
-export const getUserPage = async (userId: string, versionId: string) => {
+export const getUserPage = async (id: number | undefined) => {
   let page = db.userText.findUnique({
-    where: { id: parseInt(versionId) },
+    where: { id },
+    include: {
+      translations: true,
+    },
   });
   return page;
 };
-export let getAllVersions = async (textId: string, order: string) => {
+export let listUserText = async (textId: string, pageId: string) => {
   try {
     return await db.userText.findMany({
       where: {
         textId: parseInt(textId),
-        order: parseInt(order),
+        pageId,
       },
       select: {
         id: true,
@@ -22,4 +25,24 @@ export let getAllVersions = async (textId: string, order: string) => {
   } catch (e) {
     throw new Error(e);
   }
+};
+export const updateSource = async (id: string, content: string) => {
+  return db.userText.update({
+    where: { id: parseInt(id) },
+    data: {
+      content,
+    },
+  });
+};
+
+export const createUserText = async (textId, pageId, userId, content, name) => {
+  return await db.userText.create({
+    data: {
+      textId,
+      pageId,
+      userId,
+      content,
+      name,
+    },
+  });
 };

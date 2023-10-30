@@ -4,7 +4,7 @@ import { useLoaderData, useSearchParams } from '@remix-run/react';
 import Posts from '~/features/Post/Posts';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { openFilterState, selectedPostThread as selectedPostThreadState, showLatest, showSidebar } from '~/states';
+import { openFilterState, showLatest } from '~/states';
 import { FaFilter } from 'react-icons/fa';
 
 export default function PostSidebar({ createPost, editor }: { createPost: any; editor: any }) {

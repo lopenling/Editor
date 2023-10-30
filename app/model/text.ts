@@ -6,18 +6,17 @@ export async function getText(id: string) {
   try {
     let text = await db.text.findUnique({
       where: {
-        id:parseInt(id),
+        id: parseInt(id),
       },
       select: {
         id: true,
         name: true,
         allow_post: true,
-        userId: true
-      }
+        userId: true,
+      },
     });
     return text;
-  }
-  catch (e: any) { 
+  } catch (e: any) {
     throw new Error('fetching text error' + e.message);
   }
 }
@@ -44,7 +43,7 @@ export async function findLatestText() {
         id: true,
         name: true,
         Page: true,
-        allow_post:true,
+        allow_post: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -57,22 +56,21 @@ export async function findLatestText() {
     };
   } catch (e) {
     throw new Error('fetching text error' + e.message);
-  };
+  }
 }
 export async function findAllTextWithDetail() {
   try {
     let text = await db.text.findMany({
-      include:{
+      include: {
         author: true,
-        Page:true
-      }
+        Page: true,
+      },
     });
     return text;
   } catch (e: any) {
     throw new Error('fetching text error' + e.message);
   }
 }
-
 
 // find text by textId
 export async function findTextByPageId(pageId: string) {
@@ -92,11 +90,10 @@ export async function findTextByPageId(pageId: string) {
   }
 }
 
-
 //delete text
 export async function deleteText(id: string) {
   try {
-    let res =await db.text.delete({
+    let res = await db.text.delete({
       where: {
         id: parseInt(id),
       },

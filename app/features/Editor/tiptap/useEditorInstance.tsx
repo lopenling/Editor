@@ -1,14 +1,11 @@
 import * as Extension from '~/features/Editor/tiptap';
 import { useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
-import { openSuggestionState, selectedPostThread, selectedSuggestionThread, selectedTextOnEditor } from '~/states';
+import { selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';
-const useEditorInstance = (content: string, isEditable: boolean) => {
-  const postSelector = useSetRecoilState(selectedPostThread);
-  const suggestionSelector = useSetRecoilState(selectedSuggestionThread);
+const useEditorInstance = (content: string, isEditable: boolean, paramUpdate: boolean = true) => {
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
-  const setOpenSuggestion = useSetRecoilState(openSuggestionState);
-  const [, setSearchParams] = useSearchParams();
+  const [param, setSearchParams] = useSearchParams();
   function suggestionSetter(id: string) {
     setSearchParams({ with: 'Suggestion', thread: id });
   }
@@ -59,9 +56,12 @@ const useEditorInstance = (content: string, isEditable: boolean) => {
           },
         }),
       ],
+      content: content ? content : undefined,
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
       onSelectionUpdate: ({ editor }) => {
+        if (!paramUpdate) return null;
+
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
         setSelectionRange({
@@ -70,9 +70,8 @@ const useEditorInstance = (content: string, isEditable: boolean) => {
           end: to,
           content: editor?.state.doc.textBetween(from, to, ''),
         });
-        setOpenSuggestion(false);
         if (!editor.isActive('suggestion') && !editor.isActive('post')) {
-          setSearchParams({ with: 'all' });
+          if (param.get('with') !== 'all') setSearchParams({ with: 'all' });
         }
       },
     },

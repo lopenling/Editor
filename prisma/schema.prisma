@@ -59,18 +59,22 @@ model Page {
   content    String
   textId     Int
   Post       Post[]
+  userText   UserText[]
   Suggestion Suggestion[]
   imageUrl   String?
   version    Version?
   annotations Annotations[] @relation("annotation")
+  translation Translation[] @relation("translation" )
 }
 
 model Translation {
   id       Int      @id @default(autoincrement())
-  userText UserText @relation(fields: [userTextId], references: [id])
-  userTextId Int
+  userText UserText @relation(fields: [userTextId], references: [id],onDelete:Cascade)
+  userTextId Int 
   text Text @relation(fields: [textId], references: [id])
   textId Int
+  page Page @relation("translation",fields: [pageId], references: [id])
+  pageId String
   content String
   language String?
 }
@@ -80,6 +84,8 @@ model UserText {
   name String
   text Text @relation(fields: [textId], references: [id])
   textId Int
+  page Page  @relation(fields: [pageId], references: [id])
+  pageId String 
   user User @relation(fields: [userId], references: [id])
   userId String
   translations Translation[]
@@ -89,7 +95,7 @@ model UserText {
 model Annotations{
   id String @id @unique @default(uuid())
   content String
-  type   String
+  type   String 
   start Int
   end    Int
   page Page @relation("annotation",fields: [pageId], references: [id])
