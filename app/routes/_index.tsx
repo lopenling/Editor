@@ -11,7 +11,6 @@ import Header from '~/component/Layout/Header';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { Skeleton } from '~/component/UI';
 import { HEADER_HEIGHT } from '~/constants';
-import { initializeTribute } from '~/lib';
 import { findLatestText } from '~/model/text';
 import { TextType } from '~/model/type';
 import groupData from '~/lib/filterVersionFromText';
@@ -62,9 +61,6 @@ export default function Index() {
   const [searchInput, setSearchInput] = useState('');
   const translation: any = uselitteraTranlation();
 
-  useEffect(() => {
-    initializeTribute('inputText');
-  }, []);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     setSearchInput(inputValue);

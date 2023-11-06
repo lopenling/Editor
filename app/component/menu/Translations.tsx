@@ -1,9 +1,11 @@
 import { Link, useFetcher, useLoaderData } from '@remix-run/react';
+import { Button, Card } from 'flowbite-react';
 import { useState } from 'react';
+import { AiFillDelete } from 'react-icons/ai';
 import { LANGUAGE_OPTION_TRANSLATION } from '~/constants';
 
 function Translations() {
-  let { text, page, translations } = useLoaderData();
+  let { text, page, translations, user } = useLoaderData();
   const [fileContent, setFileContent] = useState('');
 
   const [upload, setUpload] = useState(false);
@@ -43,6 +45,10 @@ function Translations() {
     setTitle('');
     setUpload(false);
   };
+  function handleToggleUpdate() {
+    if (!user) return alert('please login first');
+    setUpload(!upload);
+  }
   let handleDelete = (id) => {
     fetcher.submit(
       { id },
@@ -52,6 +58,7 @@ function Translations() {
       },
     );
   };
+  console.log(translations);
   return (
     <div>
       <div className="fixed bottom-5 right-10">
@@ -95,21 +102,32 @@ function Translations() {
             )}
           </div>
         ) : (
-          <button
-            onClick={() => setUpload(true)}
-            className="bg-green-400 rounded shadow-sm p-2 text-white hover:bg-green-500"
+          <Button
+            onClick={handleToggleUpdate}
+            size={'sm'}
+            className="bg-green-400 rounded shadow-sm text-white hover:bg-green-500"
           >
             + upload
-          </button>
+          </Button>
         )}
       </div>
       <div className="mt-3">
+        {translations.length === 0 && <div className="text-red-500 mx-3">No translation yet</div>}
         {translations?.map((translation, index) => {
           let url = `/text/${text.id}/page/${page.order}/translation/${translation.id}`;
           return (
-            <Link to={url} key={'translation-' + index} className="flex justify-around">
-              {translation?.language} - {translation.userText.name}
-              <button onClick={() => handleDelete(translation.id)}>delete</button>
+            <Link to={url} key={'translation-' + index}>
+              <div className="flex rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col w-full p-1">
+                <div className="w-full flex justify-between">
+                  <div>
+                    {translation?.language} - {translation.userText.name}
+                    <div className="text-sm font-light ">{translation.userText.user.username}</div>
+                  </div>
+                  <Button onClick={() => handleDelete(translation.id)} className="bg-red-400">
+                    <AiFillDelete />
+                  </Button>
+                </div>
+              </div>
             </Link>
           );
         })}

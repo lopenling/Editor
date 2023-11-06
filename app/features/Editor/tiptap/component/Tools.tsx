@@ -3,7 +3,7 @@ import ToolButton from './ToolButton';
 function Tools({ editor }: any) {
   if (!editor) return null;
   return (
-    <div className="flex flex-wrap justify-between bg-gray-200 border-2">
+    <div className="flex flex-wrap justify-between bg-gray-200 z-10 rounded-md border-2 sticky top-0">
       <div>
         <ToolButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}

@@ -15,7 +15,6 @@ import {
 import ErrorPage from './component/Layout/ErrorPage';
 import { getUserSession } from './services/session.server';
 import globalStyle from './styles/globalStyle.css';
-import tributeStyle from './styles/tribute.css';
 import tailwindStyle from './styles/tailwind.css';
 import { LitteraProvider } from '@assembless/react-littera';
 import { RecoilRoot } from 'recoil';
@@ -63,7 +62,6 @@ export function links() {
     { rel: 'stylesheet', href: tailwindStyle, as: 'style' },
     { rel: 'stylesheet', href: globalStyle, as: 'style' },
     { rel: 'stylesheet', href: notificationStyle, as: 'style' },
-    { rel: 'stylesheet', href: tributeStyle, as: 'style' },
     { rel: 'stylesheet', href: nProgressStyles },
   ];
 }

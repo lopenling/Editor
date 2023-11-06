@@ -15,6 +15,11 @@ export let listTranslations = async (textId: string, pageId: string) => {
       userText: {
         select: {
           name: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
         },
       },
     },
@@ -25,6 +30,17 @@ export let getTranslation = async (id: number) => {
   return await db.translation.findUnique({
     where: {
       id,
+    },
+    include: {
+      userText: {
+        select: {
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -62,5 +78,14 @@ export let deleteTranslation = async (id: number) => {
   });
   return await db.userText.delete({
     where: { id: deleted.userTextId },
+  });
+};
+
+export let updateTranslation = async (id: number, content: string) => {
+  return await db.translation.update({
+    where: { id },
+    data: {
+      content,
+    },
   });
 };
