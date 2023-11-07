@@ -10,7 +10,7 @@ services:
     startCommand: npx prisma migrate deploy && npm run start
     envVars:
       - key: NODE_VERSION
-        value: ~18.0.0
+        value: ~18.18.0
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
