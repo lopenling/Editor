@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -16,14 +16,13 @@ import ErrorPage from './component/Layout/ErrorPage';
 import { getUserSession } from './services/session.server';
 import globalStyle from './styles/globalStyle.css';
 import tailwindStyle from './styles/tailwind.css';
-import tributeStyle from './styles/tribute.css';
 import { LitteraProvider } from '@assembless/react-littera';
 import { RecoilRoot } from 'recoil';
 import { AnimatePresence } from 'framer-motion';
 import { getUser } from './model/user';
 import notificationStyle from 'react-notifications-component/dist/theme.css';
 import nProgressStyles from 'nprogress/nprogress.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import NProgress from 'nprogress';
 export function meta({ matches }) {
   const rootMeta = matches[0].meta;
@@ -63,7 +62,6 @@ export function links() {
     { rel: 'stylesheet', href: tailwindStyle, as: 'style' },
     { rel: 'stylesheet', href: globalStyle, as: 'style' },
     { rel: 'stylesheet', href: notificationStyle, as: 'style' },
-    { rel: 'stylesheet', href: tributeStyle, as: 'style' },
     { rel: 'stylesheet', href: nProgressStyles },
   ];
 }
@@ -117,7 +115,7 @@ export default function App() {
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
         <Links />
       </head>
-      <body className="relative max-h-[100vh] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
+      <body className="relative max-h-[100vh] max-w-[100vw] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white">
         <LitteraProvider locales={['en_US', 'bo_TI']}>
           <AnimatePresence mode="wait" initial={false}>
             <RecoilRoot>
@@ -127,7 +125,6 @@ export default function App() {
         </LitteraProvider>
         <ScrollRestoration getKey={(location) => location.pathname} />
         <LiveReload />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
         <Scripts />
       </body>
     </html>

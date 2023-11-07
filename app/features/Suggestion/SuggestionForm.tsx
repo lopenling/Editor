@@ -1,7 +1,6 @@
-import { useFetcher, useLoaderData, useOutlet, useOutletContext } from '@remix-run/react';
+import { useFetcher, useLoaderData, useOutlet, useOutletContext, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { openSuggestionState, selectedSuggestionThread } from '~/states';
 import { v4 as uuidv4 } from 'uuid';
 import { Editor } from '@tiptap/react';
 import { Button, TextArea, MustLoggedIn as LogInMessage } from '~/component/UI';
@@ -11,17 +10,14 @@ import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 
 type SuggestionFormProps = {
   editor: Editor | null;
-  page: any;
 };
 
-export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
-  const data = useLoaderData();
-  let { user } = data;
+export default function SuggestionForm({ editor }: SuggestionFormProps) {
+  let { user, page, text } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [suggestionInput, setSuggestionInput] = useState('');
   const [error, setError] = useState<null | string>(null);
   const addSuggestion = useFetcherWithPromise();
-  const setSelectedSuggestion = useSetRecoilState(selectedSuggestionThread);
-  const setOpenSuggestion = useSetRecoilState(openSuggestionState);
   const [audio, setAudio] = useState({ tempUrl: '', blob: null });
   const handleSuggestionSubmit = async () => {
     if (suggestionInput === '') {
@@ -38,12 +34,10 @@ export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
     } else {
       id = editor.getAttributes('suggestion').id;
     }
-    setSelectedSuggestion({
-      id: id,
-    });
+
     let item = {
       oldValue: originalText,
-      textId: data.text.id,
+      textId: text.id,
       pageId: page?.id,
       newValue: suggestionInput,
       userId: user?.id,
@@ -52,7 +46,7 @@ export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
     let blob = audio.blob;
     var form_data = new FormData();
     if (blob) {
-      form_data.append('file', blob, `text-${data?.text?.id}-${uuidv4()}.wav`);
+      form_data.append('file', blob, `text-${text?.id}-${uuidv4()}.wav`);
     }
     for (var key in item) {
       form_data.append(key, item[key]);
@@ -76,10 +70,7 @@ export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
     }
   };
   const handleSuggestionCancel = () => {
-    setSelectedSuggestion({
-      id: '',
-    });
-    setOpenSuggestion(false);
+    setSearchParams({ with: 'all' });
   };
   let isPosting = addSuggestion.formData;
   if (!user) return <LogInMessage />;
@@ -110,7 +101,7 @@ export default function SuggestionForm({ editor, page }: SuggestionFormProps) {
       </div>
     );
   return (
-    <div className="mb-2 ml-2 bg-slate-50 p-2 shadow-md dark:bg-gray-700">
+    <div className=" bg-slate-50 p-2 shadow-md dark:bg-gray-700">
       {addSuggestion.data?.message && <div className="font-sm text-red-500">{addSuggestion.data?.message}</div>}
       <TextArea
         placeholder="any suggestion?"

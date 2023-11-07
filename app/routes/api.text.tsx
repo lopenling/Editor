@@ -1,11 +1,10 @@
 import { LoaderFunction, ActionFunction } from '@remix-run/server-runtime';
 import { deleteText } from '~/model/text';
 
-import { DiffMatchPatch } from '~/lib';
 import { getUserSession } from '~/services/session.server';
-import { TextType } from '~/model/type';
-import { trigerUpdate } from '~/lib';
-import { getPageWithId, searchPages, updatePage } from '~/model/page';
+import { searchPages, updatePage } from '~/model/page';
+import { updateAnnotations } from '~/model/annotation';
+import { redirect } from '@remix-run/node';
 
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get('search')?.trim();
@@ -34,13 +33,13 @@ export let action: ActionFunction = async ({ request }) => {
     return res;
   }
   if (request.method === 'POST') {
-    const user = await getUserSession(request);
-    const newContent = data.get('newContent') as string;
+    const newContent = data.get('content') as string;
+    const annotations = data.get('annotations') as string;
     const pageId = data.get('pageId') as string;
     try {
-      const res = await updatePage(pageId, newContent);
-      await trigerUpdate(user, pageId);
-      return res;
+      const page_return = await updatePage(pageId, newContent);
+      const annotation_return = await updateAnnotations(pageId, annotations);
+      return { page_return, annotation_return };
     } catch (e) {
       return false;
     }

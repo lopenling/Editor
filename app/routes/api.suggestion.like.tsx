@@ -1,5 +1,4 @@
 import { ActionFunction, json } from '@remix-run/server-runtime';
-import { trigerUpdate } from '~/lib';
 import { findSuggestionByUserLiked, findSuggestionWithMostLikes, updateSuggestionLike } from '~/model/suggestion';
 import { getUserSession } from '~/services/session.server';
 
@@ -17,7 +16,6 @@ export const action: ActionFunction = async ({ request }) => {
     if (update) {
       const highestLiked = await findSuggestionWithMostLikes(threadId);
       if (highestLiked) {
-        await trigerUpdate(user, highestLiked?.pageId);
         return json(
           {
             highestLiked: highestLiked.newValue,
@@ -27,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
             headers: {
               'Cache-Control': 'max-age=0, s-maxage=0',
             },
-          }
+          },
         );
       }
     }

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useOutletContext } from '@remix-run/react';
+import { useOutletContext, useParams, useSearchParams } from '@remix-run/react';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import Replies from './Replies';
 import ReplyForm from './ReplyForm';
@@ -19,9 +19,10 @@ type PostPropType = {
   isOptimistic: boolean;
   post: PostType;
   showDivider: boolean;
+  editor: Editor;
 };
 
-function Post({ isOptimistic, post, showDivider }: PostPropType) {
+function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
   const {
     id,
     creatorUser,
@@ -43,21 +44,16 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
   const [edit, setEdit] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
 
-  const { editor }: { editor: Editor } = useOutletContext();
   const { user } = useOutletContext();
-  const [selectedThreadId, setSelectedThreadId] = useRecoilState(selectedPostThread);
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const fetcher = useFetcherWithPromise();
   const translation = uselitteraTranlation();
 
-  const isSelected = selectedThreadId.id === threadId;
+  const isSelected = threadId === searchParams.get('thread');
   let likedByMe = user ? likedBy.some((l) => l && l.username === user.username) : false;
-
   const handleSelectPost = useCallback(
     (id: string) => {
-      setSelectedThreadId({
-        id,
-      });
+      setSearchParams({ with: 'Post', thread: id });
     },
     [threadId],
   );
@@ -119,7 +115,7 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
   return (
     <div
       className={`${fetcher.formMethod === 'DELETE' && 'hidden'}  `}
-      style={{ paddingInline: 24, backgroundColor: selectedThreadId?.id === threadId ? '#F3F4F6' : 'white' }}
+      style={{ paddingInline: 24, backgroundColor: isSelected ? '#F3F4F6' : 'white' }}
       id={`p_${threadId}`}
     >
       <div
@@ -230,7 +226,13 @@ function Post({ isOptimistic, post, showDivider }: PostPropType) {
               </div>
             )}
             {edit ? (
-              <FormWithAudio post={post} type="update" fetcher={fetcher} onClose={() => setEdit(false)} />
+              <FormWithAudio
+                post={post}
+                type="update"
+                fetcher={fetcher}
+                onClose={() => setEdit(false)}
+                editor={editor}
+              />
             ) : (
               <p
                 dangerouslySetInnerHTML={{

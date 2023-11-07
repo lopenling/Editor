@@ -5,11 +5,10 @@ import { GrClose } from 'react-icons/gr';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 
 type tableProps = {
-  onClose: () => void;
   editor: Editor | null;
 };
 
-const TableOfContents = ({ onClose, editor }: tableProps) => {
+const TableOfContents = ({ editor }: tableProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVersionOpen, setIsVersionOpen] = useState(true);
   const data = useLoaderData();
@@ -21,21 +20,11 @@ const TableOfContents = ({ onClose, editor }: tableProps) => {
     setIsVersionOpen(!isVersionOpen);
   };
 
-  const handleClose = () => {
-    onClose();
-  };
   const handleJump = (start: number) => {
     editor?.chain().setTextSelection(start).focus().scrollIntoView().run();
   };
   return (
-    <div className="z-50 w-full bg-gray-100 p-4 dark:bg-gray-600">
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="text-lg font-bold">Table of Contents</h2>
-
-        <button onClick={handleClose} className="mr-2">
-          <GrClose size={14} className="cursor-pointer text-gray-500" />
-        </button>
-      </div>
+    <div className="z-50 w-full bg-gray-100 p-4 dark:bg-gray-600 flex-1">
       <div className="relative">
         <button
           className="mb-1 flex w-full items-center justify-between rounded-lg bg-gray-100 p-4 px-4 py-2 shadow dark:bg-gray-700"

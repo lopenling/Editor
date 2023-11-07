@@ -4,22 +4,20 @@ export function scrollThreadIntoView(thread: string, thread2: string) {
   let doc2 = document.getElementById(thread2);
   let timer;
   if (doc && doc2)
-   timer= setTimeout(() => {
-      scrollElementsIntoView(doc, doc2);
-    },400)
+    timer = setTimeout(() => {
+      scrollElementsIntoView(doc!, doc2!);
+    }, 400);
   return timer;
 }
 
 function scrollElementsIntoView(element1: HTMLElement, element2: HTMLElement) {
   // Scroll the first element into view
   Promise.all([
-    element2.scrollIntoView({ behavior: 'smooth', block: 'center' }),
-    element1.scrollIntoView({ block: 'center',inline: 'center' }),
+    element2.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    element1.scrollIntoView({ block: 'start', inline: 'start' }),
   ]);
-
   // Delay the scrolling of the second element to ensure it is within the view
-
   setTimeout(() => {
-    window.getSelection().selectAllChildren(element1);
+    window.getSelection()?.selectAllChildren(element1);
   }, 100);
 }

@@ -13,8 +13,9 @@ type FormWithAudioProps = {
   type: 'post' | 'update';
   post: PostType | null;
   onClose?: () => void | null;
+  editor: Editor;
 };
-export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormWithAudioProps) {
+export function FormWithAudio({ fetcher, type, post, onClose = () => {}, editor }: FormWithAudioProps) {
   let content = post?.content ?? '';
   let audioUrl = post?.audioUrl ?? '';
   const [audio, setAudio] = useState({ tempUrl: audioUrl, blob: null });
@@ -27,7 +28,6 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {} }: FormW
   let textName = data.text.name;
   let order = data.order;
   let isFormEmpty = body.length < 5 || body === '<p></p>';
-  const { editor }: { editor: Editor } = useOutletContext();
 
   useEffect(() => {
     setBody(content ? content : '');

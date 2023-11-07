@@ -1,13 +1,13 @@
 const handleDOMEvents = {
   keydown: (v, event) => {
-    // let charCode = String.fromCharCode(event.which).toLowerCase();
-    // let copyPressed = (event.ctrlKey || event.metaKey) && charCode === 'c';
-    // if (![37, 38, 39, 40].includes(event.keyCode) && !copyPressed) {
-    //   event.preventDefault();
-    // }
+    let charCode = String.fromCharCode(event.which).toLowerCase();
+    let copyPressed = (event.ctrlKey || event.metaKey) && charCode === 'c';
+    if (![37, 38, 39, 40].includes(event.keyCode) && !copyPressed) {
+      event.preventDefault();
+    }
   },
   textInput: (v, evt) => {
-    // evt.preventDefault();
+    evt.preventDefault();
   },
   drop: (v, e) => {
     e.preventDefault();
@@ -21,11 +21,19 @@ const handleDOMEvents = {
   },
 };
 
-const editorProps = {
+const noneditable = {
   handleDOMEvents: handleDOMEvents,
   attributes: {
     inputmode: 'none',
     'data-encoding': 'UTF-8',
   },
 };
-export default editorProps;
+
+const editable = {
+  handleDOMEvents: {},
+  attributes: {
+    inputmode: 'none',
+    'data-encoding': 'UTF-8',
+  },
+};
+export default { editable, noneditable };

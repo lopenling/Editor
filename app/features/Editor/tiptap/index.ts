@@ -9,13 +9,16 @@ import FontFamily from '@tiptap/extension-font-family';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
 import Italic from '@tiptap/extension-italic';
+import Heading from '@tiptap/extension-heading';
 import { Suggestion } from '~/features/Editor/tiptap/tiptap-extension/suggestion';
 import PostMark from '~/features/Editor/tiptap/tiptap-extension/postMark';
 import { SearchAndReplace } from '~/features/Editor/tiptap/tiptap-extension/searchAndReplace';
 import editorProps from './events';
-
+import History from '@tiptap/extension-history';
 export {
+  Heading,
   Paragraph,
+  History,
   Document,
   Text,
   Bold,

@@ -15,7 +15,7 @@ function removeMark(editor: Editor | null, id: string) {
             editor.view.state.tr
               .setSelection(editor.view.state.selection.constructor.near(editor.view.state.doc.resolve(from)))
               .setSelection(editor.view.state.selection.constructor.near(editor.view.state.doc.resolve(to)))
-              .removeMark(from, to, mark.type)
+              .removeMark(from, to, mark.type),
           );
         }
       });
@@ -28,15 +28,15 @@ function replaceMarkContent(editor: Editor | null, markID: string, content: stri
   const { doc, selection } = editor?.state;
 
   doc.descendants((node, pos) => {
-    if (node.marks) {
+    if (node.marks && node.marks.length > 0) {
       node.marks.forEach((mark) => {
         if (mark.attrs.id === markID) {
           const from = pos;
           const to = pos + node.nodeSize;
           // Select the range
           let trx = editor.view.state.tr
-            .setSelection(editor.view.state.selection.constructor.near(editor.view.state.doc.resolve(from)))
-            .setSelection(editor.view.state.selection.constructor.near(editor.view.state.doc.resolve(to)));
+            .setSelection(editor.view.state.selection.constructor?.near(editor.view.state.doc.resolve(from)))
+            .setSelection(editor.view.state.selection.constructor?.near(editor.view.state.doc.resolve(to)));
           const markType = editor.view.state.schema.marks.suggestion;
           if (editor.state.doc.textBetween(from, to, ' ') !== content)
             editor.view.dispatch(
@@ -47,8 +47,8 @@ function replaceMarkContent(editor: Editor | null, markID: string, content: stri
                   markType.create({
                     id: markID,
                   }),
-                ])
-              )
+                ]),
+              ),
             );
         }
       });

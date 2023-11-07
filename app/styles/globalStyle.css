@@ -12,7 +12,10 @@
   font-style: normal;
   font-display: swap;
 }
-
+h1 {
+  font-size: 28px;
+  font-weight: 500 !important;
+}
 :root {
   --headerHeight: 72px;
   --suggestion-marker-insertion-background: rgba(102, 229, 119, 0.35);
@@ -36,12 +39,6 @@
   --headerHeight: 56px;
   --sidebarHeight: calc(100vh - var(--headerHeight));
   --background-text-editor: transparent;
-}
-*,
-html {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 body {
@@ -71,6 +68,7 @@ main {
 #tableContent {
   max-height: var(--sidebarHeight);
 }
+
 .loginButton {
   font-family: Arial, Helvetica, sans-serif;
   text-transform: capitalize;
@@ -128,21 +126,18 @@ nav > div {
 .suggestion {
   color: blue;
   cursor: pointer;
-  text-decoration: dotted 2px underline red;
 }
-.suggestion::selection {
-  font-weight: 700;
-}
+
 .post {
-  background-color: var(--ck-color-comment-marker);
+  /* background-color: var(--ck-color-comment-marker);
+   */
+  text-decoration: dotted underline orange;
+  text-underline-offset: 8px;
   cursor: pointer;
 }
 .dark .post {
   background-color: darkgray;
   cursor: pointer;
-}
-.post::selection {
-  background-color: var(--ck-color-comment-marker-active);
 }
 
 .search {
@@ -166,9 +161,7 @@ button,
   text-transform: capitalize;
   font-size: 14px;
 }
-/* button:disabled {
-  opacity: 0.5;
-} */
+
 select,
 select:focus {
   outline: transparent !important;

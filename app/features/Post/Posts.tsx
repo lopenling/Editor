@@ -1,12 +1,9 @@
-import { Editor } from '@tiptap/react';
-import { Suspense, memo } from 'react';
 import Post from './Post';
 import { useRecoilValue } from 'recoil';
 import { filterDataState, showLatest } from '~/states';
 import { FilterType, PostType, ReplyType, UserType } from '~/model/type';
 import Filter from './Filter';
 import { Skeleton } from '~/component/UI';
-import { ClientOnly } from 'remix-utils';
 
 type PostPropsType = {
   posts: any[];
@@ -21,7 +18,7 @@ function Posts({ posts }: PostPropsType) {
   let lists = applyFilter(posts, filters, isLatest);
   return (
     <>
-      <ClientOnly fallback={<></>}>{() => <Filter />}</ClientOnly>
+      <Filter />
       <div
         style={{
           fontFamily: 'sans-serif',

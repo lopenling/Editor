@@ -38,7 +38,7 @@ export default function List() {
         {
           method: 'DELETE',
           action: `/api/text`,
-        }
+        },
       );
     } else {
       console.log('cancelled');
@@ -64,7 +64,7 @@ export default function List() {
         <tbody>
           {currentTexts.map((text: TextType) => {
             let { groupedData, isVersionAvailable } = groupData(text.Page);
-            let url = `/text/${text.id}/page/1/${text.allow_post ? 'posts' : ''}`;
+            let url = `/text/${text.id}/page/1`;
 
             return (
               <tr

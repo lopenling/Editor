@@ -8,3 +8,6 @@ export const RIGHT_SIDEBAR_WIDTH = 400;
 export const LEFT_SIDEBAR_WIDTH = 272;
 
 export const ForumLink = 'https://forum.lopenling.org';
+
+export type languageOptionsType = 'FR' | 'BO' | 'EN';
+export const LANGUAGE_OPTION_TRANSLATION = ['FR', 'BO', 'EN'];

@@ -1,12 +1,13 @@
+import type { Config } from 'tailwindcss';
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: ['./app/**/*.{js,jsx,ts,tsx}'],
 
   theme: {
     fontFamily: {
-      "monlam": ["monlam", "sans-serif"],
-      "Inter": ["Inter", "sans-serif"],
-    }
+      monlam: ['monlam', 'sans-serif'],
+      Inter: ['Inter', 'sans-serif'],
+    },
   },
   plugins: [require('tailwind-scrollbar')({ nocompatible: true })],
-};
+} satisfies Config;

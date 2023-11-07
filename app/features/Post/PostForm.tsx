@@ -1,17 +1,15 @@
-import { useOutletContext } from '@remix-run/react';
+import { useLoaderData, useOutletContext } from '@remix-run/react';
 import Post from './Post';
-import { selectedTextOnEditor, showSidebar } from '~/states';
+import { selectedTextOnEditor } from '~/states';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { MustLoggedIn as LogInMessage } from '~/component/UI';
 import { FormWithAudio } from './component/FormWithAudio';
 import { GrClose } from 'react-icons/gr';
-import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 
-const PostForm = () => {
-  const { user, createPost }: { user: any; createPost: any } = useOutletContext();
+const PostForm = ({ createPost, editor }: any) => {
+  const { user } = useLoaderData();
   const selection = useRecoilValue(selectedTextOnEditor);
   let isPosting = createPost.formData && createPost.formData.get('body') !== '';
-  const [, setShowPostSide] = useRecoilState(showSidebar);
   if (selection.type === '') return null;
   if (isPosting) {
     return (
@@ -42,27 +40,22 @@ const PostForm = () => {
         >
           {selection.type === 'question' ? 'ask question' : 'new comment'}
         </div>
-        <button onClick={() => setShowPostSide(false)} className="mr-2">
-          <GrClose size={14} className="cursor-pointer text-gray-500" />
-        </button>
       </div>
       <section className=" m-3 rounded py-3" style={{ boxShadow: 'rgba(0, 0, 0, 0.12) 0px 2px 8px 0px' }}>
-
-       
-
         {user ? (
-           <><div className="flex items-start justify-between">
-          <div className="mb-1 flex items-center gap-2 px-4">
-            <img className="h-8 w-8 rounded-full" src={user?.avatarUrl} alt="avatar"></img>
-            <div className="font-serif text-sm font-medium leading-tight text-gray-900 dark:text-gray-200">
-              {user?.name}
+          <>
+            <div className="flex items-start justify-between">
+              <div className="mb-1 flex items-center gap-2 px-4">
+                <img className="h-8 w-8 rounded-full" src={user?.avatarUrl} alt="avatar"></img>
+                <div className="font-serif text-sm font-medium leading-tight text-gray-900 dark:text-gray-200">
+                  {user?.name}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-          <div aria-label="Default tabs" className="px-4 pt-4" style={{ lineHeight: '14px' }}>
-            <FormWithAudio fetcher={createPost} type="post" post={null} />
+            <div aria-label="Default tabs" className="px-4 pt-4" style={{ lineHeight: '14px' }}>
+              <FormWithAudio fetcher={createPost} type="post" post={null} editor={editor} />
             </div>
-            </>
+          </>
         ) : (
           <LogInMessage />
         )}

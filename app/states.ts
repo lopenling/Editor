@@ -9,18 +9,10 @@ export const audioPermission = atom({
 });
 
 export const ImageState = atom({
-  default: {show: true, url: '',isPortrait:false},
+  default: { show: true, url: '', isPortrait: false },
   key: 'showImage',
 });
 
-export const showTableContent = atom({
-  default: false,
-  key: 'tableOfContent',
-});
-export const showSidebar = atom({
-  default: false,
-  key: 'sidebar',
-});
 //textName
 
 export const textInfo = atom({
@@ -31,24 +23,6 @@ export const textInfo = atom({
   },
 });
 
-//threadSelection
-export const openSuggestionState = atom({
-  key: 'openSuggestion',
-  default: false,
-});
-
-export const selectedSuggestionThread = atom({
-  key: 'selectedSuggestionThread',
-  default: {
-    id: '',
-  },
-});
-export const selectedPostThread = atom({
-  key: 'selectedPostThread',
-  default: {
-    id: '',
-  },
-});
 //share State
 
 export const shareState = atom({

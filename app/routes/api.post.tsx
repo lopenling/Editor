@@ -16,7 +16,6 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from '@remix-run/node';
 import type { ActionArgs, UploadHandler } from '@remix-run/node';
-import { trigerUpdate } from '~/lib';
 
 export const action: ActionFunction = async ({ request }: ActionArgs) => {
   const uploadHandler: UploadHandler = composeUploadHandlers(uploadAudio, createMemoryUploadHandler());
@@ -45,7 +44,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
         textId,
         parseInt(order),
         audioUrl,
-        Obj.threadId as string
+        Obj.threadId as string,
       );
       if (data['topic_id'] && user) {
         const createPost = await createPostOnDB(
@@ -59,7 +58,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
           Obj.body as string,
           user.id,
           audioUrl,
-          Obj.selectionSegment as string
+          Obj.selectionSegment as string,
         );
 
         return createPost;
@@ -89,7 +88,6 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
         let res = await updatePostLike(postId, userId, likedUsers === null);
 
         if (res.textId) {
-          await trigerUpdate(user, res.textId);
         }
         return res.likedBy;
       } catch (e) {

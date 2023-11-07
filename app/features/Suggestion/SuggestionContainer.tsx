@@ -3,30 +3,21 @@ import { selectedSuggestionThread, selectedTextOnEditor, showSidebar } from '~/s
 import { Editor } from '@tiptap/react';
 import { GrClose } from 'react-icons/gr';
 import Suggestion from './Suggestion';
-import { SuggestionType } from '~/model/type';
-function Suggestions({ editor, suggestions }: { editor: Editor | null; suggestions: SuggestionType[]}) {
-  const suggestionThread = useRecoilValue(selectedSuggestionThread);
-  const setOpenContent = useSetRecoilState(showSidebar);
-
- const handleClose = () => {
-   setOpenContent(false);
- };
+import { useLoaderData, useSearchParams } from '@remix-run/react';
+function Suggestions({ editor }: { editor: Editor | null }) {
+  const [searchParams] = useSearchParams();
+  const { suggestions } = useLoaderData();
+  let threadId = searchParams.get('thread');
   let list = suggestions.filter((sug) => {
-    return sug.threadId === suggestionThread.id;
+    return sug.threadId === threadId;
   });
   let groupedSuggestion = transformObjectsByNewValue(list);
   return (
     <div
-      className="z-1 ml-2 mt-4 h-[80vh] max-h-[80vh] overflow-visible overflow-y-auto bg-slate-50 p-2 shadow-md dark:bg-gray-700"
+      className="z-1 flex-1 overflow-visible overflow-y-auto bg-slate-50 p-2 shadow-md dark:bg-gray-700"
       style={{ minWidth: 350, fontFamily: 'sans-serif' }}
     >
       <div className="flex flex-col  gap-2 ">
-        <div className="flex justify-between">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white lg:text-2xl">Suggestion</h2>
-          <button onClick={handleClose} className="mr-2">
-            <GrClose size={14} className="cursor-pointer text-gray-500" />
-          </button>
-        </div>
         {groupedSuggestion.map((suggest) => {
           return (
             <Suggestion

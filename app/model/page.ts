@@ -1,6 +1,6 @@
 import { fullSearch } from '~/lib';
 import { db } from '~/services/db.server';
-import {  Version } from '@prisma/client';
+import { Version } from '@prisma/client';
 export async function getPageWithId(id: string) {
   try {
     let page = db.page.findFirst({
@@ -33,7 +33,7 @@ export async function getVersions(textId: number, order: number) {
     const versionCountMap: Record<string, number> = {};
 
     pages.forEach((page) => {
-      if(!page.version) return;
+      if (!page.version) return;
       if (versionCountMap.hasOwnProperty(page.version)) {
         versionCountMap[page.version]++;
       } else {
@@ -48,10 +48,23 @@ export async function getVersions(textId: number, order: number) {
     return []; // Return an empty array if an error occurs
   }
 }
-
-export async function getPage(textId: number, order: number,version:Version|null) {
+export async function getPageContent(textId: string, order: number) {
+  let page = await getPage(textId, order, null);
+  let data = await db.page.findFirst({
+    where: {
+      id: page?.id,
+    },
+    select: {
+      id: true,
+      content: true,
+    },
+  });
+  return { id: data?.id, content: data?.content };
+}
+export async function getPage(textId: string, order: number, version: Version | null) {
   try {
-    let where = typeof version==='string' ? { textId, order, version } : { textId, order };
+    let Id = parseInt(textId);
+    let where = typeof version === 'string' ? { textId: Id, order, version } : { textId: Id, order };
     let pageWhere = version ? { version } : {};
     let page = db.page.findFirst({
       where,
@@ -60,18 +73,18 @@ export async function getPage(textId: number, order: number,version:Version|null
           include: {
             Page: {
               where: pageWhere,
-             select: {
+              select: {
                 id: true,
-               order: true,
-                version:true
-             }
+                order: true,
+                version: true,
+              },
             },
           },
         },
         Post: {
           select: {
-           id: true,
-          }
+            id: true,
+          },
         },
       },
     });
@@ -94,8 +107,6 @@ export async function getPageId(textId: number, order: number) {
   }
 }
 
-
-
 export async function searchPages(search_term = '') {
   try {
     const textList = await db.page.findMany({
@@ -115,7 +126,7 @@ export async function searchPages(search_term = '') {
         groupedData.push({
           textId: textId,
           results: [item],
-          textName:item.name
+          textName: item.name,
         });
       }
     }

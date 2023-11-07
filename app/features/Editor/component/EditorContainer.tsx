@@ -1,91 +1,83 @@
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import { BubbleMenu, Editor, EditorContent } from '@tiptap/react';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 // import EditorSettings from "./EditorSettings";
 import { Button } from '~/component/UI';
 import { DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE_MOBILE } from '~/constants';
-import { openSuggestionState, selectedPostThread, selectedTextOnEditor, ImageState } from '~/states';
+import { selectedTextOnEditor, ImageState } from '~/states';
 import { isSmallScreen } from '~/lib';
 import { checkUnknown, scrollThreadIntoView } from '../lib';
 import Pagination from '~/component/UI/Pagination';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import Controls from './Controls';
 import { saveData } from '../lib/utils';
+import { extractTextAndAnnotations, generateHtmlFromTextAndAnnotations } from '../lib/htmlParser';
+import _ from 'lodash';
 type EditorContainerProps = {
-  pageId: string;
   editor: Editor;
   isSaving: boolean;
-  order: number;
-  content: string;
-  pageCount: number;
-  imageUrl: string;
+  page: any;
   saveTextFetcher: any;
-  versions: string[];
 };
-function EditorContainer({
-  pageId,
-  editor,
-  isSaving,
-  order,
-  content,
-  imageUrl,
-  pageCount,
-  versions,
-  saveTextFetcher,
-}: EditorContainerProps) {
-  const data = useLoaderData();
-  const user = data.user;
+function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorContainerProps) {
+  const imageUrl = page.imageUrl;
+  const pageCount = page?.text.Page.length;
+  const pageId = page.id;
+  const { annotations, user, text } = useLoaderData();
   const [Image, setImage] = useRecoilState(ImageState);
-  const isPostAllowed = data.text.allow_post;
-  const [openSuggestion, setOpenSuggestion] = useRecoilState(openSuggestionState);
+  const isPostAllowed = text.allow_post;
   const [selection, setSelectionRange] = useRecoilState(selectedTextOnEditor);
-  let thread = useRecoilValue(selectedPostThread);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  let searchString = searchParams.get('s') || '';
+  let thread = searchParams.get('thread') || '';
   let saving = saveTextFetcher.state !== 'idle';
-
   useEffect(() => {
-    let timer = scrollThreadIntoView(thread.id, `p_${thread.id}`);
-    editor.on('update', async ({ editor, transaction }) => {
+    let timer = scrollThreadIntoView(thread, `p_${thread}`);
+    editor.on('update', async ({ editor }) => {
       let newContent = editor.getHTML();
-      if (newContent && newContent.length > 100 && user) saveData(newContent, pageId, saveTextFetcher);
+      let { text, annotations } = extractTextAndAnnotations(newContent);
+      if (text?.length > 100 && user) saveData(text, annotations, pageId, saveTextFetcher);
     });
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [editor, thread.id]);
+  }, [editor, thread]);
   useEffect(() => {
     let timer = setTimeout(() => {
-      let newContent = content.replace(/[\r\n]+/g, '<br/>');
-      checkUnknown(newContent);
-      editor?.commands.setContent(newContent);
+      let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
+      let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
+      editor?.commands.setContent(content);
     }, 100);
     setImage({ ...Image, url: imageUrl });
     return () => {
       clearTimeout(timer);
     };
-  }, [content, editor]);
-
+  }, [page?.content, editor]);
+  useEffect(() => {
+    if (!searchString || searchString.length === 0) {
+      editor.commands.setSearchTerm('');
+    }
+  }, [searchString]);
   const handleBubbleClick = (type: string) => {
     if (selection.start)
       setSelectionRange({
         ...selection,
         type,
       });
-    setOpenSuggestion(false);
+    setSearchParams({ with: 'Post' });
   };
   function handleSuggestionClick() {
-    setOpenSuggestion(!openSuggestion);
     setSelectionRange({
       ...selection,
       type: '',
     });
+    setSearchParams({ with: 'Suggestion' });
   }
   function handleDeleteMark() {
     if (editor.isActive('post')) {
       editor.commands.unsetPost();
     }
-
     if (editor.isActive('suggestion')) {
       editor.commands.unsetSuggestion();
     }
@@ -136,12 +128,12 @@ function EditorContainer({
               className="textname flex items-center gap-2"
               style={{ fontSize: 'clamp(18px, 24px, 2.2vw)', fontWeight: 'bold' }}
             >
-              {data.text.name} {order > 1 && <span className="text-sm font-light text-gray-100"> page {order}</span>}
               {isSaving && <span className="animate-pulse text-sm font-light">saving...</span>}
             </div>
             <Pagination pageCount={pageCount} />
           </div>
         </div>
+        {!user && <div>changes won't get saved if you are not logged in</div>}
         {!editor ? (
           <div className="flex h-[400px] w-full animate-pulse justify-center">
             <div className="mr-2 h-full flex-1 bg-gray-300 dark:bg-gray-700"></div>
@@ -192,7 +184,7 @@ function EditorContainer({
                       title="suggestion"
                       type="button"
                       color="gray"
-                      className={`${openSuggestion ? 'bg-green-400 text-white' : 'bg-white '} rounded-l-lg ${
+                      className={`bg-white rounded-l-lg ${
                         !isPostAllowed && 'rounded-r-lg'
                       } border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 focus:z-10    hover:bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:text-white  dark:hover:bg-gray-600 dark:hover:text-white `}
                       onClick={() => handleSuggestionClick()}
@@ -220,7 +212,7 @@ function EditorContainer({
                     )}
                   </>
                 )
-              ) : user?.admin === 'true' || data.text.userId == user?.id ? (
+              ) : user?.admin === 'true' || text.userId == user?.id ? (
                 <Button
                   title="delete"
                   type="button"

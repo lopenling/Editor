@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { Editor } from '@tiptap/react';
 import { useState, useEffect, memo } from 'react';
 import { searchSingleText } from '../lib';
@@ -12,10 +12,12 @@ type locationType = {
 function SearchString({ editor }: { editor: Editor }) {
   const data = useLoaderData();
   const [index, setIndex] = useState(1);
+  const [input, setInput] = useState('');
   const [selectedSearch, setSelectedSearch] = useState<locationType>(null);
-  const [searchString, setSearchString] = useState('');
-  const [searchState, setSearchState] = useState<null | 'searching' | 'done'>(null);
   const [searchLocations, setSearchLocation] = useState<locationType[]>([]);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchString = searchParams.get('s') || '';
   function nextSearch() {
     if (index > -1 && searchLocations?.length && index < searchLocations?.length) {
       setIndex((prev) => prev + 1);
@@ -37,19 +39,32 @@ function SearchString({ editor }: { editor: Editor }) {
   useEffect(() => {
     if (selectedSearch?.start) editor?.chain().focus().setTextSelection(selectedSearch.start).scrollIntoView().run();
   }, [selectedSearch]);
+  useEffect(() => {
+    if (!searchString || searchString.length === 0) {
+      handleReset();
+    } else {
+      handleSearch();
+    }
+  }, [searchString]);
   function handleSearch() {
-    if (searchString.length > 0) {
-      setSearchState('searching');
+    if (input.length > 0) {
+      setSearchParams((prev) => {
+        prev.set('s', input);
+        return prev;
+      });
       let content = editor.getText();
-      let locations = searchSingleText(content, searchString);
+      let locations = searchSingleText(content, input);
       setSearchLocation(locations);
-      editor.commands.setSearchTerm(searchString);
-      setSearchState('done');
+      editor.commands.setSearchTerm(input);
     }
   }
   function handleReset() {
     editor.commands.setSearchTerm('');
-    setSearchString('');
+    setSearchParams((prev) => {
+      prev.delete('s');
+      return prev;
+    });
+    setInput('');
     setSearchLocation([]);
   }
 
@@ -71,15 +86,15 @@ function SearchString({ editor }: { editor: Editor }) {
             type="text"
             placeholder="search"
             autoFocus={true}
-            value={searchString}
-            onChange={(e) => setSearchString(e.target.value)}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             className={` border-1 h-full w-full bg-transparent text-sm leading-tight text-gray-500 outline-1 focus:border-transparent focus:ring-1`}
           ></input>
         </form>
         <input name="textId" readOnly value={data.page.id} hidden />
         <button type="submit" hidden></button>
 
-        {searchState === 'done' && searchString && searchString !== '' && (
+        {searchString && (
           <button
             type="reset"
             onClick={() => {
