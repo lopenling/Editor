@@ -1,6 +1,7 @@
 {
   "private": true,
   "sideEffects": false,
+  "type": "commonjs",
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --manual -c \"node server.js\"",
