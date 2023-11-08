@@ -3,8 +3,8 @@
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
-    "dev": "remix dev",
-    "start": "remix-serve build",
+    "dev": "remix dev --manual -c \"node server.js\"",
+    "start": "cross-env NODE_ENV=production node server.js",
     "typecheck": "tsc",
     "format": "npx prettier --write ."
   },
@@ -68,12 +68,12 @@
     "tailwind-scrollbar": "^3.0.5",
     "tiptap-extension-font-size": "^1.2.0",
     "tiptap-extensions": "^1.35.2",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "@remix-run/serve": "^2.1.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.1.0",
     "@remix-run/eslint-config": "^2.1.0",
-    "@remix-run/serve": "^2.1.0",
     "@types/diff-match-patch": "^1.0.35",
     "@types/nprogress": "^0.2.2",
     "@types/react": "^18.2.33",
