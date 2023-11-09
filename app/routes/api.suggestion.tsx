@@ -7,18 +7,19 @@ import {
   updateSuggestionContent,
 } from '~/model/suggestion';
 import { uploadAudio } from '~/services/uploadAudio.server';
-import type { ActionArgs, UploadHandler } from '@remix-run/node';
+import type { UploadHandler } from '@remix-run/node';
 import {
   unstable_composeUploadHandlers as composeUploadHandlers,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from '@remix-run/node';
+import { db } from '~/services/db.server';
 export let loader: LoaderFunction = async ({ request }) => {
   const suggestionId = new URL(request.url).searchParams.get('suggestionId') ?? '';
   const suggestion = await getSuggestionWithThreadId(suggestionId);
   return json(suggestion);
 };
-export let action: ActionFunction = async ({ request }: ActionArgs) => {
+export let action: ActionFunction = async ({ request }) => {
   if (request.method === 'POST') {
     const uploadHandler: UploadHandler = composeUploadHandlers(uploadAudio, createMemoryUploadHandler());
     const formData = await parseMultipartFormData(request, uploadHandler);
@@ -41,10 +42,10 @@ export let action: ActionFunction = async ({ request }: ActionArgs) => {
         threadId,
         audioUrl: filepath,
       });
-      console.log(responce)
+      console.log(responce);
       return { responce };
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return { message: e };
     }
   } else {
@@ -52,11 +53,17 @@ export let action: ActionFunction = async ({ request }: ActionArgs) => {
     let Obj = Object.fromEntries(formData);
     if (request.method === 'DELETE') {
       let id = Obj.id as string;
-      let res = await deleteSuggestion(id);
-      let remainingdata = await getSuggestionWithThreadId(res.threadId);
+      let threadId = Obj.threadId as string;
+      let count = await deleteSuggestion(id);
+      if (count === 0) {
+        let delete_annotation = await db.annotations.delete({
+          where: { id: threadId },
+        });
+        console.log(delete_annotation);
+      }
+
       return {
-        deleted: res,
-        remain: remainingdata?.length,
+        remain: count,
       };
     }
     if (request.method === 'PATCH') {

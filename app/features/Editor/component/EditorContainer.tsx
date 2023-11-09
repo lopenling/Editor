@@ -44,16 +44,13 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
     };
   }, [editor, thread]);
   useEffect(() => {
-    let timer = setTimeout(() => {
+    setTimeout(() => {
       let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
       let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
       editor?.commands.setContent(content);
-    }, 100);
+    }, 1000);
     setImage({ ...Image, url: imageUrl });
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [page?.content, editor]);
+  }, [annotations.length]);
   useEffect(() => {
     if (!searchString || searchString.length === 0) {
       editor.commands.setSearchTerm('');

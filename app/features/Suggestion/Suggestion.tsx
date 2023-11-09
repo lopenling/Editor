@@ -15,10 +15,9 @@ type SuggestionProps = {
   editor: Editor | null;
   suggest: any;
   optimistic: boolean;
-  count: number;
 };
 
-export default function Suggestion({ editor, suggest, optimistic = false, count }: SuggestionProps) {
+export default function Suggestion({ editor, suggest, optimistic = false }: SuggestionProps) {
   const likeFetcher = useFetcherWithPromise();
   const deleteFetcher = useFetcher();
   const editFetcher = useFetcher();
@@ -51,7 +50,7 @@ export default function Suggestion({ editor, suggest, optimistic = false, count 
         like: !likedByMe ? 'true' : 'false',
         threadId: suggest.threadId,
       },
-      { method: 'POST', action: 'api/suggestion/like' }
+      { method: 'POST', action: '/api/suggestion/like' },
     );
     replaceMarkContent(editor, suggest.threadId, res?.highestLiked);
   };
@@ -61,17 +60,15 @@ export default function Suggestion({ editor, suggest, optimistic = false, count 
   function deleteSuggestion(id: string) {
     let decision = confirm('do you want to delete the post');
     if (decision) {
-      if (count === 1) {
-        editor?.commands.unsetSuggestion();
-      }
       deleteFetcher.submit(
         {
           id,
+          threadId: suggest.threadId,
         },
         {
-          action: 'api/suggestion',
+          action: '/api/suggestion',
           method: 'DELETE',
-        }
+        },
       );
     } else {
       console.log('cancelled');
@@ -93,7 +90,7 @@ export default function Suggestion({ editor, suggest, optimistic = false, count 
     }
   }
   return (
-    <div key={suggest.id} className={`${deleteFetcher.formData && 'hidden'} p-3 `}>
+    <div key={suggest.id} className={`${deleteFetcher?.formData && 'hidden'} p-3 `}>
       <div className="relative mb-2 flex justify-between">
         <div className="  flex items-center gap-3">
           {suggest.user.length && (

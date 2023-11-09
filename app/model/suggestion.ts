@@ -1,10 +1,17 @@
 import { db } from '~/services/db.server';
 
-export async function findAllSuggestionByPageId(pageId: string) {
+export async function findAllSuggestionByPageId(pageId: string, thread: string) {
   try {
+    if (!thread) return [];
+
     let data = await db.suggestion.findMany({
       where: {
-        pageId,
+        AND: [
+          { pageId },
+          {
+            threadId: thread,
+          },
+        ],
       },
       include: {
         user: true,
@@ -161,7 +168,8 @@ export async function deleteSuggestion(id: string) {
         id,
       },
     });
-    return data;
+    let remaining = await getSuggestionWithThreadId(data.threadId);
+    return remaining?.length;
   } catch (e) {
     throw new Error('cannot delete post ', e);
   }

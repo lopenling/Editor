@@ -16,6 +16,8 @@ import TextHeader from '~/component/Layout/TextHeader';
 import Menu from '~/component/menu/Menu';
 import { findPostByTextIdAndPage } from '~/model/post';
 import { listTranslations } from '~/model/translation';
+import { checkUnknown } from '~/features/Editor/lib';
+import { generateHtmlFromTextAndAnnotations } from '~/features/Editor/lib/htmlParser';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
@@ -23,7 +25,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const url = new URL(request.url);
   const version = url.searchParams.get('version') as Version;
   const searchParamsWith = url.searchParams.get('with') as String;
-
+  const thread = url.searchParams.get('thread') as String;
   const versions = await getVersions(parseInt(textId), parseInt(order));
   if (!version && versions.length > 0) {
     if (!version) {
@@ -37,7 +39,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const annotations = await getAnnotations(page?.id!);
   const user = await getUserSession(request);
   const translations = searchParamsWith === 'Translations' ? await listTranslations(textId, pageId) : [];
-  const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!) : [];
+  const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!, thread!) : [];
   const posts =
     searchParamsWith === 'Post' ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
   return json({
@@ -56,10 +58,12 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  const { page } = data;
+  const { page, annotations } = data;
   const saveTextFetcher = useFetcher();
+  let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
+  let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
 
-  let editor = useEditorInstance('', false);
+  let editor = useEditorInstance(content, false);
 
   const withImage = !data.text.allow_post;
   return (

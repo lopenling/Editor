@@ -93,7 +93,7 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
               user: user,
               suggestionComments: [],
               userId: '',
-              text: data.text.id,
+              text: text.id,
               audioUrl: '',
             }}
           />

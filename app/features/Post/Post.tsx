@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useOutletContext, useParams, useSearchParams } from '@remix-run/react';
+import { useFetcher, useOutletContext, useParams, useSearchParams } from '@remix-run/react';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import Replies from './Replies';
 import ReplyForm from './ReplyForm';
@@ -46,7 +46,7 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
 
   const { user } = useOutletContext();
   const [searchParams, setSearchParams] = useSearchParams();
-  const fetcher = useFetcherWithPromise();
+  const fetcher = useFetcher();
   const translation = uselitteraTranlation();
 
   const isSelected = threadId === searchParams.get('thread');
@@ -75,22 +75,21 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
           userId: user.id,
           like: !likedByMe ? 'true' : 'false',
         },
-        { method: 'PATCH', action: 'api/post', encType: 'multipart/form-data' },
+        { method: 'PATCH', action: '/api/post', encType: 'multipart/form-data' },
       );
     }
   }
   async function deletePost() {
     let decision = confirm('do you want to delete the post');
-    setTimeout(() => {
-      removeMark(editor, threadId);
-    }, 0);
+
     if (decision) {
-      let res: any = await fetcher.submit(
+      fetcher.submit(
         {
           id,
+          threadId,
         },
         {
-          action: 'api/post',
+          action: '/api/post',
           method: 'DELETE',
         },
       );

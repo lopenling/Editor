@@ -1,17 +1,10 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectedSuggestionThread, selectedTextOnEditor, showSidebar } from '~/states';
 import { Editor } from '@tiptap/react';
-import { GrClose } from 'react-icons/gr';
 import Suggestion from './Suggestion';
-import { useLoaderData, useSearchParams } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 function Suggestions({ editor }: { editor: Editor | null }) {
-  const [searchParams] = useSearchParams();
   const { suggestions } = useLoaderData();
-  let threadId = searchParams.get('thread');
-  let list = suggestions.filter((sug) => {
-    return sug.threadId === threadId;
-  });
-  let groupedSuggestion = transformObjectsByNewValue(list);
+
+  let groupedSuggestion = transformObjectsByNewValue(suggestions);
   return (
     <div
       className="z-1 flex-1 overflow-visible overflow-y-auto bg-slate-50 p-2 shadow-md dark:bg-gray-700"
@@ -19,15 +12,7 @@ function Suggestions({ editor }: { editor: Editor | null }) {
     >
       <div className="flex flex-col  gap-2 ">
         {groupedSuggestion.map((suggest) => {
-          return (
-            <Suggestion
-              optimistic={false}
-              editor={editor}
-              suggest={suggest}
-              key={suggest.id}
-              count={groupedSuggestion.length}
-            />
-          );
+          return <Suggestion optimistic={false} editor={editor} suggest={suggest} key={suggest.id} />;
         })}
       </div>
     </div>

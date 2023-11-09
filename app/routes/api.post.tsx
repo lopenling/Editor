@@ -15,9 +15,11 @@ import {
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from '@remix-run/node';
-import type { ActionArgs, UploadHandler } from '@remix-run/node';
+import type { UploadHandler } from '@remix-run/node';
+import { deleteAnnotation } from '~/model/annotation';
+import { db } from '~/services/db.server';
 
-export const action: ActionFunction = async ({ request }: ActionArgs) => {
+export const action: ActionFunction = async ({ request }) => {
   const uploadHandler: UploadHandler = composeUploadHandlers(uploadAudio, createMemoryUploadHandler());
   const user = await getUserSession(request);
   if (request.method === 'POST') {
@@ -71,9 +73,21 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
   if (request.method === 'DELETE') {
     let formData = await request.formData();
     let Obj = Object.fromEntries(formData);
-
     let id = Obj.id as string;
-    let res = await deletePost(id);
+    let threadId = Obj.threadId as string;
+    console.log(id);
+    let [res, deleted] = await db.$transaction([
+      db.post.delete({
+        where: {
+          id,
+        },
+      }),
+      db.annotations.delete({
+        where: {
+          id: threadId,
+        },
+      }),
+    ]);
     let deleteDiscourse = await deleteDiscourseTopic(user.username, res.topic_id);
     return res;
   }

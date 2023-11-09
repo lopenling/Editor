@@ -75,7 +75,7 @@ const useEditorInstance = (content: string, isEditable: boolean, paramUpdate: bo
         }
       },
     },
-    [content],
+    [],
   );
   return editor;
 };
