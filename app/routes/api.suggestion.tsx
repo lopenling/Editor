@@ -56,10 +56,9 @@ export let action: ActionFunction = async ({ request }) => {
       let threadId = Obj.threadId as string;
       let count = await deleteSuggestion(id);
       if (count === 0) {
-        let delete_annotation = await db.annotations.delete({
+        let delete_annotation = await db.annotations.deleteMany({
           where: { id: threadId },
         });
-        console.log(delete_annotation);
       }
 
       return {

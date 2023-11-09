@@ -75,14 +75,13 @@ export const action: ActionFunction = async ({ request }) => {
     let Obj = Object.fromEntries(formData);
     let id = Obj.id as string;
     let threadId = Obj.threadId as string;
-    console.log(id);
     let [res, deleted] = await db.$transaction([
       db.post.delete({
         where: {
           id,
         },
       }),
-      db.annotations.delete({
+      db.annotations.deleteMany({
         where: {
           id: threadId,
         },
