@@ -38,7 +38,7 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
     let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
     editor?.commands.setContent(content);
     setImage({ ...Image, url: imageUrl });
-  }, [annotations?.length]);
+  }, [annotations?.length, page.content]);
 
   useEffect(() => {
     if (!searchString || searchString.length === 0) {
