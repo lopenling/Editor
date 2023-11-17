@@ -3,7 +3,7 @@ import { useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';
-const useEditorInstance = (isEditable: boolean, paramUpdate: boolean = true) => {
+const useEditorInstance = (content: string | undefined, isEditable: boolean, paramUpdate: boolean = true) => {
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [param, setSearchParams] = useSearchParams();
   function suggestionSetter(id: string) {
@@ -21,6 +21,7 @@ const useEditorInstance = (isEditable: boolean, paramUpdate: boolean = true) => 
       return p;
     });
   }
+  let condition = content ? [content] : [];
   let editor = useEditor(
     {
       extensions: [
@@ -64,6 +65,7 @@ const useEditorInstance = (isEditable: boolean, paramUpdate: boolean = true) => 
           },
         }),
       ],
+      content: content ?? undefined,
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
       onSelectionUpdate: ({ editor }) => {
@@ -81,13 +83,14 @@ const useEditorInstance = (isEditable: boolean, paramUpdate: boolean = true) => 
           if (param.get('with') !== 'all') {
             setSearchParams((p) => {
               p.set('with', 'all');
+              p.delete('thread');
               return p;
             });
           }
         }
       },
     },
-    [],
+    condition,
   );
   return editor;
 };

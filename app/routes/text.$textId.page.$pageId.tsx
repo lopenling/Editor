@@ -38,7 +38,6 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!, thread) : [];
   const posts =
     searchParamsWith === 'Post' ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
-  console.log(page);
   return json({
     page,
     user,
@@ -58,7 +57,7 @@ export default function Page() {
   const { page } = data;
   const saveTextFetcher = useFetcher();
 
-  let editor = useEditorInstance(false);
+  let editor = useEditorInstance(undefined, false);
   const withImage = !data.text.allow_post;
 
   return (
