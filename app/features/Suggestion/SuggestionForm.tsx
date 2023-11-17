@@ -70,7 +70,10 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
     }
   };
   const handleSuggestionCancel = () => {
-    setSearchParams({ with: 'all' });
+    setSearchParams((p) => {
+      p.set('with', 'all');
+      return p;
+    });
   };
   let isPosting = addSuggestion.formData;
   if (!user) return <LogInMessage />;

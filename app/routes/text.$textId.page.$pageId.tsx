@@ -11,14 +11,10 @@ import { Version } from '@prisma/client';
 import { CircleSpinnerOverlay } from 'react-spinner-overlay';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import { getAnnotations } from '~/model/annotation';
-import { listUserText } from '~/model/userText';
 import TextHeader from '~/component/Layout/TextHeader';
 import Menu from '~/component/menu/Menu';
 import { findPostByTextIdAndPage } from '~/model/post';
 import { listTranslations } from '~/model/translation';
-import { checkUnknown } from '~/features/Editor/lib';
-import { generateHtmlFromTextAndAnnotations } from '~/features/Editor/lib/htmlParser';
-
 export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
@@ -29,7 +25,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const versions = await getVersions(parseInt(textId), parseInt(order));
   if (!version && versions.length > 0) {
     if (!version) {
-      return redirect(`${request.url}?version=${versions[0].version}`);
+      return redirect(`${url.pathname}?version=${versions[0].version}`);
     }
   }
 
@@ -39,9 +35,10 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const annotations = await getAnnotations(page?.id!);
   const user = await getUserSession(request);
   const translations = searchParamsWith === 'Translations' ? await listTranslations(textId, pageId) : [];
-  const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!, thread!) : [];
+  const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!, thread) : [];
   const posts =
     searchParamsWith === 'Post' ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
+
   return json({
     page,
     user,
@@ -58,14 +55,12 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  const { page, annotations } = data;
+  const { page } = data;
   const saveTextFetcher = useFetcher();
-  let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
-  let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
 
-  let editor = useEditorInstance(content, false);
-
+  let editor = useEditorInstance(false);
   const withImage = !data.text.allow_post;
+
   return (
     <div className="flex flex-col ">
       <Header editor={editor} />

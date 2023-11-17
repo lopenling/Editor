@@ -53,7 +53,11 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
   let likedByMe = user ? likedBy.some((l) => l && l.username === user.username) : false;
   const handleSelectPost = useCallback(
     (id: string) => {
-      setSearchParams({ with: 'Post', thread: id });
+      setSearchParams((p) => {
+        p.set('with', 'Post');
+        p.set('thread', id);
+        return p;
+      });
     },
     [threadId],
   );

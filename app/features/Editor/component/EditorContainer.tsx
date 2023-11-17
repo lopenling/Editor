@@ -32,6 +32,20 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
   let searchString = searchParams.get('s') || '';
   let thread = searchParams.get('thread') || '';
   let saving = saveTextFetcher.state !== 'idle';
+
+  useEffect(() => {
+    let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
+    let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
+    editor?.commands.setContent(content);
+    setImage({ ...Image, url: imageUrl });
+  }, [annotations?.length]);
+
+  useEffect(() => {
+    if (!searchString || searchString.length === 0) {
+      editor.commands.setSearchTerm('');
+    }
+  }, [searchString]);
+
   useEffect(() => {
     let timer = scrollThreadIntoView(thread, `p_${thread}`);
     editor.on('update', async ({ editor }) => {
@@ -43,33 +57,26 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
       if (timer) clearTimeout(timer);
     };
   }, [editor, thread]);
-  useEffect(() => {
-    setTimeout(() => {
-      let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
-      let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
-      editor?.commands.setContent(content);
-    }, 1000);
-    setImage({ ...Image, url: imageUrl });
-  }, [annotations.length]);
-  useEffect(() => {
-    if (!searchString || searchString.length === 0) {
-      editor.commands.setSearchTerm('');
-    }
-  }, [searchString]);
   const handleBubbleClick = (type: string) => {
     if (selection.start)
       setSelectionRange({
         ...selection,
         type,
       });
-    setSearchParams({ with: 'Post' });
+    setSearchParams((p) => {
+      p.set('with', 'Post');
+      return p;
+    });
   };
   function handleSuggestionClick() {
     setSelectionRange({
       ...selection,
       type: '',
     });
-    setSearchParams({ with: 'Suggestion' });
+    setSearchParams((p) => {
+      p.set('with', 'Suggestion');
+      return p;
+    });
   }
   function handleDeleteMark() {
     if (editor.isActive('post')) {

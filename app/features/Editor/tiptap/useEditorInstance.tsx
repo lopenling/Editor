@@ -3,15 +3,23 @@ import { useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';
-const useEditorInstance = (content: string, isEditable: boolean, paramUpdate: boolean = true) => {
+const useEditorInstance = (isEditable: boolean, paramUpdate: boolean = true) => {
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [param, setSearchParams] = useSearchParams();
   function suggestionSetter(id: string) {
-    setSearchParams({ with: 'Suggestion', thread: id });
+    setSearchParams((p) => {
+      p.set('with', 'Suggestion');
+      p.set('thread', id);
+      return p;
+    });
   }
 
   function postSetter(id: string) {
-    setSearchParams({ with: 'Post', thread: id });
+    setSearchParams((p) => {
+      p.set('with', 'Post');
+      p.set('thread', id);
+      return p;
+    });
   }
   let editor = useEditor(
     {
@@ -56,7 +64,6 @@ const useEditorInstance = (content: string, isEditable: boolean, paramUpdate: bo
           },
         }),
       ],
-      content: content ? content : undefined,
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
       onSelectionUpdate: ({ editor }) => {
@@ -71,7 +78,12 @@ const useEditorInstance = (content: string, isEditable: boolean, paramUpdate: bo
           content: editor?.state.doc.textBetween(from, to, ''),
         });
         if (!editor.isActive('suggestion') && !editor.isActive('post')) {
-          if (param.get('with') !== 'all') setSearchParams({ with: 'all' });
+          if (param.get('with') !== 'all') {
+            setSearchParams((p) => {
+              p.set('with', 'all');
+              return p;
+            });
+          }
         }
       },
     },

@@ -5,13 +5,20 @@ import { IoIosArrowRoundBack } from 'react-icons/io';
 function MenuHeader() {
   let [searchParams, setSearchParams] = useSearchParams();
   let header = searchParams.get('with');
+
+  function handleBack() {
+    setSearchParams((p) => {
+      p.set('with', 'all');
+      return p;
+    });
+  }
   return (
     <div className="w-full uppercase text-gray-500 h-[60px]  bg-gray-100 flex items-center justify-between px-6 py-4">
       {header === 'all' ? (
         'Resources'
       ) : (
         <div className="flex items-center gap-2">
-          <button type="button" onClick={() => setSearchParams({ with: 'all' })}>
+          <button type="button" onClick={handleBack}>
             <IoIosArrowRoundBack size={30} />
           </button>
           {header}
