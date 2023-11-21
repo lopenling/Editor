@@ -58,7 +58,6 @@ function Translations() {
       },
     );
   };
-  console.log(translations);
   return (
     <div>
       <div className="fixed bottom-5 right-10">
@@ -111,7 +110,7 @@ function Translations() {
           </Button>
         )}
       </div>
-      <div className="mt-3">
+      <div className="mt-3 flex flex-col gap-2">
         {translations.length === 0 && <div className="text-red-500 mx-3">No translation yet</div>}
         {translations?.map((translation, index) => {
           let url = `/text/${text.id}/page/${page.order}/translation/${translation.id}`;

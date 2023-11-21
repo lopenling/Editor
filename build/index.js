@@ -531,7 +531,7 @@ var theme_default = "/build/_assets/theme-PBTK3IJA.css";
 var nprogress_default = "/build/_assets/nprogress-A223XL3B.css";
 
 // app/root.tsx
-var import_react3 = require("react"), import_nprogress2 = __toESM(require("nprogress")), import_jsx_dev_runtime3 = require("react/jsx-dev-runtime");
+var import_react3 = require("react"), import_nprogress2 = __toESM(require("nprogress")), import_react_hot_toast = require("react-hot-toast"), import_jsx_dev_runtime3 = require("react/jsx-dev-runtime");
 function meta({ matches }) {
   return [
     { title: matches[0].meta.find((m) => m.title) || "Lopenling App" },
@@ -572,41 +572,41 @@ function ErrorBoundary() {
   return (0, import_react2.isRouteErrorResponse)(error) ? /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("h1", { children: error.status }, void 0, !1, {
       fileName: "app/root.tsx",
-      lineNumber: 75,
+      lineNumber: 76,
       columnNumber: 9
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(ErrorPage, { message: error.data }, void 0, !1, {
       fileName: "app/root.tsx",
-      lineNumber: 76,
+      lineNumber: 77,
       columnNumber: 9
     }, this)
   ] }, void 0, !0, {
     fileName: "app/root.tsx",
-    lineNumber: 74,
+    lineNumber: 75,
     columnNumber: 7
   }, this) : error instanceof Error ? /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(ErrorPage, { message: error.message }, void 0, !1, {
       fileName: "app/root.tsx",
-      lineNumber: 82,
+      lineNumber: 83,
       columnNumber: 9
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("p", { children: "The stack trace is:" }, void 0, !1, {
       fileName: "app/root.tsx",
-      lineNumber: 83,
+      lineNumber: 84,
       columnNumber: 9
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("p", { children: error.stack }, void 0, !1, {
       fileName: "app/root.tsx",
-      lineNumber: 84,
+      lineNumber: 85,
       columnNumber: 9
     }, this)
   ] }, void 0, !0, {
     fileName: "app/root.tsx",
-    lineNumber: 81,
+    lineNumber: 82,
     columnNumber: 7
   }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("h1", { children: "Unknown Error" }, void 0, !1, {
     fileName: "app/root.tsx",
-    lineNumber: 88,
+    lineNumber: 89,
     columnNumber: 12
   }, this);
 }
@@ -623,70 +623,75 @@ function App() {
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("head", { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("meta", { charSet: "UTF-8" }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 113,
+        lineNumber: 114,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.Meta, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 114,
+        lineNumber: 115,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("link", { href: "https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css", rel: "stylesheet" }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 115,
+        lineNumber: 116,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.Links, {}, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 116,
+        lineNumber: 117,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/root.tsx",
-      lineNumber: 112,
+      lineNumber: 113,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("body", { className: "relative max-h-[100vh] max-w-[100vw] overflow-x-hidden  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:bg-gray-600 dark:text-white", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react_littera.LitteraProvider, { locales: ["en_US", "bo_TI"], children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_framer_motion.AnimatePresence, { mode: "wait", initial: !1, children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_recoil.RecoilRoot, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.Outlet, { context: { user: data.user } }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 122,
+        lineNumber: 123,
         columnNumber: 15
       }, this) }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 121,
+        lineNumber: 122,
         columnNumber: 13
       }, this) }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 120,
+        lineNumber: 121,
         columnNumber: 11
       }, this) }, void 0, !1, {
         fileName: "app/root.tsx",
-        lineNumber: 119,
+        lineNumber: 120,
         columnNumber: 9
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.ScrollRestoration, { getKey: (location) => location.pathname }, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 126,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.LiveReload, {}, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react_hot_toast.Toaster, {}, void 0, !1, {
         fileName: "app/root.tsx",
         lineNumber: 127,
         columnNumber: 9
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.Scripts, {}, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.ScrollRestoration, { getKey: (location) => location.pathname }, void 0, !1, {
         fileName: "app/root.tsx",
         lineNumber: 128,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.LiveReload, {}, void 0, !1, {
+        fileName: "app/root.tsx",
+        lineNumber: 129,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(import_react2.Scripts, {}, void 0, !1, {
+        fileName: "app/root.tsx",
+        lineNumber: 130,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/root.tsx",
-      lineNumber: 118,
+      lineNumber: 119,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/root.tsx",
-    lineNumber: 111,
+    lineNumber: 112,
     columnNumber: 5
   }, this);
 }
@@ -2653,9 +2658,11 @@ var listTranslations = async (textId, pageId) => await db.translation.findMany({
 
 // app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx
 var import_bs = require("react-icons/bs"), import_ai2 = require("react-icons/ai"), import_flowbite_react3 = require("flowbite-react"), import_io = require("react-icons/io");
-var import_react15 = require("react"), import_jsx_dev_runtime15 = require("react/jsx-dev-runtime"), loader2 = async ({ request, params }) => {
-  let textId = params.textId, order = params.pageId, translationId = params.translationId, translation = await getTranslation(parseInt(translationId)), userText = await getUserPage(translation?.userTextId);
+var import_react15 = require("react"), import_react_hot_toast2 = __toESM(require("react-hot-toast"));
+var import_jsx_dev_runtime15 = require("react/jsx-dev-runtime"), loader2 = async ({ request, params }) => {
+  let textId = params.textId, order = params.pageId, translationId = params.translationId, translation = await getTranslation(parseInt(translationId)), userText = await getUserPage(translation?.userTextId), user = await getUserSession(request);
   return (0, import_node3.json)({
+    user,
     textId,
     order,
     translation,
@@ -2687,9 +2694,14 @@ var import_react15 = require("react"), import_jsx_dev_runtime15 = require("react
   }
 };
 function TranslationsRoute() {
-  let { translation, userText, textId, order } = (0, import_react13.useLoaderData)(), source_editor = useEditorInstance_default(userText.content, !0, !1), translation_editor = useEditorInstance_default(translation.content, !0, !1), sourceRef = (0, import_react15.useRef)(null), translationRef = (0, import_react15.useRef)(null), fetcher = (0, import_react13.useFetcher)();
+  let { translation, userText, textId, order, user } = (0, import_react13.useLoaderData)(), source_editor = useEditorInstance_default(userText.content, !0, !1), translation_editor = useEditorInstance_default(translation.content, !0, !1), sourceRef = (0, import_react15.useRef)(null), translationRef = (0, import_react15.useRef)(null), fetcher = (0, import_react13.useFetcher)();
+  (0, import_react15.useEffect)(() => {
+    fetcher.data?.userText && (0, import_react_hot_toast2.default)("Saved!", {
+      icon: "\u{1F44F}"
+    });
+  }, [fetcher.data]);
   function save() {
-    fetcher.submit(
+    userText?.userId === user?.id ? fetcher.submit(
       {
         sourceContent: source_editor.getHTML(),
         translationContent: translation_editor.getHTML(),
@@ -2699,10 +2711,12 @@ function TranslationsRoute() {
       {
         method: "POST"
       }
-    );
+    ) : import_react_hot_toast2.default.error("You are not the owner of this text");
   }
   function share() {
-    navigator.clipboard.writeText(window.location.href), alert("text url copied");
+    navigator.clipboard.writeText(window.location.href), import_react_hot_toast2.default.success("text url copied", {
+      icon: "\u{1F44F}"
+    });
   }
   let [prevVisibleIndex, setPrevVisibleIndex] = (0, import_react15.useState)(null), [prevVisibleElement] = (0, import_react15.useState)(null), [currentIndex, setCurrentIndex] = (0, import_react15.useState)(0), currentDiv = (0, import_react15.useRef)(null);
   (0, import_react15.useEffect)(() => {
@@ -2726,65 +2740,53 @@ function TranslationsRoute() {
   function handleChangeCurrentDiv(e) {
     currentDiv.current = e.currentTarget;
   }
+  let isSaving = fetcher.state !== "idle";
   return /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_jsx_dev_runtime15.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(Header_default, { editor: null }, void 0, !1, {
       fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-      lineNumber: 143,
+      lineNumber: 161,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "flex justify-between max-w-6xl m-auto", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react3.Button, { as: import_react13.Link, to: `/text/${textId}/page/${order}`, className: "text-white bg-slate-500", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_io.IoMdArrowRoundBack, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 146,
+          lineNumber: 164,
           columnNumber: 11
         }, this),
         "Go to Main Text"
       ] }, void 0, !0, {
         fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-        lineNumber: 145,
+        lineNumber: 163,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "flex gap-4", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react3.Button, { size: "sm", className: "text-white bg-slate-500", onClick: share, children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_bs.BsShare, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 151,
+          lineNumber: 169,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 150,
+          lineNumber: 168,
           columnNumber: 11
         }, this),
-        /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(
-          import_flowbite_react3.Button,
-          {
-            size: "sm",
-            className: "text-white bg-slate-500",
-            onClick: save,
-            isProcessing: fetcher.state !== "idle",
-            children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_ai2.AiFillSave, {}, void 0, !1, {
-              fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 159,
-              columnNumber: 13
-            }, this)
-          },
-          void 0,
-          !1,
-          {
-            fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-            lineNumber: 153,
-            columnNumber: 11
-          },
-          this
-        )
+        /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react3.Button, { size: "sm", className: "text-white bg-slate-500", onClick: save, isProcessing: isSaving, children: isSaving ? null : /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_ai2.AiFillSave, {}, void 0, !1, {
+          fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
+          lineNumber: 172,
+          columnNumber: 32
+        }, this) }, void 0, !1, {
+          fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
+          lineNumber: 171,
+          columnNumber: 11
+        }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-        lineNumber: 149,
+        lineNumber: 167,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-      lineNumber: 144,
+      lineNumber: 162,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "flex max-w-6xl gap-3 w-full mx-auto mt-3", children: [
@@ -2797,17 +2799,17 @@ function TranslationsRoute() {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("h2", { className: "text-gray-400", children: "Source Text" }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 169,
+              lineNumber: 182,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(Tools_default, { editor: source_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 170,
+              lineNumber: 183,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_react14.EditorContent, { editor: source_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 171,
+              lineNumber: 184,
               columnNumber: 11
             }, this)
           ]
@@ -2816,7 +2818,7 @@ function TranslationsRoute() {
         !0,
         {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 164,
+          lineNumber: 177,
           columnNumber: 9
         },
         this
@@ -2830,17 +2832,17 @@ function TranslationsRoute() {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("h2", { className: "text-gray-400", children: "Translation Text" }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 178,
+              lineNumber: 191,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(Tools_default, { editor: translation_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 179,
+              lineNumber: 192,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_react14.EditorContent, { editor: translation_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 180,
+              lineNumber: 193,
               columnNumber: 11
             }, this)
           ]
@@ -2849,19 +2851,19 @@ function TranslationsRoute() {
         !0,
         {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 173,
+          lineNumber: 186,
           columnNumber: 9
         },
         this
       )
     ] }, void 0, !0, {
       fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-      lineNumber: 163,
+      lineNumber: 176,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-    lineNumber: 142,
+    lineNumber: 160,
     columnNumber: 5
   }, this);
 }
@@ -3947,17 +3949,17 @@ function Translations() {
       }
     );
   };
-  return console.log(translations), /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { children: [
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { className: "fixed bottom-5 right-10", children: upload ? /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { className: "flex flex-col", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("input", { type: "file", accept: ".txt", onChange: handleFileUpload }, void 0, !1, {
         fileName: "app/component/menu/Translations.tsx",
-        lineNumber: 67,
+        lineNumber: 66,
         columnNumber: 13
       }, this),
       fileContent !== "" && /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)(import_jsx_dev_runtime24.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("input", { type: "text", placeholder: "title", value: title, onChange: (e) => setTitle(e.target.value) }, void 0, !1, {
           fileName: "app/component/menu/Translations.tsx",
-          lineNumber: 70,
+          lineNumber: 69,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { className: "flex flex-col  gap-3", children: [
@@ -3972,7 +3974,7 @@ function Translations() {
             !1,
             {
               fileName: "app/component/menu/Translations.tsx",
-              lineNumber: 72,
+              lineNumber: 71,
               columnNumber: 19
             },
             this
@@ -3987,7 +3989,7 @@ function Translations() {
               onChange: (e) => setLanguage(e.target.value),
               children: LANGUAGE_OPTION_TRANSLATION.map((option) => /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("option", { value: option, children: option }, option, !1, {
                 fileName: "app/component/menu/Translations.tsx",
-                lineNumber: 87,
+                lineNumber: 86,
                 columnNumber: 25
               }, this))
             },
@@ -3995,14 +3997,14 @@ function Translations() {
             !1,
             {
               fileName: "app/component/menu/Translations.tsx",
-              lineNumber: 78,
+              lineNumber: 77,
               columnNumber: 19
             },
             this
           )
         ] }, void 0, !0, {
           fileName: "app/component/menu/Translations.tsx",
-          lineNumber: 71,
+          lineNumber: 70,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)(
@@ -4017,19 +4019,19 @@ function Translations() {
           !1,
           {
             fileName: "app/component/menu/Translations.tsx",
-            lineNumber: 94,
+            lineNumber: 93,
             columnNumber: 17
           },
           this
         )
       ] }, void 0, !0, {
         fileName: "app/component/menu/Translations.tsx",
-        lineNumber: 69,
+        lineNumber: 68,
         columnNumber: 15
       }, this)
     ] }, void 0, !0, {
       fileName: "app/component/menu/Translations.tsx",
-      lineNumber: 66,
+      lineNumber: 65,
       columnNumber: 11
     }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)(
       import_flowbite_react4.Button,
@@ -4043,19 +4045,19 @@ function Translations() {
       !1,
       {
         fileName: "app/component/menu/Translations.tsx",
-        lineNumber: 105,
+        lineNumber: 104,
         columnNumber: 11
       },
       this
     ) }, void 0, !1, {
       fileName: "app/component/menu/Translations.tsx",
-      lineNumber: 64,
+      lineNumber: 63,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { className: "mt-3", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { className: "mt-3 flex flex-col gap-2", children: [
       translations.length === 0 && /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { className: "text-red-500 mx-3", children: "No translation yet" }, void 0, !1, {
         fileName: "app/component/menu/Translations.tsx",
-        lineNumber: 115,
+        lineNumber: 114,
         columnNumber: 39
       }, this),
       translations?.map((translation, index) => {
@@ -4067,45 +4069,45 @@ function Translations() {
             translation.userText.name,
             /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)("div", { className: "text-sm font-light ", children: translation.userText.user.username }, void 0, !1, {
               fileName: "app/component/menu/Translations.tsx",
-              lineNumber: 124,
+              lineNumber: 123,
               columnNumber: 21
             }, this)
           ] }, void 0, !0, {
             fileName: "app/component/menu/Translations.tsx",
-            lineNumber: 122,
+            lineNumber: 121,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)(import_flowbite_react4.Button, { onClick: () => handleDelete(translation.id), className: "bg-red-400", children: /* @__PURE__ */ (0, import_jsx_dev_runtime24.jsxDEV)(import_ai5.AiFillDelete, {}, void 0, !1, {
             fileName: "app/component/menu/Translations.tsx",
-            lineNumber: 127,
+            lineNumber: 126,
             columnNumber: 21
           }, this) }, void 0, !1, {
             fileName: "app/component/menu/Translations.tsx",
-            lineNumber: 126,
+            lineNumber: 125,
             columnNumber: 19
           }, this)
         ] }, void 0, !0, {
           fileName: "app/component/menu/Translations.tsx",
-          lineNumber: 121,
+          lineNumber: 120,
           columnNumber: 17
         }, this) }, void 0, !1, {
           fileName: "app/component/menu/Translations.tsx",
-          lineNumber: 120,
+          lineNumber: 119,
           columnNumber: 15
         }, this) }, "translation-" + index, !1, {
           fileName: "app/component/menu/Translations.tsx",
-          lineNumber: 119,
+          lineNumber: 118,
           columnNumber: 13
         }, this);
       })
     ] }, void 0, !0, {
       fileName: "app/component/menu/Translations.tsx",
-      lineNumber: 114,
+      lineNumber: 113,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/component/menu/Translations.tsx",
-    lineNumber: 63,
+    lineNumber: 62,
     columnNumber: 5
   }, this);
 }
@@ -8870,7 +8872,7 @@ function test() {
 var test_default = test;
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-W3DYZOQF.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-ISUP7QBC.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-H45EZ6HM.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-CL75YYAC.js", imports: ["/build/_shared/chunk-7EVRFCIL.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-CCVEKNSJ.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-LI2GKYBH.js", imports: ["/build/_shared/chunk-7EVRFCIL.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-CCVEKNSJ.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-2UHC42OQ.js", imports: ["/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-CCVEKNSJ.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "78f051cd", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700555094659 }, url: "/build/manifest-78F051CD.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-AKGU74D3.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-ISUP7QBC.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-H45EZ6HM.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-ZV7KXXSS.js", imports: ["/build/_shared/chunk-7EVRFCIL.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-CCVEKNSJ.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-RXU3I7GK.js", imports: ["/build/_shared/chunk-7EVRFCIL.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-CCVEKNSJ.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-2KOOAVO4.js", imports: ["/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-CCVEKNSJ.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-E3RCSR5Y.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "7dc426d7", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700561606335 }, url: "/build/manifest-7DC426D7.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public\\build", future = {}, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

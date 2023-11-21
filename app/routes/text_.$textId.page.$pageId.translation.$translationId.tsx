@@ -12,13 +12,17 @@ import { Button } from 'flowbite-react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { db } from '~/services/db.server';
 import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { getUserSession } from '~/services/session.server';
 export const loader: LoaderFunction = async ({ request, params }) => {
   let textId = params.textId;
   let order = params.pageId;
   let translationId = params.translationId as string;
   let translation = await getTranslation(parseInt(translationId));
   let userText = await getUserPage(translation?.userTextId);
+  let user = await getUserSession(request);
   return json({
+    user,
     textId,
     order,
     translation,
@@ -59,30 +63,43 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 function TranslationsRoute() {
-  let { translation, userText, textId, order } = useLoaderData();
+  let { translation, userText, textId, order, user } = useLoaderData();
   let source_editor = useEditorInstance(userText.content, true, false);
   let translation_editor = useEditorInstance(translation.content, true, false);
 
   let sourceRef = useRef<HTMLDivElement>(null);
   let translationRef = useRef<HTMLDivElement>(null);
-
   let fetcher = useFetcher();
+  useEffect(() => {
+    if (fetcher.data?.userText) {
+      toast('Saved!', {
+        icon: '👏',
+      });
+    }
+  }, [fetcher.data]);
   function save() {
-    fetcher.submit(
-      {
-        sourceContent: source_editor.getHTML(),
-        translationContent: translation_editor.getHTML(),
-        translationId: translation.id,
-        sourceId: userText.id,
-      },
-      {
-        method: 'POST',
-      },
-    );
+    if (userText?.userId === user?.id) {
+      fetcher.submit(
+        {
+          sourceContent: source_editor.getHTML(),
+          translationContent: translation_editor.getHTML(),
+          translationId: translation.id,
+          sourceId: userText.id,
+        },
+        {
+          method: 'POST',
+        },
+      );
+    } else {
+      toast.error('You are not the owner of this text');
+    }
   }
   function share() {
     navigator.clipboard.writeText(window.location.href);
-    alert('text url copied');
+
+    toast.success('text url copied', {
+      icon: '👏',
+    });
   }
   const [prevVisibleIndex, setPrevVisibleIndex] = useState(null);
   const [prevVisibleElement] = useState(null);
@@ -138,6 +155,7 @@ function TranslationsRoute() {
   function handleChangeCurrentDiv(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     currentDiv.current = e.currentTarget;
   }
+  const isSaving = fetcher.state !== 'idle';
   return (
     <>
       <Header editor={null} />
@@ -150,13 +168,8 @@ function TranslationsRoute() {
           <Button size={'sm'} className="text-white bg-slate-500" onClick={share}>
             <BsShare />
           </Button>
-          <Button
-            size={'sm'}
-            className="text-white bg-slate-500"
-            onClick={save}
-            isProcessing={fetcher.state !== 'idle'}
-          >
-            <AiFillSave />
+          <Button size={'sm'} className="text-white bg-slate-500" onClick={save} isProcessing={isSaving}>
+            {isSaving ? null : <AiFillSave />}
           </Button>
         </div>
       </div>
