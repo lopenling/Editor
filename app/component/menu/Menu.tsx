@@ -1,5 +1,4 @@
 import { useSearchParams } from '@remix-run/react';
-import { HEADER_HEIGHT } from '~/constants';
 import MenuHeader from './MenuHeader';
 import MenuHome from './MenuHome';
 import TableOfContents from './TableOfContent';
@@ -8,10 +7,16 @@ import Translations from './Translations';
 import Post from './Post';
 import { Editor } from '@tiptap/react';
 import Suggestion from './Suggestion';
+import { useEffect } from 'react';
 
 function Menu({ editor }: { editor: Editor | null }) {
   let [searchParams] = useSearchParams();
   let menu = searchParams.get('with');
+  useEffect(() => {
+    if (menu !== 'Search' && editor) {
+      editor.commands?.setSearchTerm(''); //reset search on params change
+    }
+  }, [menu]);
   if (!menu) return null;
   return (
     <div className="w-full flex flex-col max-w-[30%]" style={{ maxHeight: 'calc(100vh - 60px)' }}>

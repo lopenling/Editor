@@ -1,25 +1,23 @@
 import { useState, useCallback } from 'react';
-import { useFetcher, useOutletContext, useParams, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import Replies from './Replies';
 import ReplyForm from './ReplyForm';
-import { useRecoilState } from 'recoil';
-import { selectedPostThread } from '~/states';
 import { Editor } from '@tiptap/react';
-import { AudioPlayer } from '~/features/Media';
-import { removeMark } from '~/features/Editor/tiptap/markAction';
 import { PostType } from '~/model/type';
 import copyToClipboard from '~/lib/copyToClipboard';
 import { FormWithAudio } from './component/FormWithAudio';
 import { timeAgo } from '~/lib';
-import { useDetectClickOutside } from 'react-detect-click-outside';
 import { ForumLink } from '~/constants';
-import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
+import { Dropdown } from 'flowbite-react';
+import { HiOutlineDotsHorizontal } from 'react-icons/hi';
+import { AudioPlayer } from '../Media';
+import { ClientOnly } from 'remix-utils/client-only';
 type PostPropType = {
   isOptimistic: boolean;
   post: PostType;
   showDivider: boolean;
-  editor: Editor;
+  editor?: Editor;
 };
 
 function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
@@ -42,14 +40,12 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
   const [effect, setEffect] = useState(false);
   const [ReplyCount, setReplyCount] = useState(replyCount);
   const [edit, setEdit] = useState(false);
-  const [openEditMenu, setOpenEditMenu] = useState(false);
-
-  const { user } = useOutletContext();
+  const { user } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const fetcher = useFetcher();
   const translation = uselitteraTranlation();
 
-  const isSelected = threadId === searchParams.get('thread');
+  const isSelected = threadId === searchParams?.get('thread');
   let likedByMe = user ? likedBy.some((l) => l && l.username === user.username) : false;
   const handleSelectPost = useCallback(
     (id: string) => {
@@ -63,8 +59,8 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
   );
 
   let likeCount = fetcher.data ? fetcher.data?.length : likedBy.length;
-
   let likeInFetcher = fetcher?.formData?.get('like');
+
   likedByMe = likeInFetcher === 'true' ? true : likeInFetcher === 'false' ? false : likedByMe;
   if (fetcher.state === 'submitting') {
     likedByMe ? likeCount++ : likeCount--;
@@ -84,8 +80,8 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
     }
   }
   async function deletePost() {
+    if (user.username === creatorUser?.username) return alert('you can not delete post');
     let decision = confirm('do you want to delete the post');
-
     if (decision) {
       fetcher.submit(
         {
@@ -109,12 +105,9 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
   }
 
   function handleEdit() {
-    setEdit(true);
+    if (user.username === creatorUser?.username) setEdit(true);
   }
 
-  const ref = useDetectClickOutside({
-    onTriggered: () => setOpenEditMenu(false),
-  });
   return (
     <div
       className={`${fetcher.formMethod === 'DELETE' && 'hidden'}  `}
@@ -149,69 +142,49 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
             )}
           </div>
 
-          <div className="relative ml-3" ref={ref}>
-            <button
-              className=" inline-flex items-center rounded-lg text-center text-sm font-medium  text-gray-400  focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-700 dark:focus:ring-gray-600 dark:hover:bg-gray-600"
-              type="button"
-              onClick={() => setOpenEditMenu((p) => !p)}
-            >
-              <svg
-                className="h-5 w-5"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
-              </svg>
-            </button>
-
-            <div
-              className={`${
-                openEditMenu ? 'absolute' : 'hidden'
-              } right-0 top-1.5 z-10 w-36 divide-y divide-gray-100 rounded bg-white shadow dark:divide-gray-600 dark:bg-gray-700`}
-            >
-              <ul
-                className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownMenuIconHorizontalButton"
-              >
-                {user && user.username === creatorUser?.username && (
-                  <>
-                    <li>
-                      <div
-                        onClick={handleEdit}
-                        className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Edit
-                      </div>
-                    </li>
-                    <li>
-                      <div
-                        onClick={deletePost}
-                        className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Remove
-                      </div>
-                    </li>
-                  </>
-                )}
-                <li>
-                  <div className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    Report
-                  </div>
-                </li>
-                <li>
-                  <a
-                    href={ForumLink + `/t/${topicId}`}
-                    target="_blank"
+          <Dropdown
+            renderTrigger={() => <HiOutlineDotsHorizontal />}
+            label="Dropdown button"
+            dismissOnClick={false}
+            className="relative ml-3 "
+          >
+            {user && user.username === creatorUser?.username && (
+              <>
+                <Dropdown.Item>
+                  <div
+                    onClick={handleEdit}
                     className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
-                    Forum
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
+                    Edit
+                  </div>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <div
+                    onClick={deletePost}
+                    className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Remove
+                  </div>
+                </Dropdown.Item>
+              </>
+            )}
+            <Dropdown.Item>
+              {' '}
+              <div className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                Report
+              </div>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              {' '}
+              <a
+                href={ForumLink + `/t/${topicId}`}
+                target="_blank"
+                className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                Forum
+              </a>
+            </Dropdown.Item>
+          </Dropdown>
         </div>
         <div className="flex flex-col items-start justify-start">
           <div className=" w-full text-base leading-normal  dark:text-gray-100">
@@ -234,7 +207,7 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
                 type="update"
                 fetcher={fetcher}
                 onClose={() => setEdit(false)}
-                editor={editor}
+                editor={editor!}
               />
             ) : (
               <p
@@ -245,7 +218,9 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
               ></p>
             )}
           </div>
-          {audioUrl && audioUrl?.length > 0 && !edit && <AudioPlayer src={audioUrl} />}
+          {audioUrl && audioUrl?.length > 0 && !edit && (
+            <ClientOnly fallback={<p>Loading...</p>}>{() => <AudioPlayer src={audioUrl} />}</ClientOnly>
+          )}
           {isOptimistic ? (
             <div className="font-sans text-sm text-gray-300">posting ...</div>
           ) : (

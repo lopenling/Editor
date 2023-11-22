@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import classNames from 'classnames';
 import { formatTime } from './lib/formatTime';
 
-const AudioPlayer = ({ src }) => {
+export function AudioPlayer({ src }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -107,6 +107,4 @@ const AudioPlayer = ({ src }) => {
       </div>
     </div>
   );
-};
-
-export default AudioPlayer;
+}

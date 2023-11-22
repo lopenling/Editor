@@ -1,15 +1,16 @@
 import Post from './Post';
 import { useRecoilValue } from 'recoil';
 import { filterDataState, showLatest } from '~/states';
-import { FilterType, PostType, ReplyType, UserType } from '~/model/type';
+import { FilterType, PostType } from '~/model/type';
 import Filter from './Filter';
 import { Skeleton } from '~/component/UI';
 
 type PostPropsType = {
   posts: any[];
+  editor: any;
 };
 
-function Posts({ posts }: PostPropsType) {
+function Posts({ posts, editor }: PostPropsType) {
   let filters = useRecoilValue(filterDataState);
   let isLatest = useRecoilValue(showLatest);
   if (!posts) {
@@ -29,7 +30,13 @@ function Posts({ posts }: PostPropsType) {
           lists?.map((post: PostType, index: number) => {
             return (
               <div key={post.id}>
-                <Post key={post.id} post={post} isOptimistic={false} showDivider={lists.length <= index + 1} />
+                <Post
+                  key={post.id}
+                  post={post}
+                  isOptimistic={false}
+                  showDivider={lists.length <= index + 1}
+                  editor={editor}
+                />
               </div>
             );
           })

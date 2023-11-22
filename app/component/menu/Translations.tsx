@@ -1,61 +1,19 @@
 import { Link, useFetcher, useLoaderData } from '@remix-run/react';
-import { Button, Card, TextInput } from 'flowbite-react';
-import { useCallback, useEffect, useState } from 'react';
+import { Button } from 'flowbite-react';
+import { useEffect, useState } from 'react';
 import { AiFillDelete } from 'react-icons/ai';
-import { LANGUAGE_OPTION_TRANSLATION } from '~/constants';
-import { useDropzone } from 'react-dropzone';
-import toast from 'react-hot-toast';
+import TranslationUploader from './TranslationUploader';
 function Translations() {
-  let { text, page, translations, user } = useLoaderData();
-  const [fileContent, setFileContent] = useState('');
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-    accept: {
-      'text/*': ['.txt'],
-    },
-    maxFiles: 1,
-  });
+  let { text, page, translations } = useLoaderData();
   const [upload, setUpload] = useState(false);
-  const [title, setTitle] = useState('');
-  const [language, setLanguage] = useState('english');
+
   let fetcher = useFetcher();
-
   useEffect(() => {
-    let file = acceptedFiles[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const text = event.target.result;
-        setFileContent(text);
-      };
-
-      reader.readAsText(file);
+    if (fetcher.data) {
+      setUpload(false);
     }
-  }, [acceptedFiles[0]]);
+  }, [fetcher?.data]);
 
-  let handleSubmit = () => {
-    if (title === '' || !title) return toast('please enter title');
-    fetcher.submit(
-      {
-        content: fileContent,
-        textId: text.id,
-        pageId: page.order,
-        name: title,
-        language,
-      },
-      {
-        method: 'POST',
-        action: '/api/translation',
-      },
-    );
-    setFileContent('');
-    setTitle('');
-    setUpload(false);
-  };
-  function handleToggleUpdate() {
-    if (!user) return alert('please login first');
-    setUpload(!upload);
-  }
   let handleDelete = (id) => {
     fetcher.submit(
       { id },
@@ -65,59 +23,14 @@ function Translations() {
       },
     );
   };
+
   return (
     <div className="relative">
       {upload ? (
-        <div className="flex flex-col  gap-3">
-          {fileContent !== '' ? (
-            <>
-              <h4>
-                File: {acceptedFiles[0].name} , {acceptedFiles[0].size}
-              </h4>
-              <TextInput placeholder="title" required value={title} onChange={(e) => setTitle(e.target.value)} />
-              <label
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                htmlFor="selectionLanguage"
-              >
-                choose translation language
-              </label>
-              <select
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                id="selectionLanguage"
-                placeholder="language"
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                {LANGUAGE_OPTION_TRANSLATION.map((option) => {
-                  return (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  );
-                })}
-              </select>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="bg-green-400 rounded shadow-sm p-2 text-white hover:bg-green-500"
-              >
-                upload translation
-              </button>
-            </>
-          ) : (
-            <div
-              {...getRootProps({
-                className: 'dropzone',
-              })}
-            >
-              <input {...getInputProps()} />
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            </div>
-          )}
-        </div>
+        <TranslationUploader fetcher={fetcher} />
       ) : (
         <Button
-          onClick={handleToggleUpdate}
+          onClick={() => setUpload(true)}
           size={'sm'}
           className="bg-green-400 rounded shadow-sm text-white hover:bg-green-500 fixed bottom-5 right-5"
         >

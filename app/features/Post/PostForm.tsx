@@ -1,13 +1,13 @@
-import { useLoaderData, useOutletContext } from '@remix-run/react';
+import { useFetcher, useLoaderData, useOutletContext } from '@remix-run/react';
 import Post from './Post';
 import { selectedTextOnEditor } from '~/states';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { MustLoggedIn as LogInMessage } from '~/component/UI';
 import { FormWithAudio } from './component/FormWithAudio';
-import { GrClose } from 'react-icons/gr';
 
-const PostForm = ({ createPost, editor }: any) => {
+const PostForm = ({ editor }: any) => {
   const { user } = useLoaderData();
+  const createPost = useFetcher();
   const selection = useRecoilValue(selectedTextOnEditor);
   let isPosting = createPost.formData && createPost.formData.get('body') !== '';
   if (selection.type === '') return null;
@@ -27,6 +27,7 @@ const PostForm = ({ createPost, editor }: any) => {
           type: createPost?.formData?.get('type') as 'question' | 'comment',
           threadId: '',
         }}
+        editor={null}
         isOptimistic={true}
       />
     );

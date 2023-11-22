@@ -1,4 +1,3 @@
-import { useDetectClickOutside } from 'react-detect-click-outside';
 import { FaBars } from 'react-icons/fa';
 import { FcSettings } from 'react-icons/fc';
 import { changeFont, exportDoc } from '../lib';
@@ -14,7 +13,7 @@ import { Dropdown } from 'flowbite-react';
 
 type theme = { background: string; text: string };
 
-export default function sEditorSetting({ editor }: { editor: Editor }) {
+export default function EditorSetting({ editor }: { editor: Editor }) {
   const [image, setShowImage] = useRecoilState(ImageState);
   const data = useLoaderData();
   let [searchParam] = useSearchParams();

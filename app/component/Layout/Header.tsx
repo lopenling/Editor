@@ -4,8 +4,6 @@ import { useLitteraMethods } from '@assembless/react-littera';
 import { useEffect, useState, memo } from 'react';
 import uselitteraTranlation, { translationCodes } from '~/locales/useLitteraTranslations';
 import { Editor } from '@tiptap/react';
-import { SearchString } from '~/features/Editor';
-import { useDetectClickOutside } from 'react-detect-click-outside';
 import { ForumLink, HEADER_HEIGHT } from '~/constants';
 import { Avatar } from '~/component/UI';
 import { containTibetanletter, isSmallScreen } from '~/lib';
@@ -13,7 +11,7 @@ import { UserType } from '~/model/type';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { AiOutlineTranslation } from 'react-icons/ai';
 import EditorSetting from '~/features/Editor/component/EditorSetting';
-import { FaUserAlt, FaBars } from 'react-icons/fa';
+import { FaUserAlt } from 'react-icons/fa';
 import { Dropdown } from 'flowbite-react';
 
 const LogoWithTextName = ({ textName }: { textName: string }) => {
