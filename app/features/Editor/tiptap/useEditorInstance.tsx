@@ -82,7 +82,6 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
         if (!editor.isActive('suggestion') && !editor.isActive('post')) {
           if (param.get('with') !== 'all') {
             setSearchParams((p) => {
-              p.set('with', 'all');
               p.delete('thread');
               return p;
             });
