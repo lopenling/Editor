@@ -470,7 +470,7 @@ async function login(request, next, redirectTo) {
 var globalStyle_default = "/build/_assets/globalStyle-54OKGBIV.css";
 
 // app/styles/tailwind.css
-var tailwind_default = "/build/_assets/tailwind-GTZVJEKC.css";
+var tailwind_default = "/build/_assets/tailwind-RVZG2GM2.css";
 
 // app/root.tsx
 var import_react_littera = require("@assembless/react-littera"), import_recoil = require("recoil"), import_framer_motion = require("framer-motion");
@@ -1568,14 +1568,14 @@ function EditorSetting({ editor }) {
 }
 
 // app/component/Layout/Header.tsx
-var import_fa3 = require("react-icons/fa"), import_flowbite_react2 = require("flowbite-react"), import_jsx_dev_runtime12 = require("react/jsx-dev-runtime"), LogoWithTextName = ({ textName }) => (textName.length > 20 && isSmallScreen && (textName = textName.slice(0, 25) + "..."), /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex items-center gap-1", children: [
+var import_fa3 = require("react-icons/fa"), import_flowbite_react2 = require("flowbite-react"), import_md = require("react-icons/md"), import_ci = require("react-icons/ci"), import_io = require("react-icons/io"), import_jsx_dev_runtime12 = require("react/jsx-dev-runtime"), LogoWithTextName = ({ textName }) => (textName.length > 20 && isSmallScreen && (textName = textName.slice(0, 25) + "..."), /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex items-center gap-1", children: [
   /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_react9.Link, { to: "/", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("img", { src: logo_default, alt: "logo", className: "block object-contain", style: { maxHeight: "37px" } }, void 0, !1, {
     fileName: "app/component/Layout/Header.tsx",
-    lineNumber: 24,
+    lineNumber: 27,
     columnNumber: 9
   }, this) }, void 0, !1, {
     fileName: "app/component/Layout/Header.tsx",
-    lineNumber: 23,
+    lineNumber: 26,
     columnNumber: 7
   }, this),
   /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
@@ -1595,14 +1595,14 @@ var import_fa3 = require("react-icons/fa"), import_flowbite_react2 = require("fl
     !1,
     {
       fileName: "app/component/Layout/Header.tsx",
-      lineNumber: 26,
+      lineNumber: 29,
       columnNumber: 7
     },
     this
   )
 ] }, void 0, !0, {
   fileName: "app/component/Layout/Header.tsx",
-  lineNumber: 22,
+  lineNumber: 25,
   columnNumber: 5
 }, this));
 function Header({ editor }) {
@@ -1639,7 +1639,7 @@ function Header({ editor }) {
       children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: " mx-auto flex flex-wrap items-center justify-between p-2", children: [
         TextNameOnHeader ? /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(LogoWithTextName, { textName: text.name }, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 91,
+          lineNumber: 94,
           columnNumber: 11
         }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_react9.NavLink, { to: "/", prefetch: "intent", className: "flex w-auto items-center", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
           "img",
@@ -1652,53 +1652,53 @@ function Header({ editor }) {
           !1,
           {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 94,
+            lineNumber: 97,
             columnNumber: 13
           },
           this
         ) }, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 93,
+          lineNumber: 96,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2", children: [
           !user && /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2", id: "user-menu-button", children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("a", { href: ForumLink + "/signup", id: "signup", className: "loginButton", children: translation.signup }, void 0, !1, {
               fileName: "app/component/Layout/Header.tsx",
-              lineNumber: 104,
+              lineNumber: 107,
               columnNumber: 15
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(loginFetcher.Form, { method: "POST", id: "login", action: "/auth/login", className: "mr-2 flex items-center", children: [
               /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("input", { type: "hidden", name: "redirectTo", defaultValue: redirectTo }, void 0, !1, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 108,
+                lineNumber: 111,
                 columnNumber: 17
               }, this),
               /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("button", { type: "submit", name: "_action", value: "login", className: "loginButton flex items-center gap-1", children: [
                 /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_fa3.FaUserAlt, {}, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 110,
+                  lineNumber: 113,
                   columnNumber: 19
                 }, this),
                 translation.login
               ] }, void 0, !0, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 109,
+                lineNumber: 112,
                 columnNumber: 17
               }, this)
             ] }, void 0, !0, {
               fileName: "app/component/Layout/Header.tsx",
-              lineNumber: 107,
+              lineNumber: 110,
               columnNumber: 15
             }, this)
           ] }, void 0, !0, {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 103,
+            lineNumber: 106,
             columnNumber: 13
           }, this),
           editor && /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(EditorSetting, { editor }, void 0, !1, {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 116,
+            lineNumber: 119,
             columnNumber: 22
           }, this),
           user && /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
@@ -1710,17 +1710,17 @@ function Header({ editor }) {
                 "button",
                 {
                   type: "button",
-                  className: "  rounded-full  text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 md:mr-0",
+                  className: "rounded-full  text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 md:mr-0",
                   id: "user-menu-button",
                   children: [
                     /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { className: "sr-only", children: "Open user menu" }, void 0, !1, {
                       fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 130,
+                      lineNumber: 133,
                       columnNumber: 23
                     }, this),
                     /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Avatar, { alt: user.name, img: user.avatarUrl, rounded: !0, title: user?.name, size: "sm" }, void 0, !1, {
                       fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 131,
+                      lineNumber: 134,
                       columnNumber: 23
                     }, this)
                   ]
@@ -1729,263 +1729,170 @@ function Header({ editor }) {
                 !0,
                 {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 125,
+                  lineNumber: 128,
                   columnNumber: 21
                 },
                 this
               ),
               children: [
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: [
-                  " ",
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "px-4 py-3", children: [
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { className: "block text-sm text-gray-900 dark:text-white", children: user.name }, void 0, !1, {
-                      fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 139,
-                      columnNumber: 21
-                    }, this),
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { className: "block truncate  text-sm text-gray-500 dark:text-gray-400", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                      "a",
-                      {
-                        target: "_self",
-                        href: ForumLink + `/u/${user?.username}/summary`,
-                        className: "block truncate text-sm font-medium",
-                        children: user?.email
-                      },
-                      void 0,
-                      !1,
-                      {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 141,
-                        columnNumber: 23
-                      },
-                      this
-                    ) }, void 0, !1, {
-                      fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 140,
-                      columnNumber: 21
-                    }, this)
-                  ] }, void 0, !0, {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { className: "block truncate  text-sm text-gray-500 dark:text-gray-400", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                  "a",
+                  {
+                    target: "_self",
+                    href: ForumLink + `/u/${user?.username}/summary`,
+                    className: "block truncate text-sm font-large capitalize",
+                    children: user.name
+                  },
+                  void 0,
+                  !1,
+                  {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 138,
-                    columnNumber: 19
-                  }, this)
-                ] }, void 0, !0, {
+                    lineNumber: 141,
+                    columnNumber: 21
+                  },
+                  this
+                ) }, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 136,
+                  lineNumber: 140,
+                  columnNumber: 19
+                }, this) }, void 0, !1, {
+                  fileName: "app/component/Layout/Header.tsx",
+                  lineNumber: 139,
                   columnNumber: 17
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: [
-                  " ",
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                    "div",
-                    {
-                      onClick: changeTheme,
-                      className: " cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
-                      children: darkMode ? /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2 ", children: [
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                          "svg",
-                          {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            viewBox: "0 0 20 20",
-                            fill: "currentColor",
-                            "aria-hidden": "true",
-                            className: `${themeFetcher.formData?.get("theme") && "animate-spin"} h-5 w-5`,
-                            children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                              "path",
-                              {
-                                fillRule: "evenodd",
-                                d: "M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z",
-                                clipRule: "evenodd"
-                              },
-                              void 0,
-                              !1,
-                              {
-                                fileName: "app/component/Layout/Header.tsx",
-                                lineNumber: 166,
-                                columnNumber: 27
-                              },
-                              this
-                            )
-                          },
-                          void 0,
-                          !1,
-                          {
-                            fileName: "app/component/Layout/Header.tsx",
-                            lineNumber: 159,
-                            columnNumber: 25
-                          },
-                          this
-                        ),
-                        "Light mode"
-                      ] }, void 0, !0, {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                  "div",
+                  {
+                    onClick: changeTheme,
+                    className: " cursor-pointer text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
+                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2 items-center", children: darkMode ? /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_ci.CiLight, {}, void 0, !1, {
                         fileName: "app/component/Layout/Header.tsx",
                         lineNumber: 158,
-                        columnNumber: 23
-                      }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2", children: [
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                          "svg",
-                          {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            viewBox: "0 0 20 20",
-                            fill: "currentColor",
-                            "aria-hidden": "true",
-                            className: `${themeFetcher.formData?.get("theme") && "animate-spin"} h-5 w-5`,
-                            children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("path", { d: "M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" }, void 0, !1, {
-                              fileName: "app/component/Layout/Header.tsx",
-                              lineNumber: 183,
-                              columnNumber: 27
-                            }, this)
-                          },
-                          void 0,
-                          !1,
-                          {
-                            fileName: "app/component/Layout/Header.tsx",
-                            lineNumber: 176,
-                            columnNumber: 25
-                          },
-                          this
-                        ),
-                        "Dark mode"
-                      ] }, void 0, !0, {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 175,
-                        columnNumber: 23
-                      }, this)
-                    },
-                    void 0,
-                    !1,
-                    {
+                        columnNumber: 27
+                      }, this),
+                      "Light mode"
+                    ] }, void 0, !0, {
                       fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 153,
-                      columnNumber: 19
-                    },
-                    this
-                  )
-                ] }, void 0, !0, {
+                      lineNumber: 157,
+                      columnNumber: 25
+                    }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_md.MdNightlight, {}, void 0, !1, {
+                        fileName: "app/component/Layout/Header.tsx",
+                        lineNumber: 163,
+                        columnNumber: 27
+                      }, this),
+                      "Dark mode"
+                    ] }, void 0, !0, {
+                      fileName: "app/component/Layout/Header.tsx",
+                      lineNumber: 162,
+                      columnNumber: 25
+                    }, this) }, void 0, !1, {
+                      fileName: "app/component/Layout/Header.tsx",
+                      lineNumber: 155,
+                      columnNumber: 21
+                    }, this)
+                  },
+                  void 0,
+                  !1,
+                  {
+                    fileName: "app/component/Layout/Header.tsx",
+                    lineNumber: 151,
+                    columnNumber: 19
+                  },
+                  this
+                ) }, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 151,
+                  lineNumber: 150,
                   columnNumber: 17
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: [
-                  " ",
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: " flex flex-col justify-center", "aria-labelledby": "user-menu-button ", children: [
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Translation, {}, void 0, !1, {
-                      fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 193,
-                      columnNumber: 21
-                    }, this),
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                      "a",
-                      {
-                        target: "_blank",
-                        href: ForumLink + `/u/${user?.username}/preferences/account`,
-                        className: " flex gap-2 truncate px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
-                        children: [
-                          /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("svg", { width: "20", height: "20", viewBox: "0 0 20 20", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                            "path",
-                            {
-                              fillRule: "evenodd",
-                              clipRule: "evenodd",
-                              d: "M11.49 3.17C11.11 1.61 8.88999 1.61 8.50999 3.17C8.45326 3.40442 8.34198 3.62212 8.18522 3.80541C8.02845 3.9887 7.83062 4.13238 7.60784 4.22477C7.38505 4.31716 7.1436 4.35564 6.90313 4.33709C6.66266 4.31854 6.42997 4.24347 6.22399 4.118C4.85199 3.282 3.28199 4.852 4.11799 6.224C4.65799 7.11 4.17899 8.266 3.17099 8.511C1.60999 8.89 1.60999 11.111 3.17099 11.489C3.40547 11.5458 3.62322 11.6572 3.80651 11.8141C3.98979 11.971 4.13343 12.1689 4.22573 12.3918C4.31803 12.6147 4.35639 12.8563 4.33766 13.0968C4.31894 13.3373 4.24368 13.5701 4.11799 13.776C3.28199 15.148 4.85199 16.718 6.22399 15.882C6.42993 15.7563 6.66265 15.6811 6.90318 15.6623C7.14371 15.6436 7.38527 15.682 7.60817 15.7743C7.83108 15.8666 8.02904 16.0102 8.18592 16.1935C8.34281 16.3768 8.45419 16.5945 8.51099 16.829C8.88999 18.39 11.111 18.39 11.489 16.829C11.546 16.5946 11.6575 16.377 11.8144 16.1939C11.9713 16.0107 12.1692 15.8672 12.3921 15.7749C12.6149 15.6826 12.8564 15.6442 13.0969 15.6628C13.3373 15.6815 13.57 15.7565 13.776 15.882C15.148 16.718 16.718 15.148 15.882 13.776C15.7565 13.57 15.6815 13.3373 15.6628 13.0969C15.6442 12.8564 15.6826 12.6149 15.7749 12.3921C15.8672 12.1692 16.0107 11.9713 16.1939 11.8144C16.377 11.6575 16.5946 11.546 16.829 11.489C18.39 11.11 18.39 8.889 16.829 8.511C16.5945 8.45419 16.3768 8.34281 16.1935 8.18593C16.0102 8.02904 15.8666 7.83109 15.7743 7.60818C15.682 7.38527 15.6436 7.14372 15.6623 6.90318C15.681 6.66265 15.7563 6.42994 15.882 6.224C16.718 4.852 15.148 3.282 13.776 4.118C13.5701 4.24368 13.3373 4.31895 13.0968 4.33767C12.8563 4.35639 12.6147 4.31804 12.3918 4.22574C12.1689 4.13344 11.971 3.9898 11.8141 3.80651C11.6572 3.62323 11.5458 3.40548 11.489 3.171L11.49 3.17ZM9.99999 13C10.7956 13 11.5587 12.6839 12.1213 12.1213C12.6839 11.5587 13 10.7956 13 10C13 9.20435 12.6839 8.44129 12.1213 7.87868C11.5587 7.31607 10.7956 7 9.99999 7C9.20434 7 8.44128 7.31607 7.87867 7.87868C7.31606 8.44129 6.99999 9.20435 6.99999 10C6.99999 10.7956 7.31606 11.5587 7.87867 12.1213C8.44128 12.6839 9.20434 13 9.99999 13V13Z",
-                              fill: darkMode ? "white" : "#111928"
-                            },
-                            void 0,
-                            !1,
-                            {
-                              fileName: "app/component/Layout/Header.tsx",
-                              lineNumber: 202,
-                              columnNumber: 27
-                            },
-                            this
-                          ) }, void 0, !1, {
-                            fileName: "app/component/Layout/Header.tsx",
-                            lineNumber: 201,
-                            columnNumber: 25
-                          }, this),
-                          "Preferences"
-                        ]
-                      },
-                      void 0,
-                      !0,
-                      {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 196,
-                        columnNumber: 23
-                      },
-                      this
-                    ) }, void 0, !1, {
-                      fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 195,
-                      columnNumber: 21
-                    }, this),
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                      import_react9.Form,
-                      {
-                        method: "POST",
-                        action: "/auth/login",
-                        className: "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
-                        children: [
-                          /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                            "input",
-                            {
-                              type: "hidden",
-                              name: "redirectTo",
-                              className: "block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white",
-                              defaultValue: redirectTo
-                            },
-                            void 0,
-                            !1,
-                            {
-                              fileName: "app/component/Layout/Header.tsx",
-                              lineNumber: 218,
-                              columnNumber: 23
-                            },
-                            this
-                          ),
-                          /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                            "button",
-                            {
-                              className: "flex items-center gap-2 px-1 text-sm font-medium leading-tight",
-                              type: "submit",
-                              name: "_action",
-                              value: "logout",
-                              children: [
-                                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_fa2.FaSignOutAlt, {}, void 0, !1, {
-                                  fileName: "app/component/Layout/Header.tsx",
-                                  lineNumber: 230,
-                                  columnNumber: 25
-                                }, this),
-                                translation.logout
-                              ]
-                            },
-                            void 0,
-                            !0,
-                            {
-                              fileName: "app/component/Layout/Header.tsx",
-                              lineNumber: 224,
-                              columnNumber: 23
-                            },
-                            this
-                          )
-                        ]
-                      },
-                      void 0,
-                      !0,
-                      {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 213,
-                        columnNumber: 21
-                      },
-                      this
-                    )
-                  ] }, void 0, !0, {
-                    fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 192,
-                    columnNumber: 19
-                  }, this)
-                ] }, void 0, !0, {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Translation, {}, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 190,
+                  lineNumber: 170,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                  "a",
+                  {
+                    target: "_blank",
+                    href: ForumLink + `/u/${user?.username}/preferences/account`,
+                    className: " flex gap-2 items-center truncate text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_io.IoIosSettings, {}, void 0, !1, {
+                        fileName: "app/component/Layout/Header.tsx",
+                        lineNumber: 177,
+                        columnNumber: 21
+                      }, this),
+                      "Preferences"
+                    ]
+                  },
+                  void 0,
+                  !0,
+                  {
+                    fileName: "app/component/Layout/Header.tsx",
+                    lineNumber: 172,
+                    columnNumber: 19
+                  },
+                  this
+                ) }, void 0, !1, {
+                  fileName: "app/component/Layout/Header.tsx",
+                  lineNumber: 171,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: " flex flex-col justify-center", "aria-labelledby": "user-menu-button ", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                  import_react9.Form,
+                  {
+                    method: "POST",
+                    action: "/auth/login",
+                    className: "flex items-center  text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("input", { type: "hidden", name: "redirectTo", defaultValue: redirectTo }, void 0, !1, {
+                        fileName: "app/component/Layout/Header.tsx",
+                        lineNumber: 188,
+                        columnNumber: 23
+                      }, this),
+                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                        "button",
+                        {
+                          className: "flex items-center gap-2 px-1 text-sm font-medium leading-tight",
+                          type: "submit",
+                          name: "_action",
+                          value: "logout",
+                          children: [
+                            /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_fa2.FaSignOutAlt, {}, void 0, !1, {
+                              fileName: "app/component/Layout/Header.tsx",
+                              lineNumber: 195,
+                              columnNumber: 25
+                            }, this),
+                            translation.logout
+                          ]
+                        },
+                        void 0,
+                        !0,
+                        {
+                          fileName: "app/component/Layout/Header.tsx",
+                          lineNumber: 189,
+                          columnNumber: 23
+                        },
+                        this
+                      )
+                    ]
+                  },
+                  void 0,
+                  !0,
+                  {
+                    fileName: "app/component/Layout/Header.tsx",
+                    lineNumber: 183,
+                    columnNumber: 21
+                  },
+                  this
+                ) }, void 0, !1, {
+                  fileName: "app/component/Layout/Header.tsx",
+                  lineNumber: 182,
+                  columnNumber: 19
+                }, this) }, void 0, !1, {
+                  fileName: "app/component/Layout/Header.tsx",
+                  lineNumber: 181,
                   columnNumber: 17
                 }, this)
               ]
@@ -1994,23 +1901,23 @@ function Header({ editor }) {
             !0,
             {
               fileName: "app/component/Layout/Header.tsx",
-              lineNumber: 120,
+              lineNumber: 123,
               columnNumber: 15
             },
             this
           ) }, void 0, !1, {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 119,
+            lineNumber: 122,
             columnNumber: 13
           }, this)
         ] }, void 0, !0, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 101,
+          lineNumber: 104,
           columnNumber: 9
         }, this)
       ] }, void 0, !0, {
         fileName: "app/component/Layout/Header.tsx",
-        lineNumber: 89,
+        lineNumber: 92,
         columnNumber: 7
       }, this)
     },
@@ -2018,7 +1925,7 @@ function Header({ editor }) {
     !1,
     {
       fileName: "app/component/Layout/Header.tsx",
-      lineNumber: 82,
+      lineNumber: 85,
       columnNumber: 5
     },
     this
@@ -2027,9 +1934,9 @@ function Header({ editor }) {
 function Translation() {
   let methods = (0, import_react_littera3.useLitteraMethods)();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex  items-center justify-start space-x-0.5 px-4", children: [
-    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_ai.AiOutlineTranslation, {}, void 0, !1, {
+    /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_ai.AiOutlineTranslation, { className: "mr-2" }, void 0, !1, {
       fileName: "app/component/Layout/Header.tsx",
-      lineNumber: 251,
+      lineNumber: 216,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
@@ -2039,9 +1946,9 @@ function Translation() {
           methods.setLocale(e.target.value);
         },
         className: "border-transparent bg-transparent text-gray-500 focus:border-transparent focus:outline-none  focus:ring-0 focus:ring-gray-100 dark:border-gray-600  dark:bg-transparent dark:text-white dark:focus:ring-gray-700",
-        children: translationCodes.map((code) => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("option", { value: code.code, className: "bg-white dark:bg-slate-600 ", children: code.name }, code.code, !1, {
+        children: translationCodes.map((code) => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("option", { value: code.code, className: "bg-white dark:bg-slate-600 px-1 py-2 ", children: code.name }, code.code, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 257,
+          lineNumber: 222,
           columnNumber: 11
         }, this))
       },
@@ -2049,14 +1956,14 @@ function Translation() {
       !1,
       {
         fileName: "app/component/Layout/Header.tsx",
-        lineNumber: 252,
+        lineNumber: 217,
         columnNumber: 7
       },
       this
     )
   ] }, void 0, !0, {
     fileName: "app/component/Layout/Header.tsx",
-    lineNumber: 250,
+    lineNumber: 215,
     columnNumber: 5
   }, this);
 }
@@ -2709,7 +2616,7 @@ var listTranslations = async (textId, pageId) => await db.translation.findMany({
 };
 
 // app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx
-var import_bs = require("react-icons/bs"), import_ai2 = require("react-icons/ai"), import_flowbite_react3 = require("flowbite-react"), import_io = require("react-icons/io");
+var import_bs = require("react-icons/bs"), import_ai2 = require("react-icons/ai"), import_flowbite_react3 = require("flowbite-react"), import_io2 = require("react-icons/io");
 var import_react15 = require("react"), import_react_hot_toast2 = __toESM(require("react-hot-toast"));
 var import_jsx_dev_runtime15 = require("react/jsx-dev-runtime"), loader2 = async ({ request, params }) => {
   let textId = params.textId, order = params.pageId, translationId = params.translationId, translation = await getTranslation(parseInt(translationId)), userText = await getUserPage(translation?.userTextId), user = await getUserSession(request);
@@ -2801,7 +2708,7 @@ function TranslationsRoute() {
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "flex justify-between max-w-6xl m-auto", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react3.Button, { as: import_react13.Link, to: `/text/${textId}/page/${order}`, className: "text-white bg-slate-500", children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_io.IoMdArrowRoundBack, {}, void 0, !1, {
+        /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_io2.IoMdArrowRoundBack, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
           lineNumber: 164,
           columnNumber: 11
@@ -3680,7 +3587,7 @@ var updateAnnotations = async (pageId, annotations) => {
 };
 
 // app/component/Layout/TextHeader.tsx
-var import_react21 = require("@remix-run/react"), import_ai3 = require("react-icons/ai"), import_io2 = require("react-icons/io"), import_jsx_dev_runtime19 = require("react/jsx-dev-runtime");
+var import_react21 = require("@remix-run/react"), import_ai3 = require("react-icons/ai"), import_io3 = require("react-icons/io"), import_jsx_dev_runtime19 = require("react/jsx-dev-runtime");
 function TextHeader() {
   let { text } = (0, import_react21.useLoaderData)(), loc = (0, import_react21.useLocation)();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)("div", { className: "bg-gray-50  flex justify-between items-center border-t py-3", style: { height: 60 }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)("div", { className: "flex justify-between items-center lg:px-9 md:px-3 max-w-3xl w-full mx-auto", children: [
@@ -3698,7 +3605,7 @@ function TextHeader() {
       lineNumber: 14,
       columnNumber: 9
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_react21.Link, { to: loc.pathname + "?with=all", children: /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_io2.IoIosOptions, { size: 30, color: "gray" }, void 0, !1, {
+    /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_react21.Link, { to: loc.pathname + "?with=all", children: /* @__PURE__ */ (0, import_jsx_dev_runtime19.jsxDEV)(import_io3.IoIosOptions, { size: 30, color: "gray" }, void 0, !1, {
       fileName: "app/component/Layout/TextHeader.tsx",
       lineNumber: 18,
       columnNumber: 11
@@ -3723,7 +3630,7 @@ var TextHeader_default = TextHeader;
 var import_react54 = require("@remix-run/react");
 
 // app/component/menu/MenuHeader.tsx
-var import_react22 = require("@remix-run/react"), import_ai4 = require("react-icons/ai"), import_io3 = require("react-icons/io"), import_jsx_dev_runtime20 = require("react/jsx-dev-runtime");
+var import_react22 = require("@remix-run/react"), import_ai4 = require("react-icons/ai"), import_io4 = require("react-icons/io"), import_jsx_dev_runtime20 = require("react/jsx-dev-runtime");
 function MenuHeader() {
   let [searchParams, setSearchParams] = (0, import_react22.useSearchParams)(), header = searchParams.get("with");
   function handleBack() {
@@ -3731,7 +3638,7 @@ function MenuHeader() {
   }
   return /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: "w-full uppercase text-gray-500 h-[60px]  bg-gray-100 flex items-center justify-between px-6 py-4", children: [
     header === "all" ? "Resources" : /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("div", { className: "flex items-center gap-2", children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("button", { type: "button", onClick: handleBack, children: /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(import_io3.IoIosArrowRoundBack, { size: 30 }, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)("button", { type: "button", onClick: handleBack, children: /* @__PURE__ */ (0, import_jsx_dev_runtime20.jsxDEV)(import_io4.IoIosArrowRoundBack, { size: 30 }, void 0, !1, {
         fileName: "app/component/menu/MenuHeader.tsx",
         lineNumber: 22,
         columnNumber: 13
@@ -9146,7 +9053,7 @@ function test() {
 var test_default = test;
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-O6HTBR6D.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-2FHK4GQG.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-6RYKVCDY.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-FXVXQUJR.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-6RYKVCDY.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-COU2HHLY.js", imports: ["/build/_shared/chunk-5EEZ73DC.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-IRS2WYA4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-6RYKVCDY.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-F6IOEOKN.js", imports: ["/build/_shared/chunk-5EEZ73DC.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-IRS2WYA4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-6RYKVCDY.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-A2TIB63G.js", imports: ["/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-IRS2WYA4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-6RYKVCDY.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "f1532ee5", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700725377850 }, url: "/build/manifest-F1532EE5.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-6LWE2X5G.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-DS5JQWNR.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-N2EK6LAJ.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-WCY3QKBB.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-BTEB374M.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-HQUEBLI4.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-BTEB374M.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-KWOESFVO.js", imports: ["/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-BTEB374M.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "471e4b9e", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700728188442 }, url: "/build/manifest-471E4B9E.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public\\build", future = {}, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
