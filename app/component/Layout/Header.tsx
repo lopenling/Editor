@@ -78,7 +78,6 @@ function Header({ editor }: HeaderProps) {
     window.addEventListener('scroll', handleScroll);
     return () => window?.addEventListener('scroll', handleScroll);
   }, [redirectTo]);
-
   let darkMode = user?.preference?.theme === 'dark';
 
   return (
@@ -136,67 +135,36 @@ function Header({ editor }: HeaderProps) {
                   );
                 }}
               >
-                <Dropdown.Item>
-                  <span className="block truncate  text-sm text-gray-500 dark:text-gray-400">
-                    <a
-                      target={'_self'}
-                      href={ForumLink + `/u/${user?.username}/summary`}
-                      className="block truncate text-sm font-large capitalize"
-                    >
-                      {user.name}
-                    </a>
-                  </span>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <div
-                    onClick={changeTheme}
-                    className={` cursor-pointer text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white`}
+                <Dropdown.Header>
+                  <span className="block text-sm capitalize">{user.username}</span>
+                  <a
+                    target={'_self'}
+                    href={ForumLink + `/u/${user?.username}/summary`}
+                    className="block truncate text-sm font-medium"
                   >
-                    <div className="flex gap-2 items-center">
-                      {darkMode ? (
-                        <>
-                          <CiLight />
-                          Light mode
-                        </>
-                      ) : (
-                        <>
-                          <MdNightlight />
-                          Dark mode
-                        </>
-                      )}
-                    </div>
-                  </div>
+                    {user.email}
+                  </a>
+                </Dropdown.Header>
+                <Dropdown.Item onClick={changeTheme} icon={darkMode ? CiLight : MdNightlight}>
+                  {darkMode ? 'Light mode' : 'Dark mode'}
                 </Dropdown.Item>
                 <Translation />
-                <Dropdown.Item>
-                  <a
-                    target={'_blank'}
-                    href={ForumLink + `/u/${user?.username}/preferences/account`}
-                    className=" flex gap-2 items-center truncate text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    <IoIosSettings />
-                    Preferences
-                  </a>
+                <Dropdown.Item
+                  as="a"
+                  href={ForumLink + `/u/${user?.username}/preferences/account`}
+                  icon={IoIosSettings}
+                  target="_blank"
+                >
+                  Preferences
                 </Dropdown.Item>
-                <Dropdown.Item>
-                  <div className=" flex flex-col justify-center" aria-labelledby="user-menu-button ">
-                    <Form
-                      method="POST"
-                      action="/auth/login"
-                      className="flex items-center  text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      <input type="hidden" name="redirectTo" defaultValue={redirectTo} />
-                      <button
-                        className="flex items-center gap-2 px-1 text-sm font-medium leading-tight"
-                        type="submit"
-                        name="_action"
-                        value="logout"
-                      >
-                        <FaSignOutAlt />
-                        {translation.logout}
-                      </button>
-                    </Form>
-                  </div>
+                <Dropdown.Divider />
+                <Dropdown.Item icon={FaSignOutAlt}>
+                  <Form method="POST" action="/auth/login">
+                    <input type="hidden" name="redirectTo" defaultValue={redirectTo} />
+                    <button className=" text-sm font-medium leading-tight" type="submit" name="_action" value="logout">
+                      {translation.logout}
+                    </button>
+                  </Form>
                 </Dropdown.Item>
               </Dropdown>
             </>

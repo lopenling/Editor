@@ -20,24 +20,17 @@ function Posts({ posts, editor }: PostPropsType) {
   return (
     <>
       <Filter />
-      <div
-        style={{
-          fontFamily: 'sans-serif',
-        }}
-        className=" relative flex flex-col h-full overflow-y-scroll flex-1 "
-      >
+      <div className=" flex flex-col h-full overflow-y-scroll flex-1 ">
         {lists?.length > 0 ? (
           lists?.map((post: PostType, index: number) => {
             return (
-              <div key={post.id}>
-                <Post
-                  key={post.id}
-                  post={post}
-                  isOptimistic={false}
-                  showDivider={lists.length <= index + 1}
-                  editor={editor}
-                />
-              </div>
+              <Post
+                key={post.id}
+                post={post}
+                isOptimistic={false}
+                showDivider={lists.length <= index + 1}
+                editor={editor}
+              />
             );
           })
         ) : (

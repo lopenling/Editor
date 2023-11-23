@@ -10,7 +10,11 @@ export const loader: LoaderFunction = async ({ params }: LoaderArgs) => {
   let posts: any[] = [];
   const postsData = await getposts(id);
   const replyList = await findReplyByPostId(post?.id);
+
   let postsList = postsData?.post_stream?.posts;
+  if (!replyList[0]?.post_id) {
+    postsList?.shift();
+  }
   posts = combineArrays(replyList, postsList);
 
   return json({

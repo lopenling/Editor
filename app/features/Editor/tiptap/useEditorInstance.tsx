@@ -3,6 +3,9 @@ import { useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';
+
+let firsttime = true;
+
 const useEditorInstance = (content: string | undefined, isEditable: boolean, paramUpdate: boolean = true) => {
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [param, setSearchParams] = useSearchParams();
@@ -79,7 +82,7 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
           end: to,
           content: editor?.state.doc.textBetween(from, to, ''),
         });
-        if (!editor.isActive('suggestion') && !editor.isActive('post')) {
+        if (!editor.isActive('suggestion') && !editor.isActive('post') && !firsttime) {
           if (param.get('with') !== 'all') {
             setSearchParams((p) => {
               p.delete('thread');
@@ -87,6 +90,7 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
             });
           }
         }
+        firsttime = false;
       },
     },
     condition,

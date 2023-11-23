@@ -23,7 +23,6 @@ function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }
   let data = postListFetcher.data;
   useEffect(() => {
     if (data) {
-      data.posts.shift();
       let replies = data.posts;
       setReplies(replies);
       setReplyCount(replies.length);

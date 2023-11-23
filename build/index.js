@@ -470,7 +470,7 @@ async function login(request, next, redirectTo) {
 var globalStyle_default = "/build/_assets/globalStyle-54OKGBIV.css";
 
 // app/styles/tailwind.css
-var tailwind_default = "/build/_assets/tailwind-RVZG2GM2.css";
+var tailwind_default = "/build/_assets/tailwind-XZCQQUAB.css";
 
 // app/root.tsx
 var import_react_littera = require("@assembless/react-littera"), import_recoil = require("recoil"), import_framer_motion = require("framer-motion");
@@ -1639,7 +1639,7 @@ function Header({ editor }) {
       children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: " mx-auto flex flex-wrap items-center justify-between p-2", children: [
         TextNameOnHeader ? /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(LogoWithTextName, { textName: text.name }, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 94,
+          lineNumber: 93,
           columnNumber: 11
         }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_react9.NavLink, { to: "/", prefetch: "intent", className: "flex w-auto items-center", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
           "img",
@@ -1652,53 +1652,53 @@ function Header({ editor }) {
           !1,
           {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 97,
+            lineNumber: 96,
             columnNumber: 13
           },
           this
         ) }, void 0, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 96,
+          lineNumber: 95,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2", children: [
           !user && /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2", id: "user-menu-button", children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("a", { href: ForumLink + "/signup", id: "signup", className: "loginButton", children: translation.signup }, void 0, !1, {
               fileName: "app/component/Layout/Header.tsx",
-              lineNumber: 107,
+              lineNumber: 106,
               columnNumber: 15
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(loginFetcher.Form, { method: "POST", id: "login", action: "/auth/login", className: "mr-2 flex items-center", children: [
               /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("input", { type: "hidden", name: "redirectTo", defaultValue: redirectTo }, void 0, !1, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 111,
+                lineNumber: 110,
                 columnNumber: 17
               }, this),
               /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("button", { type: "submit", name: "_action", value: "login", className: "loginButton flex items-center gap-1", children: [
                 /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_fa3.FaUserAlt, {}, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 113,
+                  lineNumber: 112,
                   columnNumber: 19
                 }, this),
                 translation.login
               ] }, void 0, !0, {
                 fileName: "app/component/Layout/Header.tsx",
-                lineNumber: 112,
+                lineNumber: 111,
                 columnNumber: 17
               }, this)
             ] }, void 0, !0, {
               fileName: "app/component/Layout/Header.tsx",
-              lineNumber: 110,
+              lineNumber: 109,
               columnNumber: 15
             }, this)
           ] }, void 0, !0, {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 106,
+            lineNumber: 105,
             columnNumber: 13
           }, this),
           editor && /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(EditorSetting, { editor }, void 0, !1, {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 119,
+            lineNumber: 118,
             columnNumber: 22
           }, this),
           user && /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
@@ -1715,12 +1715,12 @@ function Header({ editor }) {
                   children: [
                     /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { className: "sr-only", children: "Open user menu" }, void 0, !1, {
                       fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 133,
+                      lineNumber: 132,
                       columnNumber: 23
                     }, this),
                     /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Avatar, { alt: user.name, img: user.avatarUrl, rounded: !0, title: user?.name, size: "sm" }, void 0, !1, {
                       fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 134,
+                      lineNumber: 133,
                       columnNumber: 23
                     }, this)
                   ]
@@ -1729,170 +1729,91 @@ function Header({ editor }) {
                 !0,
                 {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 128,
+                  lineNumber: 127,
                   columnNumber: 21
                 },
                 this
               ),
               children: [
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { className: "block truncate  text-sm text-gray-500 dark:text-gray-400", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                  "a",
-                  {
-                    target: "_self",
-                    href: ForumLink + `/u/${user?.username}/summary`,
-                    className: "block truncate text-sm font-large capitalize",
-                    children: user.name
-                  },
-                  void 0,
-                  !1,
-                  {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Header, { children: [
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { className: "block text-sm capitalize", children: user.username }, void 0, !1, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 141,
-                    columnNumber: 21
-                  },
-                  this
-                ) }, void 0, !1, {
+                    lineNumber: 139,
+                    columnNumber: 19
+                  }, this),
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                    "a",
+                    {
+                      target: "_self",
+                      href: ForumLink + `/u/${user?.username}/summary`,
+                      className: "block truncate text-sm font-medium",
+                      children: user.email
+                    },
+                    void 0,
+                    !1,
+                    {
+                      fileName: "app/component/Layout/Header.tsx",
+                      lineNumber: 140,
+                      columnNumber: 19
+                    },
+                    this
+                  )
+                ] }, void 0, !0, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 140,
-                  columnNumber: 19
-                }, this) }, void 0, !1, {
-                  fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 139,
+                  lineNumber: 138,
                   columnNumber: 17
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                  "div",
-                  {
-                    onClick: changeTheme,
-                    className: " cursor-pointer text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
-                    children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex gap-2 items-center", children: darkMode ? /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: [
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_ci.CiLight, {}, void 0, !1, {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 158,
-                        columnNumber: 27
-                      }, this),
-                      "Light mode"
-                    ] }, void 0, !0, {
-                      fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 157,
-                      columnNumber: 25
-                    }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_jsx_dev_runtime12.Fragment, { children: [
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_md.MdNightlight, {}, void 0, !1, {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 163,
-                        columnNumber: 27
-                      }, this),
-                      "Dark mode"
-                    ] }, void 0, !0, {
-                      fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 162,
-                      columnNumber: 25
-                    }, this) }, void 0, !1, {
-                      fileName: "app/component/Layout/Header.tsx",
-                      lineNumber: 155,
-                      columnNumber: 21
-                    }, this)
-                  },
-                  void 0,
-                  !1,
-                  {
-                    fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 151,
-                    columnNumber: 19
-                  },
-                  this
-                ) }, void 0, !1, {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { onClick: changeTheme, icon: darkMode ? import_ci.CiLight : import_md.MdNightlight, children: darkMode ? "Light mode" : "Dark mode" }, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 150,
+                  lineNumber: 148,
                   columnNumber: 17
                 }, this),
                 /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Translation, {}, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 170,
+                  lineNumber: 151,
                   columnNumber: 17
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                  "a",
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
+                  import_flowbite_react2.Dropdown.Item,
                   {
-                    target: "_blank",
+                    as: "a",
                     href: ForumLink + `/u/${user?.username}/preferences/account`,
-                    className: " flex gap-2 items-center truncate text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_io.IoIosSettings, {}, void 0, !1, {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 177,
-                        columnNumber: 21
-                      }, this),
-                      "Preferences"
-                    ]
+                    icon: import_io.IoIosSettings,
+                    target: "_blank",
+                    children: "Preferences"
                   },
                   void 0,
-                  !0,
+                  !1,
                   {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 172,
-                    columnNumber: 19
+                    lineNumber: 152,
+                    columnNumber: 17
                   },
                   this
-                ) }, void 0, !1, {
+                ),
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Divider, {}, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 171,
+                  lineNumber: 160,
                   columnNumber: 17
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: " flex flex-col justify-center", "aria-labelledby": "user-menu-button ", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                  import_react9.Form,
-                  {
-                    method: "POST",
-                    action: "/auth/login",
-                    className: "flex items-center  text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("input", { type: "hidden", name: "redirectTo", defaultValue: redirectTo }, void 0, !1, {
-                        fileName: "app/component/Layout/Header.tsx",
-                        lineNumber: 188,
-                        columnNumber: 23
-                      }, this),
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
-                        "button",
-                        {
-                          className: "flex items-center gap-2 px-1 text-sm font-medium leading-tight",
-                          type: "submit",
-                          name: "_action",
-                          value: "logout",
-                          children: [
-                            /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_fa2.FaSignOutAlt, {}, void 0, !1, {
-                              fileName: "app/component/Layout/Header.tsx",
-                              lineNumber: 195,
-                              columnNumber: 25
-                            }, this),
-                            translation.logout
-                          ]
-                        },
-                        void 0,
-                        !0,
-                        {
-                          fileName: "app/component/Layout/Header.tsx",
-                          lineNumber: 189,
-                          columnNumber: 23
-                        },
-                        this
-                      )
-                    ]
-                  },
-                  void 0,
-                  !0,
-                  {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_flowbite_react2.Dropdown.Item, { icon: import_fa2.FaSignOutAlt, children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_react9.Form, { method: "POST", action: "/auth/login", children: [
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("input", { type: "hidden", name: "redirectTo", defaultValue: redirectTo }, void 0, !1, {
                     fileName: "app/component/Layout/Header.tsx",
-                    lineNumber: 183,
+                    lineNumber: 163,
                     columnNumber: 21
-                  },
-                  this
-                ) }, void 0, !1, {
+                  }, this),
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("button", { className: " text-sm font-medium leading-tight", type: "submit", name: "_action", value: "logout", children: translation.logout }, void 0, !1, {
+                    fileName: "app/component/Layout/Header.tsx",
+                    lineNumber: 164,
+                    columnNumber: 21
+                  }, this)
+                ] }, void 0, !0, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 182,
+                  lineNumber: 162,
                   columnNumber: 19
                 }, this) }, void 0, !1, {
                   fileName: "app/component/Layout/Header.tsx",
-                  lineNumber: 181,
+                  lineNumber: 161,
                   columnNumber: 17
                 }, this)
               ]
@@ -1901,23 +1822,23 @@ function Header({ editor }) {
             !0,
             {
               fileName: "app/component/Layout/Header.tsx",
-              lineNumber: 123,
+              lineNumber: 122,
               columnNumber: 15
             },
             this
           ) }, void 0, !1, {
             fileName: "app/component/Layout/Header.tsx",
-            lineNumber: 122,
+            lineNumber: 121,
             columnNumber: 13
           }, this)
         ] }, void 0, !0, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 104,
+          lineNumber: 103,
           columnNumber: 9
         }, this)
       ] }, void 0, !0, {
         fileName: "app/component/Layout/Header.tsx",
-        lineNumber: 92,
+        lineNumber: 91,
         columnNumber: 7
       }, this)
     },
@@ -1925,7 +1846,7 @@ function Header({ editor }) {
     !1,
     {
       fileName: "app/component/Layout/Header.tsx",
-      lineNumber: 85,
+      lineNumber: 84,
       columnNumber: 5
     },
     this
@@ -1936,7 +1857,7 @@ function Translation() {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "flex  items-center justify-start space-x-0.5 px-4", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(import_ai.AiOutlineTranslation, { className: "mr-2" }, void 0, !1, {
       fileName: "app/component/Layout/Header.tsx",
-      lineNumber: 216,
+      lineNumber: 184,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
@@ -1948,7 +1869,7 @@ function Translation() {
         className: "border-transparent bg-transparent text-gray-500 focus:border-transparent focus:outline-none  focus:ring-0 focus:ring-gray-100 dark:border-gray-600  dark:bg-transparent dark:text-white dark:focus:ring-gray-700",
         children: translationCodes.map((code) => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("option", { value: code.code, className: "bg-white dark:bg-slate-600 px-1 py-2 ", children: code.name }, code.code, !1, {
           fileName: "app/component/Layout/Header.tsx",
-          lineNumber: 222,
+          lineNumber: 190,
           columnNumber: 11
         }, this))
       },
@@ -1956,14 +1877,14 @@ function Translation() {
       !1,
       {
         fileName: "app/component/Layout/Header.tsx",
-        lineNumber: 217,
+        lineNumber: 185,
         columnNumber: 7
       },
       this
     )
   ] }, void 0, !0, {
     fileName: "app/component/Layout/Header.tsx",
-    lineNumber: 215,
+    lineNumber: 183,
     columnNumber: 5
   }, this);
 }
@@ -2359,7 +2280,7 @@ var import_extension_history = __toESM(require("@tiptap/extension-history"));
 
 // app/features/Editor/tiptap/useEditorInstance.tsx
 var import_react11 = require("@tiptap/react"), import_recoil4 = require("recoil");
-var import_react12 = require("@remix-run/react"), useEditorInstance = (content, isEditable, paramUpdate = !0) => {
+var import_react12 = require("@remix-run/react"), firsttime = !0, useEditorInstance = (content, isEditable, paramUpdate = !0) => {
   let setSelectionRange = (0, import_recoil4.useSetRecoilState)(selectedTextOnEditor), [param, setSearchParams] = (0, import_react12.useSearchParams)();
   function suggestionSetter(id) {
     setSearchParams((p) => (p.set("with", "Suggestion"), p.set("thread", id), p));
@@ -2423,7 +2344,7 @@ var import_react12 = require("@remix-run/react"), useEditorInstance = (content, 
           start: from,
           end: to,
           content: editor2?.state.doc.textBetween(from, to, "")
-        }), !editor2.isActive("suggestion") && !editor2.isActive("post") && param.get("with") !== "all" && setSearchParams((p) => (p.delete("thread"), p));
+        }), !editor2.isActive("suggestion") && !editor2.isActive("post") && !firsttime && param.get("with") !== "all" && setSearchParams((p) => (p.delete("thread"), p)), firsttime = !1;
       }
     },
     condition
@@ -4197,14 +4118,13 @@ function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }
   let data = postListFetcher.data;
   return (0, import_react32.useEffect)(() => {
     if (data) {
-      data.posts.shift();
       let replies2 = data.posts;
       setReplies(replies2), setReplyCount(replies2.length);
     }
   }, [data]), data ? /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(import_jsx_dev_runtime26.Fragment, { children: [
     replies.length < 1 && /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "text-gray-500 text-sm mb-2 ", children: "no reply yet" }, void 0, !1, {
       fileName: "app/features/Post/Replies.tsx",
-      lineNumber: 36,
+      lineNumber: 35,
       columnNumber: 30
     }, this),
     replies.map((reply, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(
@@ -4220,14 +4140,14 @@ function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }
       !1,
       {
         fileName: "app/features/Post/Replies.tsx",
-        lineNumber: 39,
+        lineNumber: 38,
         columnNumber: 11
       },
       this
     ))
   ] }, void 0, !0, {
     fileName: "app/features/Post/Replies.tsx",
-    lineNumber: 35,
+    lineNumber: 34,
     columnNumber: 5
   }, this) : null;
 }
@@ -4656,7 +4576,7 @@ function ClientOnly({ children, fallback = null }) {
 }
 
 // app/features/Post/Post.tsx
-var import_jsx_dev_runtime30 = require("react/jsx-dev-runtime");
+var import_ai6 = require("react-icons/ai"), import_jsx_dev_runtime30 = require("react/jsx-dev-runtime");
 function Post({ isOptimistic, post, showDivider, editor }) {
   let {
     id,
@@ -4690,7 +4610,7 @@ function Post({ isOptimistic, post, showDivider, editor }) {
     );
   }
   async function deletePost3() {
-    if (user.username === creatorUser?.username)
+    if (user.username !== creatorUser?.username)
       return alert("you can not delete post");
     confirm("do you want to delete the post") ? fetcher.submit(
       {
@@ -4701,11 +4621,11 @@ function Post({ isOptimistic, post, showDivider, editor }) {
         action: "/api/post",
         method: "DELETE"
       }
-    ) : console.log(...oo_oo7("1031317447_97_6_97_30_4", "cancelled"));
+    ) : console.log(...oo_oo7("3141548459_98_6_98_30_4", "cancelled"));
   }
   function handleShare() {
-    let url = window.location.href + "?thread=" + threadId;
-    copyToClipboard(url), alert("url coppied on clipboard");
+    let url;
+    url = window.location.href + "&thread=" + threadId, window.location.href.includes("thread=") && (url = window.location.href), copyToClipboard(url), alert("url coppied on clipboard");
   }
   function handleEdit() {
     user.username === creatorUser?.username && setEdit(!0);
@@ -4713,486 +4633,408 @@ function Post({ isOptimistic, post, showDivider, editor }) {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
     "div",
     {
-      className: `${fetcher.formMethod === "DELETE" && "hidden"}  `,
-      style: { paddingInline: 24, backgroundColor: isSelected ? "#F3F4F6" : "white" },
+      className: `${fetcher.formMethod === "DELETE" && "hidden"} relative  px-6 pt-6 pb-4 `,
+      style: {
+        backgroundColor: isSelected ? "#F3F4F6" : "white"
+      },
       id: `p_${threadId}`,
       children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-          "div",
-          {
-            className: "rounded-md font-sans",
-            onClick: () => handleSelectPost(threadId),
-            style: { paddingTop: 25, paddingBottom: 16 },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "inline-flex w-full items-center justify-between", children: [
-                /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex items-center justify-start space-x-3", children: [
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("img", { className: "h-8 w-8 rounded-full", src: creatorUser?.avatarUrl, alt: "Extra small avatar" }, void 0, !1, {
+        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex items-center justify-between", children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex items-center justify-start space-x-3", children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("img", { className: "h-8 w-8 rounded-full", src: creatorUser?.avatarUrl, alt: "Extra small avatar" }, void 0, !1, {
+              fileName: "app/features/Post/Post.tsx",
+              lineNumber: 124,
+              columnNumber: 11
+            }, this),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex flex-col items-start", children: [
+              /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "font-serif text-sm font-medium leading-tight text-gray-900 dark:text-gray-200", children: creatorUser?.name }, void 0, !1, {
+                fileName: "app/features/Post/Post.tsx",
+                lineNumber: 126,
+                columnNumber: 13
+              }, this),
+              /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("p", { className: "flex-1 text-right text-sm leading-tight text-gray-500 dark:text-gray-200", children: timeAgo(created_at) }, void 0, !1, {
+                fileName: "app/features/Post/Post.tsx",
+                lineNumber: 129,
+                columnNumber: 13
+              }, this)
+            ] }, void 0, !0, {
+              fileName: "app/features/Post/Post.tsx",
+              lineNumber: 125,
+              columnNumber: 11
+            }, this),
+            isSolved && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("svg", { width: "14", height: "10", viewBox: "0 0 14 10", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+              "path",
+              {
+                fillRule: "evenodd",
+                clipRule: "evenodd",
+                d: "M13.707 0.293031C13.8945 0.480558 13.9998 0.734866 13.9998 1.00003C13.9998 1.26519 13.8945 1.5195 13.707 1.70703L5.70704 9.70703C5.51951 9.8945 5.26521 9.99982 5.00004 9.99982C4.73488 9.99982 4.48057 9.8945 4.29304 9.70703L0.293041 5.70703C0.110883 5.51843 0.0100885 5.26583 0.0123669 5.00363C0.0146453 4.74143 0.119814 4.49062 0.305222 4.30521C0.490631 4.1198 0.741443 4.01464 1.00364 4.01236C1.26584 4.01008 1.51844 4.11087 1.70704 4.29303L5.00004 7.58603L12.293 0.293031C12.4806 0.10556 12.7349 0.000244141 13 0.000244141C13.2652 0.000244141 13.5195 0.10556 13.707 0.293031Z",
+                fill: "#046C4E"
+              },
+              void 0,
+              !1,
+              {
+                fileName: "app/features/Post/Post.tsx",
+                lineNumber: 135,
+                columnNumber: 15
+              },
+              this
+            ) }, void 0, !1, {
+              fileName: "app/features/Post/Post.tsx",
+              lineNumber: 134,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, !0, {
+            fileName: "app/features/Post/Post.tsx",
+            lineNumber: 123,
+            columnNumber: 9
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+            import_flowbite_react6.Dropdown,
+            {
+              renderTrigger: () => /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_hi.HiOutlineDotsHorizontal, { className: "cursor-pointer" }, void 0, !1, {
+                fileName: "app/features/Post/Post.tsx",
+                lineNumber: 145,
+                columnNumber: 32
+              }, this),
+              label: "",
+              dismissOnClick: !0,
+              children: [
+                user && user.username === creatorUser?.username && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_jsx_dev_runtime30.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { onClick: handleEdit, children: "Edit" }, void 0, !1, {
                     fileName: "app/features/Post/Post.tsx",
-                    lineNumber: 124,
-                    columnNumber: 13
+                    lineNumber: 151,
+                    columnNumber: 15
                   }, this),
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex flex-col items-start", children: [
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "font-serif text-sm font-medium leading-tight text-gray-900 dark:text-gray-200", children: creatorUser?.name }, void 0, !1, {
-                      fileName: "app/features/Post/Post.tsx",
-                      lineNumber: 126,
-                      columnNumber: 15
-                    }, this),
-                    /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("p", { className: "flex-1 text-right text-sm leading-tight text-gray-500 dark:text-gray-200", children: timeAgo(created_at) }, void 0, !1, {
-                      fileName: "app/features/Post/Post.tsx",
-                      lineNumber: 129,
-                      columnNumber: 15
-                    }, this)
-                  ] }, void 0, !0, {
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { onClick: deletePost3, children: "Remove" }, void 0, !1, {
                     fileName: "app/features/Post/Post.tsx",
-                    lineNumber: 125,
-                    columnNumber: 13
-                  }, this),
-                  isSolved && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("svg", { width: "14", height: "10", viewBox: "0 0 14 10", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                    "path",
-                    {
-                      fillRule: "evenodd",
-                      clipRule: "evenodd",
-                      d: "M13.707 0.293031C13.8945 0.480558 13.9998 0.734866 13.9998 1.00003C13.9998 1.26519 13.8945 1.5195 13.707 1.70703L5.70704 9.70703C5.51951 9.8945 5.26521 9.99982 5.00004 9.99982C4.73488 9.99982 4.48057 9.8945 4.29304 9.70703L0.293041 5.70703C0.110883 5.51843 0.0100885 5.26583 0.0123669 5.00363C0.0146453 4.74143 0.119814 4.49062 0.305222 4.30521C0.490631 4.1198 0.741443 4.01464 1.00364 4.01236C1.26584 4.01008 1.51844 4.11087 1.70704 4.29303L5.00004 7.58603L12.293 0.293031C12.4806 0.10556 12.7349 0.000244141 13 0.000244141C13.2652 0.000244141 13.5195 0.10556 13.707 0.293031Z",
-                      fill: "#046C4E"
-                    },
-                    void 0,
-                    !1,
-                    {
-                      fileName: "app/features/Post/Post.tsx",
-                      lineNumber: 135,
-                      columnNumber: 17
-                    },
-                    this
-                  ) }, void 0, !1, {
-                    fileName: "app/features/Post/Post.tsx",
-                    lineNumber: 134,
+                    lineNumber: 152,
                     columnNumber: 15
                   }, this)
                 ] }, void 0, !0, {
                   fileName: "app/features/Post/Post.tsx",
-                  lineNumber: 123,
+                  lineNumber: 150,
+                  columnNumber: 13
+                }, this),
+                /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { children: "Report" }, void 0, !1, {
+                  fileName: "app/features/Post/Post.tsx",
+                  lineNumber: 155,
                   columnNumber: 11
                 }, this),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                  import_flowbite_react6.Dropdown,
+                /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { as: "a", href: ForumLink + `/t/${topicId}`, target: "_blank", children: "Forum" }, void 0, !1, {
+                  fileName: "app/features/Post/Post.tsx",
+                  lineNumber: 156,
+                  columnNumber: 11
+                }, this)
+              ]
+            },
+            void 0,
+            !0,
+            {
+              fileName: "app/features/Post/Post.tsx",
+              lineNumber: 144,
+              columnNumber: 9
+            },
+            this
+          )
+        ] }, void 0, !0, {
+          fileName: "app/features/Post/Post.tsx",
+          lineNumber: 122,
+          columnNumber: 7
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex flex-col items-start justify-start", children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+            "div",
+            {
+              className: " w-full text-base leading-normal cursor-pointer  dark:text-gray-100",
+              onClick: () => handleSelectPost(threadId),
+              children: [
+                /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex w-full items-center justify-end text-xs text-gray-300 font-light uppercase italic", children: type }, void 0, !1, {
+                  fileName: "app/features/Post/Post.tsx",
+                  lineNumber: 166,
+                  columnNumber: 11
+                }, this),
+                selection && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                  "div",
                   {
-                    renderTrigger: () => /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_hi.HiOutlineDotsHorizontal, {}, void 0, !1, {
-                      fileName: "app/features/Post/Post.tsx",
-                      lineNumber: 146,
-                      columnNumber: 34
-                    }, this),
-                    label: "Dropdown button",
-                    dismissOnClick: !1,
-                    className: "relative ml-3 ",
-                    children: [
-                      user && user.username === creatorUser?.username && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_jsx_dev_runtime30.Fragment, { children: [
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                          "div",
-                          {
-                            onClick: handleEdit,
-                            className: "block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white",
-                            children: "Edit"
-                          },
-                          void 0,
-                          !1,
-                          {
-                            fileName: "app/features/Post/Post.tsx",
-                            lineNumber: 154,
-                            columnNumber: 19
-                          },
-                          this
-                        ) }, void 0, !1, {
-                          fileName: "app/features/Post/Post.tsx",
-                          lineNumber: 153,
-                          columnNumber: 17
-                        }, this),
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                          "div",
-                          {
-                            onClick: deletePost3,
-                            className: "block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white",
-                            children: "Remove"
-                          },
-                          void 0,
-                          !1,
-                          {
-                            fileName: "app/features/Post/Post.tsx",
-                            lineNumber: 162,
-                            columnNumber: 19
-                          },
-                          this
-                        ) }, void 0, !1, {
-                          fileName: "app/features/Post/Post.tsx",
-                          lineNumber: 161,
-                          columnNumber: 17
-                        }, this)
-                      ] }, void 0, !0, {
-                        fileName: "app/features/Post/Post.tsx",
-                        lineNumber: 152,
-                        columnNumber: 15
-                      }, this),
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { children: [
-                        " ",
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white", children: "Report" }, void 0, !1, {
-                          fileName: "app/features/Post/Post.tsx",
-                          lineNumber: 173,
-                          columnNumber: 15
-                        }, this)
-                      ] }, void 0, !0, {
-                        fileName: "app/features/Post/Post.tsx",
-                        lineNumber: 171,
-                        columnNumber: 13
-                      }, this),
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_flowbite_react6.Dropdown.Item, { children: [
-                        " ",
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                          "a",
-                          {
-                            href: ForumLink + `/t/${topicId}`,
-                            target: "_blank",
-                            className: "block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white",
-                            children: "Forum"
-                          },
-                          void 0,
-                          !1,
-                          {
-                            fileName: "app/features/Post/Post.tsx",
-                            lineNumber: 179,
-                            columnNumber: 15
-                          },
-                          this
-                        )
-                      ] }, void 0, !0, {
-                        fileName: "app/features/Post/Post.tsx",
-                        lineNumber: 177,
-                        columnNumber: 13
-                      }, this)
-                    ]
+                    className: `bg-white shadow ${isSelected ? "font-bold dark:bg-gray-500 " : " dark:bg-gray-700"}`,
+                    style: {
+                      borderRadius: "3px",
+                      fontSize: 20,
+                      padding: 10
+                    },
+                    children: selection
                   },
                   void 0,
-                  !0,
+                  !1,
                   {
                     fileName: "app/features/Post/Post.tsx",
-                    lineNumber: 145,
-                    columnNumber: 11
+                    lineNumber: 170,
+                    columnNumber: 13
+                  },
+                  this
+                ),
+                edit ? /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                  FormWithAudio,
+                  {
+                    post,
+                    type: "update",
+                    fetcher,
+                    onClose: () => setEdit(!1),
+                    editor
+                  },
+                  void 0,
+                  !1,
+                  {
+                    fileName: "app/features/Post/Post.tsx",
+                    lineNumber: 182,
+                    columnNumber: 13
+                  },
+                  this
+                ) : /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                  "p",
+                  {
+                    dangerouslySetInnerHTML: {
+                      __html: content
+                    },
+                    className: "mt-1 "
+                  },
+                  void 0,
+                  !1,
+                  {
+                    fileName: "app/features/Post/Post.tsx",
+                    lineNumber: 190,
+                    columnNumber: 13
                   },
                   this
                 )
-              ] }, void 0, !0, {
-                fileName: "app/features/Post/Post.tsx",
-                lineNumber: 122,
-                columnNumber: 9
-              }, this),
-              /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex flex-col items-start justify-start", children: [
-                /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: " w-full text-base leading-normal  dark:text-gray-100", children: [
-                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex w-full items-center justify-end text-xs font-light uppercase italic", children: type }, void 0, !1, {
-                    fileName: "app/features/Post/Post.tsx",
-                    lineNumber: 191,
-                    columnNumber: 13
-                  }, this),
-                  selection && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                    "div",
+              ]
+            },
+            void 0,
+            !0,
+            {
+              fileName: "app/features/Post/Post.tsx",
+              lineNumber: 162,
+              columnNumber: 9
+            },
+            this
+          ),
+          audioUrl && audioUrl?.length > 0 && !edit && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(ClientOnly, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("p", { children: "Loading..." }, void 0, !1, {
+            fileName: "app/features/Post/Post.tsx",
+            lineNumber: 199,
+            columnNumber: 33
+          }, this), children: () => /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_AudioPlayer.AudioPlayer, { src: audioUrl }, void 0, !1, {
+            fileName: "app/features/Post/Post.tsx",
+            lineNumber: 199,
+            columnNumber: 59
+          }, this) }, void 0, !1, {
+            fileName: "app/features/Post/Post.tsx",
+            lineNumber: 199,
+            columnNumber: 11
+          }, this),
+          isOptimistic ? /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "font-sans text-sm text-gray-300", children: "posting ..." }, void 0, !1, {
+            fileName: "app/features/Post/Post.tsx",
+            lineNumber: 202,
+            columnNumber: 11
+          }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+            "div",
+            {
+              className: "flex w-full flex-1 items-center justify-between",
+              style: {
+                marginBlock: 14
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex h-full items-center justify-start gap-4", children: [
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                    "button",
                     {
-                      className: `bg-white shadow ${isSelected ? "font-bold dark:bg-gray-500 " : " dark:bg-gray-700"}`,
-                      style: {
-                        borderRadius: "3px",
-                        fontSize: 20,
-                        padding: 10
-                      },
-                      children: selection
+                      type: "button",
+                      disabled: !user || fetcher.formMethod === "PATCH",
+                      className: `${effect && "animate-wiggle"} flex cursor-pointer items-center justify-start gap-1 `,
+                      onClick: handleLikeClick,
+                      onAnimationEnd: () => setEffect(!1),
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                          import_ai6.AiFillLike,
+                          {
+                            style: {
+                              fill: likedByMe ? "rgb(49,196,141)" : "gray"
+                            }
+                          },
+                          void 0,
+                          !1,
+                          {
+                            fileName: "app/features/Post/Post.tsx",
+                            lineNumber: 218,
+                            columnNumber: 17
+                          },
+                          this
+                        ),
+                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "  text-sm font-medium leading-tight text-gray-500 dark:text-gray-100", children: likeCount > 0 && likeCount }, void 0, !1, {
+                          fileName: "app/features/Post/Post.tsx",
+                          lineNumber: 223,
+                          columnNumber: 17
+                        }, this)
+                      ]
                     },
                     void 0,
-                    !1,
+                    !0,
                     {
                       fileName: "app/features/Post/Post.tsx",
-                      lineNumber: 193,
+                      lineNumber: 211,
                       columnNumber: 15
                     },
                     this
                   ),
-                  edit ? /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                    FormWithAudio,
-                    {
-                      post,
-                      type: "update",
-                      fetcher,
-                      onClose: () => setEdit(!1),
-                      editor
-                    },
-                    void 0,
-                    !1,
-                    {
-                      fileName: "app/features/Post/Post.tsx",
-                      lineNumber: 205,
-                      columnNumber: 15
-                    },
-                    this
-                  ) : /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                    "p",
-                    {
-                      dangerouslySetInnerHTML: {
-                        __html: content
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex items-center justify-start", onClick: () => setShowReplies((prev) => !prev), children: [
+                    /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                      "svg",
+                      {
+                        width: "16",
+                        height: "14",
+                        viewBox: "0 0 16 14",
+                        className: "fill-gray-500",
+                        xmlns: "http://www.w3.org/2000/svg",
+                        children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                          "path",
+                          {
+                            fillRule: "evenodd",
+                            clipRule: "evenodd",
+                            d: "M15.2008 9.19995V1.99995C15.2008 1.52256 15.0111 1.06472 14.6736 0.727159C14.336 0.389593 13.8782 0.199951 13.4008 0.199951H2.60078C2.12339 0.199951 1.66555 0.389593 1.32799 0.727159C0.990424 1.06472 0.800781 1.52256 0.800781 1.99995V9.19995C0.800781 9.67734 0.990424 10.1352 1.32799 10.4727C1.66555 10.8103 2.12339 11 2.60078 11H5.30078L8.00078 13.7L10.7008 11H13.4008C13.8782 11 14.336 10.8103 14.6736 10.4727C15.0111 10.1352 15.2008 9.67734 15.2008 9.19995ZM3.50078 3.79995C3.50078 3.56126 3.5956 3.33234 3.76439 3.16356C3.93317 2.99477 4.16209 2.89995 4.40078 2.89995H11.6008C11.8395 2.89995 12.0684 2.99477 12.2372 3.16356C12.406 3.33234 12.5008 3.56126 12.5008 3.79995C12.5008 4.03865 12.406 4.26756 12.2372 4.43635C12.0684 4.60513 11.8395 4.69995 11.6008 4.69995H4.40078C4.16209 4.69995 3.93317 4.60513 3.76439 4.43635C3.5956 4.26756 3.50078 4.03865 3.50078 3.79995ZM4.40078 6.49995C4.16209 6.49995 3.93317 6.59477 3.76439 6.76356C3.5956 6.93234 3.50078 7.16126 3.50078 7.39995C3.50078 7.63865 3.5956 7.86756 3.76439 8.03635C3.93317 8.20513 4.16209 8.29995 4.40078 8.29995H7.10078C7.33948 8.29995 7.56839 8.20513 7.73718 8.03635C7.90596 7.86756 8.00078 7.63865 8.00078 7.39995C8.00078 7.16126 7.90596 6.93234 7.73718 6.76356C7.56839 6.59477 7.33948 6.49995 7.10078 6.49995H4.40078Z"
+                          },
+                          void 0,
+                          !1,
+                          {
+                            fileName: "app/features/Post/Post.tsx",
+                            lineNumber: 236,
+                            columnNumber: 19
+                          },
+                          this
+                        )
                       },
-                      className: "mt-1 "
+                      void 0,
+                      !1,
+                      {
+                        fileName: "app/features/Post/Post.tsx",
+                        lineNumber: 229,
+                        columnNumber: 17
+                      },
+                      this
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                      "button",
+                      {
+                        type: "button",
+                        className: "text-sm font-medium lowercase leading-tight text-gray-500 dark:text-gray-100",
+                        children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("span", { className: "ml-2", children: showReplies ? "hide" : "show" }, void 0, !1, {
+                          fileName: "app/features/Post/Post.tsx",
+                          lineNumber: 247,
+                          columnNumber: 19
+                        }, this)
+                      },
+                      void 0,
+                      !1,
+                      {
+                        fileName: "app/features/Post/Post.tsx",
+                        lineNumber: 243,
+                        columnNumber: 17
+                      },
+                      this
+                    )
+                  ] }, void 0, !0, {
+                    fileName: "app/features/Post/Post.tsx",
+                    lineNumber: 228,
+                    columnNumber: 15
+                  }, this),
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                    "div",
+                    {
+                      onClick: handleShare,
+                      title: "share",
+                      className: "flex items-center justify-start gap-2 fill-gray-400 text-gray-400 transition-all hover:fill-blue-400 hover:text-blue-400 dark:text-gray-200 hover:dark:text-blue-400",
+                      children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("svg", { width: "16", height: "16", viewBox: "0 0 16 16", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                        "path",
+                        {
+                          d: "M13.0001 6C13.6092 6.00002 14.2039 5.8146 14.7051 5.4684C15.2064 5.1222 15.5903 4.63162 15.8059 4.06191C16.0215 3.49219 16.0586 2.87034 15.9122 2.27903C15.7658 1.68773 15.4429 1.15501 14.9864 0.7517C14.5299 0.348392 13.9614 0.0936137 13.3565 0.0212462C12.7517 -0.0511213 12.1392 0.062351 11.6004 0.346574C11.0616 0.630796 10.6221 1.0723 10.3404 1.61237C10.0586 2.15245 9.94792 2.7655 10.0231 3.37L5.08305 5.84C4.65928 5.43135 4.12465 5.15642 3.54574 5.04944C2.96684 4.94247 2.36926 5.00819 1.82744 5.2384C1.28561 5.46862 0.823499 5.85316 0.498659 6.34413C0.173819 6.8351 0.000610352 7.4108 0.000610352 7.9995C0.000610352 8.5882 0.173819 9.1639 0.498659 9.65487C0.823499 10.1458 1.28561 10.5304 1.82744 10.7606C2.36926 10.9908 2.96684 11.0565 3.54574 10.9496C4.12465 10.8426 4.65928 10.5676 5.08305 10.159L10.0231 12.629C9.93555 13.3312 10.0991 14.0418 10.4848 14.6351C10.8706 15.2284 11.4536 15.6663 12.1309 15.8713C12.8082 16.0763 13.5362 16.0353 14.1862 15.7555C14.8362 15.4757 15.3664 14.9751 15.683 14.3422C15.9996 13.7093 16.0823 12.9849 15.9165 12.2969C15.7506 11.6089 15.3469 11.0017 14.7767 10.5826C14.2065 10.1635 13.5065 9.9595 12.8004 10.0066C12.0943 10.0537 11.4276 10.3489 10.9181 10.84L5.97805 8.37C6.00832 8.12426 6.00832 7.87574 5.97805 7.63L10.9181 5.16C11.4561 5.68 12.1901 6 13.0001 6Z",
+                          className: "fill-inherit"
+                        },
+                        void 0,
+                        !1,
+                        {
+                          fileName: "app/features/Post/Post.tsx",
+                          lineNumber: 257,
+                          columnNumber: 19
+                        },
+                        this
+                      ) }, void 0, !1, {
+                        fileName: "app/features/Post/Post.tsx",
+                        lineNumber: 256,
+                        columnNumber: 17
+                      }, this)
                     },
                     void 0,
                     !1,
                     {
                       fileName: "app/features/Post/Post.tsx",
-                      lineNumber: 213,
+                      lineNumber: 251,
                       columnNumber: 15
                     },
                     this
                   )
                 ] }, void 0, !0, {
                   fileName: "app/features/Post/Post.tsx",
-                  lineNumber: 190,
-                  columnNumber: 11
-                }, this),
-                audioUrl && audioUrl?.length > 0 && !edit && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(ClientOnly, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("p", { children: "Loading..." }, void 0, !1, {
-                  fileName: "app/features/Post/Post.tsx",
-                  lineNumber: 222,
-                  columnNumber: 35
-                }, this), children: () => /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_AudioPlayer.AudioPlayer, { src: audioUrl }, void 0, !1, {
-                  fileName: "app/features/Post/Post.tsx",
-                  lineNumber: 222,
-                  columnNumber: 61
-                }, this) }, void 0, !1, {
-                  fileName: "app/features/Post/Post.tsx",
-                  lineNumber: 222,
+                  lineNumber: 210,
                   columnNumber: 13
                 }, this),
-                isOptimistic ? /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "font-sans text-sm text-gray-300", children: "posting ..." }, void 0, !1, {
-                  fileName: "app/features/Post/Post.tsx",
-                  lineNumber: 225,
-                  columnNumber: 13
-                }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                  "div",
-                  {
-                    className: "flex w-full flex-1 items-center justify-between",
-                    style: {
-                      marginBlock: 14
-                    },
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex h-full items-center justify-start gap-4", children: [
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                          "button",
-                          {
-                            type: "button",
-                            disabled: !user || fetcher.formMethod === "PATCH",
-                            className: `${effect && "animate-wiggle"} flex cursor-pointer items-center justify-start gap-1 `,
-                            onClick: handleLikeClick,
-                            onAnimationEnd: () => setEffect(!1),
-                            children: [
-                              /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                                "path",
-                                {
-                                  d: "M0.800049 7.95005C0.800049 7.77276 0.834968 7.59722 0.902812 7.43343C0.970655 7.26964 1.0701 7.12081 1.19545 6.99545C1.32081 6.8701 1.46964 6.77066 1.63343 6.70281C1.79722 6.63497 1.97276 6.60005 2.15005 6.60005C2.32733 6.60005 2.50288 6.63497 2.66667 6.70281C2.83046 6.77066 2.97928 6.8701 3.10464 6.99545C3.23 7.12081 3.32944 7.26964 3.39729 7.43343C3.46513 7.59722 3.50005 7.77276 3.50005 7.95005V13.35C3.50005 13.7081 3.35782 14.0515 3.10464 14.3046C2.85147 14.5578 2.50809 14.7 2.15005 14.7C1.79201 14.7 1.44863 14.5578 1.19545 14.3046C0.942281 14.0515 0.800049 13.7081 0.800049 13.35V7.95005ZM4.40005 7.79975V12.6867C4.39989 13.0212 4.49295 13.3492 4.66877 13.6337C4.84459 13.9183 5.09623 14.1482 5.39545 14.2977L5.44045 14.3202C5.93985 14.5698 6.49045 14.6999 7.04875 14.7H11.9231C12.3394 14.7002 12.7429 14.5561 13.0648 14.2922C13.3868 14.0284 13.6074 13.6611 13.6889 13.2528L14.7689 7.85285C14.8211 7.59173 14.8147 7.32229 14.7502 7.06395C14.6857 6.8056 14.5647 6.56478 14.3959 6.35886C14.227 6.15293 14.0146 5.98703 13.774 5.87311C13.5333 5.75918 13.2703 5.70008 13.004 5.70005H9.80005V2.10005C9.80005 1.62266 9.61041 1.16482 9.27284 0.827257C8.93528 0.489691 8.47744 0.300049 8.00005 0.300049C7.76135 0.300049 7.53244 0.39487 7.36365 0.563653C7.19487 0.732435 7.10005 0.961354 7.10005 1.20005V1.80035C7.10005 2.57928 6.84741 3.3372 6.38005 3.96035L5.12005 5.63975C4.65269 6.2629 4.40005 7.02082 4.40005 7.79975V7.79975Z",
-                                  style: {
-                                    fill: likedByMe ? "rgb(49,196,141)" : "gray"
-                                  }
-                                },
-                                void 0,
-                                !1,
-                                {
-                                  fileName: "app/features/Post/Post.tsx",
-                                  lineNumber: 242,
-                                  columnNumber: 21
-                                },
-                                this
-                              ) }, void 0, !1, {
-                                fileName: "app/features/Post/Post.tsx",
-                                lineNumber: 241,
-                                columnNumber: 19
-                              }, this),
-                              /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "  text-sm font-medium leading-tight text-gray-500 dark:text-gray-100", children: likeCount > 0 && likeCount }, void 0, !1, {
-                                fileName: "app/features/Post/Post.tsx",
-                                lineNumber: 250,
-                                columnNumber: 19
-                              }, this)
-                            ]
-                          },
-                          void 0,
-                          !0,
-                          {
-                            fileName: "app/features/Post/Post.tsx",
-                            lineNumber: 234,
-                            columnNumber: 17
-                          },
-                          this
-                        ),
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { className: "flex items-center justify-start", onClick: () => setShowReplies((prev) => !prev), children: [
-                          /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                            "svg",
-                            {
-                              width: "16",
-                              height: "14",
-                              viewBox: "0 0 16 14",
-                              className: "fill-gray-500",
-                              xmlns: "http://www.w3.org/2000/svg",
-                              children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                                "path",
-                                {
-                                  fillRule: "evenodd",
-                                  clipRule: "evenodd",
-                                  d: "M15.2008 9.19995V1.99995C15.2008 1.52256 15.0111 1.06472 14.6736 0.727159C14.336 0.389593 13.8782 0.199951 13.4008 0.199951H2.60078C2.12339 0.199951 1.66555 0.389593 1.32799 0.727159C0.990424 1.06472 0.800781 1.52256 0.800781 1.99995V9.19995C0.800781 9.67734 0.990424 10.1352 1.32799 10.4727C1.66555 10.8103 2.12339 11 2.60078 11H5.30078L8.00078 13.7L10.7008 11H13.4008C13.8782 11 14.336 10.8103 14.6736 10.4727C15.0111 10.1352 15.2008 9.67734 15.2008 9.19995ZM3.50078 3.79995C3.50078 3.56126 3.5956 3.33234 3.76439 3.16356C3.93317 2.99477 4.16209 2.89995 4.40078 2.89995H11.6008C11.8395 2.89995 12.0684 2.99477 12.2372 3.16356C12.406 3.33234 12.5008 3.56126 12.5008 3.79995C12.5008 4.03865 12.406 4.26756 12.2372 4.43635C12.0684 4.60513 11.8395 4.69995 11.6008 4.69995H4.40078C4.16209 4.69995 3.93317 4.60513 3.76439 4.43635C3.5956 4.26756 3.50078 4.03865 3.50078 3.79995ZM4.40078 6.49995C4.16209 6.49995 3.93317 6.59477 3.76439 6.76356C3.5956 6.93234 3.50078 7.16126 3.50078 7.39995C3.50078 7.63865 3.5956 7.86756 3.76439 8.03635C3.93317 8.20513 4.16209 8.29995 4.40078 8.29995H7.10078C7.33948 8.29995 7.56839 8.20513 7.73718 8.03635C7.90596 7.86756 8.00078 7.63865 8.00078 7.39995C8.00078 7.16126 7.90596 6.93234 7.73718 6.76356C7.56839 6.59477 7.33948 6.49995 7.10078 6.49995H4.40078Z"
-                                },
-                                void 0,
-                                !1,
-                                {
-                                  fileName: "app/features/Post/Post.tsx",
-                                  lineNumber: 263,
-                                  columnNumber: 21
-                                },
-                                this
-                              )
-                            },
-                            void 0,
-                            !1,
-                            {
-                              fileName: "app/features/Post/Post.tsx",
-                              lineNumber: 256,
-                              columnNumber: 19
-                            },
-                            this
-                          ),
-                          /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                            "button",
-                            {
-                              type: "button",
-                              className: "text-sm font-medium lowercase leading-tight text-gray-500 dark:text-gray-100",
-                              children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("span", { className: "ml-2", children: showReplies ? "hide" : "show" }, void 0, !1, {
-                                fileName: "app/features/Post/Post.tsx",
-                                lineNumber: 274,
-                                columnNumber: 21
-                              }, this)
-                            },
-                            void 0,
-                            !1,
-                            {
-                              fileName: "app/features/Post/Post.tsx",
-                              lineNumber: 270,
-                              columnNumber: 19
-                            },
-                            this
-                          )
-                        ] }, void 0, !0, {
-                          fileName: "app/features/Post/Post.tsx",
-                          lineNumber: 255,
-                          columnNumber: 17
-                        }, this),
-                        /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                          "div",
-                          {
-                            onClick: handleShare,
-                            title: "share",
-                            className: "flex items-center justify-start gap-2 fill-gray-400 text-gray-400 transition-all hover:fill-blue-400 hover:text-blue-400 dark:text-gray-200 hover:dark:text-blue-400",
-                            children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("svg", { width: "16", height: "16", viewBox: "0 0 16 16", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                              "path",
-                              {
-                                d: "M13.0001 6C13.6092 6.00002 14.2039 5.8146 14.7051 5.4684C15.2064 5.1222 15.5903 4.63162 15.8059 4.06191C16.0215 3.49219 16.0586 2.87034 15.9122 2.27903C15.7658 1.68773 15.4429 1.15501 14.9864 0.7517C14.5299 0.348392 13.9614 0.0936137 13.3565 0.0212462C12.7517 -0.0511213 12.1392 0.062351 11.6004 0.346574C11.0616 0.630796 10.6221 1.0723 10.3404 1.61237C10.0586 2.15245 9.94792 2.7655 10.0231 3.37L5.08305 5.84C4.65928 5.43135 4.12465 5.15642 3.54574 5.04944C2.96684 4.94247 2.36926 5.00819 1.82744 5.2384C1.28561 5.46862 0.823499 5.85316 0.498659 6.34413C0.173819 6.8351 0.000610352 7.4108 0.000610352 7.9995C0.000610352 8.5882 0.173819 9.1639 0.498659 9.65487C0.823499 10.1458 1.28561 10.5304 1.82744 10.7606C2.36926 10.9908 2.96684 11.0565 3.54574 10.9496C4.12465 10.8426 4.65928 10.5676 5.08305 10.159L10.0231 12.629C9.93555 13.3312 10.0991 14.0418 10.4848 14.6351C10.8706 15.2284 11.4536 15.6663 12.1309 15.8713C12.8082 16.0763 13.5362 16.0353 14.1862 15.7555C14.8362 15.4757 15.3664 14.9751 15.683 14.3422C15.9996 13.7093 16.0823 12.9849 15.9165 12.2969C15.7506 11.6089 15.3469 11.0017 14.7767 10.5826C14.2065 10.1635 13.5065 9.9595 12.8004 10.0066C12.0943 10.0537 11.4276 10.3489 10.9181 10.84L5.97805 8.37C6.00832 8.12426 6.00832 7.87574 5.97805 7.63L10.9181 5.16C11.4561 5.68 12.1901 6 13.0001 6Z",
-                                className: "fill-inherit"
-                              },
-                              void 0,
-                              !1,
-                              {
-                                fileName: "app/features/Post/Post.tsx",
-                                lineNumber: 284,
-                                columnNumber: 21
-                              },
-                              this
-                            ) }, void 0, !1, {
-                              fileName: "app/features/Post/Post.tsx",
-                              lineNumber: 283,
-                              columnNumber: 19
-                            }, this)
-                          },
-                          void 0,
-                          !1,
-                          {
-                            fileName: "app/features/Post/Post.tsx",
-                            lineNumber: 278,
-                            columnNumber: 17
-                          },
-                          this
-                        )
-                      ] }, void 0, !0, {
+                user && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("div", { onClick: () => setOpenReply((prev) => !prev), className: "flex items-start justify-start space-x-1.5", children: [
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
+                    "svg",
+                    {
+                      width: "16",
+                      height: "13",
+                      viewBox: "0 0 16 13",
+                      className: "fill-gray-500 dark:fill-gray-100",
+                      xmlns: "http://www.w3.org/2000/svg",
+                      children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("path", { d: "M6.13858 7.95584L5.67917 8.15319C5.65821 8.10438 5.62774 8.06025 5.58953 8.02335L5.58328 8.01731L5.58334 8.01726L3.51964 5.95356L2.66608 5.1H3.87319H8.90059C10.2267 5.1 11.4984 5.62679 12.4361 6.56447C13.3738 7.50215 13.9006 8.77392 13.9006 10.1V11.9C13.9006 12.0061 13.9427 12.1078 14.0177 12.1828C14.0928 12.2579 14.1945 12.3 14.3006 12.3C14.4067 12.3 14.5084 12.2579 14.5834 12.1828C14.6584 12.1078 14.7006 12.0061 14.7006 11.9V10.1C14.7006 8.56175 14.0895 7.08649 13.0018 5.99878C11.9141 4.91107 10.4388 4.3 8.90059 4.3H3.87319H2.66608L3.51964 3.44645L5.58328 1.3828C5.5833 1.38279 5.58332 1.38277 5.58334 1.38275C5.65829 1.30774 5.7004 1.20604 5.7004 1.1C5.7004 0.993988 5.65831 0.892311 5.58339 0.817309C5.58335 0.817274 5.58332 0.817239 5.58328 0.817203M6.13858 7.95584L4.66429 0.463703C4.83306 0.294979 5.06194 0.200195 5.30059 0.200195C5.53924 0.200195 5.76811 0.294979 5.93689 0.463703L5.58328 0.817203M6.13858 7.95584L5.67917 8.15319C5.70014 8.20199 5.71117 8.25448 5.71163 8.30759C5.7121 8.3607 5.70197 8.41337 5.68186 8.46253C5.66175 8.51169 5.63205 8.55635 5.59449 8.59391C5.55693 8.63146 5.51227 8.66116 5.46312 8.68128C5.41396 8.70139 5.36128 8.71151 5.30817 8.71105C5.25506 8.71059 5.20257 8.69955 5.15377 8.67859C5.10497 8.65763 5.06083 8.62715 5.02393 8.58895L5.02399 8.58889L5.01784 8.58275L1.4179 4.9828C1.34291 4.90779 1.30078 4.80607 1.30078 4.7C1.30078 4.59396 1.34289 4.49226 1.41784 4.41726C1.41786 4.41724 1.41788 4.41722 1.4179 4.4172L5.01779 0.81731L6.13858 7.95584ZM5.58328 0.817203C5.50828 0.742282 5.40661 0.700195 5.30059 0.700195C5.19455 0.700195 5.09285 0.742302 5.01784 0.817256L5.58328 0.817203Z" }, void 0, !1, {
                         fileName: "app/features/Post/Post.tsx",
-                        lineNumber: 233,
-                        columnNumber: 15
-                      }, this),
-                      user && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                        "div",
-                        {
-                          onClick: () => setOpenReply((prev) => !prev),
-                          className: "flex items-start justify-start space-x-1.5",
-                          children: [
-                            /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
-                              "svg",
-                              {
-                                width: "16",
-                                height: "13",
-                                viewBox: "0 0 16 13",
-                                className: "fill-gray-500 dark:fill-gray-100",
-                                xmlns: "http://www.w3.org/2000/svg",
-                                children: /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("path", { d: "M6.13858 7.95584L5.67917 8.15319C5.65821 8.10438 5.62774 8.06025 5.58953 8.02335L5.58328 8.01731L5.58334 8.01726L3.51964 5.95356L2.66608 5.1H3.87319H8.90059C10.2267 5.1 11.4984 5.62679 12.4361 6.56447C13.3738 7.50215 13.9006 8.77392 13.9006 10.1V11.9C13.9006 12.0061 13.9427 12.1078 14.0177 12.1828C14.0928 12.2579 14.1945 12.3 14.3006 12.3C14.4067 12.3 14.5084 12.2579 14.5834 12.1828C14.6584 12.1078 14.7006 12.0061 14.7006 11.9V10.1C14.7006 8.56175 14.0895 7.08649 13.0018 5.99878C11.9141 4.91107 10.4388 4.3 8.90059 4.3H3.87319H2.66608L3.51964 3.44645L5.58328 1.3828C5.5833 1.38279 5.58332 1.38277 5.58334 1.38275C5.65829 1.30774 5.7004 1.20604 5.7004 1.1C5.7004 0.993988 5.65831 0.892311 5.58339 0.817309C5.58335 0.817274 5.58332 0.817239 5.58328 0.817203M6.13858 7.95584L4.66429 0.463703C4.83306 0.294979 5.06194 0.200195 5.30059 0.200195C5.53924 0.200195 5.76811 0.294979 5.93689 0.463703L5.58328 0.817203M6.13858 7.95584L5.67917 8.15319C5.70014 8.20199 5.71117 8.25448 5.71163 8.30759C5.7121 8.3607 5.70197 8.41337 5.68186 8.46253C5.66175 8.51169 5.63205 8.55635 5.59449 8.59391C5.55693 8.63146 5.51227 8.66116 5.46312 8.68128C5.41396 8.70139 5.36128 8.71151 5.30817 8.71105C5.25506 8.71059 5.20257 8.69955 5.15377 8.67859C5.10497 8.65763 5.06083 8.62715 5.02393 8.58895L5.02399 8.58889L5.01784 8.58275L1.4179 4.9828C1.34291 4.90779 1.30078 4.80607 1.30078 4.7C1.30078 4.59396 1.34289 4.49226 1.41784 4.41726C1.41786 4.41724 1.41788 4.41722 1.4179 4.4172L5.01779 0.81731L6.13858 7.95584ZM5.58328 0.817203C5.50828 0.742282 5.40661 0.700195 5.30059 0.700195C5.19455 0.700195 5.09285 0.742302 5.01784 0.817256L5.58328 0.817203Z" }, void 0, !1, {
-                                  fileName: "app/features/Post/Post.tsx",
-                                  lineNumber: 303,
-                                  columnNumber: 21
-                                }, this)
-                              },
-                              void 0,
-                              !1,
-                              {
-                                fileName: "app/features/Post/Post.tsx",
-                                lineNumber: 296,
-                                columnNumber: 19
-                              },
-                              this
-                            ),
-                            /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("button", { type: "button", className: "text-sm font-medium leading-tight text-gray-500 dark:text-gray-100", children: openReply ? "Close" : translation?.reply }, void 0, !1, {
-                              fileName: "app/features/Post/Post.tsx",
-                              lineNumber: 305,
-                              columnNumber: 19
-                            }, this)
-                          ]
-                        },
-                        void 0,
-                        !0,
-                        {
-                          fileName: "app/features/Post/Post.tsx",
-                          lineNumber: 292,
-                          columnNumber: 17
-                        },
-                        this
-                      )
-                    ]
-                  },
-                  void 0,
-                  !0,
-                  {
+                        lineNumber: 273,
+                        columnNumber: 19
+                      }, this)
+                    },
+                    void 0,
+                    !1,
+                    {
+                      fileName: "app/features/Post/Post.tsx",
+                      lineNumber: 266,
+                      columnNumber: 17
+                    },
+                    this
+                  ),
+                  /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("button", { type: "button", className: "text-sm font-medium leading-tight text-gray-500 dark:text-gray-100", children: openReply ? "Close" : translation?.reply }, void 0, !1, {
                     fileName: "app/features/Post/Post.tsx",
-                    lineNumber: 227,
-                    columnNumber: 13
-                  },
-                  this
-                )
-              ] }, void 0, !0, {
-                fileName: "app/features/Post/Post.tsx",
-                lineNumber: 189,
-                columnNumber: 9
-              }, this)
-            ]
-          },
-          void 0,
-          !0,
-          {
-            fileName: "app/features/Post/Post.tsx",
-            lineNumber: 117,
-            columnNumber: 7
-          },
-          this
-        ),
+                    lineNumber: 275,
+                    columnNumber: 17
+                  }, this)
+                ] }, void 0, !0, {
+                  fileName: "app/features/Post/Post.tsx",
+                  lineNumber: 265,
+                  columnNumber: 15
+                }, this)
+              ]
+            },
+            void 0,
+            !0,
+            {
+              fileName: "app/features/Post/Post.tsx",
+              lineNumber: 204,
+              columnNumber: 11
+            },
+            this
+          )
+        ] }, void 0, !0, {
+          fileName: "app/features/Post/Post.tsx",
+          lineNumber: 161,
+          columnNumber: 7
+        }, this),
         openReply && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(
           ReplyForm,
           {
@@ -5206,7 +5048,7 @@ function Post({ isOptimistic, post, showDivider, editor }) {
           !1,
           {
             fileName: "app/features/Post/Post.tsx",
-            lineNumber: 315,
+            lineNumber: 284,
             columnNumber: 9
           },
           this
@@ -5225,14 +5067,14 @@ function Post({ isOptimistic, post, showDivider, editor }) {
           !1,
           {
             fileName: "app/features/Post/Post.tsx",
-            lineNumber: 324,
+            lineNumber: 293,
             columnNumber: 9
           },
           this
         ),
         !showDivider && /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)("hr", {}, void 0, !1, {
           fileName: "app/features/Post/Post.tsx",
-          lineNumber: 333,
+          lineNumber: 302,
           columnNumber: 24
         }, this)
       ]
@@ -5241,7 +5083,7 @@ function Post({ isOptimistic, post, showDivider, editor }) {
     !0,
     {
       fileName: "app/features/Post/Post.tsx",
-      lineNumber: 112,
+      lineNumber: 115,
       columnNumber: 5
     },
     this
@@ -5714,55 +5556,38 @@ function Posts({ posts, editor }) {
       lineNumber: 22,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)(
-      "div",
+    /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)("div", { className: " flex flex-col h-full overflow-y-scroll flex-1 ", children: lists?.length > 0 ? lists?.map((post, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)(
+      Post_default,
       {
-        style: {
-          fontFamily: "sans-serif"
-        },
-        className: " relative flex flex-col h-full overflow-y-scroll flex-1 ",
-        children: lists?.length > 0 ? lists?.map((post, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)("div", { children: /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)(
-          Post_default,
-          {
-            post,
-            isOptimistic: !1,
-            showDivider: lists.length <= index + 1,
-            editor
-          },
-          post.id,
-          !1,
-          {
-            fileName: "app/features/Post/Posts.tsx",
-            lineNumber: 33,
-            columnNumber: 17
-          },
-          this
-        ) }, post.id, !1, {
-          fileName: "app/features/Post/Posts.tsx",
-          lineNumber: 32,
-          columnNumber: 15
-        }, this)) : /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)("div", { className: "text-center", children: [
-          /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)("p", { children: "No post available" }, void 0, !1, {
-            fileName: "app/features/Post/Posts.tsx",
-            lineNumber: 45,
-            columnNumber: 13
-          }, this),
-          "Feel free to be the first one to ask Question !"
-        ] }, void 0, !0, {
-          fileName: "app/features/Post/Posts.tsx",
-          lineNumber: 44,
-          columnNumber: 11
-        }, this)
+        post,
+        isOptimistic: !1,
+        showDivider: lists.length <= index + 1,
+        editor
       },
-      void 0,
+      post.id,
       !1,
       {
         fileName: "app/features/Post/Posts.tsx",
-        lineNumber: 23,
-        columnNumber: 7
+        lineNumber: 27,
+        columnNumber: 15
       },
       this
-    )
+    )) : /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)("div", { className: "text-center", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime32.jsxDEV)("p", { children: "No post available" }, void 0, !1, {
+        fileName: "app/features/Post/Posts.tsx",
+        lineNumber: 38,
+        columnNumber: 13
+      }, this),
+      "Feel free to be the first one to ask Question !"
+    ] }, void 0, !0, {
+      fileName: "app/features/Post/Posts.tsx",
+      lineNumber: 37,
+      columnNumber: 11
+    }, this) }, void 0, !1, {
+      fileName: "app/features/Post/Posts.tsx",
+      lineNumber: 23,
+      columnNumber: 7
+    }, this)
   ] }, void 0, !0, {
     fileName: "app/features/Post/Posts.tsx",
     lineNumber: 21,
@@ -8106,7 +7931,7 @@ async function updateIsAproved(id, is_approved) {
 // app/routes/api.reply.$id.tsx
 var loader7 = async ({ params }) => {
   let id = parseInt(params?.id), post = await findPostByTopicId(id), posts = [], postsData = await getposts(id), replyList = await findReplyByPostId(post?.id), postsList = postsData?.post_stream?.posts;
-  return posts = combineArrays(replyList, postsList), (0, import_react_router3.json)({
+  return replyList[0]?.post_id || postsList?.shift(), posts = combineArrays(replyList, postsList), (0, import_react_router3.json)({
     posts
   });
 };
@@ -8383,7 +8208,7 @@ __export(index_exports, {
 var import_react63 = require("@remix-run/react"), import_flowbite_react8 = require("flowbite-react");
 
 // app/component/Layout/Footer.tsx
-var import_ai6 = require("react-icons/ai");
+var import_ai7 = require("react-icons/ai");
 
 // app/assets/indrajalaLogo.png
 var indrajalaLogo_default = "/build/_assets/indrajalaLogo-JUD46QZL.png";
@@ -8443,11 +8268,11 @@ function FooterContainer() {
           link: "https://openpecha.org/"
         },
         {
-          logo: import_ai6.AiFillTwitterCircle,
+          logo: import_ai7.AiFillTwitterCircle,
           link: "https://twitter.com/OpenPecha"
         },
         {
-          logo: import_ai6.AiFillGithub,
+          logo: import_ai7.AiFillGithub,
           link: "https://github.com/OpenPecha"
         }
       ].map((item, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime48.jsxDEV)(
@@ -9053,7 +8878,7 @@ function test() {
 var test_default = test;
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-6LWE2X5G.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-DS5JQWNR.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-N2EK6LAJ.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-WCY3QKBB.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-BTEB374M.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-HQUEBLI4.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-BTEB374M.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-KWOESFVO.js", imports: ["/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-BTEB374M.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-K76OBNIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "471e4b9e", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700728188442 }, url: "/build/manifest-471E4B9E.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-JPSXLWXH.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-BJHIRQFJ.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-N3ZRGFC5.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-YXSZTQSE.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-N3ZRGFC5.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-IQ2IROGF.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-MJQIWQJE.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-N3ZRGFC5.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-K3653CCG.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-MJQIWQJE.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-N3ZRGFC5.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-UT7PYSQ5.js", imports: ["/build/_shared/chunk-43Q5JG67.js", "/build/_shared/chunk-MJQIWQJE.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-N3ZRGFC5.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "cadab9ae", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700735474215 }, url: "/build/manifest-CADAB9AE.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public\\build", future = {}, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
