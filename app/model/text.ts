@@ -42,7 +42,12 @@ export async function findLatestText() {
       select: {
         id: true,
         name: true,
-        Page: true,
+        Page: {
+          select: {
+            id: true,
+            version: true,
+          },
+        },
         allow_post: true,
       },
       orderBy: {
