@@ -15,6 +15,9 @@ import PostMark from '~/features/Editor/tiptap/tiptap-extension/postMark';
 import { SearchAndReplace } from '~/features/Editor/tiptap/tiptap-extension/searchAndReplace';
 import editorProps from './events';
 import History from '@tiptap/extension-history';
+
+import ListItem from '@tiptap/extension-list-item';
+import OrderedList from '@tiptap/extension-ordered-list';
 export {
   Heading,
   Paragraph,
@@ -33,4 +36,6 @@ export {
   Placeholder,
   Italic,
   Underline,
+  ListItem,
+  OrderedList,
 };

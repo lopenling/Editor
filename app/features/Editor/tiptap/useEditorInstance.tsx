@@ -3,6 +3,8 @@ import { useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';
+import convertPTagsToOlAfterH1 from '~/lib/ConvertpToList';
+import { useEffect } from 'react';
 
 let firsttime = true;
 
@@ -16,7 +18,6 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
       return p;
     });
   }
-
   function postSetter(id: string) {
     setSearchParams((p) => {
       p.set('with', 'Post');
@@ -24,7 +25,6 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
       return p;
     });
   }
-  let condition = content ? [content] : [];
   let editor = useEditor(
     {
       extensions: [
@@ -32,7 +32,9 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
         Extension.Heading.configure({
           levels: [1, 2, 3],
         }),
-        Extension.Paragraph.configure({}),
+        Extension.Paragraph,
+        Extension.OrderedList,
+        Extension.ListItem,
         Extension.Text,
         Extension.Bold,
         Extension.FontFamily,
@@ -57,6 +59,7 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
           },
           multicolor: true,
         }),
+
         Extension.Suggestion(suggestionSetter).configure({
           HTMLAttributes: {
             class: 'suggestion',
@@ -68,7 +71,6 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
           },
         }),
       ],
-      content: content ?? undefined,
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
       onSelectionUpdate: ({ editor }) => {
@@ -93,8 +95,16 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
         firsttime = false;
       },
     },
-    condition,
+    [],
   );
+
+  useEffect(() => {
+    if (content) {
+      let content_with_list = convertPTagsToOlAfterH1(content);
+      editor?.commands.setContent(content_with_list);
+    }
+  }, [content, editor]);
+
   return editor;
 };
 export default useEditorInstance;

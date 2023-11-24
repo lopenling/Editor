@@ -14,6 +14,7 @@ import { db } from '~/services/db.server';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getUserSession } from '~/services/session.server';
+import convertPTagsToOlAfterH1 from '~/lib/ConvertpToList';
 export const loader: LoaderFunction = async ({ request, params }) => {
   let textId = params.textId;
   let order = params.pageId;
@@ -70,6 +71,22 @@ function TranslationsRoute() {
   let sourceRef = useRef<HTMLDivElement>(null);
   let translationRef = useRef<HTMLDivElement>(null);
   let fetcher = useFetcher();
+  useEffect(() => {
+    if (source_editor) {
+      source_editor.on('update', ({ editor }) => {
+        let content = editor.getHTML();
+        let data = convertPTagsToOlAfterH1(content);
+        editor.commands.setContent(data);
+      });
+    }
+    if (translation_editor) {
+      translation_editor.on('update', ({ editor }) => {
+        let content = editor.getHTML();
+        let data = convertPTagsToOlAfterH1(content);
+        editor.commands.setContent(data);
+      });
+    }
+  }, [source_editor, translation_editor]);
   useEffect(() => {
     if (fetcher.data?.userText) {
       toast('Saved!', {

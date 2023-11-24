@@ -29,6 +29,7 @@
     "@tiptap/extension-highlight": "2.1.12",
     "@tiptap/extension-history": "^2.1.12",
     "@tiptap/extension-italic": "2.1.12",
+    "@tiptap/extension-list-item": "^2.1.12",
     "@tiptap/extension-ordered-list": "^2.1.12",
     "@tiptap/extension-paragraph": "2.1.12",
     "@tiptap/extension-placeholder": "2.1.12",

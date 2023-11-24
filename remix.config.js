@@ -9,6 +9,7 @@ module.exports = {
     'react-audio-visualize',
     'react-icons',
     'react-form-wizard-component',
+    'jsdom',
   ],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
