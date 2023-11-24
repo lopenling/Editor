@@ -12,13 +12,29 @@
   font-style: normal;
   font-display: swap;
 }
+.ProseMirror {
+  line-height: 1.9;
+  counter-reset: section;
+}
 ul,
 ol {
   padding: 0 1rem;
+  counter-reset: subsection;
 }
-li {
+ol li {
   list-style: decimal;
+  display: flex;
 }
+h1::before {
+  counter-increment: section;
+  content: counter(section) ' ';
+  font-weight: 200;
+}
+li::before {
+  counter-increment: subsection;
+  content: counter(section) '.' counter(subsection) ' ';
+}
+
 h1 {
   font-size: 28px;
   font-weight: 500 !important;
@@ -119,9 +135,7 @@ main {
 nav > div {
   height: 100%;
 }
-.ProseMirror {
-  line-height: 1.9;
-}
+
 .textEditorContainer::-webkit-scrollbar {
   display: none;
 }

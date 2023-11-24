@@ -1,5 +1,5 @@
 import { LoaderArgs, LoaderFunction, json, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { getPage, getVersions } from '~/model/page';
 
 import Header from '~/component/Layout/Header';
