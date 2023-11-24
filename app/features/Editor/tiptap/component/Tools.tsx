@@ -11,12 +11,7 @@ function Tools({ editor }: any) {
         >
           H1
         </ToolButton>
-        <ToolButton
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive('orderedList') ? 'is-active' : ''}
-        >
-          toggleOrderedList
-        </ToolButton>
+
         <ToolButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           isActive={editor.isActive('heading', { level: 3 })}
