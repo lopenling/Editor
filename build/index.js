@@ -7381,8 +7381,10 @@ function oo_oo10(i, ...v) {
 // app/routes/text.$textId.page.$pageId.tsx
 var import_jsx_dev_runtime43 = require("react/jsx-dev-runtime"), loader3 = async ({ request, params }) => {
   let textId = params.textId, order = params.pageId, url = new URL(request.url), version = url.searchParams.get("version"), searchParamsWith = url.searchParams.get("with"), thread = url.searchParams.get("thread"), versions = await getVersions(parseInt(textId), parseInt(order));
-  if (!version && versions.length > 0 && !version)
-    return (0, import_node4.redirect)(`${url.pathname}?version=${versions[0].version}`);
+  if (!version && versions.length > 0) {
+    let currentSearchParams = new URL(request.url).searchParams;
+    return currentSearchParams.has("version") || currentSearchParams.append("version", versions[0].version), (0, import_node4.redirect)(`${url.pathname}?${currentSearchParams.toString()}`);
+  }
   let text = await getText(textId), page = await getPage(textId, parseInt(order), version), pageId = page?.id, annotations = await getAnnotations(page?.id), user = await getUserSession(request), translations = searchParamsWith === "Translations" ? await listTranslations(textId, pageId) : [], suggestions = searchParamsWith === "Suggestion" ? await findAllSuggestionByPageId(page?.id, thread) : [], posts = searchParamsWith === "Post" ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
   return (0, import_node4.json)({
     page,
@@ -7402,20 +7404,20 @@ function Page() {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)("div", { className: "flex flex-col ", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)(Header_default, { editor }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 65,
+      lineNumber: 67,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)("div", { className: "flex", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)("div", { className: "flex w-full flex-col  flex-1 ", style: { maxHeight: "calc(100vh - 60px)" }, children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)(TextHeader_default, {}, void 0, !1, {
           fileName: "app/routes/text.$textId.page.$pageId.tsx",
-          lineNumber: 68,
+          lineNumber: 70,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)("div", { className: " flex justify-between gap-4 transition-all flex-1 overflow-y-auto ", children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)(import_react_spinner_overlay.CircleSpinnerOverlay, { message: "updating text", loading: saveTextFetcher.state !== "idle" }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 70,
+            lineNumber: 72,
             columnNumber: 13
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)("div", { className: "w-full flex gap-2 ", children: /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)(
@@ -7425,7 +7427,7 @@ function Page() {
               id: "textEditorContainer",
               children: editor && /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)(EditorContainer_default, { editor, isSaving: !1, page, saveTextFetcher }, void 0, !1, {
                 fileName: "app/routes/text.$textId.page.$pageId.tsx",
-                lineNumber: 77,
+                lineNumber: 79,
                 columnNumber: 19
               }, this)
             },
@@ -7433,38 +7435,38 @@ function Page() {
             !1,
             {
               fileName: "app/routes/text.$textId.page.$pageId.tsx",
-              lineNumber: 72,
+              lineNumber: 74,
               columnNumber: 15
             },
             this
           ) }, void 0, !1, {
             fileName: "app/routes/text.$textId.page.$pageId.tsx",
-            lineNumber: 71,
+            lineNumber: 73,
             columnNumber: 13
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/text.$textId.page.$pageId.tsx",
-          lineNumber: 69,
+          lineNumber: 71,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/text.$textId.page.$pageId.tsx",
-        lineNumber: 67,
+        lineNumber: 69,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime43.jsxDEV)(Menu_default, { editor }, void 0, !1, {
         fileName: "app/routes/text.$textId.page.$pageId.tsx",
-        lineNumber: 83,
+        lineNumber: 85,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
-      lineNumber: 66,
+      lineNumber: 68,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/text.$textId.page.$pageId.tsx",
-    lineNumber: 64,
+    lineNumber: 66,
     columnNumber: 5
   }, this);
 }
@@ -8929,7 +8931,7 @@ function test() {
 var test_default = test;
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-PJ2FYLCC.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-ZFS7W7A3.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-NYWPNLXN.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-PSVJDHKV.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-GPFEXUD4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-4YWILPQV.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-UBDS3MRN.js", "/build/_shared/chunk-GPFEXUD4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-HGWZ4PUS.js", imports: ["/build/_shared/chunk-UBDS3MRN.js", "/build/_shared/chunk-GPFEXUD4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "2a4f73f7", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700814632375 }, url: "/build/manifest-2A4F73F7.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-PKMXQD47.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-PJ2FYLCC.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-ZFS7W7A3.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-NYWPNLXN.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/test": { id: "routes/test", parentId: "root", path: "test", index: void 0, caseSensitive: void 0, module: "/build/routes/test-QLV2TECY.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-ZP2GB4D6.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-GPFEXUD4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-4YWILPQV.js", imports: ["/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-UBDS3MRN.js", "/build/_shared/chunk-GPFEXUD4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/translate.$textId.$pageId": { id: "routes/translate.$textId.$pageId", parentId: "root", path: "translate/:textId/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/translate.$textId.$pageId-HGWZ4PUS.js", imports: ["/build/_shared/chunk-UBDS3MRN.js", "/build/_shared/chunk-GPFEXUD4.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-WLT35TIW.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "ea3739e3", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1700815050932 }, url: "/build/manifest-EA3739E3.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public\\build", future = {}, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

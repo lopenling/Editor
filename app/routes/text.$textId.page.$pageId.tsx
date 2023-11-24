@@ -24,9 +24,11 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const thread = url.searchParams.get('thread') as String;
   const versions = await getVersions(parseInt(textId), parseInt(order));
   if (!version && versions.length > 0) {
-    if (!version) {
-      return redirect(`${url.pathname}?version=${versions[0].version}`);
+    const currentSearchParams = new URL(request.url).searchParams;
+    if (!currentSearchParams.has('version')) {
+      currentSearchParams.append('version', versions[0].version);
     }
+    return redirect(`${url.pathname}?${currentSearchParams.toString()}`);
   }
 
   const text = await getText(textId);
