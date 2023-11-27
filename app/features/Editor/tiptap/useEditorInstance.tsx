@@ -1,5 +1,5 @@
 import * as Extension from '~/features/Editor/tiptap';
-import { useEditor } from '@tiptap/react';
+import { mergeAttributes, useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';

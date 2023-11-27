@@ -15,19 +15,25 @@ import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getUserSession } from '~/services/session.server';
 import convertPTagsToOlAfterH1 from '~/lib/ConvertpToList';
+import { useDebounce } from '~/component/hooks/useDebounce';
+import useLocalStorage from '~/component/hooks/useLocaleStorage';
 export const loader: LoaderFunction = async ({ request, params }) => {
+  let url = new URL(request.url);
+  let line_number = url.searchParams.get('line');
   let textId = params.textId;
   let order = params.pageId;
   let translationId = params.translationId as string;
   let translation = await getTranslation(parseInt(translationId));
   let userText = await getUserPage(translation?.userTextId);
   let user = await getUserSession(request);
+
   return json({
     user,
     textId,
     order,
     translation,
     userText,
+    line_number,
   });
 };
 
@@ -64,9 +70,11 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 function TranslationsRoute() {
-  let { translation, userText, textId, order, user } = useLoaderData();
+  let { translation, userText, textId, order, user, line_number } = useLoaderData();
   let source_editor = useEditorInstance(userText.content, true, false);
   let translation_editor = useEditorInstance(translation.content, true, false);
+  const [sourceScroll, setSourceScroll] = useLocalStorage('sourceScroll', 0);
+  const [translationScroll, setTranslationScroll] = useLocalStorage('translationScroll', 0);
 
   let sourceRef = useRef<HTMLDivElement>(null);
   let translationRef = useRef<HTMLDivElement>(null);
@@ -75,17 +83,29 @@ function TranslationsRoute() {
     if (source_editor) {
       source_editor.on('update', ({ editor }) => {
         let content = editor.getHTML();
+        setSourceScroll(editor.view.dom.scrollTop);
         let data = convertPTagsToOlAfterH1(content);
+
         editor.commands.setContent(data);
+        sourceRef.current?.scrollTo({ top: sourceScroll });
       });
     }
     if (translation_editor) {
       translation_editor.on('update', ({ editor }) => {
         let content = editor.getHTML();
+        setTranslationScroll(editor.view.dom.scrollTop);
+
         let data = convertPTagsToOlAfterH1(content);
         editor.commands.setContent(data);
+        setTimeout(() => {
+          translationRef.current?.scrollTo({ top: translationScroll });
+        }, 100);
       });
     }
+    return () => {
+      source_editor?.destroy();
+      translation_editor?.destroy();
+    };
   }, [source_editor, translation_editor]);
   useEffect(() => {
     if (fetcher.data?.userText) {
@@ -95,6 +115,10 @@ function TranslationsRoute() {
     }
   }, [fetcher.data]);
   function save() {
+    if (!source_editor || !translation_editor) {
+      toast.error('cannot save!');
+      return;
+    }
     if (userText?.userId === user?.id) {
       fetcher.submit(
         {
@@ -158,17 +182,20 @@ function TranslationsRoute() {
     };
   }, [prevVisibleIndex]);
 
+  let debounced_Index = useDebounce(currentIndex, 500);
+
   useEffect(() => {
     let transElement = translationRef.current?.querySelectorAll('h1')[currentIndex];
     let sourceElement = sourceRef.current?.querySelectorAll('h1')[currentIndex];
-
-    if (translationRef.current !== currentDiv.current) {
+    if (transElement && translationRef.current !== currentDiv.current) {
       transElement?.scrollIntoView({ block: 'center' });
     }
-    if (sourceRef.current !== currentDiv.current) {
+
+    if (sourceElement && sourceRef.current !== currentDiv.current) {
       sourceElement?.scrollIntoView({ block: 'center' });
     }
-  }, [currentIndex]);
+  }, [debounced_Index]);
+
   function handleChangeCurrentDiv(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     currentDiv.current = e.currentTarget;
   }
@@ -194,7 +221,7 @@ function TranslationsRoute() {
         <div
           ref={sourceRef}
           onMouseOver={handleChangeCurrentDiv}
-          className="flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+          className=" flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
         >
           <h2 className="text-gray-400">Source Text</h2>
           <Tools editor={source_editor} />
@@ -203,7 +230,7 @@ function TranslationsRoute() {
         <div
           ref={translationRef}
           onMouseOver={handleChangeCurrentDiv}
-          className="flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+          className=" flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
         >
           <h2 className="text-gray-400">Translation Text</h2>
           <Tools editor={translation_editor} />

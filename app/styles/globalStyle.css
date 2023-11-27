@@ -16,23 +16,43 @@
   line-height: 1.9;
   counter-reset: section;
 }
-ul,
-ol {
-  padding: 0 1rem;
+.ProseMirror ul,
+.ProseMirror ol {
   counter-reset: subsection;
 }
-ol li {
+.ProseMirror ol li {
   list-style: decimal;
   display: flex;
+  position: relative;
+  padding-left: 50px;
 }
-h1::before {
+.ProseMirror h1 {
+  text-align: center;
+  position: relative;
+  padding-left: 30px;
+}
+.ProseMirror h1::before {
   counter-increment: section;
   content: counter(section) ' ';
-  font-weight: 200;
+  font-size: 1rem;
+  position: absolute;
+  left: 0;
+  top: 20px;
+  color: #3b6d8e;
 }
-li::before {
+.ProseMirror h1:hover::before,
+.ProseMirror li:hover::before {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ProseMirror li::before {
   counter-increment: subsection;
   content: counter(section) '.' counter(subsection) ' ';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #3b6d8e;
 }
 
 h1 {
