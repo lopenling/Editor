@@ -1,5 +1,5 @@
 import * as Extension from '~/features/Editor/tiptap';
-import { mergeAttributes, useEditor } from '@tiptap/react';
+import { useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useSearchParams } from '@remix-run/react';
@@ -33,8 +33,6 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
           levels: [1, 2, 3],
         }),
         Extension.Paragraph,
-        Extension.OrderedList,
-        Extension.ListItem,
         Extension.Text,
         Extension.Bold,
         Extension.FontFamily,
@@ -59,7 +57,10 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
           },
           multicolor: true,
         }),
-
+        Extension.OrderedList,
+        Extension.ListItem.extend({
+          content: 'text*', // allow nested lists
+        }),
         Extension.Suggestion(suggestionSetter).configure({
           HTMLAttributes: {
             class: 'suggestion',
@@ -69,6 +70,9 @@ const useEditorInstance = (content: string | undefined, isEditable: boolean, par
           HTMLAttributes: {
             class: 'post',
           },
+        }),
+        Extension.TextAlign.configure({
+          types: ['heading', 'paragraph'],
         }),
       ],
       editable: true,

@@ -5,7 +5,7 @@ module.exports = {
 
   theme: {
     fontFamily: {
-      monlam: ['monlam', 'sans-serif'],
+      monlam: ['Monlam', 'sans-serif'],
       Inter: ['Inter', 'sans-serif'],
     },
   },

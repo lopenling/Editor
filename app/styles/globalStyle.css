@@ -1,7 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 @font-face {
   font-family: 'Monlam';
-  src: url('/font/monlam_bodyig.woff') format('woff');
+  src:
+    url('/font/MonlamTBslim.woff2') format('woff2'),
+    url('/font/MonlamTBslim.woff') format('woff'),
+    url('/font/MonlamTBslim.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
@@ -13,12 +17,9 @@
   font-display: swap;
 }
 .ProseMirror {
-  line-height: 1.9;
+  line-height: normal;
   counter-reset: section;
-}
-.ProseMirror ul,
-.ProseMirror ol {
-  counter-reset: subsection;
+  font-size: 14px;
 }
 .ProseMirror ol li {
   list-style: decimal;
@@ -30,6 +31,8 @@
   text-align: center;
   position: relative;
   padding-left: 30px;
+  counter-reset: subsection;
+  margin-block: 10px;
 }
 .ProseMirror h1::before {
   counter-increment: section;
@@ -37,7 +40,7 @@
   font-size: 1rem;
   position: absolute;
   left: 0;
-  top: 20px;
+  top: 10px;
   color: #3b6d8e;
 }
 .ProseMirror h1:hover::before,
@@ -56,12 +59,12 @@
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 1.4rem;
   font-weight: 500 !important;
   color: #3d4551;
 }
 h3 {
-  font-size: 22px;
+  font-size: 1.2rem;
   font-weight: 300 !important;
   color: #4b5563;
 }
@@ -195,7 +198,6 @@ nav > div {
   word-wrap: break-word;
 }
 #textEditorContainer {
-  font-family: 'Monlam', serif;
   line-height: 1.5;
   background-color: var(--background-text-editor);
   color: var(--text-text-editor);

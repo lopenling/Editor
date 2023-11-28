@@ -66,6 +66,15 @@ model Page {
   annotations Annotations[] @relation("annotation")
   translation Translation[] @relation("translation" )
 }
+model Annotations{
+  id String @id @unique @default(uuid())
+  content String
+  type   String 
+  start Int
+  end    Int
+  page Page @relation("annotation",fields: [pageId], references: [id])
+  pageId String 
+}
 
 model Translation {
   id       Int      @id @default(autoincrement())
@@ -79,9 +88,17 @@ model Translation {
   language String?
   user User? @relation(fields: [userId], references: [id])
   userId String?
+  annotation Translation_Annotation[]
 
 }
-
+model Translation_Annotation{
+  id String @id @unique @default(uuid())
+  translation Translation @relation(fields: [translationId], references: [id])
+  translationId Int
+  start Int
+  end    Int
+  type  String
+}
 model UserText {
   id   Int      @id @default(autoincrement())
   name String
@@ -94,15 +111,16 @@ model UserText {
   translations Translation[]
   content String
   order Int?
+  Annotation UserText_Annotation[]
 }
-model Annotations{
+
+model UserText_Annotation{
   id String @id @unique @default(uuid())
-  content String
-  type   String 
-  start Int
+  userText UserText @relation(fields: [userTextId], references: [id])
+  userTextId Int
+  start  Int
   end    Int
-  page Page @relation("annotation",fields: [pageId], references: [id])
-  pageId String 
+  type   String
 }
 
 model Suggestion {

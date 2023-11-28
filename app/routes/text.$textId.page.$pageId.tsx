@@ -72,7 +72,9 @@ export default function Page() {
             <CircleSpinnerOverlay message={'updating text'} loading={saveTextFetcher.state !== 'idle'} />
             <div className="w-full flex gap-2 ">
               <div
-                className={`${!withImage ? 'max-w-3xl' : 'w-full'} justify-self-center p-2 dark:bg-gray-800 mx-auto `}
+                className={`${
+                  !withImage ? 'max-w-3xl' : 'w-full'
+                } justify-self-center p-2 dark:bg-gray-800 mx-auto font-monlam`}
                 id="textEditorContainer"
               >
                 {editor && (

@@ -1,6 +1,6 @@
 import { ActionFunction, LoaderFunction, json } from '@remix-run/node';
 import { Link, useFetcher, useLoaderData } from '@remix-run/react';
-import { EditorContent } from '@tiptap/react';
+import { EditorContent, BubbleMenu } from '@tiptap/react';
 import Header from '~/component/Layout/Header';
 import Tools from '~/features/Editor/tiptap/component/Tools';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
@@ -14,9 +14,10 @@ import { db } from '~/services/db.server';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getUserSession } from '~/services/session.server';
-import convertPTagsToOlAfterH1 from '~/lib/ConvertpToList';
+import { CiRead } from 'react-icons/ci';
 import { useDebounce } from '~/component/hooks/useDebounce';
-import useLocalStorage from '~/component/hooks/useLocaleStorage';
+import { FaEdit } from 'react-icons/fa';
+import { Editor } from '@tiptap/core';
 export const loader: LoaderFunction = async ({ request, params }) => {
   let url = new URL(request.url);
   let line_number = url.searchParams.get('line');
@@ -73,40 +74,10 @@ function TranslationsRoute() {
   let { translation, userText, textId, order, user, line_number } = useLoaderData();
   let source_editor = useEditorInstance(userText.content, true, false);
   let translation_editor = useEditorInstance(translation.content, true, false);
-  const [sourceScroll, setSourceScroll] = useLocalStorage('sourceScroll', 0);
-  const [translationScroll, setTranslationScroll] = useLocalStorage('translationScroll', 0);
-
   let sourceRef = useRef<HTMLDivElement>(null);
   let translationRef = useRef<HTMLDivElement>(null);
   let fetcher = useFetcher();
-  useEffect(() => {
-    if (source_editor) {
-      source_editor.on('update', ({ editor }) => {
-        let content = editor.getHTML();
-        setSourceScroll(editor.view.dom.scrollTop);
-        let data = convertPTagsToOlAfterH1(content);
 
-        editor.commands.setContent(data);
-        sourceRef.current?.scrollTo({ top: sourceScroll });
-      });
-    }
-    if (translation_editor) {
-      translation_editor.on('update', ({ editor }) => {
-        let content = editor.getHTML();
-        setTranslationScroll(editor.view.dom.scrollTop);
-
-        let data = convertPTagsToOlAfterH1(content);
-        editor.commands.setContent(data);
-        setTimeout(() => {
-          translationRef.current?.scrollTo({ top: translationScroll });
-        }, 100);
-      });
-    }
-    return () => {
-      source_editor?.destroy();
-      translation_editor?.destroy();
-    };
-  }, [source_editor, translation_editor]);
   useEffect(() => {
     if (fetcher.data?.userText) {
       toast('Saved!', {
@@ -114,7 +85,11 @@ function TranslationsRoute() {
       });
     }
   }, [fetcher.data]);
+
   function save() {
+    // let data = parseHeadings(source_editor.getHTML());
+    // console.log(data);
+
     if (!source_editor || !translation_editor) {
       toast.error('cannot save!');
       return;
@@ -137,7 +112,6 @@ function TranslationsRoute() {
   }
   function share() {
     navigator.clipboard.writeText(window.location.href);
-
     toast.success('text url copied', {
       icon: '👏',
     });
@@ -146,7 +120,7 @@ function TranslationsRoute() {
   const [prevVisibleElement] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentDiv = useRef<HTMLDivElement>(null);
-
+  const [isEditable, setIsEditable] = useState(true);
   useEffect(() => {
     const handleScroll = (element: HTMLDivElement) => {
       const h1Elements = element.querySelectorAll('h1');
@@ -199,9 +173,19 @@ function TranslationsRoute() {
   function handleChangeCurrentDiv(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     currentDiv.current = e.currentTarget;
   }
+
+  function toggleEditable() {
+    if (!source_editor || !translation_editor) return;
+    setIsEditable((prev) => !prev);
+  }
+
+  useEffect(() => {
+    source_editor?.setEditable(isEditable);
+    translation_editor?.setEditable(isEditable);
+  }, [isEditable]);
   const isSaving = fetcher.state !== 'idle';
   return (
-    <>
+    <div className="max-h-screen overflow-y-hidden">
       <Header editor={null} />
       <div className="flex justify-between max-w-6xl m-auto">
         <Button as={Link} to={`/text/${textId}/page/${order}`} className="text-white bg-slate-500">
@@ -212,33 +196,72 @@ function TranslationsRoute() {
           <Button size={'sm'} className="text-white bg-slate-500" onClick={share}>
             <BsShare />
           </Button>
+          <Button size={'sm'} className="text-white bg-slate-500" onClick={toggleEditable}>
+            {isEditable ? <CiRead /> : <FaEdit />}
+          </Button>
           <Button size={'sm'} className="text-white bg-slate-500" onClick={save} isProcessing={isSaving}>
             {isSaving ? null : <AiFillSave />}
           </Button>
         </div>
       </div>
-      <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3">
+      <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam">
         <div
           ref={sourceRef}
           onMouseOver={handleChangeCurrentDiv}
-          className=" flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+          className="relative flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
         >
           <h2 className="text-gray-400">Source Text</h2>
-          <Tools editor={source_editor} />
           <EditorContent editor={source_editor} />
+          <BubbleMenu editor={source_editor!} shouldShow={({ editor }) => editor?.isFocused && editor.isEditable}>
+            <Tools editor={source_editor} />
+          </BubbleMenu>
         </div>
         <div
           ref={translationRef}
           onMouseOver={handleChangeCurrentDiv}
-          className=" flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+          className="relative flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
         >
           <h2 className="text-gray-400">Translation Text</h2>
-          <Tools editor={translation_editor} />
           <EditorContent editor={translation_editor} />
+          <BubbleMenu editor={translation_editor!} shouldShow={({ editor }) => editor.isFocused && editor.isEditable}>
+            <Tools editor={translation_editor} />
+          </BubbleMenu>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
 export default TranslationsRoute;
+
+// function parseHeadings(htmlString) {
+//   const tagRegex = /<(\/?h1|\/?h3)[^>]*>/g;
+//   let match;
+//   const tags = [];
+//   const tagStack = [];
+
+//   while ((match = tagRegex.exec(htmlString)) !== null) {
+//     const isClosingTag = /<\/h[13]>/.test(match[0]);
+//     const tagName = match[1].replace(/\//g, ''); // Remove '/' for closing tags
+
+//     if (!isClosingTag) {
+//       // Opening tag
+//       tagStack.push({ tagName, startIndex: match.index, endIndex: tagRegex.lastIndex });
+//     } else {
+//       // Closing tag, find matching opening tag in stack
+//       while (tagStack.length > 0) {
+//         const lastTag = tagStack.pop();
+//         if (lastTag.tagName === tagName) {
+//           tags.push({
+//             start: lastTag.startIndex,
+//             end: tagRegex.lastIndex,
+//             type: tagName,
+//           });
+//           break;
+//         }
+//       }
+//     }
+//   }
+
+//   return tags;
+// }
