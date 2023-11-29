@@ -1,5 +1,5 @@
 import { ActionFunction, LoaderFunction, json } from '@remix-run/node';
-import { Link, useFetcher, useLoaderData } from '@remix-run/react';
+import { Link, useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import { EditorContent, BubbleMenu } from '@tiptap/react';
 import Header from '~/component/Layout/Header';
 import Tools from '~/features/Editor/tiptap/component/Tools';
@@ -11,16 +11,13 @@ import { AiFillSave } from 'react-icons/ai';
 import { Button } from 'flowbite-react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { db } from '~/services/db.server';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getUserSession } from '~/services/session.server';
 import { CiRead } from 'react-icons/ci';
 import { useDebounce } from '~/component/hooks/useDebounce';
 import { FaEdit } from 'react-icons/fa';
-import { Editor } from '@tiptap/core';
 export const loader: LoaderFunction = async ({ request, params }) => {
-  let url = new URL(request.url);
-  let line_number = url.searchParams.get('line');
   let textId = params.textId;
   let order = params.pageId;
   let translationId = params.translationId as string;
@@ -34,7 +31,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     order,
     translation,
     userText,
-    line_number,
   });
 };
 
@@ -77,6 +73,9 @@ function TranslationsRoute() {
   let sourceRef = useRef<HTMLDivElement>(null);
   let translationRef = useRef<HTMLDivElement>(null);
   let fetcher = useFetcher();
+  let [params, setParams] = useSearchParams();
+  let sectionIndex = params.get('section');
+  let subsectionIndex = params.get('subsection');
 
   useEffect(() => {
     if (fetcher.data?.userText) {
@@ -119,12 +118,18 @@ function TranslationsRoute() {
   const [prevVisibleIndex, setPrevVisibleIndex] = useState(null);
   const [prevVisibleElement] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentDiv = useRef<HTMLDivElement>(null);
+  let currentDiv = useRef<HTMLDivElement>(null);
   const [isEditable, setIsEditable] = useState(true);
   useEffect(() => {
     const handleScroll = (element: HTMLDivElement) => {
       const h1Elements = element.querySelectorAll('h1');
-
+      if (params.get('section') || params.get('subsection')) {
+        setParams((p) => {
+          p.delete('section');
+          p.delete('subsection');
+          return p;
+        });
+      }
       // Find the index and element of the first visible h1 element
       const firstVisibleH1 = Array.from(h1Elements).find((h1) => {
         const h1Rect = h1.getBoundingClientRect();
@@ -183,6 +188,34 @@ function TranslationsRoute() {
     source_editor?.setEditable(isEditable);
     translation_editor?.setEditable(isEditable);
   }, [isEditable]);
+
+  useLayoutEffect(() => {
+    if (sectionIndex !== null) {
+      currentDiv.current = sourceRef.current;
+      const sections = sourceRef.current?.getElementsByTagName('h1');
+      setTimeout(() => {
+        if (sections && sections.length > 0) {
+          const section = sections[parseInt(sectionIndex) - 1];
+          // Assuming sectionIndex is 1-based
+          console.log(section); // Check if the element is accessible now
+
+          if (section) {
+            section.scrollIntoView();
+
+            if (subsectionIndex !== null) {
+              const subsections = section.querySelectorAll('li');
+              const subsection = subsections[parseInt(subsectionIndex) - 1]; // Assuming subsectionIndex is 1-based
+              console.log(sectionIndex);
+              if (subsection) {
+                subsection.scrollIntoView();
+              }
+            }
+          }
+        }
+      }, 1000);
+    }
+  }, [sectionIndex, subsectionIndex]);
+
   const isSaving = fetcher.state !== 'idle';
   return (
     <div className="max-h-screen overflow-y-hidden">

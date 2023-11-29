@@ -17,7 +17,7 @@
   font-display: swap;
 }
 .ProseMirror {
-  line-height: normal;
+  line-height: 2rem;
   counter-reset: section;
   font-size: 14px;
 }
