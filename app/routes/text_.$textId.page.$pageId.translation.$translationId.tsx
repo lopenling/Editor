@@ -5,18 +5,19 @@ import Header from '~/component/Layout/Header';
 import Tools from '~/features/Editor/tiptap/component/Tools';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import { getTranslation } from '~/model/translation';
-import { getUserPage, updateSource } from '~/model/userText';
+import { getUserPage } from '~/model/userText';
 import { BsShare } from 'react-icons/bs';
 import { AiFillSave } from 'react-icons/ai';
 import { Button } from 'flowbite-react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { db } from '~/services/db.server';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getUserSession } from '~/services/session.server';
 import { CiRead } from 'react-icons/ci';
 import { useDebounce } from '~/component/hooks/useDebounce';
 import { FaEdit } from 'react-icons/fa';
+import copy from '~/lib/copy.client';
 export const loader: LoaderFunction = async ({ request, params }) => {
   let textId = params.textId;
   let order = params.pageId;
@@ -67,59 +68,27 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 function TranslationsRoute() {
-  let { translation, userText, textId, order, user, line_number } = useLoaderData();
+  let { translation, userText, textId, order, user } = useLoaderData();
   let source_editor = useEditorInstance(userText.content, true, false);
   let translation_editor = useEditorInstance(translation.content, true, false);
-  let sourceRef = useRef<HTMLDivElement>(null);
-  let translationRef = useRef<HTMLDivElement>(null);
+
   let fetcher = useFetcher();
   let [params, setParams] = useSearchParams();
   let sectionIndex = params.get('section');
   let subsectionIndex = params.get('subsection');
 
-  useEffect(() => {
-    if (fetcher.data?.userText) {
-      toast('Saved!', {
-        icon: '👏',
-      });
-    }
-  }, [fetcher.data]);
-
-  function save() {
-    // let data = parseHeadings(source_editor.getHTML());
-    // console.log(data);
-
-    if (!source_editor || !translation_editor) {
-      toast.error('cannot save!');
-      return;
-    }
-    if (userText?.userId === user?.id) {
-      fetcher.submit(
-        {
-          sourceContent: source_editor.getHTML(),
-          translationContent: translation_editor.getHTML(),
-          translationId: translation.id,
-          sourceId: userText.id,
-        },
-        {
-          method: 'POST',
-        },
-      );
-    } else {
-      toast.error('You are not the owner of this text');
-    }
-  }
-  function share() {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success('text url copied', {
-      icon: '👏',
-    });
-  }
   const [prevVisibleIndex, setPrevVisibleIndex] = useState(null);
   const [prevVisibleElement] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  let currentDiv = useRef<HTMLDivElement>(null);
   const [isEditable, setIsEditable] = useState(true);
+
+  let sourceRef = useRef<HTMLDivElement>(null);
+  let translationRef = useRef<HTMLDivElement>(null);
+  let currentDiv = useRef<HTMLDivElement>(null);
+
+  let debounced_Index = useDebounce(currentIndex, 500);
+
+  //  handle scrolling of both divs
   useEffect(() => {
     const handleScroll = (element: HTMLDivElement) => {
       const h1Elements = element.querySelectorAll('h1');
@@ -161,8 +130,7 @@ function TranslationsRoute() {
     };
   }, [prevVisibleIndex]);
 
-  let debounced_Index = useDebounce(currentIndex, 500);
-
+  // Scroll to the current h1 element when the currentIndex changes
   useEffect(() => {
     let transElement = translationRef.current?.querySelectorAll('h1')[currentIndex];
     let sourceElement = sourceRef.current?.querySelectorAll('h1')[currentIndex];
@@ -175,21 +143,23 @@ function TranslationsRoute() {
     }
   }, [debounced_Index]);
 
-  function handleChangeCurrentDiv(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    currentDiv.current = e.currentTarget;
-  }
-
-  function toggleEditable() {
-    if (!source_editor || !translation_editor) return;
-    setIsEditable((prev) => !prev);
-  }
-
+  // Set the editor to editable or not
   useEffect(() => {
     source_editor?.setEditable(isEditable);
     translation_editor?.setEditable(isEditable);
   }, [isEditable]);
 
-  useLayoutEffect(() => {
+  // Toast a message when the text is saved
+  useEffect(() => {
+    if (fetcher.data?.userText) {
+      toast('Saved!', {
+        icon: '👏',
+      });
+    }
+  }, [fetcher.data]);
+
+  // Scroll to the section and subsection if the url has the query params
+  useEffect(() => {
     if (sectionIndex !== null) {
       currentDiv.current = sourceRef.current;
       const sections = sourceRef.current?.getElementsByTagName('h1');
@@ -216,6 +186,35 @@ function TranslationsRoute() {
     }
   }, [sectionIndex, subsectionIndex]);
 
+  function save() {
+    // let data = parseHeadings(source_editor.getHTML());
+    // console.log(data);
+
+    if (!source_editor || !translation_editor) {
+      toast.error('cannot save!');
+      return;
+    }
+    if (userText?.userId === user?.id) {
+      fetcher.submit(
+        {
+          sourceContent: source_editor.getHTML(),
+          translationContent: translation_editor.getHTML(),
+          translationId: translation.id,
+          sourceId: userText.id,
+        },
+        {
+          method: 'POST',
+        },
+      );
+    } else {
+      toast.error('You are not the owner of this text');
+    }
+  }
+
+  function handleChangeCurrentDiv(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    currentDiv.current = e.currentTarget;
+  }
+
   const isSaving = fetcher.state !== 'idle';
   return (
     <div className="max-h-screen overflow-y-hidden">
@@ -226,13 +225,23 @@ function TranslationsRoute() {
           Go to Main Text
         </Button>
         <div className="flex gap-4">
-          <Button size={'sm'} className="text-white bg-slate-500" onClick={share}>
+          <Button
+            title="share"
+            size={'sm'}
+            className="text-white bg-slate-500"
+            onClick={() => copy(window.location.href)}
+          >
             <BsShare />
           </Button>
-          <Button size={'sm'} className="text-white bg-slate-500" onClick={toggleEditable}>
+          <Button
+            title="edit"
+            size={'sm'}
+            className="text-white bg-slate-500"
+            onClick={() => setIsEditable((prev) => !prev)}
+          >
             {isEditable ? <CiRead /> : <FaEdit />}
           </Button>
-          <Button size={'sm'} className="text-white bg-slate-500" onClick={save} isProcessing={isSaving}>
+          <Button title="save" size={'sm'} className="text-white bg-slate-500" onClick={save} isProcessing={isSaving}>
             {isSaving ? null : <AiFillSave />}
           </Button>
         </div>
@@ -266,35 +275,3 @@ function TranslationsRoute() {
 }
 
 export default TranslationsRoute;
-
-// function parseHeadings(htmlString) {
-//   const tagRegex = /<(\/?h1|\/?h3)[^>]*>/g;
-//   let match;
-//   const tags = [];
-//   const tagStack = [];
-
-//   while ((match = tagRegex.exec(htmlString)) !== null) {
-//     const isClosingTag = /<\/h[13]>/.test(match[0]);
-//     const tagName = match[1].replace(/\//g, ''); // Remove '/' for closing tags
-
-//     if (!isClosingTag) {
-//       // Opening tag
-//       tagStack.push({ tagName, startIndex: match.index, endIndex: tagRegex.lastIndex });
-//     } else {
-//       // Closing tag, find matching opening tag in stack
-//       while (tagStack.length > 0) {
-//         const lastTag = tagStack.pop();
-//         if (lastTag.tagName === tagName) {
-//           tags.push({
-//             start: lastTag.startIndex,
-//             end: tagRegex.lastIndex,
-//             type: tagName,
-//           });
-//           break;
-//         }
-//       }
-//     }
-//   }
-
-//   return tags;
-// }
