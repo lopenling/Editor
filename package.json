@@ -47,6 +47,7 @@
     "flowbite-react": "^0.6.4",
     "framer-motion": "^10.16.4",
     "grapheme-splitter": "^1.0.4",
+    "html-docx-js-typescript": "^0.1.5",
     "isbot": "^3.7.0",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",

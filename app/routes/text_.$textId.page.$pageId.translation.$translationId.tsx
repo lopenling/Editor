@@ -7,8 +7,8 @@ import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import { getTranslation } from '~/model/translation';
 import { getUserPage } from '~/model/userText';
 import { BsShare } from 'react-icons/bs';
-import { AiFillSave } from 'react-icons/ai';
-import { Button } from 'flowbite-react';
+import { AiFillSave, AiOutlineExport } from 'react-icons/ai';
+import { Button, Tooltip, Dropdown } from 'flowbite-react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { db } from '~/services/db.server';
 import { useEffect, useRef, useState } from 'react';
@@ -18,6 +18,8 @@ import { CiRead } from 'react-icons/ci';
 import { useDebounce } from '~/component/hooks/useDebounce';
 import { FaEdit } from 'react-icons/fa';
 import copy from '~/lib/copy.client';
+import ExportButton from '~/features/Editor/component/ExportButton';
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   let textId = params.textId;
   let order = params.pageId;
@@ -225,25 +227,40 @@ function TranslationsRoute() {
           Go to Main Text
         </Button>
         <div className="flex gap-4">
-          <Button
-            title="share"
-            size={'sm'}
-            className="text-white bg-slate-500"
-            onClick={() => copy(window.location.href)}
-          >
-            <BsShare />
-          </Button>
-          <Button
-            title="edit"
-            size={'sm'}
-            className="text-white bg-slate-500"
-            onClick={() => setIsEditable((prev) => !prev)}
-          >
-            {isEditable ? <CiRead /> : <FaEdit />}
-          </Button>
-          <Button title="save" size={'sm'} className="text-white bg-slate-500" onClick={save} isProcessing={isSaving}>
-            {isSaving ? null : <AiFillSave />}
-          </Button>
+          <Tooltip content="share link" placement="bottom">
+            <Button size={'sm'} className="text-white bg-slate-500" onClick={() => copy(window.location.href)}>
+              <BsShare />
+            </Button>
+          </Tooltip>
+          <Tooltip content="edit" placement="bottom">
+            <Button size={'sm'} className="text-white bg-slate-500" onClick={() => setIsEditable((prev) => !prev)}>
+              {isEditable ? <CiRead /> : <FaEdit />}
+            </Button>
+          </Tooltip>
+          <Tooltip content="export as docx" placement="top">
+            <Dropdown
+              label=""
+              size="sm"
+              dismissOnClick={false}
+              renderTrigger={() => (
+                <Button className="text-white bg-slate-500">
+                  <AiOutlineExport />
+                </Button>
+              )}
+            >
+              <Dropdown.Item>
+                <ExportButton editor={source_editor} name="Source" />
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <ExportButton editor={translation_editor} name="Translation" />
+              </Dropdown.Item>
+            </Dropdown>
+          </Tooltip>
+          <Tooltip content="save" placement="bottom">
+            <Button size={'sm'} className="text-white bg-slate-500" onClick={save} isProcessing={isSaving}>
+              {isSaving ? null : <AiFillSave />}
+            </Button>
+          </Tooltip>
         </div>
       </div>
       <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam">
