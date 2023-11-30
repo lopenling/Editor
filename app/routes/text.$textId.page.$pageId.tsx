@@ -59,7 +59,7 @@ export default function Page() {
   const { page } = data;
   const saveTextFetcher = useFetcher();
 
-  let editor = useEditorInstance(undefined, false);
+  let editor = useEditorInstance({ content: undefined, isEditable: false });
   const withImage = !data.text.allow_post;
 
   return (

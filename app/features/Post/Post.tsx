@@ -142,7 +142,11 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
           )}
         </div>
         <Dropdown
-          renderTrigger={() => <HiOutlineDotsHorizontal className="cursor-pointer" />}
+          renderTrigger={() => (
+            <div>
+              <HiOutlineDotsHorizontal className="cursor-pointer" />
+            </div>
+          )}
           label=""
           dismissOnClick={true}
         >

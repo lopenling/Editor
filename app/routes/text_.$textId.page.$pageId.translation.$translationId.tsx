@@ -19,7 +19,7 @@ import { useDebounce } from '~/component/hooks/useDebounce';
 import { FaEdit } from 'react-icons/fa';
 import copy from '~/lib/copy.client';
 import ExportButton from '~/features/Editor/component/ExportButton';
-
+import { ClientOnly } from 'remix-utils/client-only';
 export const loader: LoaderFunction = async ({ request, params }) => {
   let textId = params.textId;
   let order = params.pageId;
@@ -71,8 +71,18 @@ export const action: ActionFunction = async ({ request }) => {
 
 function TranslationsRoute() {
   let { translation, userText, textId, order, user } = useLoaderData();
-  let source_editor = useEditorInstance(userText.content, true, false);
-  let translation_editor = useEditorInstance(translation.content, true, false);
+  let source_editor = useEditorInstance({
+    name: 'userText' + userText.id,
+    content: userText.content,
+    isEditable: true,
+    paramUpdate: false,
+  });
+  let translation_editor = useEditorInstance({
+    name: 'translation' + translation.id,
+    content: translation.content,
+    isEditable: true,
+    paramUpdate: false,
+  });
 
   let fetcher = useFetcher();
   let [params, setParams] = useSearchParams();
@@ -218,6 +228,7 @@ function TranslationsRoute() {
   }
 
   const isSaving = fetcher.state !== 'idle';
+  // if (source_editor === null || translation_editor === null) return <div>loading</div>;
   return (
     <div className="max-h-screen overflow-y-hidden">
       <Header editor={null} />
@@ -263,30 +274,37 @@ function TranslationsRoute() {
           </Tooltip>
         </div>
       </div>
-      <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam">
-        <div
-          ref={sourceRef}
-          onMouseOver={handleChangeCurrentDiv}
-          className="relative flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
-        >
-          <h2 className="text-gray-400">Source Text</h2>
-          <EditorContent editor={source_editor} />
-          <BubbleMenu editor={source_editor!} shouldShow={({ editor }) => editor?.isFocused && editor.isEditable}>
-            <Tools editor={source_editor} />
-          </BubbleMenu>
-        </div>
-        <div
-          ref={translationRef}
-          onMouseOver={handleChangeCurrentDiv}
-          className="relative flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
-        >
-          <h2 className="text-gray-400">Translation Text</h2>
-          <EditorContent editor={translation_editor} />
-          <BubbleMenu editor={translation_editor!} shouldShow={({ editor }) => editor.isFocused && editor.isEditable}>
-            <Tools editor={translation_editor} />
-          </BubbleMenu>
-        </div>
-      </div>
+      <ClientOnly fallback={<div />}>
+        {() => (
+          <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam">
+            <div
+              ref={sourceRef}
+              onMouseOver={handleChangeCurrentDiv}
+              className="relative flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+            >
+              <h2 className="text-gray-400">Source Text</h2>
+              <EditorContent editor={source_editor} />
+              <BubbleMenu editor={source_editor!} shouldShow={({ editor }) => editor?.isFocused && editor.isEditable}>
+                <Tools editor={source_editor} />
+              </BubbleMenu>
+            </div>
+            <div
+              ref={translationRef}
+              onMouseOver={handleChangeCurrentDiv}
+              className="relative flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+            >
+              <h2 className="text-gray-400">Translation Text</h2>
+              <EditorContent editor={translation_editor} />
+              <BubbleMenu
+                editor={translation_editor!}
+                shouldShow={({ editor }) => editor.isFocused && editor.isEditable}
+              >
+                <Tools editor={translation_editor} />
+              </BubbleMenu>
+            </div>
+          </div>
+        )}
+      </ClientOnly>
     </div>
   );
 }

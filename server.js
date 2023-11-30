@@ -1,11 +1,12 @@
 const fs = require('fs');
 const { createServer } = require('http');
 const path = require('path');
-
 const { createRequestHandler } = require('@remix-run/express');
 const compression = require('compression');
 const express = require('express');
 const morgan = require('morgan');
+const expressWebsockets = require('express-ws');
+const { Server } = require('@hocuspocus/server');
 
 const MODE = process.env.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
@@ -15,8 +16,7 @@ if (!fs.existsSync(BUILD_DIR)) {
     "Build directory doesn't exist, please run `npm run dev` or `npm run build` before starting the server.",
   );
 }
-
-const app = express();
+const { app } = expressWebsockets(express());
 
 // You need to create the HTTP server from the Express app
 const httpServer = createServer(app);
@@ -47,6 +47,11 @@ const port = process.env.PORT || 3000;
 httpServer.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
+const server = Server.configure({
+  port,
+});
+
+server.listen();
 
 ////////////////////////////////////////////////////////////////////////////////
 function purgeRequireCache() {

@@ -8,7 +8,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 function TranslationEditor() {
   let { translation } = useLoaderData();
   let content = translation?.content;
-  let editor = useEditorInstance(content, true);
+  let editor = useEditorInstance({ content, isEditable: true });
   let saveFetcher = useFetcher();
 
   useEffect(() => {

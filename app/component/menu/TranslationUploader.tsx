@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { LANGUAGE_OPTION_TRANSLATION } from '~/constants';
 import { useTxtUpload } from '../hooks/useTxtUpload';
 import { useLoaderData } from '@remix-run/react';
-import { TextInput } from 'flowbite-react';
+import { Card, TextInput } from 'flowbite-react';
 
 function TranslationUploader({ fetcher }: { fetcher: any }) {
   const { acceptedFiles, fileContent, getRootProps, getInputProps, setFileContent } = useTxtUpload();
   let { text, page } = useLoaderData();
-
+  let textInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [language, setLanguage] = useState('english');
   let handleSubmit = () => {
@@ -29,14 +29,25 @@ function TranslationUploader({ fetcher }: { fetcher: any }) {
     setFileContent('');
     setTitle('');
   };
+  useEffect(() => {
+    if (fileContent !== '') {
+      textInputRef.current?.focus();
+    }
+  }, [fileContent]);
   return (
     <div className="flex flex-col  gap-3">
       {fileContent !== '' ? (
-        <>
+        <Card>
           <h4>
             File: {acceptedFiles[0].name} , {acceptedFiles[0].size}
           </h4>
-          <TextInput placeholder="title" required value={title} onChange={(e) => setTitle(e.target.value)} />
+          <TextInput
+            ref={textInputRef}
+            placeholder="title"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="selectionLanguage">
             choose translation language
           </label>
@@ -62,15 +73,15 @@ function TranslationUploader({ fetcher }: { fetcher: any }) {
           >
             upload translation
           </button>
-        </>
+        </Card>
       ) : (
         <div
           {...getRootProps({
             className: 'dropzone',
           })}
         >
-          <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here</p>
+          <input {...getInputProps()} accept=".txt" />
+          <p>Drag 'n' drop a .TXT files here</p>
         </div>
       )}
     </div>

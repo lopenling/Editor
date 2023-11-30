@@ -9,6 +9,7 @@ function MenuHeader() {
   function handleBack() {
     setSearchParams((p) => {
       p.set('with', 'all');
+      p.delete('thread');
       return p;
     });
   }
