@@ -23,7 +23,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   const searchParamsWith = url.searchParams.get('with') as String;
   const thread = url.searchParams.get('thread') as String;
   const versions = await getVersions(parseInt(textId), parseInt(order));
-  if (!version && versions.length > 0) {
+  if (!version && versions?.length > 0) {
     const currentSearchParams = new URL(request.url).searchParams;
     if (!currentSearchParams.has('version')) {
       currentSearchParams.append('version', versions[0].version);
@@ -56,10 +56,10 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
 
 export default function Page() {
   const data = useLoaderData<typeof loader>();
-  const { page } = data;
+  const { text, page } = data;
   const saveTextFetcher = useFetcher();
 
-  let editor = useEditorInstance({ content: undefined, isEditable: false });
+  let editor = useEditorInstance({ name: text.id + '' + page.id, content: undefined, isEditable: false });
   const withImage = !data.text.allow_post;
 
   return (

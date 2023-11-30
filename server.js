@@ -47,9 +47,7 @@ const port = process.env.PORT || 3000;
 httpServer.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
-const server = Server.configure({
-  port,
-});
+const server = Server.configure();
 
 server.listen();
 

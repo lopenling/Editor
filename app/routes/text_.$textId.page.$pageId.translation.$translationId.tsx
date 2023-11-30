@@ -179,7 +179,6 @@ function TranslationsRoute() {
         if (sections && sections.length > 0) {
           const section = sections[parseInt(sectionIndex) - 1];
           // Assuming sectionIndex is 1-based
-          console.log(section); // Check if the element is accessible now
 
           if (section) {
             section.scrollIntoView();
@@ -187,7 +186,6 @@ function TranslationsRoute() {
             if (subsectionIndex !== null) {
               const subsections = section.querySelectorAll('li');
               const subsection = subsections[parseInt(subsectionIndex) - 1]; // Assuming subsectionIndex is 1-based
-              console.log(sectionIndex);
               if (subsection) {
                 subsection.scrollIntoView();
               }
@@ -274,37 +272,30 @@ function TranslationsRoute() {
           </Tooltip>
         </div>
       </div>
-      <ClientOnly fallback={<div />}>
-        {() => (
-          <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam">
-            <div
-              ref={sourceRef}
-              onMouseOver={handleChangeCurrentDiv}
-              className="relative flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
-            >
-              <h2 className="text-gray-400">Source Text</h2>
-              <EditorContent editor={source_editor} />
-              <BubbleMenu editor={source_editor!} shouldShow={({ editor }) => editor?.isFocused && editor.isEditable}>
-                <Tools editor={source_editor} />
-              </BubbleMenu>
-            </div>
-            <div
-              ref={translationRef}
-              onMouseOver={handleChangeCurrentDiv}
-              className="relative flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
-            >
-              <h2 className="text-gray-400">Translation Text</h2>
-              <EditorContent editor={translation_editor} />
-              <BubbleMenu
-                editor={translation_editor!}
-                shouldShow={({ editor }) => editor.isFocused && editor.isEditable}
-              >
-                <Tools editor={translation_editor} />
-              </BubbleMenu>
-            </div>
-          </div>
-        )}
-      </ClientOnly>
+      <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam">
+        <div
+          ref={sourceRef}
+          onMouseOver={handleChangeCurrentDiv}
+          className="relative flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+        >
+          <h2 className="text-gray-400">Source Text</h2>
+          <EditorContent editor={source_editor} />
+          <BubbleMenu editor={source_editor!} shouldShow={({ editor }) => editor?.isFocused && editor.isEditable}>
+            <Tools editor={source_editor} />
+          </BubbleMenu>
+        </div>
+        <div
+          ref={translationRef}
+          onMouseOver={handleChangeCurrentDiv}
+          className="relative flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+        >
+          <h2 className="text-gray-400">Translation Text</h2>
+          <EditorContent editor={translation_editor} />
+          <BubbleMenu editor={translation_editor!} shouldShow={({ editor }) => editor.isFocused && editor.isEditable}>
+            <Tools editor={translation_editor} />
+          </BubbleMenu>
+        </div>
+      </div>
     </div>
   );
 }
