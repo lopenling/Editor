@@ -44,11 +44,24 @@ app.all(
 const port = process.env.PORT || 3000;
 
 // instead of running listen on the Express app, do it on the HTTP server
+const server = Server.configure();
+
+// app.ws('/collaboration/:document', (websocket, request) => {
+//   console.log('ws: ', websocket);
+//   console.log('req: ', request);
+//   const context = {
+//     user: {
+//       id: 1234,
+//       name: 'Jane',
+//     },
+//   };
+//   console.log('hi');
+//   server.handleConnection(websocket, request, context);
+// });
+
 httpServer.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
-const server = Server.configure();
-
 server.listen();
 
 ////////////////////////////////////////////////////////////////////////////////

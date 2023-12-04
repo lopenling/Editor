@@ -2,12 +2,13 @@ import * as Extension from '~/features/Editor/tiptap';
 import { useEditor } from '@tiptap/react';
 import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
-import { useSearchParams } from '@remix-run/react';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
 import convertPTagsToOlAfterH1 from '~/lib/ConvertpToList';
 import { useEffect, useMemo } from 'react';
 import * as Y from 'yjs';
 import { Collaboration } from '@tiptap/extension-collaboration';
-import { TiptapCollabProvider } from '@hocuspocus/provider';
+import { HocuspocusProvider } from '@hocuspocus/provider';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 let firsttime = true;
 
 type useEditorProps = {
@@ -21,10 +22,7 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [param, setSearchParams] = useSearchParams();
   let documentName = name;
-  // const doc = useMemo(() => {
-  //   return new Y.Doc();
-  // }, [documentName]);
-
+  const { user } = useLoaderData();
   function suggestionSetter(id: string) {
     setSearchParams((p) => {
       p.set('with', 'Suggestion');
@@ -39,18 +37,41 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
       return p;
     });
   }
+  const doc = useMemo(() => {
+    return new Y.Doc();
+  }, [documentName]);
 
-  // useEffect(() => {
-  //   const provider = new TiptapCollabProvider({
-  //     name: documentName, // any identifier - all connections sharing the same identifier will be synced
-  //     appId: '7j9y6m10', // replace with YOUR_APP_ID
-  //     token: 'notoken', // replace with your JWT
-  //     document: doc,
-  //   });
-  //   return () => {
-  //     provider.destroy();
-  //   };
-  // }, []);
+  let provider;
+  let extraExtension = [];
+
+  useEffect(() => {
+    if (user && name) {
+      provider = new HocuspocusProvider({
+        url: 'ws://' + window.location.hostname,
+        name,
+        document: doc,
+      });
+    }
+
+    return () => {
+      doc.destroy();
+    };
+  }, [documentName]);
+
+  if (provider && extraExtension.length === 0) {
+    extraExtension.push(
+      CollaborationCursor.configure({
+        provider: provider,
+      }),
+    );
+  } else if (!provider) {
+    extraExtension.push(
+      Extension.History.configure({
+        newGroupDelay: 500,
+        depth: 100,
+      }),
+    );
+  }
 
   let editor = useEditor(
     {
@@ -63,10 +84,6 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         Extension.Text,
         Extension.Bold,
         Extension.FontFamily,
-        Extension.History.configure({
-          newGroupDelay: 500,
-          depth: 100,
-        }),
         Extension.TextStyle,
         Extension.SearchAndReplace.configure({
           searchResultClass: 'search',
@@ -101,9 +118,10 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         Extension.TextAlign.configure({
           types: ['heading', 'paragraph'],
         }),
-        // Collaboration.configure({
-        //   document: doc,
-        // }),
+        Collaboration.configure({
+          document: provider?.document ?? doc,
+        }),
+        ...extraExtension,
       ],
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
@@ -128,17 +146,26 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         }
         firsttime = false;
       },
+      onCreate({ editor }) {
+        setTimeout(() => {
+          if (editor.getText() === '') {
+            if (content) {
+              let content_with_list = convertPTagsToOlAfterH1(content);
+              editor?.commands.setContent(content_with_list);
+            }
+          }
+        }, 2000);
+      },
     },
-    [],
+    [content, provider],
   );
 
   useEffect(() => {
-    if (content) {
-      let content_with_list = convertPTagsToOlAfterH1(content);
-      editor?.commands.setContent(content_with_list);
+    if (editor && user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      // editor.chain().focus()?.updateUser(user.username).run();
     }
-  }, [content, editor]);
-
+  }, [editor, user?.username]);
   return editor;
 };
 export default useEditorInstance;
