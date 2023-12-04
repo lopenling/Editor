@@ -42,7 +42,6 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
   }, [documentName]);
 
   let provider;
-  let extraExtension = [];
 
   useEffect(() => {
     if (user && name) {
@@ -61,21 +60,6 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
       doc.destroy();
     };
   }, [documentName]);
-
-  if (provider && extraExtension.length === 0) {
-    extraExtension.push(
-      CollaborationCursor.configure({
-        provider: provider,
-      }),
-    );
-  } else if (!provider) {
-    extraExtension.push(
-      Extension.History.configure({
-        newGroupDelay: 500,
-        depth: 100,
-      }),
-    );
-  }
 
   let editor = useEditor(
     {
@@ -105,6 +89,10 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
           },
           multicolor: true,
         }),
+        Extension.History.configure({
+          newGroupDelay: 500,
+          depth: 100,
+        }),
         Extension.OrderedList,
         Extension.ListItem.extend({
           content: 'text*', // allow nested lists
@@ -125,7 +113,9 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         Collaboration.configure({
           document: provider?.document ?? doc,
         }),
-        ...extraExtension,
+        // CollaborationCursor.configure({
+        //   provider: provider,
+        // }),
       ],
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
@@ -156,20 +146,26 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
             if (content) {
               let content_with_list = convertPTagsToOlAfterH1(content);
               editor?.commands.setContent(content_with_list);
+              editor.chain().focus().updateUser({ name: user.username, color: '#F98181' }).run();
             }
           }
         }, 2000);
       },
     },
-    [content, provider],
+    [provider],
   );
 
   useEffect(() => {
-    if (editor && user) {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      // editor.chain().focus()?.updateUser(user.username).run();
+    if (editor && user?.username) {
+      let currentUser = { name: user?.username, color: '#F98181' };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
     }
+
+    return () => {
+      editor?.destroy();
+    };
   }, [editor, user?.username]);
+
   return editor;
 };
 export default useEditorInstance;
