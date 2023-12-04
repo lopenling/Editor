@@ -5,21 +5,36 @@ const { createRequestHandler } = require('@remix-run/express');
 const compression = require('compression');
 const express = require('express');
 const morgan = require('morgan');
-const expressWebsockets = require('express-ws');
 const { Server } = require('@hocuspocus/server');
-const { SQLite } = require('@hocuspocus/extension-sqlite');
+const expressWsR = require('express-ws');
 const MODE = process.env.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
+
+var app = express();
+const httpServer = createServer(app);
+var expressWs = expressWsR(app, httpServer);
 
 if (!fs.existsSync(BUILD_DIR)) {
   console.warn(
     "Build directory doesn't exist, please run `npm run dev` or `npm run build` before starting the server.",
   );
 }
-const { app } = expressWebsockets(express());
+const server = Server.configure({
+  async onConnect() {
+    console.log('🔮 connected');
+  },
+});
+app.ws('/socket', (websocket, request) => {
+  const context = {
+    user: {
+      id: 1234,
+      name: 'Jane',
+    },
+  };
 
+  server.handleConnection(websocket, request, context);
+});
 // You need to create the HTTP server from the Express app
-const httpServer = createServer(app);
 
 app.use(compression());
 
@@ -30,6 +45,7 @@ app.use(express.static('public', { maxAge: '1h' }));
 app.use(express.static('public/build', { immutable: true, maxAge: '1y' }));
 
 app.use(morgan('tiny'));
+
 app.all(
   '*',
   MODE === 'production'
@@ -44,36 +60,10 @@ app.all(
 const port = process.env.PORT || 3000;
 
 // instead of running listen on the Express app, do it on the HTTP server
-const server = Server.configure({
-  port: 80,
-  address: 'wss://editor.lopenling.org',
-  async onConnect() {
-    console.log('🔮');
-  },
-  extensions: [
-    new SQLite({
-      database: 'db.sqlite',
-    }),
-  ],
-});
-
-// app.ws('/collaboration/:document', (websocket, request) => {
-//   console.log('ws: ', websocket);
-//   console.log('req: ', request);
-//   const context = {
-//     user: {
-//       id: 1234,
-//       name: 'Jane',
-//     },
-//   };
-//   console.log('hi');
-//   server.handleConnection(websocket, request, context);
-// });
 
 httpServer.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
-server.listen();
 
 ////////////////////////////////////////////////////////////////////////////////
 function purgeRequireCache() {

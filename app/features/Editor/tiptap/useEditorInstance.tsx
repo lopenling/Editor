@@ -48,8 +48,8 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
     if (user && name) {
       let url =
         process.env.NODE_ENV === 'development'
-          ? 'ws://' + window.location.hostname
-          : 'wss://' + window.location.hostname;
+          ? 'ws://' + window.location.hostname + ':3000/socket'
+          : 'wss://' + window.location.hostname + '/socket';
       provider = new HocuspocusProvider({
         url,
         name,
