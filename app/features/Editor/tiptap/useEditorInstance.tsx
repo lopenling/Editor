@@ -46,8 +46,13 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
 
   useEffect(() => {
     if (user && name) {
+      console.log(process.env.NODE_ENV);
+      let url =
+        process.env.NODE_ENV === 'development'
+          ? 'ws://' + window.location.hostname
+          : 'wss://' + window.location.hostname;
       provider = new HocuspocusProvider({
-        url: 'ws://' + window.location.hostname,
+        url,
         name,
         document: doc,
       });
