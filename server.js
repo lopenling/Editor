@@ -7,7 +7,7 @@ const express = require('express');
 const morgan = require('morgan');
 const expressWebsockets = require('express-ws');
 const { Server } = require('@hocuspocus/server');
-
+const { SQLite } = require('@hocuspocus/extension-sqlite');
 const MODE = process.env.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
 
@@ -44,7 +44,18 @@ app.all(
 const port = process.env.PORT || 3000;
 
 // instead of running listen on the Express app, do it on the HTTP server
-const server = Server.configure();
+const server = Server.configure({
+  port: 80,
+  address: 'wss://editor.lopenling.org',
+  async onConnect() {
+    console.log('🔮');
+  },
+  extensions: [
+    new SQLite({
+      database: 'db.sqlite',
+    }),
+  ],
+});
 
 // app.ws('/collaboration/:document', (websocket, request) => {
 //   console.log('ws: ', websocket);

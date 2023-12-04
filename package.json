@@ -15,6 +15,7 @@
   "dependencies": {
     "@assembless/react-littera": "^2.4.0",
     "@aws-sdk/client-s3": "^3.438.0",
+    "@hocuspocus/extension-sqlite": "^2.8.1",
     "@hocuspocus/provider": "^2.8.1",
     "@hocuspocus/server": "^2.8.1",
     "@prisma/client": "^5.5.2",
