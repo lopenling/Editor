@@ -18,7 +18,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get('search')?.trim();
   const { texts } = await findLatestText();
   if (!searchText) return { textList: null, search: null, latestTexts: { list: texts } };
-  return defer({ textList: searchPages(searchText), search: searchText, latestTexts: null });
+  return defer({ textList: await searchPages(searchText), search: searchText, latestTexts: null });
 };
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -87,7 +87,7 @@ function MainLayout({ children }) {
 
 function SearchBar({ searchInput, onInputChange, translation }) {
   return (
-    <div className="mx-auto max-w-2xl" style={{ paddingTop: HEADER_HEIGHT }}>
+    <div className="mx-auto max-w-2xl" style={{ paddingTop: HEADER_HEIGHT + 40 }}>
       <Form method="GET" className="mb-3 w-full max-w-2xl">
         <div className="relative flex w-full space-x-3">
           <TextInput
@@ -119,7 +119,8 @@ function ContentArea({ latestTexts, isLoading }) {
         <Suspense fallback={<div>loading...</div>}>
           <Await resolve={textList}>
             {(lists) => {
-              if (lists?.length === 0 || !lists) return <NoResultMessage />;
+              if (!lists) return null;
+              if (lists?.length === 0) return <NoResultMessage />;
               return <ListResults lists={lists} />;
             }}
           </Await>
