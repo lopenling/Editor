@@ -1,34 +1,24 @@
-import { Link, Form, useSearchParams } from '@remix-run/react';
+import { Link, Form, useSearchParams, Await } from '@remix-run/react';
 import type { LoaderFunction, V2_MetaArgs } from '@remix-run/node';
 import { Button, Card, TextInput } from 'flowbite-react';
 import FooterContainer from '~/component/Layout/Footer';
 import { defer } from '@remix-run/node';
 import { searchPages } from '~/model/page';
 import { useLocation, useLoaderData, useNavigation } from '@remix-run/react';
-import uselitteraTranlation from '~/locales/useLitteraTranslations';
+import useLitteraTranslation from '~/locales/useLitteraTranslations';
 import { motion } from 'framer-motion';
 import Header from '~/component/Layout/Header';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, Suspense } from 'react';
 import { Skeleton } from '~/component/UI';
 import { HEADER_HEIGHT } from '~/constants';
 import { findLatestText } from '~/model/text';
-import { TextType } from '~/model/type';
 import groupData from '~/lib/filterVersionFromText';
 
 export let loader: LoaderFunction = async ({ request }) => {
   const searchText = new URL(request.url).searchParams.get('search')?.trim();
-  const { latestTexts, count } = await findLatestText();
-  let headers = {
-    'Cache-Control': 'max-age=15,stale-while-revalidate=60',
-  };
-  if (!searchText) return { textList: null, search: null, latestTexts: { list: latestTexts, count } };
-
-  return defer(
-    { textList: await searchPages(searchText), search: searchText, latestTexts: null },
-    {
-      headers,
-    },
-  );
+  const { texts } = await findLatestText();
+  if (!searchText) return { textList: null, search: null, latestTexts: { list: texts } };
+  return defer({ textList: searchPages(searchText), search: searchText, latestTexts: null });
 };
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -59,23 +49,27 @@ export default function Index() {
   const navigation = useNavigation();
   const [params] = useSearchParams();
   const [searchInput, setSearchInput] = useState('');
-  const translation: any = uselitteraTranlation();
+  const translation = useLitteraTranslation();
+
+  useEffect(() => {
+    setSearchInput(params.get('search') || '');
+  }, [params]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    setSearchInput(inputValue);
+    setSearchInput(event.target.value);
   };
-  useEffect(() => {
-    let p = params.get('search');
-    if (!p) {
-      setSearchInput('');
-    } else {
-      setSearchInput(p);
-    }
-  }, [params]);
-  const lists = data.textList;
+
   const isLoading = navigation.formData?.get('search') && navigation.state === 'loading';
-  if (lists?.message) return <div className="text-red-400">{lists?.message}</div>;
+
+  return (
+    <MainLayout>
+      <SearchBar searchInput={searchInput} onInputChange={handleInputChange} translation={translation} />
+      <ContentArea latestTexts={data.latestTexts} isLoading={isLoading} />
+    </MainLayout>
+  );
+}
+
+function MainLayout({ children }) {
   return (
     <motion.div
       key={useLocation().pathname}
@@ -85,117 +79,126 @@ export default function Index() {
       style={{ position: 'relative', minHeight: '100vh' }}
     >
       <Header editor={null} />
-      <div className=" mx-auto max-w-2xl " style={{ paddingTop: HEADER_HEIGHT }}>
-        <div className="flex w-full flex-col items-center justify-center  px-3 pt-24 md:px-1.5  ">
-          <Form method="GET" className="mb-3 w-full max-w-2xl">
-            <div className="relative flex w-full space-x-3 ">
-              <TextInput
-                autoComplete="off"
-                name="search"
-                placeholder={translation.searchText}
-                value={searchInput}
-                id="inputText"
-                onChange={handleInputChange}
-                type="search"
-                style={{ height: '100%' }}
-                className="flex-1 text-gray-500 pr-3"
-              />
-              <Button type="submit" className="h-full bg-green-400 text-white" color={'#1C64F2'} size="lg">
-                {translation.searchText}
-              </Button>
-            </div>
-          </Form>
-
-          {data?.latestTexts && (
-            <>
-              {data.latestTexts.list.map((text: TextType) => {
-                let { groupedData, isVersionAvailable } = groupData(text.Page);
-                let url = `/text/${text.id}/page/1/`;
-                return (
-                  <div key={text.id} className="flex w-full justify-between border-b dark:border-gray-700">
-                    <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
-                      <Link to={url}>{text.name}</Link>
-                    </div>
-                    {
-                      <div className="flex gap-2 px-4 py-4 font-light text-gray-300">
-                        {!isVersionAvailable ? (
-                          <></>
-                        ) : (
-                          <>
-                            {Object.keys(groupedData).map((key) => {
-                              let urlversion = url + '?version=' + key;
-                              return (
-                                <Link
-                                  key={key}
-                                  to={urlversion}
-                                  className="cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black"
-                                >
-                                  {translation[key]}
-                                </Link>
-                              );
-                            })}
-                          </>
-                        )}
-                      </div>
-                    }
-                  </div>
-                );
-              })}
-              <Link
-                to="/list"
-                className="mb-3 pt-5 text-sm font-light text-gray-800 underline transition-colors dark:text-white"
-              >
-                List all ({data?.latestTexts?.count}) Pechas
-              </Link>
-            </>
-          )}
-        </div>
-        <div className="inline-flex  w-full flex-col items-center justify-start space-y-3.5 py-10">
-          {isLoading && <Skeleton height={125} number={3} />}
-
-          {lists && !isLoading && (
-            <>
-              {lists.length === 0 && (
-                <div className="text-xl font-extrabold capitalize text-gray-300 font-Inter leading-[150%]">
-                  No result found
-                </div>
-              )}
-              {lists?.map(
-                (
-                  list: {
-                    textId: number;
-                    results: any;
-                  },
-                  index: number,
-                ) => {
-                  let result = list.results[0];
-                  return (
-                    <Link
-                      to={`/text/${list.textId}/page/1`}
-                      key={'id' + index}
-                      className="container w-full"
-                      prefetch="intent"
-                    >
-                      <Card className="dark:bg-gray-500 font-monlam">
-                        <div className="text-xl">{result.name}</div>
-                        <div className="flex flex-wrap justify-between text-sm">
-                          {result && result[1]}
-                          <div className="text-sm text-gray-400">{result.total} matches</div>
-                        </div>
-                      </Card>
-                    </Link>
-                  );
-                },
-              )}
-            </>
-          )}
-        </div>
-      </div>
-      {!lists && !isLoading && (
-        <>
-          <FooterContainer />
-        </>
-      )}
+      {children}
+      <FooterContainer />
     </motion.div>
+  );
+}
+
+function SearchBar({ searchInput, onInputChange, translation }) {
+  return (
+    <div className="mx-auto max-w-2xl" style={{ paddingTop: HEADER_HEIGHT }}>
+      <Form method="GET" className="mb-3 w-full max-w-2xl">
+        <div className="relative flex w-full space-x-3">
+          <TextInput
+            autoComplete="off"
+            name="search"
+            placeholder={translation.searchText}
+            value={searchInput}
+            id="inputText"
+            onChange={onInputChange}
+            type="search"
+            className="flex-1 text-gray-500 pr-3"
+          />
+          <Button type="submit" className="h-full bg-green-400 text-white">
+            {translation.searchText}
+          </Button>
+        </div>
+      </Form>
+    </div>
+  );
+}
+
+function ContentArea({ latestTexts, isLoading }) {
+  let { textList } = useLoaderData<typeof loader>();
+  return (
+    <div className="flex w-full mx-auto max-w-2xl flex-col items-center justify-start space-y-3.5 py-10">
+      {isLoading && <Skeleton height={70} number={3} />}
+      {latestTexts && !isLoading && latestTexts.list.map((text) => <TextItem key={text.id} text={text} />)}
+      {!isLoading && (
+        <Suspense fallback={<div>loading...</div>}>
+          <Await resolve={textList}>
+            {(lists) => {
+              if (lists?.length === 0 || !lists) return <NoResultMessage />;
+              return <ListResults lists={lists} />;
+            }}
+          </Await>
+        </Suspense>
+      )}
+    </div>
+  );
+}
+
+function TextItem({ text }) {
+  const { groupedData, isVersionAvailable } = groupData(text.Page);
+  const textItemUrl = `/text/${text.id}/page/1/`;
+
+  return (
+    <div className="flex w-full justify-between border-b dark:border-gray-700">
+      <TextLink url={textItemUrl} name={text.name} />
+      {isVersionAvailable && <VersionLinks groupedData={groupedData} baseUrl={textItemUrl} />}
+    </div>
+  );
+}
+
+function TextLink({ url, name }) {
+  return (
+    <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
+      <Link to={url}>{name}</Link>
+    </div>
+  );
+}
+
+function VersionLinks({ groupedData, baseUrl }) {
+  const translation = useLitteraTranslation();
+
+  return (
+    <div className="flex gap-2 px-4 py-4 font-light text-gray-300">
+      {Object.keys(groupedData).map((key) => (
+        <Link
+          key={key}
+          to={`${baseUrl}?version=${key}`}
+          className="cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black"
+        >
+          {translation[key]}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function NoResultMessage() {
+  return (
+    <div className="text-xl font-extrabold capitalize text-gray-300 font-Inter leading-[150%]">No result found</div>
+  );
+}
+
+function ListResults({ lists }) {
+  if (!lists || lists.length === 0) return <NoResultMessage />;
+  return (
+    <>
+      {lists.map((list, index) => (
+        <ResultLink key={`id${index}`} list={list} />
+      ))}
+    </>
+  );
+}
+
+function ResultLink({ list }) {
+  const { textId, results } = list;
+  const result = results[0];
+
+  return (
+    <Link
+      to={`/text/${textId}/page/1`}
+      className="font-monlam w-full hover:text-slate-500 transition-all duration-75"
+      prefetch="intent"
+    >
+      <div className="text-md">{result.name}</div>
+      <div className="flex justify-between float-right">
+        {result && result[1]}
+        <div className="text-gray-400 text-xs">{result.total} matches</div>
+      </div>
+    </Link>
   );
 }

@@ -4,7 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useLoaderData, useSearchParams } from '@remix-run/react';
 import convertPTagsToOlAfterH1 from '~/lib/ConvertpToList';
-import { useEffect, useMemo } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 import * as Y from 'yjs';
 import { Collaboration } from '@tiptap/extension-collaboration';
 import { HocuspocusProvider } from '@hocuspocus/provider';
@@ -19,10 +19,11 @@ type useEditorProps = {
 };
 
 const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: useEditorProps) => {
+  const { user } = useLoaderData();
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [param, setSearchParams] = useSearchParams();
   let documentName = name;
-  const { user } = useLoaderData();
+  let provider;
   function suggestionSetter(id: string) {
     setSearchParams((p) => {
       p.set('with', 'Suggestion');
@@ -41,25 +42,17 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
     return new Y.Doc();
   }, [documentName]);
 
-  let provider;
-
-  useEffect(() => {
-    if (user && name) {
-      let url =
-        process.env.NODE_ENV === 'development'
-          ? 'ws://' + window.location.hostname + ':3000/socket'
-          : 'wss://' + window.location.hostname + '/socket';
-      provider = new HocuspocusProvider({
-        url,
-        name,
-        document: doc,
-      });
-    }
-
-    return () => {
-      doc.destroy();
-    };
-  }, [documentName]);
+  useLayoutEffect(() => {
+    let url =
+      process.env.NODE_ENV === 'development'
+        ? 'ws://' + window.location.hostname + ':3000/socket'
+        : 'wss://' + window.location.hostname + '/socket';
+    provider = new HocuspocusProvider({
+      url,
+      name,
+      document: doc,
+    });
+  }, []);
 
   let editor = useEditor(
     {
@@ -113,9 +106,6 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         Collaboration.configure({
           document: provider?.document ?? doc,
         }),
-        // CollaborationCursor.configure({
-        //   provider: provider,
-        // }),
       ],
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
@@ -130,7 +120,7 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
           end: to,
           content: editor?.state.doc.textBetween(from, to, ''),
         });
-        if (!editor.isActive('suggestion') && !editor.isActive('post') && !firsttime) {
+        if (!editor?.isActive('suggestion') && !editor?.isActive('post') && !firsttime) {
           if (param.get('with') !== 'all') {
             setSearchParams((p) => {
               p.delete('thread');
@@ -152,20 +142,8 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         }, 2000);
       },
     },
-    [provider],
+    [],
   );
-
-  useEffect(() => {
-    if (editor && user?.username) {
-      let currentUser = { name: user?.username, color: '#F98181' };
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    }
-
-    return () => {
-      editor?.destroy();
-    };
-  }, [editor, user?.username]);
-
   return editor;
 };
 export default useEditorInstance;

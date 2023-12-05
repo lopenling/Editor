@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { db } from '~/services/db.server';
 
 //find all user
@@ -24,7 +25,6 @@ export async function isUserPresent(username: string) {
 }
 
 export async function getUser(username: string) {
-  if (!username) return null;
   try {
     let user = await db.user.findUnique({
       where: {
@@ -46,7 +46,7 @@ export async function createUserInDB(
   name: string,
   email: string,
   isAdmin: boolean,
-  avatarUrl: string
+  avatarUrl: string,
 ) {
   try {
     const newUser = await db.user.create({

@@ -32,7 +32,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) =>
   }
 
   const text = await getText(textId);
-  const page = await getPage(textId, parseInt(order), version);
+  const page = await getPage(parseInt(textId), parseInt(order), version);
   const pageId = page?.id;
   const annotations = await getAnnotations(page?.id!);
   const user = await getUserSession(request);

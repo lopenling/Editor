@@ -4,7 +4,7 @@ import React from 'react';
 import exportAsDocs from '~/lib/export_docs';
 
 type Props = {
-  editor: Editor | null;
+  editor: Editor;
   name: string;
 };
 

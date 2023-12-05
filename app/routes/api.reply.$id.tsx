@@ -1,10 +1,10 @@
-import { LoaderFunction, LoaderArgs } from '@remix-run/server-runtime';
+import { LoaderFunction } from '@remix-run/server-runtime';
 import { json } from 'react-router';
 import { getposts } from '~/services/discourseApi';
 import { findPostByTopicId } from '~/model/post';
 import { findReplyByPostId } from '~/model/reply';
 
-export const loader: LoaderFunction = async ({ params }: LoaderArgs) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const id = parseInt(params?.id!);
   const post = await findPostByTopicId(id);
   let posts: any[] = [];

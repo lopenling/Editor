@@ -4,7 +4,6 @@ import { getUserSession } from '~/services/session.server';
 
 import {
   createPost as createPostOnDB,
-  deletePost,
   findPostByUserLiked,
   updatePostContentandAudio,
   updatePostLike,
@@ -16,7 +15,6 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from '@remix-run/node';
 import type { UploadHandler } from '@remix-run/node';
-import { deleteAnnotation } from '~/model/annotation';
 import { db } from '~/services/db.server';
 
 export const action: ActionFunction = async ({ request }) => {

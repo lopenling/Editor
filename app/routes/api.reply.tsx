@@ -1,4 +1,3 @@
-
 import { ActionFunction } from '@remix-run/server-runtime';
 import { createPost, deletePost } from '~/services/discourseApi';
 import { getUserSession } from '~/services/session.server';
@@ -8,10 +7,10 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from '@remix-run/node';
 import { uploadAudio } from '~/services/uploadAudio.server';
-import type { ActionArgs, UploadHandler } from '@remix-run/node';
+import type { UploadHandler } from '@remix-run/node';
 import { createReply, findReply, isReplyPresent, updateIsAproved, updateLikeReply } from '~/model/reply';
 
-export const action: ActionFunction = async ({ request }: ActionArgs) => {
+export const action: ActionFunction = async ({ request }) => {
   const user = await getUserSession(request);
   try {
     if (request.method === 'DELETE') {

@@ -19,7 +19,6 @@ import { useDebounce } from '~/component/hooks/useDebounce';
 import { FaEdit } from 'react-icons/fa';
 import copy from '~/lib/copy.client';
 import ExportButton from '~/features/Editor/component/ExportButton';
-import { ClientOnly } from 'remix-utils/client-only';
 export const loader: LoaderFunction = async ({ request, params }) => {
   let textId = params.textId;
   let order = params.pageId;
@@ -71,6 +70,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 function TranslationsRoute() {
   let { translation, userText, textId, order, user } = useLoaderData();
+
   let source_editor = useEditorInstance({
     name: 'userText' + userText.id,
     content: userText.content,
@@ -226,7 +226,7 @@ function TranslationsRoute() {
   }
 
   const isSaving = fetcher.state !== 'idle';
-  // if (source_editor === null || translation_editor === null) return <div>loading</div>;
+  if (source_editor === null || translation_editor === null) return <div>loading</div>;
   return (
     <div className="max-h-screen overflow-y-hidden">
       <Header editor={null} />

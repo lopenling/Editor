@@ -7,13 +7,13 @@ import {
 import { getUserSession } from '~/services/session.server';
 
 import { uploadAudio } from '~/services/uploadAudio.server';
-import type { ActionArgs, UploadHandler } from '@remix-run/node';
+import type { UploadHandler } from '@remix-run/node';
 import {
   unstable_composeUploadHandlers as composeUploadHandlers,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from '@remix-run/node';
-export let action: ActionFunction = async ({ request }: ActionArgs) => {
+export let action: ActionFunction = async ({ request }) => {
   const user = await getUserSession(request);
   const uploadHandler: UploadHandler = composeUploadHandlers(uploadAudio, createMemoryUploadHandler());
   const formData = await parseMultipartFormData(request, uploadHandler);

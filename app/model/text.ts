@@ -38,7 +38,7 @@ export async function findAllText(id = true, name = true, content = false) {
 }
 export async function findLatestText() {
   try {
-    let text = await db.text.findMany({
+    let texts = await db.text.findMany({
       select: {
         id: true,
         name: true,
@@ -50,14 +50,15 @@ export async function findLatestText() {
         },
         allow_post: true,
       },
+      take: 4,
       orderBy: {
         createdAt: 'desc',
       },
     });
 
     return {
-      count: text.length,
-      latestTexts: text.slice(0, 4),
+      count: texts.length,
+      texts,
     };
   } catch (e) {
     throw new Error('fetching text error' + e.message);

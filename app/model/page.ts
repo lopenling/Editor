@@ -48,7 +48,7 @@ export async function getVersions(textId: number, order: number) {
     return []; // Return an empty array if an error occurs
   }
 }
-export async function getPageContent(textId: string, order: number) {
+export async function getPageContent(textId: number, order: number) {
   let page = await getPage(textId, order, null);
   let data = await db.page.findFirst({
     where: {
@@ -61,9 +61,9 @@ export async function getPageContent(textId: string, order: number) {
   });
   return { id: data?.id, content: data?.content };
 }
-export async function getPage(textId: string, order: number, version: Version | null) {
+export async function getPage(textId: number, order: number, version: Version | null) {
   try {
-    let Id = parseInt(textId);
+    let Id = textId;
     let where = typeof version === 'string' ? { textId: Id, order, version } : { textId: Id, order };
     let pageWhere = version ? { version } : {};
     let page = db.page.findFirst({
@@ -110,10 +110,23 @@ export async function getPageId(textId: number, order: number) {
 export async function searchPages(search_term = '') {
   try {
     const textList = await db.page.findMany({
+      where: {
+        text: {
+          name: {
+            contains: search_term,
+            mode: 'insensitive',
+          },
+        },
+        content: {
+          contains: search_term,
+        },
+      },
       include: {
         text: true,
       },
+      orderBy: { content: 'asc' },
     });
+
     let results = fullSearch(textList, search_term);
     let groupedData = [];
 
