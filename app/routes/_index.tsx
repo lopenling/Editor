@@ -50,7 +50,9 @@ export default function Index() {
   const [params, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState(params.get('search') ?? '');
   const translation = useLitteraTranslation();
-
+  useEffect(() => {
+    if (!params.get('search')) setSearchInput('');
+  }, [params.get('search')]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') {
       setSearchParams((p) => {
@@ -215,7 +217,7 @@ function ResultLink({ list }: { list: any }) {
           <Avatar img={result.author.avatarUrl} title={result.author.username} />
         </div>
         <div className="flex-1">
-          <div className="text-[14px] leading-normal">{result.name}</div>
+          <div className="text-[12px] md:text-[14px]  leading-normal">{result.name}</div>
           <div className="flex justify-between mt-2">
             {result && result[1]}
             <div className="text-gray-400 text-[10px]">{result.total} matches</div>
