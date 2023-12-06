@@ -18,6 +18,7 @@ export const fullSearch = (textList, search_term) => {
         textId: text.textId,
         order: text.order,
         name: text.text.name,
+        author: text.text.author,
         results: [],
         total: 0,
         extra: false,

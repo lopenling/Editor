@@ -11,9 +11,5 @@ module.exports = {
     'react-form-wizard-component',
     'jsdom',
   ],
-  // appDirectory: "app",
-  // assetsBuildDirectory: "public/build",
-  // publicPath: "/build/",
-  // serverBuildPath: "build/index.js",
   tailwind: true,
 };

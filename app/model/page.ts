@@ -122,7 +122,11 @@ export async function searchPages(search_term = '') {
         },
       },
       include: {
-        text: true,
+        text: {
+          include: {
+            author: true,
+          },
+        },
       },
       orderBy: { content: 'asc' },
     });
