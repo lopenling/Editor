@@ -214,7 +214,7 @@ function ResultLink({ list }: { list: any }) {
         <div>
           <Avatar img={result.author.avatarUrl} title={result.author.username} />
         </div>
-        <div>
+        <div className="flex-1">
           <div className="text-[14px] leading-normal">{result.name}</div>
           <div className="flex justify-between mt-2">
             {result && result[1]}
