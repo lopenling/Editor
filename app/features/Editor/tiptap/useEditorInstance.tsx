@@ -43,15 +43,17 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
   }, [documentName]);
 
   useEffect(() => {
-    let url =
-      process.env.NODE_ENV === 'development'
-        ? 'ws://' + window.location.hostname + ':3000/socket'
-        : 'wss://' + window.location.hostname + '/socket';
-    provider = new HocuspocusProvider({
-      url,
-      name,
-      document: doc,
-    });
+    if (user) {
+      let url =
+        process.env.NODE_ENV === 'development'
+          ? 'ws://' + window.location.hostname + ':3000/socket'
+          : 'wss://' + window.location.hostname + '/socket';
+      provider = new HocuspocusProvider({
+        url,
+        name,
+        document: doc,
+      });
+    }
   }, []);
 
   let editor = useEditor(
@@ -136,7 +138,6 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
             if (content) {
               let content_with_list = convertPTagsToOlAfterH1(content);
               editor?.commands.setContent(content_with_list);
-              editor.chain().focus().updateUser({ name: user.username, color: '#F98181' }).run();
             }
           }
         }, 2000);

@@ -474,7 +474,7 @@ async function login(request, next, redirectTo) {
 }
 
 // app/styles/globalStyle.css
-var globalStyle_default = "/build/_assets/globalStyle-24F5JITW.css";
+var globalStyle_default = "/build/_assets/globalStyle-SXLNABWO.css";
 
 // app/styles/tailwind.css
 var tailwind_default = "/build/_assets/tailwind-Z54QMY6C.css";
@@ -2358,12 +2358,14 @@ var import_react13 = require("react"), Y = __toESM(require("yjs")), import_exten
   }
   let doc = (0, import_react13.useMemo)(() => new Y.Doc(), [documentName]);
   return (0, import_react13.useEffect)(() => {
-    let url = "ws://" + window.location.hostname + ":3000/socket";
-    provider = new import_provider.HocuspocusProvider({
-      url,
-      name,
-      document: doc
-    });
+    if (user) {
+      let url = "ws://" + window.location.hostname + ":3000/socket";
+      provider = new import_provider.HocuspocusProvider({
+        url,
+        name,
+        document: doc
+      });
+    }
   }, []), (0, import_react11.useEditor)(
     {
       extensions: [
@@ -2435,7 +2437,7 @@ var import_react13 = require("react"), Y = __toESM(require("yjs")), import_exten
         setTimeout(() => {
           if (editor2.getText() === "" && content) {
             let content_with_list = ConvertpToList_default(content);
-            editor2?.commands.setContent(content_with_list), editor2.chain().focus().updateUser({ name: user.username, color: "#F98181" }).run();
+            editor2?.commands.setContent(content_with_list);
           }
         }, 2e3);
       }
@@ -2747,9 +2749,8 @@ function TranslationsRoute() {
     content: translation.content,
     isEditable: !0,
     paramUpdate: !1
-  }), fetcher = (0, import_react15.useFetcher)(), [params, setParams] = (0, import_react15.useSearchParams)(), sectionIndex = params.get("section"), subsectionIndex = params.get("subsection"), [prevVisibleIndex, setPrevVisibleIndex] = (0, import_react17.useState)(null), [prevVisibleElement] = (0, import_react17.useState)(null), [currentIndex, setCurrentIndex] = (0, import_react17.useState)(0), [isEditable, setIsEditable] = (0, import_react17.useState)(!0), sourceRef = (0, import_react17.useRef)(null), translationRef = (0, import_react17.useRef)(null), currentDiv = (0, import_react17.useRef)(null), debounced_Index = useDebounce(currentIndex, 500);
-  (0, import_react17.useEffect)(() => {
-    let handleScroll = (element) => {
+  }), fetcher = (0, import_react15.useFetcher)(), [params, setParams] = (0, import_react15.useSearchParams)(), sectionIndex = params.get("section"), subsectionIndex = params.get("subsection"), [prevVisibleIndex, setPrevVisibleIndex] = (0, import_react17.useState)(null), [prevVisibleElement] = (0, import_react17.useState)(null), [currentIndex, setCurrentIndex] = (0, import_react17.useState)(0), [isEditable, setIsEditable] = (0, import_react17.useState)(!0), sourceRef = (0, import_react17.useRef)(null), translationRef = (0, import_react17.useRef)(null), currentDiv = (0, import_react17.useRef)(null), debounced_Index = useDebounce(currentIndex, 500), handleScroll = (0, import_react17.useCallback)(
+    (element) => {
       let h1Elements = element.querySelectorAll("h1");
       (params.get("section") || params.get("subsection")) && setParams((p) => (p.delete("section"), p.delete("subsection"), p));
       let firstVisibleH1 = Array.from(h1Elements).find((h1) => {
@@ -2760,11 +2761,17 @@ function TranslationsRoute() {
         let firstVisibleIndex = Array.from(h1Elements).indexOf(firstVisibleH1);
         (firstVisibleIndex !== prevVisibleIndex || firstVisibleH1 !== prevVisibleElement) && (setCurrentIndex(firstVisibleIndex), setPrevVisibleIndex(firstVisibleIndex));
       }
+    },
+    [sourceRef.current]
+  );
+  (0, import_react17.useEffect)(() => {
+    let timer;
+    return timer = setTimeout(() => {
+      sourceRef.current?.addEventListener("scroll", () => handleScroll(sourceRef.current)), translationRef.current?.addEventListener("scroll", () => handleScroll(translationRef.current));
+    }, 2e3), () => {
+      sourceRef.current?.removeEventListener("scroll", () => handleScroll(sourceRef.current)), translationRef.current?.removeEventListener("scroll", () => handleScroll(translationRef.current)), timer && clearTimeout(timer);
     };
-    return sourceRef.current?.addEventListener("scroll", () => handleScroll(sourceRef.current)), translationRef.current?.addEventListener("scroll", () => handleScroll(translationRef.current)), () => {
-      sourceRef.current?.removeEventListener("scroll", () => handleScroll(sourceRef.current)), translationRef.current?.removeEventListener("scroll", () => handleScroll(translationRef.current));
-    };
-  }, [prevVisibleIndex]), (0, import_react17.useEffect)(() => {
+  }, []), (0, import_react17.useEffect)(() => {
     let transElement = translationRef.current?.querySelectorAll("h1")[currentIndex], sourceElement = sourceRef.current?.querySelectorAll("h1")[currentIndex];
     transElement && translationRef.current !== currentDiv.current && transElement?.scrollIntoView({ block: "center" }), sourceElement && sourceRef.current !== currentDiv.current && sourceElement?.scrollIntoView({ block: "center" });
   }, [debounced_Index]), (0, import_react17.useEffect)(() => {
@@ -2785,9 +2792,9 @@ function TranslationsRoute() {
             subsection && subsection.scrollIntoView();
           }
         }
-      }, 1e3);
+      }, 3e3);
     }
-  }, [sectionIndex, subsectionIndex]);
+  }, [sectionIndex, subsectionIndex, sourceRef.current?.innerHTML]);
   function save() {
     if (!source_editor || !translation_editor) {
       import_react_hot_toast3.default.error("cannot save!");
@@ -2811,56 +2818,56 @@ function TranslationsRoute() {
   let isSaving = fetcher.state !== "idle";
   return source_editor === null || translation_editor === null ? /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { children: "loading" }, void 0, !1, {
     fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-    lineNumber: 229,
+    lineNumber: 236,
     columnNumber: 69
   }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "max-h-screen overflow-y-hidden", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(Header_default, { editor: null }, void 0, !1, {
       fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-      lineNumber: 232,
+      lineNumber: 239,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "flex justify-between max-w-6xl m-auto", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Button, { as: import_react15.Link, to: `/text/${textId}/page/${order}`, className: "text-white bg-slate-500", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_io3.IoMdArrowRoundBack, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 235,
+          lineNumber: 242,
           columnNumber: 11
         }, this),
         "Go to Main Text"
       ] }, void 0, !0, {
         fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-        lineNumber: 234,
+        lineNumber: 241,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "flex gap-4", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Tooltip, { content: "share link", placement: "bottom", children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Button, { size: "sm", className: "text-white bg-slate-500", onClick: () => (0, import_copy.default)(window.location.href), children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_bs.BsShare, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 241,
+          lineNumber: 248,
           columnNumber: 15
         }, this) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 240,
+          lineNumber: 247,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 239,
+          lineNumber: 246,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Tooltip, { content: "edit", placement: "bottom", children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Button, { size: "sm", className: "text-white bg-slate-500", onClick: () => setIsEditable((prev) => !prev), children: isEditable ? /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_ci3.CiRead, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 246,
+          lineNumber: 253,
           columnNumber: 29
         }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_fa6.FaEdit, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 246,
+          lineNumber: 253,
           columnNumber: 42
         }, this) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 245,
+          lineNumber: 252,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 244,
+          lineNumber: 251,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Tooltip, { content: "export as docx", placement: "top", children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(
@@ -2871,30 +2878,30 @@ function TranslationsRoute() {
             dismissOnClick: !1,
             renderTrigger: () => /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Button, { className: "text-white bg-slate-500", children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_ai2.AiOutlineExport, {}, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 256,
+              lineNumber: 263,
               columnNumber: 19
             }, this) }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 255,
+              lineNumber: 262,
               columnNumber: 17
             }, this),
             children: [
               /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(ExportButton_default, { editor: source_editor, name: "Source" }, void 0, !1, {
                 fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-                lineNumber: 261,
+                lineNumber: 268,
                 columnNumber: 17
               }, this) }, void 0, !1, {
                 fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-                lineNumber: 260,
+                lineNumber: 267,
                 columnNumber: 15
               }, this),
               /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Dropdown.Item, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(ExportButton_default, { editor: translation_editor, name: "Translation" }, void 0, !1, {
                 fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-                lineNumber: 264,
+                lineNumber: 271,
                 columnNumber: 17
               }, this) }, void 0, !1, {
                 fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-                lineNumber: 263,
+                lineNumber: 270,
                 columnNumber: 15
               }, this)
             ]
@@ -2903,36 +2910,36 @@ function TranslationsRoute() {
           !0,
           {
             fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-            lineNumber: 250,
+            lineNumber: 257,
             columnNumber: 13
           },
           this
         ) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 249,
+          lineNumber: 256,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Tooltip, { content: "save", placement: "bottom", children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_flowbite_react4.Button, { size: "sm", className: "text-white bg-slate-500", onClick: save, isProcessing: isSaving, children: isSaving ? null : /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_ai2.AiFillSave, {}, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 270,
+          lineNumber: 277,
           columnNumber: 34
         }, this) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 269,
+          lineNumber: 276,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 268,
+          lineNumber: 275,
           columnNumber: 11
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-        lineNumber: 238,
+        lineNumber: 245,
         columnNumber: 9
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-      lineNumber: 233,
+      lineNumber: 240,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("div", { className: "flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam", children: [
@@ -2945,21 +2952,21 @@ function TranslationsRoute() {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("h2", { className: "text-gray-400", children: "Source Text" }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 281,
+              lineNumber: 288,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_react16.EditorContent, { editor: source_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 282,
+              lineNumber: 289,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_react16.BubbleMenu, { editor: source_editor, shouldShow: ({ editor }) => editor?.isFocused && editor.isEditable, children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(Tools_default, { editor: source_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 284,
+              lineNumber: 291,
               columnNumber: 13
             }, this) }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 283,
+              lineNumber: 290,
               columnNumber: 11
             }, this)
           ]
@@ -2968,7 +2975,7 @@ function TranslationsRoute() {
         !0,
         {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 276,
+          lineNumber: 283,
           columnNumber: 9
         },
         this
@@ -2982,21 +2989,21 @@ function TranslationsRoute() {
           children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)("h2", { className: "text-gray-400", children: "Translation Text" }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 292,
+              lineNumber: 299,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_react16.EditorContent, { editor: translation_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 293,
+              lineNumber: 300,
               columnNumber: 11
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(import_react16.BubbleMenu, { editor: translation_editor, shouldShow: ({ editor }) => editor.isFocused && editor.isEditable, children: /* @__PURE__ */ (0, import_jsx_dev_runtime15.jsxDEV)(Tools_default, { editor: translation_editor }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 295,
+              lineNumber: 302,
               columnNumber: 13
             }, this) }, void 0, !1, {
               fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-              lineNumber: 294,
+              lineNumber: 301,
               columnNumber: 11
             }, this)
           ]
@@ -3005,19 +3012,19 @@ function TranslationsRoute() {
         !0,
         {
           fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-          lineNumber: 287,
+          lineNumber: 294,
           columnNumber: 9
         },
         this
       )
     ] }, void 0, !0, {
       fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-      lineNumber: 275,
+      lineNumber: 282,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/text_.$textId.page.$pageId.translation.$translationId.tsx",
-    lineNumber: 231,
+    lineNumber: 238,
     columnNumber: 5
   }, this);
 }
@@ -9053,7 +9060,7 @@ function oo_oo16(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-PNJGJ7WK.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-EVUJHA4X.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-3DZRI5MD.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-LIBHLG36.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-CPHOVMMK.js", imports: ["/build/_shared/chunk-PSMJYD7W.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-PO3YA5UR.js", imports: ["/build/_shared/chunk-PSMJYD7W.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "86811857", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1701928895471 }, url: "/build/manifest-86811857.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-PNJGJ7WK.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-FRVD7Q35.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-R3NPOYCX.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-3DZRI5MD.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-LIBHLG36.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-VXKPHATS.js", imports: ["/build/_shared/chunk-7NH3EG74.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-7HKUPANB.js", imports: ["/build/_shared/chunk-7NH3EG74.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-AGQUERQ7.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasErrorBoundary: !1 } }, version: "4d38ec0a", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1701930618003 }, url: "/build/manifest-4D38EC0A.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public\\build", future = {}, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

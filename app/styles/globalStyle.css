@@ -23,7 +23,7 @@
 }
 .ProseMirror ol li {
   list-style: decimal;
-  display: flex;
+  display: block;
   position: relative;
   padding-left: 50px;
 }

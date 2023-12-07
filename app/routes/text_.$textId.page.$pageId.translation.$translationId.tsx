@@ -11,7 +11,7 @@ import { AiFillSave, AiOutlineExport } from 'react-icons/ai';
 import { Button, Tooltip, Dropdown } from 'flowbite-react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { db } from '~/services/db.server';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { getUserSession } from '~/services/session.server';
 import { CiRead } from 'react-icons/ci';
@@ -101,8 +101,9 @@ function TranslationsRoute() {
   let debounced_Index = useDebounce(currentIndex, 500);
 
   //  handle scrolling of both divs
-  useEffect(() => {
-    const handleScroll = (element: HTMLDivElement) => {
+
+  let handleScroll = useCallback(
+    (element) => {
       const h1Elements = element.querySelectorAll('h1');
       if (params.get('section') || params.get('subsection')) {
         setParams((p) => {
@@ -130,17 +131,24 @@ function TranslationsRoute() {
           setPrevVisibleIndex(firstVisibleIndex);
         }
       }
-    };
+    },
+    [sourceRef.current],
+  );
 
+  useEffect(() => {
+    let timer;
     // Add scroll event listener to the sourceRef
-    sourceRef.current?.addEventListener('scroll', () => handleScroll(sourceRef.current));
-    translationRef.current?.addEventListener('scroll', () => handleScroll(translationRef.current));
+    timer = setTimeout(() => {
+      sourceRef.current?.addEventListener('scroll', () => handleScroll(sourceRef.current));
+      translationRef.current?.addEventListener('scroll', () => handleScroll(translationRef.current));
+    }, 2000);
     // Clean up the event listener on component unmount
     return () => {
       sourceRef.current?.removeEventListener('scroll', () => handleScroll(sourceRef.current));
       translationRef.current?.removeEventListener('scroll', () => handleScroll(translationRef.current));
+      if (timer) clearTimeout(timer);
     };
-  }, [prevVisibleIndex]);
+  }, []);
 
   // Scroll to the current h1 element when the currentIndex changes
   useEffect(() => {
@@ -192,9 +200,9 @@ function TranslationsRoute() {
             }
           }
         }
-      }, 1000);
+      }, 3000);
     }
-  }, [sectionIndex, subsectionIndex]);
+  }, [sectionIndex, subsectionIndex, sourceRef.current?.innerHTML]);
 
   function save() {
     // let data = parseHeadings(source_editor.getHTML());
@@ -220,7 +228,6 @@ function TranslationsRoute() {
       toast.error('You are not the owner of this text');
     }
   }
-
   function handleChangeCurrentDiv(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     currentDiv.current = e.currentTarget;
   }
