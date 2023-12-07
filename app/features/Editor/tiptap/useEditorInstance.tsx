@@ -4,7 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import { selectedTextOnEditor } from '~/states';
 import { useLoaderData, useSearchParams } from '@remix-run/react';
 import convertPTagsToOlAfterH1 from '~/lib/ConvertpToList';
-import { useLayoutEffect, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useMemo } from 'react';
 import * as Y from 'yjs';
 import { Collaboration } from '@tiptap/extension-collaboration';
 import { HocuspocusProvider } from '@hocuspocus/provider';
@@ -42,7 +42,7 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
     return new Y.Doc();
   }, [documentName]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let url =
       process.env.NODE_ENV === 'development'
         ? 'ws://' + window.location.hostname + ':3000/socket'

@@ -4,8 +4,7 @@ import { useRecoilState } from 'recoil';
 import { filterDataState, openFilterState } from '~/states';
 import uselitteraTranlation from '~/locales/useLitteraTranslations';
 import Datepicker from 'react-tailwindcss-datepicker';
-import { Modal } from 'flowbite-react';
-import { Button } from '~/component/UI';
+import { Modal, Button } from 'flowbite-react';
 type FilterProps = {};
 function Filter({}: FilterProps) {
   const [filterData, setFilterData] = useRecoilState(filterDataState);
@@ -163,7 +162,7 @@ function Filter({}: FilterProps) {
                           {
                             filterUser: e.target.value,
                           },
-                          { method: 'GET', action: '/api/user/search' }
+                          { method: 'GET', action: '/api/user/search' },
                         );
                       }}
                       className="h-full flex-1 border-none border-transparent bg-transparent text-sm leading-none text-gray-900 outline-none focus:border-none focus:border-transparent focus:outline-none focus:ring-0"

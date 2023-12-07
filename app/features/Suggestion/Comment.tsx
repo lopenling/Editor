@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { useRecoilValue } from 'recoil';
 import { useFetcher, useOutletContext } from '@remix-run/react';
-import { Button, TextArea } from '~/component/UI';
-
+import { TextArea } from '~/component/UI';
+import { Button } from 'flowbite-react';
 type CommentProps = {
   comments: SuggestionCommentType[];
 };
@@ -47,7 +47,7 @@ const Comment = ({ comment }: { comment: SuggestionCommentType }) => {
           action: 'api/suggestion/comment',
           method: 'DELETE',
           encType: 'multipart/form-data',
-        }
+        },
       );
     } else {
       console.log('cancelled');
@@ -64,7 +64,7 @@ const Comment = ({ comment }: { comment: SuggestionCommentType }) => {
         action: 'api/suggestion/comment',
         method: 'PATCH',
         encType: 'multipart/form-data',
-      }
+      },
     );
     setEdit(false);
   };

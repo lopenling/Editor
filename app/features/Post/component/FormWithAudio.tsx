@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedTextOnEditor, textInfo } from '~/states';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, TextArea } from '~/component/UI';
+import { Button } from 'flowbite-react';
 import { AudioPlayer, AudioRecorder } from '~/features/Media';
 import { PostType } from '~/model/type';
 import TiptapInstance from '~/component/UI/TiptapInstance';
@@ -145,6 +145,7 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {}, editor 
             }}
             style={{ borderRadius: 24 }}
             label="cancel"
+            className="bg-transparent text-black"
           />
           <Button
             style={{ borderRadius: 24, opacity: isFormEmpty ? 0.3 : 1 }}
@@ -152,6 +153,7 @@ export function FormWithAudio({ fetcher, type, post, onClose = () => {}, editor 
             onClick={handleSubmit}
             type="submit"
             label="Respond"
+            className="bg-green-400 text-white pr-3"
           />
         </div>
       </div>

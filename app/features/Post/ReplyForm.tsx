@@ -1,9 +1,9 @@
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { useRef, useEffect, useState } from 'react';
-import { Button, TextArea } from '~/component/UI';
 import { AudioRecorder, AudioPlayer } from '../Media';
 import { v4 as uuidv4 } from 'uuid';
 import TiptapInstance from '~/component/UI/TiptapInstance';
+import { Button } from 'flowbite-react';
 
 type ReplyFormPropsType = {
   closeReply: () => void;
@@ -48,10 +48,10 @@ export default function ReplyForm({ closeReply, topicId, updateReplyCount }: Rep
   };
   let emptyTextField = textArea === '' || postFetcher.state !== 'idle' || textArea === '<p></p>';
   return (
-    <div className="mt-1 flex justify-between" >
+    <div className="mt-1 flex justify-between">
       <div
         style={{
-          borderLeft: '4px solid #e5e7eb'
+          borderLeft: '4px solid #e5e7eb',
         }}
       ></div>
       <form
@@ -61,14 +61,11 @@ export default function ReplyForm({ closeReply, topicId, updateReplyCount }: Rep
           opacity: postFetcher.state !== 'idle' ? 0.5 : 1,
           cursor: postFetcher.state !== 'idle' ? 'not-allowed' : 'auto',
           minHeight: 100,
-          padding:14
+          padding: 14,
         }}
       >
-        <TiptapInstance
-          placeholder="Write your reply here ..."
-          onChange={setTextArea}
-        />
-        <input  id="textArea" name='postString' value={textArea} hidden required/>
+        <TiptapInstance placeholder="Write your reply here ..." onChange={setTextArea} />
+        <input id="textArea" name="postString" value={textArea} hidden required />
         {audio.tempUrl !== '' ? (
           <>
             <div className="mt-2 flex w-full items-center gap-3 ">
@@ -94,7 +91,7 @@ export default function ReplyForm({ closeReply, topicId, updateReplyCount }: Rep
               type="submit"
               onClick={handleSubmit}
               style={{
-                opacity:emptyTextField?0.3:1
+                opacity: emptyTextField ? 0.3 : 1,
               }}
               disabled={emptyTextField}
               label={

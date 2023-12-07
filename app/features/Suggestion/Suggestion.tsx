@@ -1,15 +1,14 @@
 import { useFetcher, useLoaderData, useOutlet, useOutletContext } from '@remix-run/react';
 import { Editor } from '@tiptap/react';
-import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { timeAgo } from '~/lib/getFormatedDate';
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import { Button, TextArea } from '~/component/UI';
+import { TextArea } from '~/component/UI';
 import { AudioPlayer, AudioRecorder } from '../Media';
 import { v4 as uuidv4 } from 'uuid';
 import { replaceMarkContent } from '~/features/Editor/tiptap/markAction';
 import Comment from './Comment';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
+import { Button } from 'flowbite-react';
 
 type SuggestionProps = {
   editor: Editor | null;
@@ -199,7 +198,7 @@ export default function Suggestion({ editor, suggest, optimistic = false }: Sugg
                 defaultValue={suggest.newValue}
               />
               <input name="id" type="text" value={suggest.id} hidden />
-              <Button label={editFetcher.state === 'submitting' ? 'saving' : 'confirm'} type="submit" />
+              <Button type="submit">{editFetcher.state === 'submitting' ? 'saving' : 'confirm'}</Button>
               <Button label="cancel" type="reset" onClick={() => setOpenEdit(false)} />
             </editFetcher.Form>
           ) : (

@@ -1,13 +1,12 @@
-import { useFetcher, useLoaderData, useOutlet, useOutletContext, useSearchParams } from '@remix-run/react';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { Editor } from '@tiptap/react';
-import { Button, TextArea, MustLoggedIn as LogInMessage } from '~/component/UI';
+import { TextArea, MustLoggedIn as LogInMessage } from '~/component/UI';
 import Suggestion from './Suggestion';
 import { AudioPlayer, AudioRecorder } from '../Media';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
-
+import { Button } from 'flowbite-react';
 type SuggestionFormProps = {
   editor: Editor | null;
 };
@@ -138,8 +137,9 @@ export default function SuggestionForm({ editor }: SuggestionFormProps) {
             onClick={handleSuggestionSubmit}
             type="submit"
             label="submit"
+            className="bg-green-400 text-white pr-3"
           />
-          <Button onClick={handleSuggestionCancel} type="reset" label="cancel" />
+          <Button onClick={handleSuggestionCancel} type="reset" label="cancel" className="bg-transparent text-black" />
         </div>
       </div>
     </div>
