@@ -3,7 +3,6 @@ import { SuggestionCommentType } from '~/model/type';
 import { AudioPlayer } from '../Media';
 import { useState } from 'react';
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import { useRecoilValue } from 'recoil';
 import { useFetcher, useOutletContext } from '@remix-run/react';
 import { TextArea } from '~/component/UI';
 import { Button } from 'flowbite-react';

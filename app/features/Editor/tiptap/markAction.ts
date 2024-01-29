@@ -3,7 +3,7 @@ import { Editor } from '@tiptap/react';
 function removeMark(editor: Editor | null, id: string) {
   if (!editor) return null;
   let markID = id;
-  const { doc, selection } = editor?.state;
+  const { doc } = editor?.state;
   doc.descendants((node, pos) => {
     if (node.marks) {
       node.marks.forEach((mark) => {
@@ -25,7 +25,7 @@ function removeMark(editor: Editor | null, id: string) {
 
 function replaceMarkContent(editor: Editor | null, markID: string, content: string) {
   if (!editor) return null;
-  const { doc, selection } = editor?.state;
+  const { doc } = editor?.state;
 
   doc.descendants((node, pos) => {
     if (node.marks && node.marks.length > 0) {

@@ -43,6 +43,7 @@ export const action: ActionFunction = async ({ request }) => {
   let sourceId = formdata.get('sourceId') as string;
   let translationId = formdata.get('translationId') as string;
   //text should be longer than 1000 characters
+
   try {
     const [userText, translation] = await db.$transaction([
       db.userText.update({
