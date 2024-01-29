@@ -9,6 +9,7 @@ import { replaceMarkContent } from '~/features/Editor/tiptap/markAction';
 import Comment from './Comment';
 import { useFetcherWithPromise } from '~/component/hooks/useFetcherPromise';
 import { Button } from 'flowbite-react';
+import { useState } from 'react';
 
 type SuggestionProps = {
   editor: Editor | null;

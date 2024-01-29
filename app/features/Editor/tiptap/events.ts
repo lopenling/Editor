@@ -21,19 +21,18 @@ const handleDOMEvents = {
   },
 };
 
+let attributes = {
+  inputmode: 'none',
+  'data-encoding': 'UTF-8',
+};
+
 const noneditable = {
   handleDOMEvents: handleDOMEvents,
-  attributes: {
-    inputmode: 'none',
-    'data-encoding': 'UTF-8',
-  },
+  attributes,
 };
 
 const editable = {
   handleDOMEvents: {},
-  attributes: {
-    inputmode: 'none',
-    'data-encoding': 'UTF-8',
-  },
+  attributes,
 };
 export default { editable, noneditable };

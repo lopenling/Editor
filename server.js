@@ -31,7 +31,6 @@ app.ws('/socket', (websocket, request) => {
       name: 'Jane',
     },
   };
-
   server.handleConnection(websocket, request, context);
 });
 // You need to create the HTTP server from the Express app

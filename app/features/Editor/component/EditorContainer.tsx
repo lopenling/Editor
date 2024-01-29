@@ -118,6 +118,5 @@ const Header = ({ isSaving, pageCount, user }) => (
       </div>
       <Pagination pageCount={pageCount} />
     </div>
-    {!user && <div>changes won't get saved if you are not logged in</div>}
   </div>
 );

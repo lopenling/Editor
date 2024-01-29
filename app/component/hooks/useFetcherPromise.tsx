@@ -22,7 +22,7 @@ export function useFetcherWithPromise() {
       fetcher.submit(...args);
       return promiseRef.current;
     },
-    [fetcher, promiseRef]
+    [fetcher, promiseRef],
   );
 
   useEffect(() => {
