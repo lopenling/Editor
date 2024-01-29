@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const { Server } = require('@hocuspocus/server');
 const expressWsR = require('express-ws');
 const MODE = process.env.NODE_ENV;
-const BUILD_DIR = path.join(process.cwd(), 'build');
+const BUILD_DIR = path.join(process.cwd(), '/public/build');
 
 var app = express();
 const httpServer = createServer(app);
