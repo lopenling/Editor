@@ -5,10 +5,10 @@ import { createUserText } from './userText';
 import { languageOptionsType } from '~/constants';
 
 //get list of translations for a text
-export let listTranslations = async (textId: string, pageId: string) => {
+export let listTranslations = async (textId: number, pageId: string) => {
   return await db.translation.findMany({
     where: {
-      textId: parseInt(textId),
+      textId,
       pageId,
     },
     include: {
@@ -88,4 +88,30 @@ export let updateTranslation = async (id: number, content: string) => {
       content,
     },
   });
+};
+
+export let updateSourceAndTranslation = async ({
+  sourceId,
+  sourceContent,
+  sourceAnnotation,
+  translationId,
+  translationContent,
+  translationAnnotation,
+}) => {
+  return await db.$transaction([
+    db.userText.update({
+      where: { id: parseInt(sourceId) },
+      data: {
+        content: sourceContent,
+        Annotation: sourceAnnotation,
+      },
+    }),
+    db.translation.update({
+      where: { id: parseInt(translationId) },
+      data: {
+        content: translationContent,
+        annotation: translationAnnotation,
+      },
+    }),
+  ]);
 };

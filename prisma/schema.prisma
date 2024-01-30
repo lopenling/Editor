@@ -88,17 +88,10 @@ model Translation {
   language String?
   user User? @relation(fields: [userId], references: [id])
   userId String?
-  annotation Translation_Annotation[]
+  annotation Json[]
 
 }
-model Translation_Annotation{
-  id String @id @unique @default(uuid())
-  translation Translation @relation(fields: [translationId], references: [id])
-  translationId Int
-  start Int
-  end    Int
-  type  String
-}
+
 model UserText {
   id   Int      @id @default(autoincrement())
   name String
@@ -111,17 +104,9 @@ model UserText {
   translations Translation[]
   content String
   order Int?
-  Annotation UserText_Annotation[]
+  Annotation Json[]
 }
 
-model UserText_Annotation{
-  id String @id @unique @default(uuid())
-  userText UserText @relation(fields: [userTextId], references: [id])
-  userTextId Int
-  start  Int
-  end    Int
-  type   String
-}
 
 model Suggestion {
   id                String              @id @unique @default(uuid())

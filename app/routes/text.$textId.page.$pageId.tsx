@@ -15,14 +15,15 @@ import TextHeader from '~/component/Layout/TextHeader';
 import Menu from '~/component/menu/Menu';
 import { findPostByTextIdAndPage } from '~/model/post';
 import { listTranslations } from '~/model/translation';
+
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const textId = params.textId as string;
-  const order = params.pageId as string;
+  const textId = parseInt(params.textId as string);
+  const order = parseInt(params.pageId as string);
   const url = new URL(request.url);
   const version = url.searchParams.get('version') as Version;
   const searchParamsWith = url.searchParams.get('with') as String;
-  const thread = url.searchParams.get('thread') as String;
-  const versions = await getVersions(parseInt(textId), parseInt(order));
+  const thread = url.searchParams.get('thread') as string;
+  const versions = await getVersions(textId, order);
   if (!version && versions?.length > 0) {
     const currentSearchParams = new URL(request.url).searchParams;
     if (!currentSearchParams.has('version')) {
@@ -32,14 +33,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   const text = await getText(textId);
-  const page = await getPage(parseInt(textId), parseInt(order), version);
-  const pageId = page?.id;
+  const page = await getPage(textId, order, version);
   const annotations = await getAnnotations(page?.id!);
   const user = await getUserSession(request);
-  const translations = searchParamsWith === 'Translations' ? await listTranslations(textId, pageId) : [];
+  const translations = searchParamsWith === 'Translations' ? await listTranslations(textId, page?.id!) : [];
   const suggestions = searchParamsWith === 'Suggestion' ? await findAllSuggestionByPageId(page?.id!, thread) : [];
-  const posts =
-    searchParamsWith === 'Post' ? await findPostByTextIdAndPage(parseInt(textId), parseInt(order), version) : [];
+  const posts = searchParamsWith === 'Post' ? await findPostByTextIdAndPage(textId, order, version) : [];
   return json({
     page,
     user,
@@ -50,7 +49,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     translations,
     annotations,
     posts,
-    pageId,
+    pageId: page?.id,
   });
 };
 

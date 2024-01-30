@@ -4,7 +4,7 @@ import { EditorContent, BubbleMenu } from '@tiptap/react';
 import Header from '~/component/Layout/Header';
 import Tools from '~/features/Editor/tiptap/component/Tools';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
-import { getTranslation } from '~/model/translation';
+import { getTranslation, updateSourceAndTranslation } from '~/model/translation';
 import { getUserPage } from '~/model/userText';
 import { BsShare } from 'react-icons/bs';
 import { AiFillSave, AiOutlineExport } from 'react-icons/ai';
@@ -19,6 +19,7 @@ import { useDebounce } from '~/component/hooks/useDebounce';
 import { FaEdit } from 'react-icons/fa';
 import copy from '~/lib/copy.client';
 import ExportButton from '~/features/Editor/component/ExportButton';
+import { constructHTML, processHTML } from '~/lib/translationhtmlparser';
 export const loader: LoaderFunction = async ({ request, params }) => {
   let textId = params.textId;
   let order = params.pageId;
@@ -40,25 +41,21 @@ export const action: ActionFunction = async ({ request }) => {
   let formdata = await request.formData();
   let sourceContent = formdata.get('sourceContent') as string;
   let translationContent = formdata.get('translationContent') as string;
+  let sourceAnnotation = JSON.parse(formdata.get('sourceAnnotation') as string);
+  let translationAnnotation = JSON.parse(formdata.get('translationAnnotation') as string);
+
   let sourceId = formdata.get('sourceId') as string;
   let translationId = formdata.get('translationId') as string;
   //text should be longer than 1000 characters
-
   try {
-    const [userText, translation] = await db.$transaction([
-      db.userText.update({
-        where: { id: parseInt(sourceId) },
-        data: {
-          content: sourceContent,
-        },
-      }),
-      db.translation.update({
-        where: { id: parseInt(translationId) },
-        data: {
-          content: translationContent,
-        },
-      }),
-    ]);
+    const [userText, translation] = await updateSourceAndTranslation({
+      sourceContent,
+      sourceAnnotation,
+      sourceId,
+      translationContent,
+      translationAnnotation,
+      translationId,
+    });
 
     return {
       userText,
@@ -213,11 +210,25 @@ function TranslationsRoute() {
       toast.error('cannot save!');
       return;
     }
+    let sourceContent = source_editor.getHTML();
+    let translationContent = translation_editor.getHTML();
+
+    let source = processHTML(sourceContent);
+    let translation = processHTML(translationContent);
+    // let html = constructHTML(text, annotations);
+    let sourceText = source.text;
+    let sourceAnnotation = source.annotations;
+
+    let translationText = translation.text;
+    let translationAnnotation = translation.annotations;
+
     if (userText?.userId === user?.id) {
       fetcher.submit(
         {
-          sourceContent: source_editor.getHTML(),
-          translationContent: translation_editor.getHTML(),
+          sourceContent: sourceText,
+          sourceAnnotation: JSON.stringify(sourceAnnotation),
+          translationContent: translationText,
+          translationAnnotation: JSON.stringify(translationAnnotation),
           translationId: translation.id,
           sourceId: userText.id,
         },

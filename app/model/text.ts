@@ -2,11 +2,11 @@
 
 import { db } from '~/services/db.server';
 // get all text
-export async function getText(id: string) {
+export async function getText(id: number) {
   try {
     let text = await db.text.findUnique({
       where: {
-        id: parseInt(id),
+        id: id,
       },
       select: {
         id: true,
