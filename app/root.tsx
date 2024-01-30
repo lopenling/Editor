@@ -25,6 +25,7 @@ import nProgressStyles from 'nprogress/nprogress.css';
 import { useEffect, useMemo } from 'react';
 import NProgress from 'nprogress';
 import toast, { Toaster } from 'react-hot-toast';
+
 export function meta({ matches }) {
   const rootMeta = matches[0].meta;
   const title = rootMeta.find((m) => m.title) || 'Lopenling App';

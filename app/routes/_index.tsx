@@ -110,9 +110,9 @@ function SearchBar({
             id="inputText"
             onChange={onInputChange}
             type="search"
-            className="flex-1 text-gray-500 pr-3"
+            className="flex-1 font-monlam text-gray-500 pr-3"
           />
-          <Button type="submit" className="h-full bg-green-400 text-white">
+          <Button type="submit" className="h-full font-monlam bg-green-400 text-white">
             {translation.searchText}
           </Button>
         </div>
@@ -130,7 +130,7 @@ type Text = {
 function ContentArea({ latestTexts, isLoading }: { latestTexts: Text; isLoading: boolean }) {
   let { textList } = useLoaderData<typeof loader>();
   return (
-    <div className="flex w-full mx-auto max-w-2xl flex-col items-center justify-start py-10">
+    <div className="flex w-full mx-auto max-w-2xl flex-col gap-3 items-center justify-start py-10">
       {isLoading && <Skeleton height={70} number={3} />}
       {latestTexts && !isLoading && latestTexts.list.map((text) => <TextItem key={text.id} text={text} />)}
       {!isLoading && (
@@ -153,7 +153,7 @@ function TextItem({ text }: { text: any }) {
   const textItemUrl = `/text/${text.id}/page/1/`;
 
   return (
-    <div className="flex w-full justify-between border-b dark:border-gray-700">
+    <div className="flex rounded-lg border hover:bg-gray-50 border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col w-full p-0 ">
       <TextLink url={textItemUrl} name={text.name} />
       {isVersionAvailable && <VersionLinks groupedData={groupedData} baseUrl={textItemUrl} />}
     </div>
@@ -162,8 +162,10 @@ function TextItem({ text }: { text: any }) {
 
 function TextLink({ url, name }: { url: string; name: string }) {
   return (
-    <div className="flex items-center gap-1 px-4 py-4" style={{ fontFamily: 'monlam' }}>
-      <Link to={url}>{name}</Link>
+    <div className="font-monlam w-full  pb-2 pt-3 px-2 transition-all duration-75">
+      <Link to={url} prefetch="intent">
+        {name}
+      </Link>
     </div>
   );
 }
@@ -172,12 +174,13 @@ function VersionLinks({ groupedData, baseUrl }: { groupedData: any; baseUrl: str
   const translation = useLitteraTranslation();
 
   return (
-    <div className="flex gap-2 px-4 py-4 font-light text-gray-300">
+    <div className="px-4 py-1 font-light block">
       {Object.keys(groupedData).map((key) => (
         <Link
           key={key}
+          prefetch="intent"
           to={`${baseUrl}?version=${key}`}
-          className="cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black"
+          className="cursor-pointer rounded-md mx-1 uppercase pb-2 bg-yellow-300 px-2 font-bold hover:bg-yellow-200 text-black"
         >
           {translation[key]}
         </Link>

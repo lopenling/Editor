@@ -1,4 +1,4 @@
-import { LoaderArgs, LoaderFunction, json, redirect } from '@remix-run/node';
+import { LoaderFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { getPage, getVersions } from '~/model/page';
 
@@ -15,7 +15,7 @@ import TextHeader from '~/component/Layout/TextHeader';
 import Menu from '~/component/menu/Menu';
 import { findPostByTextIdAndPage } from '~/model/post';
 import { listTranslations } from '~/model/translation';
-export const loader: LoaderFunction = async ({ request, params }: LoaderArgs) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const textId = params.textId as string;
   const order = params.pageId as string;
   const url = new URL(request.url);

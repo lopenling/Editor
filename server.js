@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const { Server } = require('@hocuspocus/server');
 const expressWsR = require('express-ws');
 const MODE = process.env.NODE_ENV;
-const BUILD_DIR = path.join(process.cwd(), '/public/build');
+const BUILD_DIR = path.join(process.cwd(), 'build');
 
 var app = express();
 const httpServer = createServer(app);
@@ -20,10 +20,9 @@ if (!fs.existsSync(BUILD_DIR)) {
   );
 }
 const server = Server.configure({
-  async onConnect() {
-    console.log('🔮 connected');
-  },
+  async onConnect() {},
 });
+
 app.ws('/socket', (websocket, request) => {
   const context = {
     user: {
@@ -31,6 +30,7 @@ app.ws('/socket', (websocket, request) => {
       name: 'Jane',
     },
   };
+
   server.handleConnection(websocket, request, context);
 });
 // You need to create the HTTP server from the Express app

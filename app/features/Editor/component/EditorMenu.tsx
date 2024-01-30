@@ -49,10 +49,10 @@ function EditorMenu({ editor, selection, setSelectionRange, setSearchParams, isP
   };
 
   const InSelectionLimit = selection.content.length > 0 && selection.content.length < 239;
-
+  const isTextAdmin = text.userId !== user?.id;
   return (
     <>
-      {editor && (
+      {editor && user && (
         <BubbleMenu
           shouldShow={({ editor }) => {
             const postmarkType = editor.schema.marks.post;
@@ -115,8 +115,7 @@ function EditorMenu({ editor, selection, setSelectionRange, setSearchParams, isP
               color="gray"
               onClick={() => handleDeleteMark()}
               label="Delete"
-              disabled={text.userId !== user?.id}
-              className="disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`disabled:opacity-50 disabled:cursor-not-allowed ${isTextAdmin && 'hidden'}`}
             />
           )}
         </BubbleMenu>

@@ -113,7 +113,7 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
       onSelectionUpdate: ({ editor }) => {
         if (!paramUpdate) return null;
-
+        // if (!user) return null;
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
         setSelectionRange({
@@ -123,9 +123,10 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
           content: editor?.state.doc.textBetween(from, to, ''),
         });
         if (!editor?.isActive('suggestion') && !editor?.isActive('post') && !firsttime) {
-          if (param.get('with') !== 'all') {
+          if (param.get('with') === 'Suggestion' || param.get('with') === 'Post') {
             setSearchParams((p) => {
               p.delete('thread');
+              p.set('with', 'all');
               return p;
             });
           }
