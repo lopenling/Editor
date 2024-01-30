@@ -4,6 +4,8 @@ import { LANGUAGE_OPTION_TRANSLATION } from '~/constants';
 import { useTxtUpload } from '../hooks/useTxtUpload';
 import { useLoaderData } from '@remix-run/react';
 import { Card, TextInput } from 'flowbite-react';
+import { formatBytes } from '~/lib/formatSize';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 function TranslationUploader({ fetcher }: { fetcher: any }) {
   const { acceptedFiles, fileContent, getRootProps, getInputProps, setFileContent } = useTxtUpload();
@@ -34,13 +36,24 @@ function TranslationUploader({ fetcher }: { fetcher: any }) {
       textInputRef.current?.focus();
     }
   }, [fileContent]);
+
+  // when user click close button - reset the text input and file content
+  const closeFileUpload = () => {
+    setFileContent('');
+    setTitle('');
+  };
   return (
     <div className="flex flex-col  gap-3">
       {fileContent !== '' ? (
         <Card>
-          <h4>
-            File: {acceptedFiles[0].name} , {acceptedFiles[0].size}
-          </h4>
+          <div className="flex justify-between">
+            <h4>
+              File: {acceptedFiles[0].name} , {formatBytes(acceptedFiles[0].size)}
+            </h4>
+            <button type="button" onClick={closeFileUpload}>
+              <AiOutlineCloseCircle />
+            </button>
+          </div>
           <TextInput
             ref={textInputRef}
             placeholder="title"
