@@ -113,7 +113,7 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
       onSelectionUpdate: ({ editor }) => {
         if (!paramUpdate) return null;
-        // if (!user) return null;
+        if (!user) return null;
         let from = editor.state.selection.from;
         let to = editor.state.selection.to;
         setSelectionRange({
