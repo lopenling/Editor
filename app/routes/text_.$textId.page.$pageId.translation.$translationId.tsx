@@ -250,7 +250,7 @@ function TranslationsRoute() {
     <div className="max-h-screen overflow-y-hidden">
       <Header editor={null} />
       <div className="flex justify-between max-w-6xl m-auto my-4">
-        <Button as={Link} to={`/text/${textId}/page/${order}`} className="text-white bg-slate-500">
+        <Button as={Link} to={`/text/${textId}/page/${order}?with=Translations`} className="text-white bg-slate-500">
           <IoMdArrowRoundBack />
           Go to Main Text
         </Button>
