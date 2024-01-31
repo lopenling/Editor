@@ -3,8 +3,7 @@ import { Editor } from '@tiptap/react';
 import { useState, useEffect, memo } from 'react';
 import { searchSingleText } from '../lib';
 import { RxCross2 } from 'react-icons/rx';
-import { FaAngleDown } from 'react-icons/fa6';
-import { FaAngleUp } from 'react-icons/fa6';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 type locationType = {
   start: number;
   length: number;
@@ -73,10 +72,10 @@ function SearchString({ editor }: { editor: Editor }) {
 
   return (
     <div
-      className={`searchForm flex flex-row items-center space-x-2.5 rounded-lg rounded-bl-lg border p-2  
+      className={`searchForm flex flex-row items-center space-x-2.5 border p-2  
      `}
     >
-      <div className="flex w-full">
+      <div className="flex w-full space-x-2">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -91,7 +90,7 @@ function SearchString({ editor }: { editor: Editor }) {
             autoFocus={true}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className={` border-1 h-full w-full bg-transparent text-sm leading-tight text-gray-500 outline-1 focus:border-transparent focus:ring-1`}
+            className={` border-1 rounded-md h-full w-full bg-transparent text-sm leading-tight text-gray-500 dark:text-white outline-1 focus:border-transparent focus:ring-1`}
           ></input>
           <input name="textId" readOnly value={data.page.id} hidden />
           <button type="submit" hidden></button>

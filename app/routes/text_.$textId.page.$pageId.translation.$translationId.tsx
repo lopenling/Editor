@@ -249,7 +249,7 @@ function TranslationsRoute() {
   return (
     <div className="max-h-screen overflow-y-hidden">
       <Header editor={null} />
-      <div className="flex justify-between max-w-6xl m-auto">
+      <div className="flex justify-between max-w-6xl m-auto my-4">
         <Button as={Link} to={`/text/${textId}/page/${order}`} className="text-white bg-slate-500">
           <IoMdArrowRoundBack />
           Go to Main Text
@@ -291,7 +291,7 @@ function TranslationsRoute() {
           </Tooltip>
         </div>
       </div>
-      <div className="flex max-w-6xl gap-3 w-full mx-auto mt-3 font-monlam">
+      <div className="flex max-w-6xl gap-3 w-full mx-auto font-monlam">
         <div
           ref={sourceRef}
           onMouseOver={handleChangeCurrentDiv}

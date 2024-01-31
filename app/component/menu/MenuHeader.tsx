@@ -14,7 +14,7 @@ function MenuHeader() {
     });
   }
   return (
-    <div className="w-full uppercase text-gray-500 h-[60px]  bg-gray-100 flex items-center justify-between px-6 py-4">
+    <div className="w-full uppercase text-gray-500 h-[60px] bg-gray-100 dark:text-white dark:bg-gray-400 flex items-center justify-between px-6 py-4">
       {header === 'all' ? (
         'Resources'
       ) : (
