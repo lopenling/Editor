@@ -113,10 +113,12 @@ function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {
 
   return (
     <div
-      className={`${fetcher.formMethod === 'DELETE' && 'hidden'} relative  px-6 pt-6 pb-4 `}
-      style={{
-        backgroundColor: isSelected ? '#F3F4F6' : 'white',
-      }}
+      className={`${fetcher.formMethod === 'DELETE' && 'hidden'} relative px-6 pt-6 pb-4 ${
+        isSelected ? 'bg-[#F3F4F6] dark:bg-gray-800' : 'bg-white dark:bg-gray-700'
+      }`}
+      // style={{
+      //   backgroundColor: isSelected ? '#F3F4F6' : 'white',
+      // }}
       id={`p_${threadId}`}
     >
       <div className="flex items-center justify-between">

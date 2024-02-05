@@ -99,7 +99,7 @@ function SearchBar({
   translation: any;
 }) {
   return (
-    <div className="mx-auto max-w-2xl" style={{ paddingTop: HEADER_HEIGHT + 40 }}>
+    <div className="px-4 md:px-0 mx-auto max-w-2xl" style={{ paddingTop: HEADER_HEIGHT + 40 }}>
       <Form method="GET" className="mb-3 w-full max-w-2xl">
         <div className="relative flex w-full space-x-3">
           <TextInput
@@ -130,7 +130,7 @@ type Text = {
 function ContentArea({ latestTexts, isLoading }: { latestTexts: Text; isLoading: boolean }) {
   let { textList } = useLoaderData<typeof loader>();
   return (
-    <div className="flex w-full mx-auto max-w-2xl flex-col gap-3 items-center justify-start py-10">
+    <div className="flex w-full px-4 md:px-0 mx-auto max-w-2xl flex-col gap-3 items-center justify-start py-10">
       {isLoading && <Skeleton height={70} number={3} />}
       {latestTexts && !isLoading && latestTexts.list.map((text) => <TextItem key={text.id} text={text} />)}
       {!isLoading && (

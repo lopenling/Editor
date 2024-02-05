@@ -62,14 +62,14 @@ export default function Page() {
   const withImage = !data.text.allow_post;
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col">
       <Header editor={editor} />
       <div className="flex">
-        <div className="flex w-full flex-col  flex-1 " style={{ maxHeight: 'calc(100vh - 60px)' }}>
+        <div className="relative md:static flex w-full flex-col flex-1" style={{ maxHeight: 'calc(100vh - 60px)' }}>
           <TextHeader />
-          <div className=" flex justify-between gap-4 transition-all flex-1 overflow-y-auto ">
+          <div className=" flex justify-between gap-4 transition-all flex-1 overflow-y-auto">
             <CircleSpinnerOverlay message={'updating text'} loading={saveTextFetcher.state !== 'idle'} />
-            <div className="w-full flex gap-2 ">
+            <div className="w-full flex gap-2">
               <div
                 className={`${
                   !withImage ? 'max-w-3xl' : 'w-full'
