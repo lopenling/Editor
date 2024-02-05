@@ -10,7 +10,7 @@ type Props = {
 
 function ExportButton({ editor, name }: Props) {
   return (
-    <Button size={'sm'} className="text-slate-500" onClick={() => exportAsDocs(editor)}>
+    <Button size={'xs'} className="text-slate-500" onClick={() => exportAsDocs(editor)}>
       {name}
     </Button>
   );

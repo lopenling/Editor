@@ -71,13 +71,13 @@ function TranslationsRoute() {
 
   let source_editor = useEditorInstance({
     name: 'userText' + userText.id,
-    content: userText.content,
+    content: constructHTML(userText.content, userText.Annotation),
     isEditable: true,
     paramUpdate: false,
   });
   let translation_editor = useEditorInstance({
     name: 'translation' + translation.id,
-    content: translation.content,
+    content: constructHTML(translation.content, translation.annotation),
     isEditable: true,
     paramUpdate: false,
   });
@@ -214,13 +214,13 @@ function TranslationsRoute() {
     let translationContent = translation_editor.getHTML();
 
     let source = processHTML(sourceContent);
-    let translation = processHTML(translationContent);
+    let translationHTML = processHTML(translationContent);
     // let html = constructHTML(text, annotations);
     let sourceText = source.text;
     let sourceAnnotation = source.annotations;
 
-    let translationText = translation.text;
-    let translationAnnotation = translation.annotations;
+    let translationText = translationHTML.text;
+    let translationAnnotation = translationHTML.annotations;
 
     if (userText?.userId === user?.id) {
       fetcher.submit(
@@ -268,10 +268,10 @@ function TranslationsRoute() {
           <Tooltip content="export as docx" placement="top">
             <Dropdown
               label=""
-              size="sm"
+              size="xs"
               dismissOnClick={false}
               renderTrigger={() => (
-                <Button className="text-white bg-slate-500">
+                <Button size="sm" className="text-white bg-slate-500">
                   <AiOutlineExport />
                 </Button>
               )}
