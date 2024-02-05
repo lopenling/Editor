@@ -3164,7 +3164,7 @@ __export(text_textId_page_pageId_exports, {
   default: () => Page,
   loader: () => loader3
 });
-var import_node4 = require("@remix-run/node"), import_react61 = require("@remix-run/react");
+var import_node4 = require("@remix-run/node"), import_react62 = require("@remix-run/react");
 
 // app/features/Editor/component/EditorContainer.tsx
 var import_react23 = require("@remix-run/react"), import_react24 = require("@tiptap/react"), import_react25 = require("react"), import_recoil5 = require("recoil");
@@ -3948,7 +3948,7 @@ function TextHeader() {
 var TextHeader_default = TextHeader;
 
 // app/component/menu/Menu.tsx
-var import_react59 = require("@remix-run/react");
+var import_react60 = require("@remix-run/react");
 
 // app/component/menu/MenuHeader.tsx
 var import_react27 = require("@remix-run/react"), import_ai4 = require("react-icons/ai"), import_io5 = require("react-icons/io"), import_jsx_dev_runtime23 = require("react/jsx-dev-runtime");
@@ -4203,36 +4203,60 @@ var import_jsx_dev_runtime25 = require("react/jsx-dev-runtime"), TableOfContents
   }, this);
 }, TableOfContent_default = TableOfContents;
 
+// app/component/hooks/searchInstance.tsx
+var import_react31 = require("@remix-run/react");
+function searchInstance() {
+  let { page } = (0, import_react31.useLoaderData)(), fullText = checkunknown_default(page.content.replace(/[\r\n]+/g, "<p/><p>")), [param, setParam] = (0, import_react31.useSearchParams)(), searchTerm = param.get("s");
+  return searchTerm !== null ? findOccurrencesWithContext(fullText, searchTerm) : [];
+}
+var searchInstance_default = searchInstance;
+function findOccurrencesWithContext(fullText, targetString, contextRange = 20) {
+  let occurrences = [];
+  if (!fullText || !targetString)
+    return console.error(fullText, targetString), occurrences;
+  let targetLength = targetString.length, index = fullText.indexOf(targetString);
+  for (; index !== -1; ) {
+    let start = Math.max(0, index - contextRange), end = Math.min(fullText.length, index + targetLength + contextRange), occurrence = {
+      start,
+      end,
+      context: fullText.substring(start, end)
+    };
+    occurrences.push(occurrence), index = fullText.indexOf(targetString, index + 1);
+  }
+  return occurrences;
+}
+
 // app/component/menu/Search.tsx
 var import_jsx_dev_runtime26 = require("react/jsx-dev-runtime");
 function Search({ editor }) {
+  let data = searchInstance_default();
   return editor ? /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "flex flex-col flex-1", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(import_SearchString.default, { editor }, void 0, !1, {
       fileName: "app/component/menu/Search.tsx",
-      lineNumber: 9,
+      lineNumber: 10,
       columnNumber: 7
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "bg-green-200 flex-1 h-full", children: "intext" }, void 0, !1, {
       fileName: "app/component/menu/Search.tsx",
-      lineNumber: 10,
+      lineNumber: 11,
       columnNumber: 7
     }, this)
   ] }, void 0, !0, {
     fileName: "app/component/menu/Search.tsx",
-    lineNumber: 8,
+    lineNumber: 9,
     columnNumber: 5
   }, this) : null;
 }
 var Search_default = Search;
 
 // app/component/menu/Translations.tsx
-var import_react34 = require("@remix-run/react"), import_flowbite_react7 = require("flowbite-react"), import_react35 = require("react"), import_ai6 = require("react-icons/ai");
+var import_react35 = require("@remix-run/react"), import_flowbite_react7 = require("flowbite-react"), import_react36 = require("react"), import_ai6 = require("react-icons/ai");
 
 // app/component/menu/TranslationUploader.tsx
-var import_react32 = require("react"), import_react_hot_toast4 = __toESM(require("react-hot-toast"));
+var import_react33 = require("react"), import_react_hot_toast4 = __toESM(require("react-hot-toast"));
 
 // app/component/hooks/useTxtUpload.tsx
-var import_react31 = require("react"), import_react_dropzone = require("react-dropzone"), baseStyle = {
+var import_react32 = require("react"), import_react_dropzone = require("react-dropzone"), baseStyle = {
   flex: 1,
   display: "flex",
   flexDirection: "column",
@@ -4258,7 +4282,7 @@ var import_react31 = require("react"), import_react_dropzone = require("react-dr
       "text/*": [".txt"]
     },
     maxFiles: 1
-  }), [fileContent, setFileContent] = (0, import_react31.useState)(""), style = (0, import_react31.useMemo)(
+  }), [fileContent, setFileContent] = (0, import_react32.useState)(""), style = (0, import_react32.useMemo)(
     () => ({
       ...baseStyle,
       ...isFocused ? focusedStyle : {},
@@ -4267,7 +4291,7 @@ var import_react31 = require("react"), import_react_dropzone = require("react-dr
     }),
     [isFocused, isDragAccept, isDragReject]
   );
-  return (0, import_react31.useEffect)(() => {
+  return (0, import_react32.useEffect)(() => {
     let file = acceptedFiles[0];
     if (file) {
       let reader = new FileReader();
@@ -4286,7 +4310,7 @@ var import_react31 = require("react"), import_react_dropzone = require("react-dr
 };
 
 // app/component/menu/TranslationUploader.tsx
-var import_react33 = require("@remix-run/react"), import_flowbite_react6 = require("flowbite-react");
+var import_react34 = require("@remix-run/react"), import_flowbite_react6 = require("flowbite-react");
 
 // app/lib/formatSize.ts
 function formatBytes(bytes, decimals = 2) {
@@ -4299,7 +4323,7 @@ function formatBytes(bytes, decimals = 2) {
 // app/component/menu/TranslationUploader.tsx
 var import_ai5 = require("react-icons/ai"), import_jsx_dev_runtime27 = require("react/jsx-dev-runtime");
 function TranslationUploader({ fetcher }) {
-  let { acceptedFiles, fileContent, getRootProps, getInputProps, setFileContent } = useTxtUpload(), { text, page } = (0, import_react33.useLoaderData)(), textInputRef = (0, import_react32.useRef)(null), [title, setTitle] = (0, import_react32.useState)(""), [language, setLanguage] = (0, import_react32.useState)("english"), handleSubmit = () => {
+  let { acceptedFiles, fileContent, getRootProps, getInputProps, setFileContent } = useTxtUpload(), { text, page } = (0, import_react34.useLoaderData)(), textInputRef = (0, import_react33.useRef)(null), [title, setTitle] = (0, import_react33.useState)(""), [language, setLanguage] = (0, import_react33.useState)("english"), handleSubmit = () => {
     if (title === "" || !title)
       return (0, import_react_hot_toast4.default)("please enter title");
     fetcher.submit(
@@ -4316,7 +4340,7 @@ function TranslationUploader({ fetcher }) {
       }
     ), setFileContent(""), setTitle("");
   };
-  (0, import_react32.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     fileContent !== "" && textInputRef.current?.focus();
   }, [fileContent]);
   let closeFileUpload = () => {
@@ -4453,8 +4477,8 @@ var TranslationUploader_default = TranslationUploader;
 // app/component/menu/Translations.tsx
 var import_jsx_dev_runtime28 = require("react/jsx-dev-runtime");
 function Translations() {
-  let { text, page, translations } = (0, import_react34.useLoaderData)(), [upload, setUpload] = (0, import_react35.useState)(!1), fetcher = (0, import_react34.useFetcher)();
-  (0, import_react35.useEffect)(() => {
+  let { text, page, translations } = (0, import_react35.useLoaderData)(), [upload, setUpload] = (0, import_react36.useState)(!1), fetcher = (0, import_react35.useFetcher)();
+  (0, import_react36.useEffect)(() => {
     fetcher.data && setUpload(!1);
   }, [fetcher?.data]);
   let handleDelete = (id) => {
@@ -4501,7 +4525,7 @@ function Translations() {
           {
             className: "flex rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col w-full px-3 py-2",
             children: /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)("div", { className: "w-full flex justify-between", children: [
-              /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)(import_react34.Link, { to: url, className: "flex-1", children: /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)("div", { children: [
+              /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)(import_react35.Link, { to: url, className: "flex-1", children: /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)("div", { children: [
                 translation?.language,
                 " - ",
                 translation.userText.name,
@@ -4558,17 +4582,17 @@ function Translations() {
 var Translations_default = Translations;
 
 // app/features/Post/Post.tsx
-var import_react44 = require("react"), import_react45 = require("@remix-run/react");
+var import_react45 = require("react"), import_react46 = require("@remix-run/react");
 
 // app/features/Post/Replies.tsx
-var import_react36 = require("@remix-run/react"), import_react37 = require("react"), import_Reply = __toESM(require_Reply()), import_jsx_dev_runtime29 = require("react/jsx-dev-runtime");
+var import_react37 = require("@remix-run/react"), import_react38 = require("react"), import_Reply = __toESM(require_Reply()), import_jsx_dev_runtime29 = require("react/jsx-dev-runtime");
 function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }) {
-  let [replies, setReplies] = (0, import_react37.useState)([]), postListFetcher = (0, import_react36.useFetcher)();
-  (0, import_react37.useEffect)(() => {
+  let [replies, setReplies] = (0, import_react38.useState)([]), postListFetcher = (0, import_react37.useFetcher)();
+  (0, import_react38.useEffect)(() => {
     postListFetcher.load(`/api/reply/${topicId}`);
   }, []);
   let data = postListFetcher.data;
-  return (0, import_react37.useEffect)(() => {
+  return (0, import_react38.useEffect)(() => {
     if (data) {
       let replies2 = data.posts;
       setReplies(replies2), setReplyCount(replies2.length);
@@ -4606,7 +4630,7 @@ function Replies({ postId, topicId, isCreator, type, replyCount, setReplyCount }
 var Replies_default = Replies;
 
 // app/features/Post/ReplyForm.tsx
-var import_react39 = require("@remix-run/react"), import_react40 = require("react");
+var import_react40 = require("@remix-run/react"), import_react41 = require("react");
 
 // app/features/Media/index.tsx
 var import_AudioPlayer = __toESM(require_AudioPlayer()), import_AudioRecorder = __toESM(require_AudioRecorder());
@@ -4615,10 +4639,10 @@ var import_AudioPlayer = __toESM(require_AudioPlayer()), import_AudioRecorder = 
 var import_uuid = require("uuid");
 
 // app/component/UI/TiptapInstance.tsx
-var import_react38 = require("@tiptap/react");
+var import_react39 = require("@tiptap/react");
 var import_jsx_dev_runtime30 = require("react/jsx-dev-runtime"), ContentEditableDiv = (props) => {
   let editor;
-  return typeof document < "u" && (editor = (0, import_react38.useEditor)({
+  return typeof document < "u" && (editor = (0, import_react39.useEditor)({
     extensions: [
       import_extension_document.default,
       import_extension_paragraph.default,
@@ -4647,7 +4671,7 @@ var import_jsx_dev_runtime30 = require("react/jsx-dev-runtime"), ContentEditable
       let newContent = editor2.getHTML();
       props.onChange(newContent);
     }
-  })), /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_jsx_dev_runtime30.Fragment, { children: editor ? /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_react38.EditorContent, { editor }, void 0, !1, {
+  })), /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_jsx_dev_runtime30.Fragment, { children: editor ? /* @__PURE__ */ (0, import_jsx_dev_runtime30.jsxDEV)(import_react39.EditorContent, { editor }, void 0, !1, {
     fileName: "app/component/UI/TiptapInstance.tsx",
     lineNumber: 45,
     columnNumber: 19
@@ -4661,8 +4685,8 @@ var import_jsx_dev_runtime30 = require("react/jsx-dev-runtime"), ContentEditable
 // app/features/Post/ReplyForm.tsx
 var import_flowbite_react8 = require("flowbite-react"), import_jsx_dev_runtime31 = require("react/jsx-dev-runtime");
 function ReplyForm({ closeReply, topicId, updateReplyCount }) {
-  let postFetcher = (0, import_react39.useFetcher)(), textareaRef = (0, import_react40.useRef)(null), loaderData = (0, import_react39.useLoaderData)(), [audio, setAudio] = (0, import_react40.useState)({ tempUrl: "", blob: null }), [textArea, setTextArea] = (0, import_react40.useState)("");
-  (0, import_react40.useEffect)(() => {
+  let postFetcher = (0, import_react40.useFetcher)(), textareaRef = (0, import_react41.useRef)(null), loaderData = (0, import_react40.useLoaderData)(), [audio, setAudio] = (0, import_react41.useState)({ tempUrl: "", blob: null }), [textArea, setTextArea] = (0, import_react41.useState)("");
+  (0, import_react41.useEffect)(() => {
     postFetcher.data && (updateReplyCount(), closeReply());
   }, [postFetcher.formData, loaderData.posts, topicId]), postFetcher.formData && textareaRef.current && (textareaRef.current.value = "");
   let handleSubmit = (e) => {
@@ -4825,13 +4849,13 @@ function ReplyForm({ closeReply, topicId, updateReplyCount }) {
 }
 
 // app/features/Post/component/FormWithAudio.tsx
-var import_react41 = require("@remix-run/react"), import_react42 = require("react"), import_recoil6 = require("recoil");
+var import_react42 = require("@remix-run/react"), import_react43 = require("react"), import_recoil6 = require("recoil");
 var import_uuid2 = require("uuid"), import_flowbite_react9 = require("flowbite-react");
 var import_jsx_dev_runtime32 = require("react/jsx-dev-runtime");
 function FormWithAudio({ fetcher, type, post, onClose = () => {
 }, editor }) {
-  let content = post?.content ?? "", audioUrl = post?.audioUrl ?? "", [audio, setAudio] = (0, import_react42.useState)({ tempUrl: audioUrl, blob: null }), [body, setBody] = (0, import_react42.useState)(content), [error, setError] = (0, import_react42.useState)(""), [selection, setSelection] = (0, import_recoil6.useRecoilState)(selectedTextOnEditor), data = (0, import_react41.useLoaderData)(), textName = data.text.name, order = data.order, isFormEmpty = body.length < 5 || body === "<p></p>";
-  (0, import_react42.useEffect)(() => {
+  let content = post?.content ?? "", audioUrl = post?.audioUrl ?? "", [audio, setAudio] = (0, import_react43.useState)({ tempUrl: audioUrl, blob: null }), [body, setBody] = (0, import_react43.useState)(content), [error, setError] = (0, import_react43.useState)(""), [selection, setSelection] = (0, import_recoil6.useRecoilState)(selectedTextOnEditor), data = (0, import_react42.useLoaderData)(), textName = data.text.name, order = data.order, isFormEmpty = body.length < 5 || body === "<p></p>";
+  (0, import_react43.useEffect)(() => {
     setBody(content || ""), setAudio({ tempUrl: audioUrl || "", blob: null }), setError("");
   }, [selection.start]);
   function validator() {
@@ -5006,10 +5030,10 @@ var import_flowbite_react10 = require("flowbite-react"), import_hi = require("re
 var React7 = __toESM(require("react"), 1);
 
 // node_modules/remix-utils/build/react/use-hydrated.js
-var import_react43 = require("react"), hydrating = !0;
+var import_react44 = require("react"), hydrating = !0;
 function useHydrated() {
-  let [hydrated, setHydrated] = (0, import_react43.useState)(() => !hydrating);
-  return (0, import_react43.useEffect)(function() {
+  let [hydrated, setHydrated] = (0, import_react44.useState)(() => !hydrating);
+  return (0, import_react44.useEffect)(function() {
     hydrating = !1, setHydrated(!0);
   }, []), hydrated;
 }
@@ -5035,7 +5059,7 @@ function Post({ isOptimistic, post, showDivider, editor }) {
     threadId,
     audioUrl,
     selection
-  } = post, [openReply, setOpenReply] = (0, import_react44.useState)(!1), [showReplies, setShowReplies] = (0, import_react44.useState)(!1), [effect, setEffect] = (0, import_react44.useState)(!1), [ReplyCount, setReplyCount] = (0, import_react44.useState)(replyCount), [edit, setEdit] = (0, import_react44.useState)(!1), { user } = (0, import_react45.useLoaderData)(), [searchParams, setSearchParams] = (0, import_react45.useSearchParams)(), fetcher = (0, import_react45.useFetcher)(), translation = uselitteraTranlation(), isSelected = threadId === searchParams?.get("thread"), likedByMe = user ? likedBy.some((l) => l && l.username === user.username) : !1, handleSelectPost = (0, import_react44.useCallback)(
+  } = post, [openReply, setOpenReply] = (0, import_react45.useState)(!1), [showReplies, setShowReplies] = (0, import_react45.useState)(!1), [effect, setEffect] = (0, import_react45.useState)(!1), [ReplyCount, setReplyCount] = (0, import_react45.useState)(replyCount), [edit, setEdit] = (0, import_react45.useState)(!1), { user } = (0, import_react46.useLoaderData)(), [searchParams, setSearchParams] = (0, import_react46.useSearchParams)(), fetcher = (0, import_react46.useFetcher)(), translation = uselitteraTranlation(), isSelected = threadId === searchParams?.get("thread"), likedByMe = user ? likedBy.some((l) => l && l.username === user.username) : !1, handleSelectPost = (0, import_react45.useCallback)(
     (id2) => {
       setSearchParams((p) => (p.set("with", "Post"), p.set("thread", id2), p));
     },
@@ -5553,11 +5577,11 @@ function oo_oo8(i, ...v) {
 var import_recoil8 = require("recoil");
 
 // app/features/Post/Filter.tsx
-var import_react46 = require("react"), import_react_router_dom = require("react-router-dom"), import_recoil7 = require("recoil");
+var import_react47 = require("react"), import_react_router_dom = require("react-router-dom"), import_recoil7 = require("recoil");
 var import_react_tailwindcss_datepicker = __toESM(require("react-tailwindcss-datepicker")), import_flowbite_react11 = require("flowbite-react"), import_jsx_dev_runtime34 = require("react/jsx-dev-runtime");
 function Filter({}) {
-  let [filterData, setFilterData] = (0, import_recoil7.useRecoilState)(filterDataState), [openFilter, setOpenFilter] = (0, import_recoil7.useRecoilState)(openFilterState), [userInput, setUserInput] = (0, import_react46.useState)(""), searchUser = (0, import_react_router_dom.useFetcher)(), typeId = (0, import_react46.useId)(), solvedId = (0, import_react46.useId)();
-  (0, import_react46.useEffect)(() => {
+  let [filterData, setFilterData] = (0, import_recoil7.useRecoilState)(filterDataState), [openFilter, setOpenFilter] = (0, import_recoil7.useRecoilState)(openFilterState), [userInput, setUserInput] = (0, import_react47.useState)(""), searchUser = (0, import_react_router_dom.useFetcher)(), typeId = (0, import_react47.useId)(), solvedId = (0, import_react47.useId)();
+  (0, import_react47.useEffect)(() => {
     setUserInput("");
   }, [filterData]);
   let handleTypeCheck = (e) => {
@@ -5981,7 +6005,7 @@ function Filter({}) {
     this
   );
 }
-var Filter_default = (0, import_react46.memo)(Filter);
+var Filter_default = (0, import_react47.memo)(Filter);
 
 // app/features/Post/Posts.tsx
 var import_jsx_dev_runtime35 = require("react/jsx-dev-runtime");
@@ -6051,10 +6075,10 @@ var applyFilter = (list, filter, isLatest) => (filter.type && filter.type !== "a
 }), list), Posts_default = Posts;
 
 // app/features/Post/PostForm.tsx
-var import_react47 = require("@remix-run/react");
+var import_react48 = require("@remix-run/react");
 var import_recoil9 = require("recoil");
 var import_jsx_dev_runtime36 = require("react/jsx-dev-runtime"), PostForm = ({ editor }) => {
-  let { user } = (0, import_react47.useLoaderData)(), createPost3 = (0, import_react47.useFetcher)(), selection = (0, import_recoil9.useRecoilValue)(selectedTextOnEditor), isPosting = createPost3.formData && createPost3.formData.get("body") !== "";
+  let { user } = (0, import_react48.useLoaderData)(), createPost3 = (0, import_react48.useFetcher)(), selection = (0, import_recoil9.useRecoilValue)(selectedTextOnEditor), isPosting = createPost3.formData && createPost3.formData.get("body") !== "";
   return selection.type === "" ? null : isPosting ? /* @__PURE__ */ (0, import_jsx_dev_runtime36.jsxDEV)(
     Post_default,
     {
@@ -6154,13 +6178,13 @@ var import_jsx_dev_runtime36 = require("react/jsx-dev-runtime"), PostForm = ({ e
 }, PostForm_default = PostForm;
 
 // app/features/Post/PostSidebar.tsx
-var import_react48 = require("react");
-var import_react49 = require("@remix-run/react");
+var import_react49 = require("react");
+var import_react50 = require("@remix-run/react");
 var import_recoil10 = require("recoil");
 var import_fa8 = require("react-icons/fa"), import_jsx_dev_runtime37 = require("react/jsx-dev-runtime");
 function PostSidebar({ editor }) {
-  let data = (0, import_react49.useLoaderData)(), [params] = (0, import_react49.useSearchParams)(), selectedId = params.get("thread");
-  (0, import_react48.useEffect)(() => {
+  let data = (0, import_react50.useLoaderData)(), [params] = (0, import_react50.useSearchParams)(), selectedId = params.get("thread");
+  (0, import_react49.useEffect)(() => {
     selectedId && selectedId !== "" && setTimeout(() => {
       document.getElementById("p_" + selectedId)?.scrollIntoView({
         behavior: "smooth",
@@ -6302,7 +6326,7 @@ function Post2({ editor }) {
 var Post_default2 = Post2;
 
 // app/features/Suggestion/Suggestion.tsx
-var import_react54 = require("@remix-run/react");
+var import_react55 = require("@remix-run/react");
 var import_react_detect_click_outside2 = require("react-detect-click-outside");
 var import_uuid3 = require("uuid");
 
@@ -6332,7 +6356,7 @@ function replaceMarkContent(editor, markID, content) {
 }
 
 // app/features/Suggestion/Comment.tsx
-var import_react50 = require("react"), import_react_detect_click_outside = require("react-detect-click-outside"), import_react51 = require("@remix-run/react");
+var import_react51 = require("react"), import_react_detect_click_outside = require("react-detect-click-outside"), import_react52 = require("@remix-run/react");
 var import_flowbite_react12 = require("flowbite-react"), import_jsx_dev_runtime39 = require("react/jsx-dev-runtime");
 function Comments({ comments }) {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime39.jsxDEV)(import_jsx_dev_runtime39.Fragment, { children: comments.length > 0 && comments.map((comment, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime39.jsxDEV)(Comment, { comment }, comment.id, !1, {
@@ -6346,9 +6370,9 @@ function Comments({ comments }) {
   }, this);
 }
 var Comment = ({ comment }) => {
-  let [openEditMenu, setOpenEditMenu] = (0, import_react50.useState)(!1), [edit, setEdit] = (0, import_react50.useState)(!1), [newContent, setNewContent] = (0, import_react50.useState)(comment.text), [checked, setChecked] = (0, import_react50.useState)(comment.type === "support"), { user } = (0, import_react51.useOutletContext)(), ref = (0, import_react_detect_click_outside.useDetectClickOutside)({
+  let [openEditMenu, setOpenEditMenu] = (0, import_react51.useState)(!1), [edit, setEdit] = (0, import_react51.useState)(!1), [newContent, setNewContent] = (0, import_react51.useState)(comment.text), [checked, setChecked] = (0, import_react51.useState)(comment.type === "support"), { user } = (0, import_react52.useOutletContext)(), ref = (0, import_react_detect_click_outside.useDetectClickOutside)({
     onTriggered: () => setOpenEditMenu(!1)
-  }), color = comment.type === "support" ? "bg-green-100" : comment.type === "reject" ? "bg-red-100" : null, time = timeAgo(comment.createdAt), fetcher = (0, import_react51.useFetcher)(), handleEdit = () => {
+  }), color = comment.type === "support" ? "bg-green-100" : comment.type === "reject" ? "bg-red-100" : null, time = timeAgo(comment.createdAt), fetcher = (0, import_react52.useFetcher)(), handleEdit = () => {
     setEdit(!0);
   }, handleDelete = () => {
     confirm("do you want to delete the post") ? fetcher.submit(
@@ -6633,29 +6657,29 @@ function oo_oo9(i, ...v) {
 }
 
 // app/component/hooks/useFetcherPromise.tsx
-var import_react52 = require("react"), import_react53 = require("@remix-run/react");
+var import_react53 = require("react"), import_react54 = require("@remix-run/react");
 function useFetcherWithPromise() {
-  let resolveRef = (0, import_react52.useRef)(), promiseRef = (0, import_react52.useRef)(), fetcher = (0, import_react53.useFetcher)();
+  let resolveRef = (0, import_react53.useRef)(), promiseRef = (0, import_react53.useRef)(), fetcher = (0, import_react54.useFetcher)();
   promiseRef.current || (promiseRef.current = new Promise((resolve) => {
     resolveRef.current = resolve;
   }));
-  let resetResolver = (0, import_react52.useCallback)(() => {
+  let resetResolver = (0, import_react53.useCallback)(() => {
     promiseRef.current = new Promise((resolve) => {
       resolveRef.current = resolve;
     });
-  }, [promiseRef, resolveRef]), submit = (0, import_react52.useCallback)(
+  }, [promiseRef, resolveRef]), submit = (0, import_react53.useCallback)(
     async (...args) => (fetcher.submit(...args), promiseRef.current),
     [fetcher, promiseRef]
   );
-  return (0, import_react52.useEffect)(() => {
+  return (0, import_react53.useEffect)(() => {
     fetcher.data && fetcher.state === "idle" && (resolveRef.current(fetcher.data), resetResolver());
   }, [fetcher, resetResolver]), { ...fetcher, submit };
 }
 
 // app/features/Suggestion/Suggestion.tsx
-var import_flowbite_react13 = require("flowbite-react"), import_react55 = require("react"), import_jsx_dev_runtime40 = require("react/jsx-dev-runtime");
+var import_flowbite_react13 = require("flowbite-react"), import_react56 = require("react"), import_jsx_dev_runtime40 = require("react/jsx-dev-runtime");
 function Suggestion2({ editor, suggest, optimistic = !1 }) {
-  let likeFetcher = useFetcherWithPromise(), deleteFetcher = (0, import_react54.useFetcher)(), editFetcher = (0, import_react54.useFetcher)(), [effect, setEffect] = (0, import_react55.useState)(!1), [openEdit, setOpenEdit] = (0, import_react55.useState)(!1), [openComment, setOpenComment] = (0, import_react55.useState)(!1), [openEditMenu, setOpenEditMenu] = (0, import_react55.useState)(!1), { text, user } = (0, import_react54.useLoaderData)(), ref = (0, import_react_detect_click_outside2.useDetectClickOutside)({
+  let likeFetcher = useFetcherWithPromise(), deleteFetcher = (0, import_react55.useFetcher)(), editFetcher = (0, import_react55.useFetcher)(), [effect, setEffect] = (0, import_react56.useState)(!1), [openEdit, setOpenEdit] = (0, import_react56.useState)(!1), [openComment, setOpenComment] = (0, import_react56.useState)(!1), [openEditMenu, setOpenEditMenu] = (0, import_react56.useState)(!1), { text, user } = (0, import_react55.useLoaderData)(), ref = (0, import_react_detect_click_outside2.useDetectClickOutside)({
     onTriggered: () => setOpenEditMenu(!1)
   }), likedByMe = user ? suggest.likedBy.some((l) => l?.username === user.username) : !1, likeInFetcher = likeFetcher?.formData?.get("like"), likeCount = likeFetcher.data ? likeFetcher.data?.likedBy.likedBy.length : suggest.likedBy.length;
   likeInFetcher === "true" && (likedByMe = !0, likeFetcher.state === "submitting" && likeCount++), likeInFetcher === "false" && (likedByMe = !1, likeFetcher.state === "submitting" && likeCount--);
@@ -7160,7 +7184,7 @@ function Suggestion2({ editor, suggest, optimistic = !1 }) {
   }, this);
 }
 function CommentSection({ id, setOpenComment, comments, type }) {
-  let [commentText, setCommentText] = (0, import_react55.useState)(""), [audio, setAudio] = (0, import_react55.useState)({ tempUrl: "", blob: null }), data = (0, import_react54.useLoaderData)(), postCommentFetcher = (0, import_react54.useFetcher)();
+  let [commentText, setCommentText] = (0, import_react56.useState)(""), [audio, setAudio] = (0, import_react56.useState)({ tempUrl: "", blob: null }), data = (0, import_react55.useLoaderData)(), postCommentFetcher = (0, import_react55.useFetcher)();
   function postComment() {
     let item = {
       id,
@@ -7308,9 +7332,9 @@ function oo_oo10(i, ...v) {
 }
 
 // app/features/Suggestion/SuggestionContainer.tsx
-var import_react56 = require("@remix-run/react"), import_jsx_dev_runtime41 = require("react/jsx-dev-runtime");
+var import_react57 = require("@remix-run/react"), import_jsx_dev_runtime41 = require("react/jsx-dev-runtime");
 function Suggestions({ editor }) {
-  let { suggestions } = (0, import_react56.useLoaderData)(), groupedSuggestion = transformObjectsByNewValue(suggestions);
+  let { suggestions } = (0, import_react57.useLoaderData)(), groupedSuggestion = transformObjectsByNewValue(suggestions);
   return /* @__PURE__ */ (0, import_jsx_dev_runtime41.jsxDEV)(
     "div",
     {
@@ -7357,10 +7381,10 @@ function transformObjectsByNewValue(objects) {
 }
 
 // app/features/Suggestion/SuggestionForm.tsx
-var import_react57 = require("@remix-run/react"), import_react58 = require("react"), import_uuid4 = require("uuid");
+var import_react58 = require("@remix-run/react"), import_react59 = require("react"), import_uuid4 = require("uuid");
 var import_flowbite_react14 = require("flowbite-react"), import_jsx_dev_runtime42 = require("react/jsx-dev-runtime");
 function SuggestionForm({ editor }) {
-  let { user, page, text } = (0, import_react57.useLoaderData)(), [searchParams, setSearchParams] = (0, import_react57.useSearchParams)(), [suggestionInput, setSuggestionInput] = (0, import_react58.useState)(""), [error, setError] = (0, import_react58.useState)(null), addSuggestion = useFetcherWithPromise(), [audio, setAudio] = (0, import_react58.useState)({ tempUrl: "", blob: null }), handleSuggestionSubmit = async () => {
+  let { user, page, text } = (0, import_react58.useLoaderData)(), [searchParams, setSearchParams] = (0, import_react58.useSearchParams)(), [suggestionInput, setSuggestionInput] = (0, import_react59.useState)(""), [error, setError] = (0, import_react59.useState)(null), addSuggestion = useFetcherWithPromise(), [audio, setAudio] = (0, import_react59.useState)({ tempUrl: "", blob: null }), handleSuggestionSubmit = async () => {
     if (suggestionInput === "")
       return setError("suggestion cannot be empty"), null;
     let { state } = editor, { from, to } = state.selection, originalText = state.doc.textBetween(from, to, " "), id = null;
@@ -7584,10 +7608,10 @@ function Suggestion3({ editor }) {
 var Suggestion_default = Suggestion3;
 
 // app/component/menu/Menu.tsx
-var import_react60 = require("react"), import_jsx_dev_runtime45 = require("react/jsx-dev-runtime");
+var import_react61 = require("react"), import_jsx_dev_runtime45 = require("react/jsx-dev-runtime");
 function Menu({ editor }) {
-  let [searchParams] = (0, import_react59.useSearchParams)(), menu = searchParams.get("with");
-  return (0, import_react60.useEffect)(() => {
+  let [searchParams] = (0, import_react60.useSearchParams)(), menu = searchParams.get("with");
+  return (0, import_react61.useEffect)(() => {
     menu !== "Search" && editor && editor.commands?.setSearchTerm("");
   }, [menu]), menu ? /* @__PURE__ */ (0, import_jsx_dev_runtime45.jsxDEV)(
     "div",
@@ -7805,7 +7829,7 @@ var import_jsx_dev_runtime46 = require("react/jsx-dev-runtime"), loader3 = async
   });
 };
 function Page() {
-  let data = (0, import_react61.useLoaderData)(), { text, page } = data, saveTextFetcher = (0, import_react61.useFetcher)(), editor = useEditorInstance_default({ name: "text" + text.id + "page" + page.id, content: void 0, isEditable: !1 }), withImage = !data.text.allow_post;
+  let data = (0, import_react62.useLoaderData)(), { text, page } = data, saveTextFetcher = (0, import_react62.useFetcher)(), editor = useEditorInstance_default({ name: "text" + text.id + "page" + page.id, content: void 0, isEditable: !1 }), withImage = !data.text.allow_post;
   return /* @__PURE__ */ (0, import_jsx_dev_runtime46.jsxDEV)("div", { className: "flex flex-col", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime46.jsxDEV)(Header_default, { editor }, void 0, !1, {
       fileName: "app/routes/text.$textId.page.$pageId.tsx",
@@ -8494,7 +8518,7 @@ __export(index_exports, {
   loader: () => loader9,
   meta: () => meta2
 });
-var import_react62 = require("@remix-run/react"), import_flowbite_react15 = require("flowbite-react");
+var import_react63 = require("@remix-run/react"), import_flowbite_react15 = require("flowbite-react");
 
 // app/component/Layout/Footer.tsx
 var import_ai8 = require("react-icons/ai");
@@ -8614,9 +8638,9 @@ function FooterContainer() {
 
 // app/routes/_index.tsx
 var import_node10 = require("@remix-run/node");
-var import_react63 = require("@remix-run/react");
+var import_react64 = require("@remix-run/react");
 var import_framer_motion2 = require("framer-motion");
-var import_react64 = require("react");
+var import_react65 = require("react");
 
 // app/lib/filterVersionFromText.ts
 function groupData(data) {
@@ -8656,8 +8680,8 @@ function meta2({ data }) {
   ];
 }
 function Index() {
-  let data = (0, import_react63.useLoaderData)(), navigation = (0, import_react63.useNavigation)(), [params, setSearchParams] = (0, import_react62.useSearchParams)(), [searchInput, setSearchInput] = (0, import_react64.useState)(params.get("search") ?? ""), translation = uselitteraTranlation();
-  (0, import_react64.useEffect)(() => {
+  let data = (0, import_react64.useLoaderData)(), navigation = (0, import_react64.useNavigation)(), [params, setSearchParams] = (0, import_react63.useSearchParams)(), [searchInput, setSearchInput] = (0, import_react65.useState)(params.get("search") ?? ""), translation = uselitteraTranlation();
+  (0, import_react65.useEffect)(() => {
     params.get("search") || setSearchInput("");
   }, [params.get("search")]);
   let handleInputChange = (event) => {
@@ -8702,7 +8726,7 @@ function MainLayout({ children }) {
         }, this)
       ]
     },
-    (0, import_react63.useLocation)().pathname,
+    (0, import_react64.useLocation)().pathname,
     !0,
     {
       fileName: "app/routes/_index.tsx",
@@ -8717,7 +8741,7 @@ function SearchBar({
   onInputChange,
   translation
 }) {
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "px-4 md:px-0 mx-auto max-w-2xl", style: { paddingTop: 56 + 40 }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react62.Form, { method: "GET", className: "mb-3 w-full max-w-2xl", children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "relative flex w-full space-x-3", children: [
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "px-4 md:px-0 mx-auto max-w-2xl", style: { paddingTop: 56 + 40 }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react63.Form, { method: "GET", className: "mb-3 w-full max-w-2xl", children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "relative flex w-full space-x-3", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(
       import_flowbite_react15.TextInput,
       {
@@ -8759,7 +8783,7 @@ function SearchBar({
   }, this);
 }
 function ContentArea({ latestTexts, isLoading }) {
-  let { textList } = (0, import_react63.useLoaderData)();
+  let { textList } = (0, import_react64.useLoaderData)();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "flex w-full px-4 md:px-0 mx-auto max-w-2xl flex-col gap-3 items-center justify-start py-10", children: [
     isLoading && /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(Skeleton, { height: 70, number: 3 }, void 0, !1, {
       fileName: "app/routes/_index.tsx",
@@ -8771,11 +8795,11 @@ function ContentArea({ latestTexts, isLoading }) {
       lineNumber: 135,
       columnNumber: 68
     }, this)),
-    !isLoading && /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react64.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { children: "loading..." }, void 0, !1, {
+    !isLoading && /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react65.Suspense, { fallback: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { children: "loading..." }, void 0, !1, {
       fileName: "app/routes/_index.tsx",
       lineNumber: 137,
       columnNumber: 29
-    }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react62.Await, { resolve: textList, children: (lists) => lists ? lists?.length === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(NoResultMessage, {}, void 0, !1, {
+    }, this), children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react63.Await, { resolve: textList, children: (lists) => lists ? lists?.length === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(NoResultMessage, {}, void 0, !1, {
       fileName: "app/routes/_index.tsx",
       lineNumber: 141,
       columnNumber: 47
@@ -8818,7 +8842,7 @@ function TextItem({ text }) {
   }, this);
 }
 function TextLink({ url, name }) {
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "font-monlam w-full  pb-2 pt-3 px-2 transition-all duration-75", children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react62.Link, { to: url, prefetch: "intent", children: name }, void 0, !1, {
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "font-monlam w-full  pb-2 pt-3 px-2 transition-all duration-75", children: /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(import_react63.Link, { to: url, prefetch: "intent", children: name }, void 0, !1, {
     fileName: "app/routes/_index.tsx",
     lineNumber: 166,
     columnNumber: 7
@@ -8831,7 +8855,7 @@ function TextLink({ url, name }) {
 function VersionLinks({ groupedData, baseUrl }) {
   let translation = uselitteraTranlation();
   return /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)("div", { className: "px-4 py-1 font-light block", children: Object.keys(groupedData).map((key) => /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(
-    import_react62.Link,
+    import_react63.Link,
     {
       prefetch: "intent",
       to: `${baseUrl}?version=${key}`,
@@ -8877,7 +8901,7 @@ function ListResults({ lists }) {
 function ResultLink({ list }) {
   let { textId, results } = list, result = results[0];
   return /* @__PURE__ */ (0, import_jsx_dev_runtime49.jsxDEV)(
-    import_react62.Link,
+    import_react63.Link,
     {
       to: `/text/${textId}/page/1`,
       className: "font-monlam w-full hover:bg-gray-50 pb-2 pt-3 px-2 transition-all duration-75",
@@ -8941,8 +8965,8 @@ __export(list_exports, {
   default: () => List,
   loader: () => loader10
 });
-var import_react65 = require("@remix-run/react");
-var import_react66 = require("react");
+var import_react66 = require("@remix-run/react");
+var import_react67 = require("react");
 var import_jsx_dev_runtime50 = require("react/jsx-dev-runtime"), loader10 = async ({ request }) => {
   let textList = await findAllTextWithDetail(), user = await getUserSession(request);
   return {
@@ -8951,7 +8975,7 @@ var import_jsx_dev_runtime50 = require("react/jsx-dev-runtime"), loader10 = asyn
   };
 };
 function List() {
-  let fetcher = (0, import_react65.useFetcher)(), { textList, isAdmin } = (0, import_react65.useLoaderData)(), [currentPage, setCurrentPage] = (0, import_react66.useState)(1), textsPerPage = 20, indexOfLastText = currentPage * textsPerPage, indexOfFirstText = indexOfLastText - textsPerPage, currentTexts = textList.slice(indexOfFirstText, indexOfLastText), totalPages = Math.ceil(textList.length / textsPerPage), goToPage = (page) => {
+  let fetcher = (0, import_react66.useFetcher)(), { textList, isAdmin } = (0, import_react66.useLoaderData)(), [currentPage, setCurrentPage] = (0, import_react67.useState)(1), textsPerPage = 20, indexOfLastText = currentPage * textsPerPage, indexOfFirstText = indexOfLastText - textsPerPage, currentTexts = textList.slice(indexOfFirstText, indexOfLastText), totalPages = Math.ceil(textList.length / textsPerPage), goToPage = (page) => {
     setCurrentPage(page);
   }, deleteText2 = (textId) => {
     confirm("Are you sure you want to delete this text?") ? fetcher.submit(
@@ -9020,7 +9044,7 @@ function List() {
                   },
                   this
                 ),
-                /* @__PURE__ */ (0, import_jsx_dev_runtime50.jsxDEV)(import_react65.Link, { to: url, children: text.name }, void 0, !1, {
+                /* @__PURE__ */ (0, import_jsx_dev_runtime50.jsxDEV)(import_react66.Link, { to: url, children: text.name }, void 0, !1, {
                   fileName: "app/routes/list.tsx",
                   lineNumber: 82,
                   columnNumber: 19
@@ -9033,7 +9057,7 @@ function List() {
               /* @__PURE__ */ (0, import_jsx_dev_runtime50.jsxDEV)("td", { scope: "col", className: " px-4 py-4", children: isVersionAvailable ? /* @__PURE__ */ (0, import_jsx_dev_runtime50.jsxDEV)("div", { className: "flex gap-2", children: Object.keys(groupedData).map((key) => {
                 let urlversion = url + "?version=" + key;
                 return /* @__PURE__ */ (0, import_jsx_dev_runtime50.jsxDEV)(
-                  import_react65.Link,
+                  import_react66.Link,
                   {
                     to: urlversion,
                     className: "cursor-pointer rounded-md bg-yellow-300 px-2 capitalize text-black",
@@ -9168,7 +9192,7 @@ function oo_oo16(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-AS3BK6KV.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-YIIKRLZ2.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-5Y4OJERR.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-4Y5CWZNV.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-J6CXMBAD.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-FBV33IO4.js", imports: ["/build/_shared/chunk-FZ7P37GT.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-XQFQAHHU.js", imports: ["/build/_shared/chunk-FZ7P37GT.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "f6eb9ac5", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1707127800493 }, url: "/build/manifest-F6EB9AC5.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-AS3BK6KV.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-YIIKRLZ2.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-5Y4OJERR.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-4Y5CWZNV.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-J6CXMBAD.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-P4WDWIB4.js", imports: ["/build/_shared/chunk-FZ7P37GT.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-XQFQAHHU.js", imports: ["/build/_shared/chunk-FZ7P37GT.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-U2C6M364.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "08a6d5d4", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1707130919129 }, url: "/build/manifest-08A6D5D4.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

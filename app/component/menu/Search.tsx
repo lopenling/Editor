@@ -1,8 +1,9 @@
 import { Editor } from '@tiptap/react';
-import React from 'react';
 import { SearchString } from '~/features/Editor';
+import searchInstance from '../hooks/searchInstance';
 
 function Search({ editor }: { editor: Editor | null }) {
+  let data = searchInstance();
   if (!editor) return null;
   return (
     <div className="flex flex-col flex-1">
