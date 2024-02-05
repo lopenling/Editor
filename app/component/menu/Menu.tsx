@@ -19,7 +19,10 @@ function Menu({ editor }: { editor: Editor | null }) {
   }, [menu]);
   if (!menu) return null;
   return (
-    <div className="w-full flex flex-col max-w-[30%]" style={{ maxHeight: 'calc(100vh - 60px)' }}>
+    <div
+      className="w-full absolute md:static flex flex-col md:max-w-[30%] bg-white pb-4"
+      style={{ maxHeight: 'calc(100vh - 60px)' }}
+    >
       <MenuHeader />
       {menu === 'all' && <MenuHome />}
       {menu === 'TableOfContent' && <TableOfContents editor={null} />}
