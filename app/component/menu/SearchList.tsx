@@ -7,20 +7,20 @@ function SearhList() {
   let data = searchInstance();
 
   return (
-    <div className="flex-1 h-full p-2 ">
-      <div className="">
+    <div className="flex-1 h-full p-2">
+      <div>
         {data.map((list, index) => {
           const parts = list.context.split(new RegExp(`(${searchTerm})`, 'gi'));
           return (
             <div key={index} className="p-2 border rounded-md mb-2">
               {parts.map((part, partIndex) => {
                 // Check if the part is the search text
-                const isSearchText = part === list.search;
+                const isSearchText = part === searchTerm;
                 return (
                   <Link to={''} key={partIndex}>
                     {isSearchText ? (
                       // Wrap search text with spaces in a <strong> tag
-                      <strong>&nbsp;{part}&nbsp;</strong>
+                      <strong>{part}</strong>
                     ) : (
                       // Render non-search text normally
                       <span>{part}</span>
