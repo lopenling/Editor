@@ -8,7 +8,7 @@ function Search({ editor }: { editor: Editor | null }) {
   return (
     <div className="flex flex-col flex-1 overflow-y-auto">
       <SearchString editor={editor} />
-      <SearchList />
+      <SearchList editor={editor} />
     </div>
   );
 }

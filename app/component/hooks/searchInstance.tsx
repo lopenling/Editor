@@ -28,10 +28,12 @@ function findOccurrencesWithContext(fullText: string, targetString: string | nul
   while (index !== -1) {
     const start = Math.max(0, index - contextRange);
     const end = Math.min(fullText.length, index + targetLength + contextRange);
+    const at = fullText.indexOf(targetString, index);
 
     const occurrence = {
       start,
       end,
+      at,
       context: fullText.substring(start, end),
     };
 
