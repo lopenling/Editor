@@ -1,9 +1,9 @@
 import { Editor } from '@tiptap/react';
 import { SearchString } from '~/features/Editor';
 
-import SearchList from './SearchList';
 import { SearchListFromText } from './SearchListFromTexts';
 import { useSearchParams } from '@remix-run/react';
+import { SearchList } from './SearchList';
 
 function Search({ editor }: { editor: Editor | null }) {
   if (!editor) return null;
@@ -15,8 +15,8 @@ function Search({ editor }: { editor: Editor | null }) {
       {searchTerm && (
         <>
           <SearchList editor={editor} />
-          <hr />
           <SearchListFromText />
+          <hr />
         </>
       )}
     </div>

@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from '@remix-run/react';
 import { useSearchInstance } from '../hooks/searchInstance';
 
-function SearhList({ editor }: { editor: any }) {
+export function SearchList({ editor }: { editor: any }) {
   let [param, setParam] = useSearchParams();
   let searchTerm = param.get('s');
   let data = useSearchInstance();
@@ -14,7 +14,7 @@ function SearhList({ editor }: { editor: any }) {
         {data.map((list, index) => {
           const parts = list.context.split(new RegExp(`(${searchTerm})`, 'gi'));
           return (
-            <div key={index} onClick={() => handleScroll(list.start)} className="p-2 border rounded-md mb-2">
+            <div key={index} onClick={() => handleScroll(list?.start)} className="p-2 border rounded-md mb-2">
               {parts.map((part, partIndex) => {
                 // Check if the part is the search text
                 const isSearchText = part === searchTerm;
@@ -38,5 +38,3 @@ function SearhList({ editor }: { editor: any }) {
     </div>
   );
 }
-
-export default SearhList;

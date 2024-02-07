@@ -72,8 +72,7 @@ function SearchString({ editor }: { editor: Editor }) {
 
   return (
     <div
-      className={`searchForm flex flex-row items-center space-x-2.5 border p-2  
-     `}
+      className={`searchForm flex flex-row items-center space-x-2.5 border p-2 sticky top-0 bg-white dark:bg-gray-800 z-10`}
     >
       <div className="flex w-full space-x-2">
         <form

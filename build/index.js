@@ -4196,7 +4196,7 @@ var import_jsx_dev_runtime25 = require("react/jsx-dev-runtime"), TableOfContents
   }, this);
 }, TableOfContent_default = TableOfContents;
 
-// app/component/menu/SearchList.tsx
+// app/component/menu/SearchListFromTexts.tsx
 var import_react32 = require("@remix-run/react");
 
 // app/component/hooks/searchInstance.tsx
@@ -4216,9 +4216,10 @@ function findOccurrencesWithContext(fullText, targetString, contextRange = 20) {
     return console.error(fullText, targetString), occurrences;
   let targetLength = targetString.length, index = fullText.indexOf(targetString);
   for (; index !== -1; ) {
-    let start = Math.max(0, index), end = Math.min(fullText.length, index + targetLength + contextRange), occurrence = {
+    let start = Math.max(0, index), end = Math.min(fullText.length, index + targetLength + contextRange), at = fullText.indexOf(targetString, index), occurrence = {
       start,
       end,
+      at,
       context: fullText.substring(start, end)
     };
     occurrences.push(occurrence), index = fullText.indexOf(targetString, index + 1);
@@ -4239,80 +4240,21 @@ function useSearchAcrossAllText() {
   }, [fetcher.data]), { list, loading };
 }
 
-// app/component/menu/SearchList.tsx
-var import_jsx_dev_runtime26 = (
-  // Wrap search text with spaces in a <strong> tag
-  require("react/jsx-dev-runtime")
-);
-function SearhList({ editor }) {
-  let [param, setParam] = (0, import_react32.useSearchParams)(), searchTerm = param.get("s"), data = useSearchInstance();
-  function handleScroll(start) {
-    start && editor?.chain().focus().setTextSelection(start).scrollIntoView().run();
-  }
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "flex-1 p-2  max-h-[40vh] overflow-y-scroll ", children: /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "h-full", children: data.map((list, index) => {
-    let parts = list.context.split(new RegExp(`(${searchTerm})`, "gi"));
-    return /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { onClick: () => handleScroll(list.start), className: "p-2 border rounded-md mb-2", children: [
-      parts.map((part, partIndex) => /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("span", { children: part === searchTerm ? /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("strong", { children: part }, void 0, !1, {
-        fileName: "app/component/menu/SearchList.tsx",
-        lineNumber: 25,
-        columnNumber: 23
-      }, this) : (
-        // Render non-search text normally
-        /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("span", { children: part }, void 0, !1, {
-          fileName: "app/component/menu/SearchList.tsx",
-          lineNumber: 28,
-          columnNumber: 23
-        }, this)
-      ) }, partIndex, !1, {
-        fileName: "app/component/menu/SearchList.tsx",
-        lineNumber: 22,
-        columnNumber: 19
-      }, this)),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "text-xs", children: list.textName && /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("span", { children: [
-        "Text Name:",
-        list.textName
-      ] }, void 0, !0, {
-        fileName: "app/component/menu/SearchList.tsx",
-        lineNumber: 33,
-        columnNumber: 58
-      }, this) }, void 0, !1, {
-        fileName: "app/component/menu/SearchList.tsx",
-        lineNumber: 33,
-        columnNumber: 15
-      }, this)
-    ] }, index, !0, {
-      fileName: "app/component/menu/SearchList.tsx",
-      lineNumber: 17,
-      columnNumber: 13
-    }, this);
-  }) }, void 0, !1, {
-    fileName: "app/component/menu/SearchList.tsx",
-    lineNumber: 13,
-    columnNumber: 7
-  }, this) }, void 0, !1, {
-    fileName: "app/component/menu/SearchList.tsx",
-    lineNumber: 12,
-    columnNumber: 5
-  }, this);
-}
-var SearchList_default = SearhList;
-
 // app/component/menu/SearchListFromTexts.tsx
-var import_react33 = require("@remix-run/react");
-var import_flowbite_react6 = require("flowbite-react"), import_jsx_dev_runtime27 = require("react/jsx-dev-runtime");
+var import_flowbite_react6 = require("flowbite-react"), import_jsx_dev_runtime26 = require("react/jsx-dev-runtime");
 function SearchListFromText() {
   let { list: data, loading } = useSearchAcrossAllText();
-  return loading ? /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { children: "Loading..." }, void 0, !1, {
+  return loading ? /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { children: "Loading..." }, void 0, !1, {
     fileName: "app/component/menu/SearchListFromTexts.tsx",
     lineNumber: 7,
     columnNumber: 23
-  }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "flex max-h-[25vh] mt-2 overflow-y-auto m-2 rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col p-0 ", children: [
-    data.length > 0 && /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("h3", { children: "Related Text:" }, void 0, !1, {
+  }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "flex max-h-[25vh] mt-2 overflow-y-auto m-2 rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col p-0 ", children: [
+    data.length > 0 && /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("h3", { children: "Related Text:" }, void 0, !1, {
       fileName: "app/component/menu/SearchListFromTexts.tsx",
       lineNumber: 10,
       columnNumber: 27
     }, this),
-    data.map((list, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)(ResultLink, { list }, `id${index}`, !1, {
+    data.map((list, index) => /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(ResultLink, { list }, `id${index}`, !1, {
       fileName: "app/component/menu/SearchListFromTexts.tsx",
       lineNumber: 12,
       columnNumber: 9
@@ -4325,27 +4267,27 @@ function SearchListFromText() {
 }
 function ResultLink({ list }) {
   let { textId, results } = list, result = results[0];
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)(
-    import_react33.Link,
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(
+    import_react32.Link,
     {
       to: `/text/${textId}/page/1`,
       className: "font-monlam  hover:bg-gray-50 pb-2 pt-3 px-2 transition-all duration-75",
       prefetch: "intent",
-      children: /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "flex gap-4 items-center", children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)(import_flowbite_react6.Avatar, { img: result.author.avatarUrl, title: result.author.username }, void 0, !1, {
+      children: /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "flex gap-4 items-center", children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)(import_flowbite_react6.Avatar, { img: result.author.avatarUrl, title: result.author.username }, void 0, !1, {
           fileName: "app/component/menu/SearchListFromTexts.tsx",
           lineNumber: 28,
           columnNumber: 9
         }, this),
-        /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "flex-1", children: [
-          /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "text-[8px] md:text-[10px]  leading-normal", children: result.name }, void 0, !1, {
+        /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "flex-1", children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "text-[8px] md:text-[10px]  leading-normal", children: result.name }, void 0, !1, {
             fileName: "app/component/menu/SearchListFromTexts.tsx",
             lineNumber: 30,
             columnNumber: 11
           }, this),
-          /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "flex justify-between mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "flex justify-between mt-2", children: [
             result && result[1],
-            /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "text-gray-400 text-[10px]", children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime26.jsxDEV)("div", { className: "text-gray-400 text-[10px]", children: [
               result.total,
               " matches"
             ] }, void 0, !0, {
@@ -4381,7 +4323,68 @@ function ResultLink({ list }) {
 }
 
 // app/component/menu/Search.tsx
-var import_react34 = require("@remix-run/react"), import_jsx_dev_runtime28 = require("react/jsx-dev-runtime");
+var import_react34 = require("@remix-run/react");
+
+// app/component/menu/SearchList.tsx
+var import_react33 = require("@remix-run/react");
+var import_jsx_dev_runtime27 = (
+  // Wrap search text with spaces in a <strong> tag
+  require("react/jsx-dev-runtime")
+);
+function SearchList({ editor }) {
+  let [param, setParam] = (0, import_react33.useSearchParams)(), searchTerm = param.get("s"), data = useSearchInstance();
+  function handleScroll(start) {
+    start && editor?.chain().focus().setTextSelection(start).scrollIntoView().run();
+  }
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "flex-1 p-2  max-h-[40vh] overflow-y-scroll ", children: /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "h-full", children: data.map((list, index) => {
+    let parts = list.context.split(new RegExp(`(${searchTerm})`, "gi"));
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { onClick: () => handleScroll(list?.start), className: "p-2 border rounded-md mb-2", children: [
+      parts.map((part, partIndex) => /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("span", { children: part === searchTerm ? /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("strong", { children: part }, void 0, !1, {
+        fileName: "app/component/menu/SearchList.tsx",
+        lineNumber: 25,
+        columnNumber: 23
+      }, this) : (
+        // Render non-search text normally
+        /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("span", { children: part }, void 0, !1, {
+          fileName: "app/component/menu/SearchList.tsx",
+          lineNumber: 28,
+          columnNumber: 23
+        }, this)
+      ) }, partIndex, !1, {
+        fileName: "app/component/menu/SearchList.tsx",
+        lineNumber: 22,
+        columnNumber: 19
+      }, this)),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("div", { className: "text-xs", children: list.textName && /* @__PURE__ */ (0, import_jsx_dev_runtime27.jsxDEV)("span", { children: [
+        "Text Name:",
+        list.textName
+      ] }, void 0, !0, {
+        fileName: "app/component/menu/SearchList.tsx",
+        lineNumber: 33,
+        columnNumber: 58
+      }, this) }, void 0, !1, {
+        fileName: "app/component/menu/SearchList.tsx",
+        lineNumber: 33,
+        columnNumber: 15
+      }, this)
+    ] }, index, !0, {
+      fileName: "app/component/menu/SearchList.tsx",
+      lineNumber: 17,
+      columnNumber: 13
+    }, this);
+  }) }, void 0, !1, {
+    fileName: "app/component/menu/SearchList.tsx",
+    lineNumber: 13,
+    columnNumber: 7
+  }, this) }, void 0, !1, {
+    fileName: "app/component/menu/SearchList.tsx",
+    lineNumber: 12,
+    columnNumber: 5
+  }, this);
+}
+
+// app/component/menu/Search.tsx
+var import_jsx_dev_runtime28 = require("react/jsx-dev-runtime");
 function Search({ editor }) {
   if (!editor)
     return null;
@@ -4393,17 +4396,17 @@ function Search({ editor }) {
       columnNumber: 7
     }, this),
     searchTerm && /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)(import_jsx_dev_runtime28.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)(SearchList_default, { editor }, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)(SearchList, { editor }, void 0, !1, {
         fileName: "app/component/menu/Search.tsx",
         lineNumber: 17,
         columnNumber: 11
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)("hr", {}, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)(SearchListFromText, {}, void 0, !1, {
         fileName: "app/component/menu/Search.tsx",
         lineNumber: 18,
         columnNumber: 11
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)(SearchListFromText, {}, void 0, !1, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime28.jsxDEV)("hr", {}, void 0, !1, {
         fileName: "app/component/menu/Search.tsx",
         lineNumber: 19,
         columnNumber: 11
@@ -7788,7 +7791,7 @@ function Menu({ editor }) {
   }, [menu]), menu ? /* @__PURE__ */ (0, import_jsx_dev_runtime47.jsxDEV)(
     "div",
     {
-      className: "w-full absolute md:static flex flex-col md:max-w-[30%] bg-white pb-4",
+      className: "w-full absolute md:static flex flex-col md:max-w-[30%] pb-4",
       style: { maxHeight: "calc(100vh - 60px)" },
       children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime47.jsxDEV)(MenuHeader_default, {}, void 0, !1, {
@@ -9364,7 +9367,7 @@ function oo_oo16(i, ...v) {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-AS3BK6KV.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-YIIKRLZ2.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-PYBNLSUA.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-U4SZYNFP.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-Y5TIYUG2.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-L7ZF6MFK.js", imports: ["/build/_shared/chunk-B5JEA7HM.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-B5LWMUNX.js", imports: ["/build/_shared/chunk-B5JEA7HM.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "b89eb8c7", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1707291448841 }, url: "/build/manifest-B89EB8C7.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-AS3BK6KV.js", imports: ["/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-YIIKRLZ2.js", "/build/_shared/chunk-F6QSZDU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-PYBNLSUA.js", imports: ["/build/_shared/chunk-ZD3YNBOG.js", "/build/_shared/chunk-FZ2UKIPG.js", "/build/_shared/chunk-3JRTTPUJ.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-U4SZYNFP.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.post": { id: "routes/api.post", parentId: "root", path: "api/post", index: void 0, caseSensitive: void 0, module: "/build/routes/api.post-Z72R5DYQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply": { id: "routes/api.reply", parentId: "root", path: "api/reply", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply-LEJRNHKE.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.reply.$id": { id: "routes/api.reply.$id", parentId: "routes/api.reply", path: ":id", index: void 0, caseSensitive: void 0, module: "/build/routes/api.reply.$id-AUQNHNDM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion": { id: "routes/api.suggestion", parentId: "root", path: "api/suggestion", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion-4ERNMFON.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.comment": { id: "routes/api.suggestion.comment", parentId: "routes/api.suggestion", path: "comment", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.comment-RWF7QWFX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.suggestion.like": { id: "routes/api.suggestion.like", parentId: "routes/api.suggestion", path: "like", index: void 0, caseSensitive: void 0, module: "/build/routes/api.suggestion.like-TNRF7ISQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.text": { id: "routes/api.text", parentId: "root", path: "api/text", index: void 0, caseSensitive: void 0, module: "/build/routes/api.text-3IYJTLNB.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.translation": { id: "routes/api.translation", parentId: "root", path: "api/translation", index: void 0, caseSensitive: void 0, module: "/build/routes/api.translation-SU3MKLLC.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.preference.theme": { id: "routes/api.user.preference.theme", parentId: "root", path: "api/user/preference/theme", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.preference.theme-4FHSOV23.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.user.search": { id: "routes/api.user.search", parentId: "root", path: "api/user/search", index: void 0, caseSensitive: void 0, module: "/build/routes/api.user.search-REEVYCCK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth_.login": { id: "routes/auth_.login", parentId: "root", path: "auth/login", index: void 0, caseSensitive: void 0, module: "/build/routes/auth_.login-QS7HGYN4.js", imports: void 0, hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/list": { id: "routes/list", parentId: "root", path: "list", index: void 0, caseSensitive: void 0, module: "/build/routes/list-Y5TIYUG2.js", imports: ["/build/_shared/chunk-JA2LHEOU.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text.$textId.page.$pageId": { id: "routes/text.$textId.page.$pageId", parentId: "root", path: "text/:textId/page/:pageId", index: void 0, caseSensitive: void 0, module: "/build/routes/text.$textId.page.$pageId-757SCQK2.js", imports: ["/build/_shared/chunk-B5JEA7HM.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/text_.$textId.page.$pageId.translation.$translationId": { id: "routes/text_.$textId.page.$pageId.translation.$translationId", parentId: "root", path: "text/:textId/page/:pageId/translation/:translationId", index: void 0, caseSensitive: void 0, module: "/build/routes/text_.$textId.page.$pageId.translation.$translationId-B5LWMUNX.js", imports: ["/build/_shared/chunk-B5JEA7HM.js", "/build/_shared/chunk-HQVM5TCW.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-RCUYQY2C.js", "/build/_shared/chunk-2QJY4JOV.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "a69f7826", hmr: { runtime: "/build/_shared\\chunk-F6QSZDU5.js", timestamp: 1707292331113 }, url: "/build/manifest-A69F7826.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

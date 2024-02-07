@@ -20,7 +20,7 @@ function Menu({ editor }: { editor: Editor | null }) {
   if (!menu) return null;
   return (
     <div
-      className="w-full absolute md:static flex flex-col md:max-w-[30%] bg-white pb-4"
+      className="w-full absolute md:static flex flex-col md:max-w-[30%] pb-4"
       style={{ maxHeight: 'calc(100vh - 60px)' }}
     >
       <MenuHeader />
