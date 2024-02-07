@@ -1,20 +1,21 @@
-import { useLoaderData, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
+import { useEffect, useState } from 'react';
 import { checkUnknown } from '~/features/Editor/lib';
 
-function searchInstance() {
+export function useSearchInstance() {
   let { page } = useLoaderData();
+  let [list, setList] = useState([]);
   let fullText = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
   let [param, setParam] = useSearchParams();
   let searchTerm = param.get('s');
-  if (searchTerm !== null) {
-    let data = findOccurrencesWithContext(fullText, searchTerm);
-    return data;
-  }
-  return [];
+  useEffect(() => {
+    if (searchTerm) {
+      let data = findOccurrencesWithContext(fullText, searchTerm);
+      setList(data);
+    }
+  }, [searchTerm]);
+  return list;
 }
-
-export default searchInstance;
-
 function findOccurrencesWithContext(fullText: string, targetString: string | null, contextRange = 20) {
   const occurrences = [];
   // Check if fullText or targetString is undefined or null
@@ -26,7 +27,7 @@ function findOccurrencesWithContext(fullText: string, targetString: string | nul
 
   let index = fullText.indexOf(targetString);
   while (index !== -1) {
-    const start = Math.max(0, index - contextRange);
+    const start = Math.max(0, index);
     const end = Math.min(fullText.length, index + targetLength + contextRange);
 
     const occurrence = {
@@ -40,4 +41,32 @@ function findOccurrencesWithContext(fullText: string, targetString: string | nul
   }
 
   return occurrences;
+}
+
+export function useSearchAcrossAllText() {
+  let { text } = useLoaderData();
+  let [param, setParam] = useSearchParams();
+  let [list, setList] = useState([]);
+  let [loading, setLoading] = useState(false);
+  let searchTerm = param.get('s');
+  let fetcher = useFetcher();
+  useEffect(() => {
+    if (searchTerm) {
+      fetcher.load(`/api/text?search=${searchTerm}`);
+      setLoading(true);
+    }
+  }, [searchTerm]);
+  useEffect(() => {
+    if (fetcher.data) {
+      let data = fetcher.data as [];
+      const filteredData = data.filter((item) => item.results[0].name !== text.name);
+
+      setList(filteredData);
+    } else {
+      setList([]);
+    }
+    setLoading(false);
+  }, [fetcher.data]);
+
+  return { list, loading };
 }

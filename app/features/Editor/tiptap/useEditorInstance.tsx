@@ -22,8 +22,6 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
   const { user } = useLoaderData();
   const setSelectionRange = useSetRecoilState(selectedTextOnEditor);
   const [param, setSearchParams] = useSearchParams();
-  let documentName = name;
-  let provider;
   function suggestionSetter(id: string) {
     setSearchParams((p) => {
       p.set('with', 'Suggestion');
@@ -38,23 +36,23 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
       return p;
     });
   }
-  const doc = useMemo(() => {
-    return new Y.Doc();
-  }, [documentName]);
+  // const doc = useMemo(() => {
+  //   return new Y.Doc();
+  // }, [name]);
 
-  useEffect(() => {
-    if (user) {
-      let url =
-        process.env.NODE_ENV === 'development'
-          ? 'ws://' + window.location.hostname + ':3000/socket'
-          : 'wss://' + window.location.hostname + '/socket';
-      provider = new HocuspocusProvider({
-        url,
-        name,
-        document: doc,
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     let url =
+  //       process.env.NODE_ENV === 'development'
+  //         ? 'ws://' + window.location.hostname + ':3000/socket'
+  //         : 'wss://' + window.location.hostname + '/socket';
+  //     provider = new HocuspocusProvider({
+  //       url,
+  //       name,
+  //       document: doc,
+  //     });
+  //   }
+  // }, []);
 
   let editor = useEditor(
     {
@@ -105,9 +103,9 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         Extension.TextAlign.configure({
           types: ['heading', 'paragraph'],
         }),
-        Collaboration.configure({
-          document: provider?.document ?? doc,
-        }),
+        // Collaboration.configure({
+        //   document: provider?.document ?? doc,
+        // }),
       ],
       editable: true,
       editorProps: isEditable ? Extension.editorProps.editable : Extension.editorProps.noneditable,
@@ -134,14 +132,10 @@ const useEditorInstance = ({ name, content, isEditable, paramUpdate = true }: us
         firsttime = false;
       },
       onCreate({ editor }) {
-        setTimeout(() => {
-          if (editor.getText() === '') {
-            if (content) {
-              let content_with_list = convertPTagsToOlAfterH1(content);
-              editor?.commands.setContent(content_with_list);
-            }
-          }
-        }, 2000);
+        if (content) {
+          let content_with_list = convertPTagsToOlAfterH1(content);
+          editor?.commands.setContent(content_with_list);
+        }
       },
     },
     [],

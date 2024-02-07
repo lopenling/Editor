@@ -111,15 +111,22 @@ export async function searchPages(search_term = '') {
   try {
     const textList = await db.page.findMany({
       where: {
-        text: {
-          name: {
-            contains: search_term,
-            mode: 'insensitive',
+        OR: [
+          {
+            text: {
+              name: {
+                contains: search_term,
+                mode: 'insensitive',
+              },
+            },
           },
-        },
-        content: {
-          contains: search_term,
-        },
+          {
+            content: {
+              contains: search_term,
+              mode: 'insensitive',
+            },
+          },
+        ],
       },
       include: {
         text: {
@@ -130,7 +137,6 @@ export async function searchPages(search_term = '') {
       },
       orderBy: { content: 'asc' },
     });
-
     let results = fullSearch(textList, search_term);
     let groupedData = [];
 

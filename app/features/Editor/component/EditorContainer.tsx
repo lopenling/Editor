@@ -35,9 +35,7 @@ function EditorContainer({ editor, isSaving, page, saveTextFetcher }: EditorCont
   useEffect(() => {
     let newContent = checkUnknown(page.content.replace(/[\r\n]+/g, '<p/><p>'));
     let content = generateHtmlFromTextAndAnnotations(newContent, annotations);
-    setTimeout(() => {
-      if (editor.getText() === '') editor?.commands.setContent(content);
-    }, 2000);
+    if (editor.getText() === '') editor?.commands.setContent(content);
     setImage({ ...Image, url: imageUrl });
   }, [annotations?.length, page.content]);
 
