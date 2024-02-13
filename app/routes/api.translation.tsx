@@ -32,12 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
 export const loader: LoaderFunction = async ({ request }) => {
   //check if the request is a GET request from same origin
   let u = new URL(request.url);
-  const referer = request.headers.get('Referer') || '';
-  const origin = `${u.protocol}//${u.host}`;
-  if (!referer.startsWith(origin)) {
-    // If the Referer does not match, you might want to redirect, throw an error, or handle accordingly
-    throw new Response('Access denied: requests must originate from the same domain.', { status: 403 });
-  }
+
   let query = u.searchParams;
   let text = query.get('text') as string;
   let direction = query.get('direction') as string;
