@@ -8,7 +8,6 @@ export default async function exportAsDocs(editor: any) {
   }
   let htmlContent = editor.getHTML();
   const docBlob = await asBlob(htmlContent); // Convert HTML to a Word document Blob
-  console.log(docBlob);
   // Create a Blob for download
   const url = URL.createObjectURL(docBlob);
   const downloadLink = document.createElement('a');

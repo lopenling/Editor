@@ -11,6 +11,7 @@ import { AiFillApi } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import { useFetcher } from '@remix-run/react';
 import TranslationList from './TranslationList';
+import { BsGlobeAmericas } from 'react-icons/bs';
 function Tools({ editor }: { editor: Editor }) {
   let [translation, setTranslation] = useState<null | string>(null);
 
@@ -71,6 +72,7 @@ function Tools({ editor }: { editor: Editor }) {
               editor.commands.toggleHeading({ level: 3 });
             }
           }}
+          isActive={editor.isActive('heading', { level: 3 })}
         >
           <LuHeading3 />
         </ToolButton>
@@ -104,7 +106,7 @@ function Tools({ editor }: { editor: Editor }) {
           <IoMdRedo />
         </ToolButton>
         <ToolButton title="translator" onClick={fetchTranslation} disabled={lengthSelection <= 1}>
-          <AiFillApi />
+          <BsGlobeAmericas />
         </ToolButton>
       </div>
       <TranslationList translation={translation} fetcher={fetcher} />

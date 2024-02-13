@@ -7,7 +7,7 @@ export function SearchListFromText() {
   if (loading) return <div>Loading...</div>;
   return (
     <div className="flex max-h-[25vh] mt-2 overflow-y-auto m-2 rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col p-0 ">
-      {data.length > 0 && <h3>Related Text:</h3>}
+      {data.length > 0 && <h3 className="px-2">Related Text:</h3>}
       {data.map((list, index) => (
         <ResultLink key={`id${index}`} list={list} />
       ))}

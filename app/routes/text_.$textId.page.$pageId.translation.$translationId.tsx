@@ -6,7 +6,7 @@ import Tools from '~/features/Editor/tiptap/component/Tools';
 import useEditorInstance from '~/features/Editor/tiptap/useEditorInstance';
 import { getTranslation, updateSourceAndTranslation } from '~/model/translation';
 import { getUserPage } from '~/model/userText';
-import { BsShare } from 'react-icons/bs';
+import { BsSearch, BsShare } from 'react-icons/bs';
 import { AiFillSave, AiOutlineExport } from 'react-icons/ai';
 import { Button, Tooltip, Dropdown } from 'flowbite-react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
@@ -68,6 +68,13 @@ export const action: ActionFunction = async ({ request }) => {
 
 function TranslationsRoute() {
   let { translation, userText, textId, order, user } = useLoaderData();
+  let fetcher = useFetcher();
+  let [params, setParams] = useSearchParams();
+  const [isEditable, setIsEditable] = useState(true);
+  const [showSearch, setShowSearch] = useState(false);
+  const isSaving = fetcher.state !== 'idle';
+
+  // Initialize editors
   let source_editor = useEditorInstance({
     name: 'userText' + userText.id,
     content: constructHTML(userText.content, userText.Annotation),
@@ -80,19 +87,16 @@ function TranslationsRoute() {
     isEditable: true,
     paramUpdate: false,
   });
-  let fetcher = useFetcher();
-  let [params, setParams] = useSearchParams();
   let sectionIndex = params.get('section');
   let subsectionIndex = params.get('subsection');
 
   const [prevVisibleIndex, setPrevVisibleIndex] = useState(null);
   const [prevVisibleElement] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isEditable, setIsEditable] = useState(true);
-
-  let sourceRef = useRef<HTMLDivElement>(null);
-  let translationRef = useRef<HTMLDivElement>(null);
-  let currentDiv = useRef<HTMLDivElement>(null);
+  // Refs for source and translation divs, and the currently focused div
+  const sourceRef = useRef(null);
+  const translationRef = useRef(null);
+  const currentDivRef = useRef(null);
 
   let debounced_Index = useDebounce(currentIndex, 500);
 
@@ -131,30 +135,28 @@ function TranslationsRoute() {
     [sourceRef.current],
   );
 
+  // Attach and clean up the scroll event listeners
   useEffect(() => {
-    let timer;
-    // Add scroll event listener to the sourceRef
-    timer = setTimeout(() => {
-      sourceRef.current?.addEventListener('scroll', () => handleScroll(sourceRef.current));
-      translationRef.current?.addEventListener('scroll', () => handleScroll(translationRef.current));
-    }, 2000);
-    // Clean up the event listener on component unmount
+    const sourceEl = sourceRef.current;
+    const translationEl = translationRef.current;
+    sourceEl?.addEventListener('scroll', () => handleScroll(sourceEl));
+    translationEl?.addEventListener('scroll', () => handleScroll(translationEl));
+
     return () => {
-      sourceRef.current?.removeEventListener('scroll', () => handleScroll(sourceRef.current));
-      translationRef.current?.removeEventListener('scroll', () => handleScroll(translationRef.current));
-      if (timer) clearTimeout(timer);
+      sourceEl?.removeEventListener('scroll', () => handleScroll(sourceEl));
+      translationEl?.removeEventListener('scroll', () => handleScroll(translationEl));
     };
-  }, []);
+  }, [handleScroll]);
 
   // Scroll to the current h1 element when the currentIndex changes
   useEffect(() => {
     let transElement = translationRef.current?.querySelectorAll('h1')[currentIndex];
     let sourceElement = sourceRef.current?.querySelectorAll('h1')[currentIndex];
-    if (transElement && translationRef.current !== currentDiv.current) {
+    if (transElement && translationRef.current !== currentDivRef.current) {
       transElement?.scrollIntoView({ block: 'center' });
     }
 
-    if (sourceElement && sourceRef.current !== currentDiv.current) {
+    if (sourceElement && sourceRef.current !== currentDivRef.current) {
       sourceElement?.scrollIntoView({ block: 'center' });
     }
   }, [debounced_Index]);
@@ -177,7 +179,7 @@ function TranslationsRoute() {
   // Scroll to the section and subsection if the url has the query params
   useEffect(() => {
     if (sectionIndex !== null) {
-      currentDiv.current = sourceRef.current;
+      currentDivRef.current = sourceRef.current;
       const sections = sourceRef.current?.getElementsByTagName('h1');
       setTimeout(() => {
         if (sections && sections.length > 0) {
@@ -237,7 +239,7 @@ function TranslationsRoute() {
     }
   }
   function handleChangeCurrentDiv(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    currentDiv.current = e.currentTarget;
+    currentDivRef.current = e.currentTarget;
   }
 
   useEffect(() => {
@@ -255,15 +257,14 @@ function TranslationsRoute() {
     };
   }, [source_editor, translation_editor]);
 
-  const isSaving = fetcher.state !== 'idle';
   if (source_editor === null || translation_editor === null) return <div>loading</div>;
   return (
     <div className="flex flex-col h-screen overflow-y-hidden">
       <Header editor={null} />
 
       <div className="flex flex-1 gap-2 w-full  font-monlam">
-        <div className="flex flex-col gap-3 max-w-6xl m-auto my-4 mx-2">
-          <Tooltip content="go back" placement="bottom">
+        <div className="flex flex-col gap-3 max-w-6xl m-auto my-4 mx-2 font-inter">
+          <Tooltip content="go back" placement="right">
             <Button
               as={Link}
               size={'sm'}
@@ -273,18 +274,29 @@ function TranslationsRoute() {
               <IoMdArrowRoundBack />
             </Button>
           </Tooltip>
+          <Tooltip content="search" placement="right">
+            <Button
+              size={'sm'}
+              onClick={() => {
+                setShowSearch(true);
+              }}
+              className="text-white bg-slate-500"
+            >
+              <BsSearch />
+            </Button>
+          </Tooltip>
           <div className="flex flex-col gap-4">
-            <Tooltip content="share link" placement="bottom">
+            <Tooltip content="share link" placement="right">
               <Button size={'sm'} className="text-white bg-slate-500" onClick={() => copy(window.location.href)}>
                 <BsShare />
               </Button>
             </Tooltip>
-            <Tooltip content="edit" placement="bottom">
+            <Tooltip content="edit" placement="right">
               <Button size={'sm'} className="text-white bg-slate-500" onClick={() => setIsEditable((prev) => !prev)}>
                 {isEditable ? <CiRead /> : <FaEdit />}
               </Button>
             </Tooltip>
-            <Tooltip content="export as docx" placement="top">
+            <Tooltip content="export as docx" placement="right">
               <Dropdown
                 label=""
                 size="xs"
@@ -303,9 +315,31 @@ function TranslationsRoute() {
                 </Dropdown.Item>
               </Dropdown>
             </Tooltip>
-            <Tooltip content="save" placement="bottom">
+            <Tooltip content="save" placement="right">
               <Button size={'sm'} className="text-white bg-slate-500" onClick={save} disabled={isSaving}>
-                {isSaving ? <FaTruckLoading /> : <AiFillSave />}
+                {isSaving ? (
+                  <div role="status">
+                    <svg
+                      aria-hidden="true"
+                      className="w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  <AiFillSave />
+                )}
               </Button>
             </Tooltip>
           </div>
