@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { ActionFunction } from '@remix-run/node';
+import { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { languageOptionsType } from '~/constants';
 import { createTranslation, deleteTranslation } from '~/model/translation';
 import { getUser } from '~/model/user';
@@ -27,4 +27,17 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   return null;
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  let u = new URL(request.url);
+  let query = u.searchParams;
+  let text = query.get('text') as string;
+  let direction = query.get('direction') as string;
+
+  let url = `https://monlam.ai/api/translation?text=${text}`;
+  if (direction) url = url + `&direction=${direction}`;
+  let data = await fetch(url);
+  let res = await data.json();
+  return res.translation;
 };

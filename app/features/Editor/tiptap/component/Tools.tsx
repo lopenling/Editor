@@ -8,7 +8,12 @@ import { LuHeading1, LuHeading3 } from 'react-icons/lu';
 import { MdOutlineFormatIndentDecrease } from 'react-icons/md';
 import { CiTextAlignCenter } from 'react-icons/ci';
 import { AiFillApi } from 'react-icons/ai';
+import { useEffect, useState } from 'react';
+import { useFetcher } from '@remix-run/react';
+import TranslationList from './TranslationList';
 function Tools({ editor }: { editor: Editor }) {
+  let [translation, setTranslation] = useState<null | string>(null);
+
   if (!editor) return null;
 
   function formatEditor() {
@@ -19,15 +24,30 @@ function Tools({ editor }: { editor: Editor }) {
   const { from, to } = editor.state.selection;
   const text = editor.state.doc.textBetween(from, to);
   let lengthSelection = text.length;
-
-  function fetchTranslation() {
-    // fetch translation
-    //make request to monlam for translation and show on UI
+  let t = null;
+  let fetcher = useFetcher();
+  async function fetchTranslation() {
+    try {
+      let url = `/api/translation?text=${text}`;
+      fetcher.load(url);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
+  useEffect(() => {
+    if (translation) {
+      setTranslation(null);
+    }
+  }, [from]);
+  useEffect(() => {
+    if (fetcher.data) {
+      setTranslation(fetcher?.data);
+    }
+  }, [fetcher.data]);
   return (
-    <div className="flex justify-between bg-gray-200 z-10 rounded-md border-2 sticky top-0">
-      <div>
+    <div className="flex flex-col justify-between bg-gray-200 z-10 rounded-md border-2 sticky top-0 w-min">
+      <div className="flex">
         <ToolButton
           title="Heading 1"
           onClick={() => {
@@ -87,6 +107,7 @@ function Tools({ editor }: { editor: Editor }) {
           <AiFillApi />
         </ToolButton>
       </div>
+      <TranslationList translation={translation} fetcher={fetcher} />
     </div>
   );
 }

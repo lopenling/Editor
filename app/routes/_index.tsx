@@ -5,7 +5,7 @@ import FooterContainer from '~/component/Layout/Footer';
 import { defer } from '@remix-run/node';
 import { searchPages } from '~/model/page';
 import { useLocation, useLoaderData, useNavigation } from '@remix-run/react';
-import useLitteraTranslation from '~/locales/useLitteraTranslations';
+import useLitteraTranslation, { getLocale } from '~/locales/useLitteraTranslations';
 import { motion } from 'framer-motion';
 import Header from '~/component/Layout/Header';
 import { useState, useEffect, ChangeEvent, Suspense } from 'react';
@@ -94,14 +94,16 @@ function SearchBar({
   onInputChange,
   translation,
 }: {
-  searchInput: string | null;
+  searchInput: string;
   onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
   translation: any;
 }) {
+  let { isTibetan } = getLocale();
+
   return (
     <div className="px-4 md:px-0 mx-auto max-w-2xl" style={{ paddingTop: HEADER_HEIGHT + 40 }}>
       <Form method="GET" className="mb-3 w-full max-w-2xl">
-        <div className="relative flex w-full space-x-3">
+        <div className={`relative flex w-full space-x-3 ${isTibetan ? 'font-monlam' : 'font-inter'}`}>
           <TextInput
             autoComplete="off"
             name="search"
@@ -110,9 +112,9 @@ function SearchBar({
             id="inputText"
             onChange={onInputChange}
             type="search"
-            className="flex-1 font-monlam text-gray-500 pr-3"
+            className="flex-1  text-gray-500 pr-3 "
           />
-          <Button type="submit" className="h-full font-monlam bg-green-400 text-white">
+          <Button type="submit" className="h-full bg-green-400 text-white">
             {translation.searchText}
           </Button>
         </div>

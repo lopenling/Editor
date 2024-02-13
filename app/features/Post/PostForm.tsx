@@ -27,8 +27,8 @@ const PostForm = ({ editor }: any) => {
           type: createPost?.formData?.get('type') as 'question' | 'comment',
           threadId: '',
         }}
-        editor={null}
         isOptimistic={true}
+        showDivider={false}
       />
     );
   }

@@ -1,7 +1,16 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "app/routes/_public.api", "app/routes/auth_/.login.tsx", "public/js/autocomplete.js", "app/lib/tibuteCollection", "server.js"],
+  "include": [
+    "remix.env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "app/routes/_public.api",
+    "app/routes/auth_/.login.tsx",
+    "public/js/autocomplete.js",
+    "app/lib/tibuteCollection",
+    "server.js"
+  ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

@@ -1,4 +1,4 @@
-import { useLittera } from '@assembless/react-littera';
+import { useLittera, useLitteraMethods } from '@assembless/react-littera';
 import en from '~/assets/locale/en.json';
 import bo from '~/assets/locale/bo.json';
 
@@ -28,4 +28,10 @@ export default function uselitteraTranlation() {
   let translations = translationList();
   const translation = useLittera(translations);
   return translation;
+}
+
+export function getLocale() {
+  let { locale } = useLitteraMethods();
+  let isTibetan = locale === 'bo_TI';
+  return { locale, isTibetan };
 }

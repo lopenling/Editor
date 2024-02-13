@@ -16,9 +16,9 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { AiFillLike } from 'react-icons/ai';
 type PostPropType = {
   isOptimistic: boolean;
-  post: PostType;
+  post: any;
   showDivider: boolean;
-  editor?: Editor;
+  editor?: Editor | null;
 };
 
 function Post({ isOptimistic, post, showDivider, editor }: PostPropType) {

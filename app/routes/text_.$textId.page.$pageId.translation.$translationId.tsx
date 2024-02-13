@@ -289,7 +289,7 @@ function TranslationsRoute() {
           </Tooltip>
         </div>
       </div>
-      <div className="flex max-w-6xl gap-3 w-full mx-auto font-monlam">
+      <div className="flex max-w-7xl gap-3 w-full mx-auto font-monlam">
         <div
           ref={sourceRef}
           onMouseOver={handleChangeCurrentDiv}
