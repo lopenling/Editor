@@ -3,4 +3,5 @@ node_modules
 /public/build
 /.netlify
 .env
-build/*
+build/
+build

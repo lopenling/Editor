@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 import { getUserSession } from '~/services/session.server';
 import { CiRead } from 'react-icons/ci';
 import { useDebounce } from '~/component/hooks/useDebounce';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaTruckLoading } from 'react-icons/fa';
 import copy from '~/lib/copy.client';
 import ExportButton from '~/features/Editor/component/ExportButton';
 import { constructHTML, processHTML } from '~/lib/translationhtmlparser';
@@ -68,7 +68,6 @@ export const action: ActionFunction = async ({ request }) => {
 
 function TranslationsRoute() {
   let { translation, userText, textId, order, user } = useLoaderData();
-
   let source_editor = useEditorInstance({
     name: 'userText' + userText.id,
     content: constructHTML(userText.content, userText.Annotation),
@@ -81,7 +80,6 @@ function TranslationsRoute() {
     isEditable: true,
     paramUpdate: false,
   });
-
   let fetcher = useFetcher();
   let [params, setParams] = useSearchParams();
   let sectionIndex = params.get('section');
@@ -285,8 +283,8 @@ function TranslationsRoute() {
             </Dropdown>
           </Tooltip>
           <Tooltip content="save" placement="bottom">
-            <Button size={'sm'} className="text-white bg-slate-500" onClick={save} isProcessing={isSaving}>
-              {isSaving ? null : <AiFillSave />}
+            <Button size={'sm'} className="text-white bg-slate-500" onClick={save} disabled={isSaving}>
+              {isSaving ? <FaTruckLoading /> : <AiFillSave />}
             </Button>
           </Tooltip>
         </div>
@@ -297,7 +295,7 @@ function TranslationsRoute() {
           onMouseOver={handleChangeCurrentDiv}
           className="relative flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
         >
-          <h2 className="text-gray-400">Source Text</h2>
+          <h2 className="text-gray-400">{userText.name}</h2>
           <EditorContent editor={source_editor} />
           <BubbleMenu editor={source_editor!} shouldShow={({ editor }) => editor?.isFocused && editor.isEditable}>
             <Tools editor={source_editor} />
@@ -308,7 +306,10 @@ function TranslationsRoute() {
           onMouseOver={handleChangeCurrentDiv}
           className="relative flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
         >
-          <h2 className="text-gray-400">Translation Text</h2>
+          <h2 className="text-gray-400 flex justify-between">
+            {translation.userText.user?.username}
+            <div>{translation.language + ' ' + 'translation'}</div>
+          </h2>
           <EditorContent editor={translation_editor} />
           <BubbleMenu editor={translation_editor!} shouldShow={({ editor }) => editor.isFocused && editor.isEditable}>
             <Tools editor={translation_editor} />

@@ -7,13 +7,22 @@ import { FaBold } from 'react-icons/fa';
 import { LuHeading1, LuHeading3 } from 'react-icons/lu';
 import { MdOutlineFormatIndentDecrease } from 'react-icons/md';
 import { CiTextAlignCenter } from 'react-icons/ci';
-function Tools({ editor }: any) {
+import { AiFillApi } from 'react-icons/ai';
+function Tools({ editor }: { editor: Editor }) {
   if (!editor) return null;
 
   function formatEditor() {
     let content = editor?.getHTML();
     let data = convertPTagsToOlAfterH1(content);
     editor?.commands.setContent(data);
+  }
+  const { from, to } = editor.state.selection;
+  const text = editor.state.doc.textBetween(from, to);
+  let lengthSelection = text.length;
+
+  function fetchTranslation() {
+    // fetch translation
+    //make request to monlam for translation and show on UI
   }
 
   return (
@@ -73,6 +82,9 @@ function Tools({ editor }: any) {
         </ToolButton>
         <ToolButton title="redo" onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()}>
           <IoMdRedo />
+        </ToolButton>
+        <ToolButton title="translator" onClick={fetchTranslation} disabled={lengthSelection <= 1}>
+          <AiFillApi />
         </ToolButton>
       </div>
     </div>
