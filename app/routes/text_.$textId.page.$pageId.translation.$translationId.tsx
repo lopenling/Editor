@@ -201,11 +201,9 @@ function TranslationsRoute() {
   }, [sectionIndex, subsectionIndex, sourceRef.current?.innerHTML]);
 
   function save() {
-    // let data = parseHeadings(source_editor.getHTML());
-    // console.log(data);
-
     if (!source_editor || !translation_editor) {
       toast.error('cannot save!');
+      console.log(source_editor, translation_editor);
       return;
     }
     let sourceContent = source_editor.getHTML();
@@ -242,60 +240,82 @@ function TranslationsRoute() {
     currentDiv.current = e.currentTarget;
   }
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+        save();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [source_editor, translation_editor]);
+
   const isSaving = fetcher.state !== 'idle';
   if (source_editor === null || translation_editor === null) return <div>loading</div>;
   return (
-    <div className="max-h-screen overflow-y-hidden">
+    <div className="flex flex-col h-screen overflow-y-hidden">
       <Header editor={null} />
-      <div className="flex justify-between max-w-6xl m-auto my-4">
-        <Button as={Link} to={`/text/${textId}/page/${order}?with=Translations`} className="text-white bg-slate-500">
-          <IoMdArrowRoundBack />
-          Go to Main Text
-        </Button>
-        <div className="flex gap-4">
-          <Tooltip content="share link" placement="bottom">
-            <Button size={'sm'} className="text-white bg-slate-500" onClick={() => copy(window.location.href)}>
-              <BsShare />
-            </Button>
-          </Tooltip>
-          <Tooltip content="edit" placement="bottom">
-            <Button size={'sm'} className="text-white bg-slate-500" onClick={() => setIsEditable((prev) => !prev)}>
-              {isEditable ? <CiRead /> : <FaEdit />}
-            </Button>
-          </Tooltip>
-          <Tooltip content="export as docx" placement="top">
-            <Dropdown
-              label=""
-              size="xs"
-              dismissOnClick={false}
-              renderTrigger={() => (
-                <Button size="sm" className="text-white bg-slate-500">
-                  <AiOutlineExport />
-                </Button>
-              )}
+
+      <div className="flex flex-1 gap-2 w-full  font-monlam">
+        <div className="flex flex-col gap-3 max-w-6xl m-auto my-4 mx-2">
+          <Tooltip content="go back" placement="bottom">
+            <Button
+              as={Link}
+              size={'sm'}
+              to={`/text/${textId}/page/${order}?with=Translations`}
+              className="text-white bg-slate-500"
             >
-              <Dropdown.Item>
-                <ExportButton editor={source_editor} name="Source" />
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <ExportButton editor={translation_editor} name="Translation" />
-              </Dropdown.Item>
-            </Dropdown>
-          </Tooltip>
-          <Tooltip content="save" placement="bottom">
-            <Button size={'sm'} className="text-white bg-slate-500" onClick={save} disabled={isSaving}>
-              {isSaving ? <FaTruckLoading /> : <AiFillSave />}
+              <IoMdArrowRoundBack />
             </Button>
           </Tooltip>
+          <div className="flex flex-col gap-4">
+            <Tooltip content="share link" placement="bottom">
+              <Button size={'sm'} className="text-white bg-slate-500" onClick={() => copy(window.location.href)}>
+                <BsShare />
+              </Button>
+            </Tooltip>
+            <Tooltip content="edit" placement="bottom">
+              <Button size={'sm'} className="text-white bg-slate-500" onClick={() => setIsEditable((prev) => !prev)}>
+                {isEditable ? <CiRead /> : <FaEdit />}
+              </Button>
+            </Tooltip>
+            <Tooltip content="export as docx" placement="top">
+              <Dropdown
+                label=""
+                size="xs"
+                dismissOnClick={false}
+                renderTrigger={() => (
+                  <Button size="sm" className="text-white bg-slate-500">
+                    <AiOutlineExport />
+                  </Button>
+                )}
+              >
+                <Dropdown.Item>
+                  <ExportButton editor={source_editor} name="Source" />
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <ExportButton editor={translation_editor} name="Translation" />
+                </Dropdown.Item>
+              </Dropdown>
+            </Tooltip>
+            <Tooltip content="save" placement="bottom">
+              <Button size={'sm'} className="text-white bg-slate-500" onClick={save} disabled={isSaving}>
+                {isSaving ? <FaTruckLoading /> : <AiFillSave />}
+              </Button>
+            </Tooltip>
+          </div>
         </div>
-      </div>
-      <div className="flex max-w-7xl gap-3 w-full mx-auto font-monlam">
         <div
           ref={sourceRef}
           onMouseOver={handleChangeCurrentDiv}
-          className="relative flex-1 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+          className="relative flex-1 block max-h-[90vh] p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700  overflow-y-scroll"
         >
-          <h2 className="text-gray-400">{userText.name}</h2>
+          <h2 className="absolute top-2 right-2 text-gray-400">{userText.name}</h2>
           <EditorContent editor={source_editor} />
           <BubbleMenu editor={source_editor!} shouldShow={({ editor }) => editor?.isFocused && editor.isEditable}>
             <Tools editor={source_editor} />
@@ -304,11 +324,10 @@ function TranslationsRoute() {
         <div
           ref={translationRef}
           onMouseOver={handleChangeCurrentDiv}
-          className="relative flex-1 block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 max-h-[80vh] overflow-y-scroll"
+          className="relative flex-1 block max-h-[90vh]  p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 overflow-y-scroll"
         >
-          <h2 className="text-gray-400 flex justify-between">
-            {translation.userText.user?.username}
-            <div>{translation.language + ' ' + 'translation'}</div>
+          <h2 className="absolute top-2 right-2 text-gray-400">
+            <div className="text-sm"> {translation.language + ' ' + 'translation'}</div>
           </h2>
           <EditorContent editor={translation_editor} />
           <BubbleMenu editor={translation_editor!} shouldShow={({ editor }) => editor.isFocused && editor.isEditable}>
